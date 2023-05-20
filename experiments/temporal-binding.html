@@ -7,11 +7,15 @@
       background-color: #111;
       color: #fff;
       font-family: Arial, sans-serif;
+      margin: 0;
     }
 
     .container {
       text-align: center;
-      margin-top: 100px;
+    }
+
+    h1 {
+      margin-top: 0;
     }
 
     .start-button {
@@ -21,6 +25,14 @@
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .start-button.hide {
+      display: none;
     }
 
     .bulb {
@@ -30,9 +42,12 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
-      margin: 0 auto;
       margin-top: 20px;
       display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
@@ -52,9 +67,11 @@
       startButton.addEventListener('click', function() {
         if (!isFlashing) {
           isFlashing = true;
+          startButton.classList.add('hide');
           bulb.style.display = 'block';
           setTimeout(function() {
             bulb.style.display = 'none';
+            startButton.classList.remove('hide');
             isFlashing = false;
           }, 400);
         }
