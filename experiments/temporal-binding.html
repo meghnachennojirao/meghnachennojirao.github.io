@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Temporal Binding</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    .start-button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .bulb {
+      width: 100px;
+      height: 100px;
+      background-color: #222;
+      border-radius: 50%;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Temporal Binding</h1>
+    <button class="start-button">Start</button>
+    <div class="bulb"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var startButton = document.querySelector('.start-button');
+      var bulb = document.querySelector('.bulb');
+
+      startButton.addEventListener('click', function() {
+        setTimeout(function() {
+          bulb.style.display = 'block';
+          setTimeout(function() {
+            bulb.style.display = 'none';
+          }, 400);
+        }, 400);
+      });
+    });
+  </script>
+</body>
+</html>
