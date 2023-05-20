@@ -47,14 +47,17 @@
     document.addEventListener('DOMContentLoaded', function() {
       var startButton = document.querySelector('.start-button');
       var bulb = document.querySelector('.bulb');
+      var isFlashing = false;
 
       startButton.addEventListener('click', function() {
-        setTimeout(function() {
+        if (!isFlashing) {
+          isFlashing = true;
           bulb.style.display = 'block';
           setTimeout(function() {
             bulb.style.display = 'none';
+            isFlashing = false;
           }, 400);
-        }, 400);
+        }
       });
     });
   </script>
