@@ -63,16 +63,28 @@
       var startButton = document.querySelector('.start-button');
       var bulb = document.querySelector('.bulb');
       var isFlashing = false;
+      var attemptCount = 0;
 
       startButton.addEventListener('click', function() {
         if (!isFlashing) {
           isFlashing = true;
+          attemptCount++;
+
           startButton.classList.add('hide');
           bulb.style.display = 'block';
           setTimeout(function() {
             bulb.style.display = 'none';
             startButton.classList.remove('hide');
             isFlashing = false;
+            
+            // Check if attempt count is less than or equal to 20
+            if (attemptCount <= 20) {
+              setTimeout(function() {
+                startButton.click(); // Trigger the button click again
+              }, 400);
+            } else {
+              attemptCount = 0; // Reset attempt count after 20 attempts
+            }
           }, 400);
         }
       });
