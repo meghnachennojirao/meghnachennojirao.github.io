@@ -1,0 +1,401 @@
+<html>
+	<head>
+		<title>Temporal Binding Game - Dr. Meghna C Rao</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+		<!-- Common Fonts I use.  Calibri doesn't always work.  -->
+		<link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Calibri:400,700,400italic,700italic" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Alegreya+Sans&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+		<!-- Some times used library for icons -->
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        
+        <!-- <link rel="stylesheet" type="text/css" href="../css/generic.css">
+        <link rel="stylesheet" type="text/css" href="../css/ignus-theme.css"> -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.css">
+        <script src="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.js"></script>
+        <!-- <script src="../js/ignus-theme.js"></script> -->
+
+		<link rel="icon" href="../square.png">
+
+		<style id='sliderstyles' type="text/css">
+
+		</style>
+
+		<style type="text/css">
+			:root {
+				--themeblue: hsla(196, 100%, 50%,  1);
+				--themeviolet: hsla(280, 100%, 50%,  1);
+				--themeorange: hsla(32, 100%, 50%,  1);
+				--boundaryorange: hsla(32, 100%, 50%, 0.6);
+				--themegrey: hsla(32, 0%, 70%, 0.6);
+			}
+
+		</style>
+
+		<style id="sliderStyleH" type="text/css">
+			a {
+				cursor: pointer;
+			}
+
+			.standardSlider {
+				-webkit-appearance: none;
+				border-radius: 5px;
+				outline: none;
+				-webkit-transition: .2s;
+				transition: opacity .2s;
+			}
+			.standardSlider::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 10px;
+				height: 10px;
+				border-radius: 50%; 
+				background: hsla(200, 100%, 50%, 1);
+				cursor: pointer;
+			}
+			.standardSlider::-moz-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 10px;
+				height: 10px;
+				border-radius: 50%; 
+				background: hsla(200, 100%, 50%, 1);
+				cursor: pointer;
+			}
+
+            body {
+                background: black;
+            }
+
+
+			body::-webkit-scrollbar {
+				width: 5px;
+			}
+
+			body::-webkit-scrollbar-track {
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+				border-radius: 30px;
+			}
+
+			body::-webkit-scrollbar-thumb {
+				background-color: black;
+				border-radius: 50px;
+				/*outline: 1px solid slategrey;*/
+			}
+            
+
+		</style>
+		
+		<!-- Very important Library for handling layouts such as phone/tablet layouts. -->
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script type="application/ld+json">
+			{
+			  "@type": "game",
+			  "name": "Temporal Binding Game",
+			  "author": "Dr.Meghna C Rao, Prajwal DSouza",
+			  "description": "A game that measures temporal binding, a concept in neuroscience."
+			  }
+		</script>
+
+		 <meta charset="UTF-8">
+		 <meta name="description" content="A game that measures temporal binding, a concept in neuroscience.">
+		 <meta name="keywords" content="Meghna C Rao, temporal binding, david eagleman, game">
+		 <meta name="author" content="Dr.Meghna C Rao, Prajwal DSouza">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	</head>
+	<body style='margin:0px; display: block;'>
+		<div id="containAll" style='margin:0px;width:100%; height: 100%; font-size: 0; display: inline-block; position: relative; '>
+            <div class="p-2">
+                <div style="background-color: hsla(32, 0%, 3%, 1); border: 1px solid hsla(32, 0%, 5%, 0.4); border-radius: 20px;">
+                    <div class="text-ignus pl-4 p-3 text-center mt-4">
+                        <h3 style="font-family: Raleway;"><b>Temporal Binding Game</b></h3>
+                        <p class="text-ignus" style="color: grey; font-weight: bold;">By Dr. Meghna C Rao <br/>Based on <a href="https://www.nature.com/articles/nn827" style="color: royalblue;" target="_blank">Voluntary action and conscious awareness
+                            by Patrick Haggard, Sam Clark & Jeri Kalogeras</a> </p>
+                        <p class="text-ignus text-grey-ignus" style="color: grey;">The goal here is to guess the answer to two questions. First, the number you saw on the screen when you clicked the button. Second the number you saw on the screen when you saw the light bulb turn on.</p>
+                        <div style="display: flex; justify-content: center; align-items: center; position: relative;" class="mt-2 mt-md-5">
+                            <div style="position: relative;">
+                                <div id="light-glow" style="width: 130px; height:  130px; background-image: radial-gradient(hsla(37, 100%, 50%, 0.6), hsla(42, 100%, 50%, 0.4)); border-radius: 50%; position: absolute; top: 10px; left: 30px; filter: blur(20px); visibility: hidden;"></div>
+                                <img src="https://i.ibb.co/68Jc2rR/Picture2.png" width="200px;" style="position: relative;">
+                           </div>
+                            <div id="the-clock" class="text-ignus" style="font-size: 90px">8</div>
+                        </div>
+                        
+
+                        <button id="button-switch-on" class="pl-3 pr-3 p-2 btn-outline-primary-ignus mt-4" style="color: white; border: 1px solid hsla(270, 100%, 50%, 0.4); border-radius: 10px; cursor: pointer;">Switch on bulb!</button>
+
+                        <div id="questions" class="mt-3" style="display: none;">
+                            <p class="text-ignus" style="color: hsla(32, 0%, 50%, 1)">What number did you see when</p>
+                            <p class="text-ignus">The button was clicked by you?</p>
+                            <input id="button-click-number-input" type="range" min="0" max="9" value="7"><p id="button-click-number-display">7</p>
+                            <p class="text-ignus pt-3">The light bulb switched on?</p>
+                            <input id="light-switch-on-number-input" type="range" min="0" max="9" value="3"><p id="light-switch-on-number-display">3</p>
+                            <p id="scoreInfo" class="text-ignus text-small-ignus" style="color: grey;"> How good your answers were will be revealed after 10 attempts.</p>
+
+                            <button id="submit-answer-button" class="pl-3 pr-3 p-2 btn-outline-primary-ignus mt-4" style="color: white; border: 1px solid hsla(270, 100%, 50%, 0.4); border-radius: 10px; cursor: pointer;">Submit Answer</button>
+                        </div>
+
+                        <div class="mt-3 text-ignus text-small-ignus" style="color: grey;">
+                            <p><b id="attempts-info">0</b> attempts so far.</p>
+                            
+                        </div>
+
+                        <div id="your-results" class="mt-3 p-0 p-md-5"  style="display: none;">
+                            <h4 class="pt-3" style="font-family: Nunito;">So, how did you do?</h4>
+                            <p id="averageScore" class="pb-3"></p>
+                            <table id="resultsTable" class="table-ignus text-centered-ignus m-0" style="background-color: hsla(198, 20%, 20%, 0); color: grey;">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Attempt</th>
+                                        <th colspan="2">Button Clicked</th>
+                                        <th colspan="2">Bulb Switched On</th>
+                                        <th rowspan="2">Score</th>
+                                      </tr>
+                                      <tr>
+                                        <th>At</th>
+                                        <th>Your Answer</th>
+                                        <th>At</th>
+                                        <th>Your Answer</th>
+                                      </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="p-5 m-5"></div>
+                            <div id="nerdy-analysis" class="text-ignus pt-3">
+                                <b>Other Analysis</b>
+                                <div class="p-2 m-2"></div>
+                                <p class="text-ignus pt-3" id="averageUserDelayInfo"></p>
+                                <div class="p-2 m-2"></div>
+                                <table id="analysisTable" class="table-ignus text-centered-ignus m-0" style="background-color: hsla(198, 20%, 20%, 0); color: grey;">
+                                    <thead>
+                                        <tr>
+                                            <th>Delay Planned (ms)</th>
+                                            <th>Delay Observed (ms)</th>
+                                            <th>User Delay (ms)</th>
+                                            <th>Attempt No.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+
+                        </div>
+
+                        
+
+                        
+                        <div class="p-5 m-5"></div>
+
+                    </div>
+                </div>
+            </div>
+			
+		</div>
+
+		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX/viewx.js"></script> -->
+    
+
+		<script type="text/javascript">
+            var clockState = 0
+            var displayLightAfter = 450
+            delaysTested = [450, 250, 650]
+
+
+            var answers = {}
+            var averageScore = 0
+
+            measurementResolution = 100
+
+            var attemptIndex = 0
+
+            analysisData = []
+
+
+            setInterval(function() {
+                clockState = (clockState + 1)  % 10
+                $('#the-clock').html(clockState)
+            }, measurementResolution)
+
+
+            $('#button-switch-on').click(function() {
+                buttonClickStartTime = performance.now()
+                buttonClickClockState = clockState
+                $('#button-switch-on').hide()
+                setTimeout(function() {
+                    $('#light-glow').css('visibility', 'visible')
+                    lightGlowStartTime = performance.now()
+                    lightGlowClockState = clockState
+
+                    $('#questions').show()
+                    $('#button-click-number-input').val(Math.floor(Math.random() * 10));
+                    $('#button-click-number-display').html($('#button-click-number-input').val());
+                    $('#light-switch-on-number-input').val(Math.floor(Math.random() * 10));
+                    $('#light-switch-on-number-display').html($('#light-switch-on-number-input').val());
+
+
+
+                }, displayLightAfter)
+            })
+
+            $('#button-click-number-input').on('input', function() {
+                $('#button-click-number-display').html($('#button-click-number-input').val());
+            })
+
+            $('#light-switch-on-number-input').on('input', function() {
+                $('#light-switch-on-number-display').html($('#light-switch-on-number-input').val());
+            })
+
+
+            $('#submit-answer-button').click(function() {
+                answers[attemptIndex] = {
+                    'buttonClick': parseInt($('#button-click-number-input').val()),
+                    'lightSwitchOn': parseInt($('#light-switch-on-number-input').val()),
+                    'trueButtonClickClockState': buttonClickClockState,
+                    'trueLightSwitchClockState': lightGlowClockState,
+                    'buttonLightDelay': lightGlowStartTime - buttonClickStartTime,
+                    'delayPlanned': displayLightAfter
+                }
+
+
+                $('#light-glow').css('visibility', 'hidden')
+                $('#questions').hide()
+                $('#button-switch-on').show()
+                
+
+                resultsTable = document.getElementById("resultsTable")
+                let row = resultsTable.insertRow(2);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
+                let cell6 = row.insertCell(5);
+
+                cell1.textContent = attemptIndex + 1;
+                cell2.textContent = answers[attemptIndex]['buttonClick']
+                cell3.textContent = answers[attemptIndex]['trueButtonClickClockState']
+                cell4.textContent = answers[attemptIndex]['lightSwitchOn']
+                cell5.textContent = answers[attemptIndex]['trueLightSwitchClockState']
+
+                buttonClickDifference = Math.min(Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']), 10 - Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']))
+
+                lightSwitchOnDifference = Math.min(Math.abs(answers[attemptIndex]['lightSwitchOn'] - answers[attemptIndex]['trueLightSwitchClockState']), 10 - Math.abs(answers[attemptIndex]['lightSwitchOn'] - answers[attemptIndex]['trueLightSwitchClockState']))
+
+                currentScore = 10 - (buttonClickDifference + lightSwitchOnDifference);
+                cell6.textContent = currentScore
+
+                averageScore =  (averageScore*attemptIndex +  currentScore)/(attemptIndex + 1)
+                $('#averageScore').html('Your average score is ' + averageScore.toFixed(2) + ' out of 10.')
+                $('#averageScore').hide()
+
+
+
+                
+                buttonClickDifference = Math.min(Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']), 10 - Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']))
+
+
+                if (buttonClickDifference <= 2) {
+                    
+                    multiplier = circularDifference(answers[attemptIndex]['lightSwitchOn'], answers[attemptIndex]['trueLightSwitchClockState'])
+
+                    userDelay = multiplier*measurementResolution
+
+                    analysisTable = document.getElementById("analysisTable")
+                    let row = analysisTable.insertRow(1);
+                    let cell1 = row.insertCell(0);
+                    let cell2 = row.insertCell(1);
+                    let cell3 = row.insertCell(2);
+                    let cell4 = row.insertCell(3);
+
+                    cell1.textContent = answers[attemptIndex]['delayPlanned']
+                    cell2.textContent = answers[attemptIndex]['buttonLightDelay']
+                    cell3.textContent = userDelay
+                    cell4.textContent = attemptIndex + 1
+                    
+                    analysisData.push([answers[attemptIndex]['delayPlanned'], answers[attemptIndex]['buttonLightDelay'], userDelay, attemptIndex + 1])
+                    
+                }
+
+
+                userDelays = {}
+                for (k = 0; k < analysisData.length; k++) {
+                    if (typeof(userDelays[analysisData[k][0]]) == 'undefined') {
+                        userDelays[analysisData[k][0]] = []
+                    }
+                    
+                    userDelays[analysisData[k][0]].push(analysisData[k][2])
+                }
+
+                averageUserDelays = {}
+
+                for (k = 0; k < Object.keys(userDelays).length; k++) {
+                    averageUserDelays[Object.keys(userDelays)[k]] = userDelays[Object.keys(userDelays)[k]].reduce((a, b) => a + b, 0)/userDelays[Object.keys(userDelays)[k]].length
+                }
+
+
+                averageUserDelayInfo = document.getElementById('averageUserDelayInfo')
+                averageUserDelayInfo.innerHTML = ''
+
+                for (var key in averageUserDelays) {
+                    averageUserDelayInfo.innerHTML += '<p>For a delay of ' + key + 'ms, the average user delay was ' + averageUserDelays[key].toFixed(2) + 'ms.</p>'
+                }
+
+                attemptIndex += 1
+                $('#attempts-info').html(attemptIndex)
+
+                if (attemptIndex >= 10) {
+                    $('#your-results').show()
+                    $('#scoreInfo').css('display', 'none')
+                    $('#averageScore').show()
+                }
+
+                
+                if (attemptIndex > 6) {
+                    displayLightAfter = delaysTested[Math.floor(Math.random() * delaysTested.length)]
+                }
+
+
+            });
+
+
+
+
+
+            function circularDifference(a, b) {
+                let diff = a - b;
+                if (diff < -5) {
+                    diff += 10;
+                } else if (diff > 4) {
+                    diff -= 10;
+                }
+                return diff;
+            }
+
+
+            console.log(circularDifference(3, 7))
+
+
+
+
+
+
+
+		</script>
+
+
+	</body>
+<html>
