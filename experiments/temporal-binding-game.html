@@ -432,7 +432,7 @@
                 dataToBeSaved.clockStates = clockStates
                 dataToBeSaved.delaysTested = delaysTested
 
-                database.ref('users/' + sessionID).set(dataToBeSaved)
+                database.ref('sessions/' + sessionID).set(dataToBeSaved)
                 .then(function() {
                     console.log("Data written successfully.");
                 })
