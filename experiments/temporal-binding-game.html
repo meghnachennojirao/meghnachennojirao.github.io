@@ -138,7 +138,7 @@
                         <div id="questions" class="mt-3" style="display: none;">
                             <p class="text-ignus" style="color: hsla(32, 0%, 50%, 1)">What character did you see when</p>
                             <p class="text-ignus pt-3">The light bulb switched on?</p>
-                            <input id="light-switch-on-number-input" type="range" min="0" max="9" value="3"><p id="light-switch-on-number-display">3</p>
+                            <input id="light-switch-on-number-input" type="range" min="0" max="9" value="3" step="1" style="width: 70%; max-width: 500px;"><p id="light-switch-on-number-display">3</p>
                             <p id="scoreInfo" class="text-ignus text-small-ignus" style="color: grey;"> How good your answers were will be revealed after 10 attempts.</p>
 
                             <button id="redo-attempt-button" class="pl-3 pr-3 p-2 btn-outline-primary-ignus mt-4" style="color: white; border: 1px solid hsla(270, 100%, 50%, 0.4); border-radius: 10px; cursor: pointer;">Redo Attempt</button>
@@ -225,7 +225,8 @@
 
 
             document.getElementById('light-switch-on-number-input').setAttribute('max', clockStates.length - 1)
-            // document.getElementById('button-click-number-input').setAttribute('max', clockStates.length - 1)
+
+            gameAt = 'clickButtonStage'
 
 
             setInterval(function() {
@@ -234,7 +235,7 @@
             }, measurementResolution)
 
 
-            $('#button-switch-on').click(function() {
+            function buttonClickFunction() {
                 buttonClickStartTime = performance.now()
                 buttonClickClockState = clockState
                 $('#button-switch-on').hide()
@@ -244,19 +245,20 @@
                     lightGlowClockState = clockState
 
                     $('#questions').show()
-                    // $('#button-click-number-input').val(Math.floor(Math.random() * clockStates.length));
-                    // $('#button-click-number-display').html(clockStates[$('#button-click-number-input').val()]);
                     $('#light-switch-on-number-input').val(Math.floor(Math.random() * clockStates.length));
                     $('#light-switch-on-number-display').html(clockStates[$('#light-switch-on-number-input').val()]);
 
-
-
                 }, displayLightAfter)
-            })
 
-            // $('#button-click-number-input').on('input', function() {
-            //     $('#button-click-number-display').html(clockStates[$('#button-click-number-input').val()]);
-            // })
+                gameAt = "lightGlowStage"
+            }
+
+
+            $('#button-switch-on').click(function() {
+                buttonClickFunction();
+                $('#light-switch-on-number-input').focus();
+            });
+
 
             $('#light-switch-on-number-input').on('input', function() {
                 $('#light-switch-on-number-display').html(clockStates[$('#light-switch-on-number-input').val()]);
@@ -267,10 +269,11 @@
                 $('#light-glow').css('visibility', 'hidden')
                 $('#questions').hide()
                 $('#button-switch-on').show()
+                gameAt = "clickButtonStage"
             })
 
 
-            $('#submit-answer-button').click(function() {
+            function onSubmitAnswer() {
                 answers[attemptIndex] = {
                     'lightSwitchOn': parseInt($('#light-switch-on-number-input').val()),
                     'trueButtonClickClockState': buttonClickClockState,
@@ -296,7 +299,6 @@
                 cell2.textContent = clockStates[answers[attemptIndex]['trueLightSwitchClockState']]
                 cell3.textContent = clockStates[answers[attemptIndex]['lightSwitchOn']]
 
-                // buttonClickDifference = Math.min(Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']), clockStates.length - Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']))
 
                 lightSwitchOnDifference = Math.min(Math.abs(answers[attemptIndex]['lightSwitchOn'] - answers[attemptIndex]['trueLightSwitchClockState']), clockStates.length - Math.abs(answers[attemptIndex]['lightSwitchOn'] - answers[attemptIndex]['trueLightSwitchClockState']))
 
@@ -306,12 +308,6 @@
                 averageScore =  (averageScore*attemptIndex +  currentScore)/(attemptIndex + 1)
                 $('#averageScore').html('Your average score is ' + averageScore.toFixed(2) + ' out of ' + clockStates.length + '.')
                 $('#averageScore').hide()
-
-
-
-                
-                // buttonClickDifference = Math.min(Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']), clockStates.length - Math.abs(answers[attemptIndex]['buttonClick'] - answers[attemptIndex]['trueButtonClickClockState']))
-
 
                     
                 multiplier = circularDifference(answers[attemptIndex]['lightSwitchOn'], answers[attemptIndex]['trueLightSwitchClockState'], clockStates.length)
@@ -371,8 +367,46 @@
                     displayLightAfter = delaysTested[Math.floor(Math.random() * delaysTested.length)]
                 }
 
+                gameAt = "clickButtonStage"
 
+
+            }
+
+
+            $('#submit-answer-button').click(function() {
+                onSubmitAnswer()
+                
             });
+
+            $(document).keypress(function(event) {
+                if (event.which === 13) {
+                    if (gameAt == "lightGlowStage") {
+                        onSubmitAnswer()
+                    } else if (gameAt == "clickButtonStage") {
+                        buttonClickFunction()
+                    }
+                }
+            });
+
+
+            document.addEventListener('keydown', function(event) {
+                
+                if (event.keyCode == 37) {
+                    var slider = document.getElementById('light-switch-on-number-input');
+                    var currentValue = parseInt(slider.value);
+                    var step = parseInt(slider.step);
+                    slider.value = currentValue - step;
+                }
+                else if (event.keyCode == 39) {
+                    var slider = document.getElementById('light-switch-on-number-input');
+                    var currentValue = parseInt(slider.value);
+                    var step = parseInt(slider.step);
+                    slider.value = currentValue + step;
+                }
+
+                $('#light-switch-on-number-display').html(clockStates[$('#light-switch-on-number-input').val()]);
+            });
+
 
 
 
