@@ -390,21 +390,32 @@
 
 
             document.addEventListener('keydown', function(event) {
-                
-                if (event.keyCode == 37) {
+
+                if (gameAt == "lightGlowStage") {
+                    if (event.keyCode == 37) {
                     var slider = document.getElementById('light-switch-on-number-input');
-                    var currentValue = parseInt(slider.value);
-                    var step = parseInt(slider.step);
-                    slider.value = currentValue - step;
+                    if (document.activeElement != slider) {
+                        var currentValue = parseInt(slider.value);
+                        var step = parseInt(slider.step);
+                        slider.value = currentValue - step;
+                    }
+                    
                 }
                 else if (event.keyCode == 39) {
                     var slider = document.getElementById('light-switch-on-number-input');
-                    var currentValue = parseInt(slider.value);
-                    var step = parseInt(slider.step);
-                    slider.value = currentValue + step;
+                    if (document.activeElement != slider) {
+                        var currentValue = parseInt(slider.value);
+                        var step = parseInt(slider.step);
+                        slider.value = currentValue + step;
+                    }
                 }
 
                 $('#light-switch-on-number-display').html(clockStates[$('#light-switch-on-number-input').val()]);
+                }
+                
+                
+
+
             });
 
 
