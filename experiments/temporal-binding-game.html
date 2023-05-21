@@ -203,10 +203,54 @@
 			
 		</div>
 
+        <!-- Firebase SDK -->
+        <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-database.js"></script>
+
+        <script>
+            // // Import the functions you need from the SDKs you need
+            // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+          
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+              apiKey: "AIzaSyBKxNqyazU_K6GjknHUwb7Jma9jJTM_wm4",
+              authDomain: "meghnacrao.firebaseapp.com",
+              databaseURL: "https://meghnacrao-default-rtdb.firebaseio.com",
+              projectId: "meghnacrao",
+              storageBucket: "meghnacrao.appspot.com",
+              messagingSenderId: "13059362392",
+              appId: "1:13059362392:web:4a4c24dee5607ea562442d"
+            };
+          
+            // Initialize Firebase
+            const app = firebase.initializeApp(firebaseConfig);
+
+            var database = firebase.database();
+
+            
+
+        </script>
+
+
 		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX/viewx.js"></script> -->
     
 
 		<script type="text/javascript">
+
+            function uniqueIDGen() {
+                sevenZBit = 78364164096;
+                randomString = sevenZBit + parseInt(Math.random() * sevenZBit * 35)
+                dateStringGen = new Date().getTime().toString(36)
+                return (dateStringGen + "-" + randomString.toString(36))
+            }
+
+            sessionID = uniqueIDGen()
+
+            var currentDate = new Date();
+            var dateTimeString = currentDate.toLocaleString();
+
             var clockState = 0
             var displayLightAfter = 0
             delaysTested = [0, 100, 450, 650, 800]
@@ -214,6 +258,8 @@
 
             var answers = {}
             var averageScore = 0
+
+            var scores = {}
 
             measurementResolution = 130
 
@@ -272,8 +318,12 @@
                 gameAt = "clickButtonStage"
             })
 
+    
+
 
             function onSubmitAnswer() {
+                dataToBeSaved = {}
+
                 answers[attemptIndex] = {
                     'lightSwitchOn': parseInt($('#light-switch-on-number-input').val()),
                     'trueButtonClickClockState': buttonClickClockState,
@@ -281,6 +331,9 @@
                     'buttonLightDelay': lightGlowStartTime - buttonClickStartTime,
                     'delayPlanned': displayLightAfter
                 }
+
+
+                dataToBeSaved.answers = answers
 
 
                 $('#light-glow').css('visibility', 'hidden')
@@ -309,6 +362,9 @@
                 $('#averageScore').html('Your average score is ' + averageScore.toFixed(2) + ' out of ' + clockStates.length + '.')
                 $('#averageScore').hide()
 
+                scores[attemptIndex] = currentScore
+                dataToBeSaved.scores = scores
+
                     
                 multiplier = circularDifference(answers[attemptIndex]['lightSwitchOn'], answers[attemptIndex]['trueLightSwitchClockState'], clockStates.length)
 
@@ -328,7 +384,7 @@
                 
                 analysisData.push([answers[attemptIndex]['delayPlanned'], answers[attemptIndex]['buttonLightDelay'], userDelay, attemptIndex + 1])
                 
-
+                dataToBeSaved.analysisData = analysisData
 
                 userDelays = {}
                 for (k = 0; k < analysisData.length; k++) {
@@ -344,7 +400,9 @@
                 for (k = 0; k < Object.keys(userDelays).length; k++) {
                     averageUserDelays[Object.keys(userDelays)[k]] = userDelays[Object.keys(userDelays)[k]].reduce((a, b) => a + b, 0)/userDelays[Object.keys(userDelays)[k]].length
                 }
-
+                
+                dataToBeSaved.userDelays = userDelays
+                dataToBeSaved.averageUserDelays = averageUserDelays
 
                 averageUserDelayInfo = document.getElementById('averageUserDelayInfo')
                 averageUserDelayInfo.innerHTML = '<p>For a delay of</p>'
@@ -368,6 +426,19 @@
                 }
 
                 gameAt = "clickButtonStage"
+
+                dataToBeSaved.dateTimeString = dateTimeString
+                dataToBeSaved.measurementResolution = measurementResolution
+                dataToBeSaved.clockStates = clockStates
+                dataToBeSaved.delaysTested = delaysTested
+
+                database.ref('users/' + sessionID).set(dataToBeSaved)
+                .then(function() {
+                    console.log("Data written successfully.");
+                })
+                .catch(function(error) {
+                    console.log("Error writing data:", error);
+                });
 
 
             }
