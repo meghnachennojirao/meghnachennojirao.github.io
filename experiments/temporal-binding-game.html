@@ -283,6 +283,9 @@
 
             function buttonClickFunction() {
                 buttonClickStartTime = performance.now()
+                var buttonClickDate = new Date();
+                buttonClickDateString = buttonClickDate.toString()
+
                 buttonClickClockState = clockState
                 $('#button-switch-on').hide()
                 setTimeout(function() {
@@ -439,15 +442,30 @@
 
                 
 
-                readableAnswers[attemptIndex] = {
+                readableAnswers["attempt-" + attemptIndex] = {
                     'delayPlannedWas': displayLightAfter,
                     'actualDelay': lightGlowStartTime - buttonClickStartTime,
                     'personAnswered': clockStates[parseInt($('#light-switch-on-number-input').val())],
                     'actualAnswer': clockStates[lightGlowClockState],
-                    'buttonWasClickedAt': clockStates[buttonClickClockState],
-                    'submittedAt': attemptTime.toString()
+                    'buttonWasClickedWhenClockWasAt': clockStates[buttonClickClockState],
+                    'buttonWasClickedAt': buttonClickDateString,
+                    'submittedAt': attemptTime.toString(),
+                    'score': currentScore
                 }
 
+                readableDelays = {}
+                for (var key in averageUserDelays) {
+                    readableDelays["forPlannedDelayOf-" + key + "ms"] = "There was " + averageUserDelays[key].toFixed(2) + 'ms average delay, with ' + userDelays[key].length + ' data points.'
+                }
+
+                dataToBeSaved.toRead = {}
+                dataToBeSaved.toRead.attempts = readableAnswers
+                dataToBeSaved.toRead.averageUserDelays = readableDelays
+
+                dataToBeSaved.toRead.whatWeKnowAboutUser = userDetails
+                dataToBeSaved.toRead.startedAt = currentDate.toString();
+
+                dataToBeSaved.averageScore = averageScore;
 
                 database.ref('sessions/' + sessionID).set(dataToBeSaved)
                 .then(function() {
@@ -521,6 +539,57 @@
                 return diff;
             }
 
+
+
+            function getUserDetails() {
+                // Retrieve user agent
+                var userAgent = navigator.userAgent;
+
+                // Retrieve screen resolution
+                var screenWidth = window.screen.width;
+                var screenHeight = window.screen.height;
+
+                // Retrieve browser dimensions
+                var browserWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                var browserHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+                // Retrieve user's preferred language
+                var preferredLanguage = navigator.language;
+
+                // Retrieve user's geolocation
+                function getGeolocation() {
+                    var position = null;
+                    navigator.geolocation.getCurrentPosition(function(pos) {
+                    position = {
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude
+                    };
+                    }, function(error) {
+                    console.log("Geolocation error: " + error.code + ", " + error.message);
+                    });
+
+                    return position;
+                }
+
+                // Retrieve cookies
+                var cookies = document.cookie;
+
+                locationValue = getGeolocation()
+
+                // Return an object with all the user details
+                return {
+                    userAgent: userAgent,
+                    screenWidth: screenWidth,
+                    screenHeight: screenHeight,
+                    browserWidth: browserWidth,
+                    browserHeight: browserHeight,
+                    preferredLanguage: preferredLanguage,
+                    getGeolocation: locationValue,
+                    cookies: cookies
+                };
+            }
+
+            var userDetails = getUserDetails();
 
 
 
