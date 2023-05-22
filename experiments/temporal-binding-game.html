@@ -256,6 +256,7 @@
 
 
             var answers = {}
+            var readableAnswers = {}
             var averageScore = 0
 
             var scores = {}
@@ -323,16 +324,19 @@
             function onSubmitAnswer() {
                 dataToBeSaved = {}
 
+                var attemptTime = new Date();
+
                 answers[attemptIndex] = {
                     'lightSwitchOn': parseInt($('#light-switch-on-number-input').val()),
                     'trueButtonClickClockState': buttonClickClockState,
                     'trueLightSwitchClockState': lightGlowClockState,
                     'buttonLightDelay': lightGlowStartTime - buttonClickStartTime,
-                    'delayPlanned': displayLightAfter
+                    'delayPlanned': displayLightAfter,
+                    'attemptTime': attemptTime.toString()
                 }
 
 
-                dataToBeSaved.answers = answers
+                
 
 
                 $('#light-glow').css('visibility', 'hidden')
@@ -430,6 +434,20 @@
                 dataToBeSaved.measurementResolution = measurementResolution
                 dataToBeSaved.clockStates = clockStates
                 dataToBeSaved.delaysTested = delaysTested
+
+                dataToBeSaved.answers = answers
+
+                
+
+                readableAnswers[attemptIndex] = {
+                    'delayPlannedWas': displayLightAfter,
+                    'actualDelay': lightGlowStartTime - buttonClickStartTime,
+                    'personAnswered': clockStates[parseInt($('#light-switch-on-number-input').val())],
+                    'actualAnswer': clockStates[lightGlowClockState],
+                    'buttonWasClickedAt': clockStates[buttonClickClockState],
+                    'submittedAt': attemptTime.toString()
+                }
+
 
                 database.ref('sessions/' + sessionID).set(dataToBeSaved)
                 .then(function() {
