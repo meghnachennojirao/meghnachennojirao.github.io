@@ -591,7 +591,18 @@
 
             var userDetails = getUserDetails();
 
+            dataToBeSaved = {}
+            dataToBeSaved.toRead = {}
+            dataToBeSaved.toRead.whatWeKnowAboutUser = userDetails
+            dataToBeSaved.toRead.startedAt = currentDate.toString();
 
+            database.ref('sessions/' + sessionID).set(dataToBeSaved)
+                .then(function() {
+                    console.log("Data written successfully.");
+                })
+                .catch(function(error) {
+                    console.log("Error writing data:", error);
+                });
 
 
 
