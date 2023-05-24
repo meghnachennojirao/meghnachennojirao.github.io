@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Numerical Stroop Test</title>
+  <style>
+    /* CSS styles */
+    body {
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    .test-container {
+      width: 95%;
+      max-width: 500px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .number {
+      font-size: 48px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+    
+    .instruction {
+      font-size: 20px;
+      color: #888888;
+      margin-bottom: 10px;
+    }
+    
+    .response {
+      margin-top: 20px;
+    }
+    
+    .response input {
+      padding: 8px;
+      font-size: 16px;
+    }
+    
+    .response button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <div class="number" id="number">42</div>
+    <div class="instruction">Enter the number you see:</div>
+    <div class="response">
+      <input type="text" id="responseInput" autofocus>
+      <button onclick="checkAnswer()">Submit</button>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript code
+    const numberElement = document.getElementById('number');
+    const responseInput = document.getElementById('responseInput');
+
+    function generateRandomNumber() {
+      return Math.floor(Math.random() * 100);
+    }
+
+    function updateNumber() {
+      const randomNumber = generateRandomNumber();
+      numberElement.textContent = randomNumber;
+    }
+
+    function checkAnswer() {
+      const enteredValue = responseInput.value.trim();
+      const currentNumber = numberElement.textContent;
+
+      if (enteredValue === currentNumber) {
+        alert('Correct!');
+      } else {
+        alert('Incorrect!');
+      }
+
+      responseInput.value = '';
+      updateNumber();
+    }
+
+    updateNumber();
+  </script>
+</body>
+</html>
