@@ -32,7 +32,7 @@
       background-color: hsl(0, 100%, 50%);
       position: absolute;
       top: calc(50% - 4px);
-      left: calc(50% - (150px/2) - 4px);
+      left: calc(50% - (300px/4) - 4px);
     }
   </style>
 </head>
@@ -46,10 +46,11 @@
     // JavaScript code
     var outerCircle = document.getElementById("outer-circle");
     var innerCircle = document.getElementById("inner-circle");
+    var offsetSquare = document.getElementById("offset-square");
 
     var angle = 0;
     var radius = outerCircle.offsetWidth / 2;
-    var speed = 2;
+    var speed = 4;
 
     function rotateInnerCircle() {
       var centerX = outerCircle.offsetWidth / 2;
@@ -60,6 +61,13 @@
 
       innerCircle.style.left = x + "px";
       innerCircle.style.top = y + "px";
+
+      // Check if the green dot is on the left side of the red square horizontally
+      if (x < offsetSquare.offsetLeft && Math.abs(y - offsetSquare.offsetTop) < 5) {
+        innerCircle.style.backgroundColor = "white";
+      } else {
+        innerCircle.style.backgroundColor = "transparent";
+      }
 
       angle += speed * (Math.PI / 180);
       requestAnimationFrame(rotateInnerCircle);
