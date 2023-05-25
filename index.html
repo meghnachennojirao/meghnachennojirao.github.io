@@ -245,6 +245,17 @@
             else if (window.innerWidth > 1201) {
               document.getElementById('background-part-0').style.height = '100px';
             }   
+
+
+            var backgroundParts = document.getElementsByClassName('backgroundSvgSlice');
+
+              for (var i = 0; i < backgroundParts.length; i++) {
+                partNumber = backgroundParts[i].id.split('background-part-')[1];
+                if (partNumber != 0) {
+                  backgroundParts[i].style.transform = 'translateY(' + ((0* partNumber * 0.04 * 2400/window.innerWidth) + (-10*(3400/window.innerWidth))) + '%)';
+                }
+                
+              }
             </script>
             
             
