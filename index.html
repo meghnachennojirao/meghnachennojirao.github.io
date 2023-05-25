@@ -11,38 +11,53 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
-    <style  id="dark-theme-style">
-      /* Custom styles */
-      body {
-        font-family: 'Raleway', Arial, sans-serif;
-        background-color: black;
-        color: lightgray;
+    <style id="lighter-theme-style">
+        h1 {
+            color: #000;
+        }
+        body {
+          color: #07284c;
+        }
+        .theHeadings {
+          color: #2463b5;
+          font-weight: bold;
       }
-      h1 {
-        color: #fff;
-      }
-      .profile {
-        display: flex;
-        align-items: center;
-        margin-bottom: 30px;
-      }
-      .profile img {
-        width: 150px;
-        border-radius: 50%;
-        margin-right: 20px;
-        border: 4px solid hsla(40, 50%, 50%, 0.4);
-      }
-      .work {
-        margin-bottom: 30px;
-      }
-      .project {
-        border-left: 2px solid hsla(230, 100%, 50%, 1);
-        max-width: 900px;
-      }
-      .project-heading {
-        font-weight: bold;
+      .project-description {
+        color: #0c576b
       }
       .click-button {
+        color: #08178b;
+        font-weight: bold;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 12px;
+        border: 1px solid hsla(0, 0%, 33%, 0.3);
+        font-family: Nunito;
+        font-size: 13px;
+        font-weight: bold;
+      }
+      .click-button:hover {
+        background-color: #fff;
+        color: #111;
+      }
+    </style>
+
+    <!-- <style id="darker-theme-style">
+        h1 {
+            color: #fff;
+        }
+        body {
+          color: lightgray;
+        }
+        .theHeadings {
+        color: gray;
+        font-weight: bold;
+      }
+      .project-description {
+        color: #0c576b
+      }
+
+       .click-button {
         color: #fff;
         border-color: #fff;
         font-weight: bold;
@@ -57,10 +72,38 @@
         background-color: #fff;
         color: #111;
       }
-      .theHeadings {
-        color: gray;
+      </style> -->
+
+    <style>
+      /* Custom styles */
+      body {
+        font-family: 'Raleway', Arial, sans-serif;
+        background-color: hsla(193, 40%, 10%, 1);
+        
+      }
+      .profile {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      .profile img {
+        filter: saturate(1.2);
+        width: 150px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+      .work {
+        margin-bottom: 30px;
+      }
+      .project {
+        border-left: 2px solid hsla(230, 100%, 50%, 1);
+        max-width: 900px;
+      }
+      .project-heading {
         font-weight: bold;
       }
+     
+      
       p {
         font-family: Nunito, Arial, sans-serif;
       }
@@ -82,11 +125,11 @@
         position: absolute;
         bottom: 0px;
         border-radius: 20px;
-        min-width: 400px;
+        min-width: 813px;
       }
 
       .container-inner {
-        background-color: hsla(193, 69%, 57%, 1);
+        background-color: hsla(193,  69%, 57%, 1);
       }
 
     </style>
@@ -107,14 +150,14 @@
         </div>
         <div class="p-5" style="z-index: 2; position: relative;">
           <div class="profile d-none  d-md-flex">
-            <img src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Profile Picture" class="rounded-circle">
+            <img src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Profile Picture" class="rounded-circle"  style="border: 6px solid hsla(220, 100%, 80%, 0.6)">
             <div class="pl-3">
               <h1><b>Dr. Meghna C Rao</b></h1>
               <p>Chief Physician, Self-Employed at Dr Rao's Homeopathic Clinic, Katapadi</p>
             </div>
           </div>
           <div class="d-md-none text-center">
-            <img src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Profile Picture" class="rounded-circle">
+            <img src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Profile Picture" class="rounded-circle" style="border: 10px solid hsla(220, 80%, 70%, 0.4)">
             <div class="pt-4">
               <h1><b>Dr. Meghna C Rao</b></h1>
               <p>Chief Physician, Self-Employed at Dr Rao's Homeopathic Clinic, Katapadi</p>
@@ -131,34 +174,79 @@
             <p style="max-width: 800px;">I like working on projects related to neuroscience, medicine and biology. </p>
             <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
               <h6 class="project-heading">Experiment: Temporal Binding Game</h6>
-              <p style="color: grey;">Experience the temporal binding phenomenon through an interactive game.</p>
+              <p class="project-description">Experience the temporal binding phenomenon through an interactive game.</p>
               <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/temporal-binding-game.html" class="click-button" target="_blank">Play Game</a>
             </div>
             <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
               <h6 class="project-heading">Experiment: Flash Lag Illusion</h6>
-              <p style="color: grey;">Explore the intriguing flash lag illusion and understand its perceptual implications.</p>
+              <p class="project-description">Explore the intriguing flash lag illusion and understand its perceptual implications.</p>
               <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/flash-lag-illusion.html" class="click-button"  target="_blank">View Experiment</a>
             </div>
           </div>
 
-          <div class="p-5 m-5"></div>
-          <div class="p-5 m-5"></div>
-          <div class="p-5 m-5"></div>
-          <div class="p-5 m-5"></div>
-          <div class="p-5 m-5"></div>
+
+          <div style="height: 100px;" class="w-100 d-xl-block d-none"></div>
+          <div style="height: 100px;" class="w-100 d-lg-block d-none"></div>
+          <div style="height: 100px;" class="w-100 d-md-block d-none"></div>
+          <div style="height: 100px;" class="w-100 d-sm-block d-none"></div>
+          <div style="height: 300px;" class="w-100"></div>
         </div>
 
+
         <div class="backgroundSvgHolder">
+          <div style="position: absolute; background-image: linear-gradient(180deg,hsla(193,  69%, 57%, 0.8), hsla(193,  69%, 57%, 0.8), hsla(193,  0%, 0%, 0.2) 40%, transparent); width: 100%; height: 100%; z-index: 1;"></div>
+          <div class="w-100 d-lg-block d-none" style="height: 200px;" ></div>
           <div style="position: relative; height: 100%;">
             
-            <img class="backgroundSvgSlice" src="assets/images/main/background-6.svg" style="border-radius: 0px;" />
-            <img class="backgroundSvgSlice" src="assets/images/main/background-7.svg" />
-            <img class="backgroundSvgSlice" src="assets/images/main/background-5.svg" />
-            <img class="backgroundSvgSlice" src="assets/images/main/background-4.svg" />
-            <img class="backgroundSvgSlice" src="assets/images/main/background-3.svg" />
-            <img class="backgroundSvgSlice" src="assets/images/main/background-2.svg" />
-            <img class="backgroundSvgSlice" src="assets/images/main/background-1.svg" />
-            <div style="position: absolute; background-image: linear-gradient(180deg, hsla(0, 0%, 0%, 0.8), hsla(0, 0%, 0%, 0.8) 60%, transparent); width: 100%; height: 100%"></div>
+            <img id="background-part-6" class="backgroundSvgSlice" src="assets/images/main/background-6.svg" style="border-radius: 0px;" />
+            <img id="background-part-7" class="backgroundSvgSlice" src="assets/images/main/background-7.svg" />
+            <img id="background-part-5" class="backgroundSvgSlice" src="assets/images/main/background-5.svg" />
+            <img id="background-part-4" class="backgroundSvgSlice" src="assets/images/main/background-4.svg" />
+            <img id="background-part-3" class="backgroundSvgSlice" src="assets/images/main/background-3.svg" />
+            <img id="background-part-2" class="backgroundSvgSlice" src="assets/images/main/background-2.svg" />
+            <img id="background-part-1" class="backgroundSvgSlice" src="assets/images/main/background-1.svg" />
+
+            <div id="background-part-0" class="backgroundSvgSlice" style="background-color: #13232c;"></div>
+
+
+            <script>
+              window.addEventListener('scroll', function() {
+              // Get the scroll position in pixels
+              var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              
+              // Calculate the scrollable height of the document
+              var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+              
+              // Calculate the scroll percentage
+              var scrollPercent = (scrollTop / scrollHeight) * 100;
+
+              var backgroundParts = document.getElementsByClassName('backgroundSvgSlice');
+
+              for (var i = 0; i < backgroundParts.length; i++) {
+                partNumber = backgroundParts[i].id.split('background-part-')[1];
+                if (partNumber != 0) {
+                  backgroundParts[i].style.transform = 'translateY(' + ((scrollPercent* partNumber * 0.04 * 2400/window.innerWidth) + (-10*(3400/window.innerWidth))) + '%)';
+                }
+                
+              }
+
+
+            });
+
+            if (window.innerWidth < 300) {
+              document.getElementById('background-part-0').style.height = '600px';
+            }
+            else if (window.innerWidth > 301 &&  window.innerWidth < 800) {
+              document.getElementById('background-part-0').style.height = '400px';
+            }
+            else if (window.innerWidth > 801 &&  window.innerWidth < 1200) {
+              document.getElementById('background-part-0').style.height = '200px';
+            }
+            else if (window.innerWidth > 1201) {
+              document.getElementById('background-part-0').style.height = '100px';
+            }   
+            </script>
+            
             
           </div>
           
