@@ -3,15 +3,18 @@
   <head>
     <title>Dr. Meghna C Rao</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap">
 
-    <style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <style  id="dark-theme-style">
       /* Custom styles */
       body {
         font-family: 'Raleway', Arial, sans-serif;
-        background-color: #111;
-        color: #fff;
-        margin: 20px;
+        background-color: black;
+        color: lightgray;
       }
       h1 {
         color: #fff;
@@ -22,38 +25,68 @@
         margin-bottom: 30px;
       }
       .profile img {
-        width: 100px;
+        width: 150px;
         border-radius: 50%;
         margin-right: 20px;
+        border: 4px solid hsla(40, 50%, 50%, 0.4);
       }
       .work {
         margin-bottom: 30px;
       }
       .project {
-        margin-bottom: 20px;
+        border-left: 2px solid hsla(230, 100%, 50%, 1);
+        max-width: 900px;
       }
-      .kitten-image {
-        width: 200px;
+      .project-heading {
+        font-weight: bold;
       }
-      .btn-outline-light {
+      .click-button {
         color: #fff;
         border-color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 12px;
+        border: 1px solid hsla(0, 0%, 33%, 1);
+        font-family: Nunito;
+        font-size: 13px;
       }
-      .btn-outline-light:hover {
+      .click-button:hover {
         background-color: #fff;
         color: #111;
       }
-      .gradient-bg {
-        background: linear-gradient(to bottom right, #4a47a3, #874da1);
+      .theHeadings {
+        color: gray;
+        font-weight: bold;
       }
-      .svg-shape {
+      p {
+        font-family: Nunito, Arial, sans-serif;
+      }
+
+      .backgroundSvgHolder {
         position: absolute;
-        top: 0;
+        bottom: 0px;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1;
+        pointer-events: none;
+        z-index: 0; 
+        overflow: hidden;
+        border-radius: 20px;
       }
+
+      .backgroundSvgSlice {
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+        border-radius: 20px;
+        min-width: 400px;
+      }
+
+      .container-inner {
+        background-color: hsla(193, 69%, 57%, 1);
+      }
+
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3H9JR6P5Z0"></script>
     <script>
@@ -65,45 +98,66 @@
     </script>
   </head>
   <body>
-    <div class="container">
-      <div class="profile">
-        <img src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Profile Picture" class="rounded-circle">
-        <div>
-          <h1>Dr. Meghna C Rao</h1>
-          <p>Chief Physician, Self-Employed at Dr Rao's Homeopathic Clinic, Katapadi</p>
+    <div class="container-main">
+      <div class="container-inner m-3" style="position: relative;  min-height: 100vh; border-radius: 20px; border: 1px solid hsla(0, 0%, 2%, 1);"> 
+        <div style="position: absolute; right: 20px; top: 10px">
+          <input type="checkbox" id="theme-toggle">
         </div>
-      </div>
+        <div class="p-5" style="z-index: 2; position: relative;">
+          <div class="profile">
+            <img src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Profile Picture" class="rounded-circle">
+            <div class="pl-3">
+              <h1><b>Dr. Meghna C Rao</b></h1>
+              <p>Chief Physician, Self-Employed at Dr Rao's Homeopathic Clinic, Katapadi</p>
+            </div>
+          </div>
+    
+          <div class="work mt-5 pt-2">
+            <h5 class="theHeadings">ABOUT ME</h5>
+            <p style="max-width: 800px;">I am a chief physician and the owner of Dr Rao's Homeopathic Clinic in Katapadi. With expertise in homeopathy, I have been providing comprehensive healthcare services since February 2020.</p>
+          </div>
+    
+          <div class="projects mt-5 pt-2">
+            <h5 class="theHeadings">PROJECTS</h5>
+            <p style="max-width: 800px;">I like working on projects related to neuroscience, medicine and biology. </p>
+            <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
+              <h6 class="project-heading">Experiment: Temporal Binding Game</h6>
+              <p style="color: grey;">Experience the temporal binding phenomenon through an interactive game.</p>
+              <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/temporal-binding-game.html" class="click-button" target="_blank">Play Game</a>
+            </div>
+            <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
+              <h6 class="project-heading">Experiment: Flash Lag Illusion</h6>
+              <p style="color: grey;">Explore the intriguing flash lag illusion and understand its perceptual implications.</p>
+              <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/flash-lag-illusion.html" class="click-button"  target="_blank">View Experiment</a>
+            </div>
+          </div>
 
-      <div class="work">
-        <h2>About Me</h2>
-        <p>I am a chief physician and the owner of Dr Rao's Homeopathic Clinic in Katapadi. With expertise in homeopathy, I have been providing comprehensive healthcare services since February 2020.</p>
-      </div>
+          <div class="p-5 m-5"></div>
+          <div class="p-5 m-5"></div>
+          <div class="p-5 m-5"></div>
+          <div class="p-5 m-5"></div>
+          <div class="p-5 m-5"></div>
+        </div>
 
-      <div class="projects">
-        <h2>Projects</h2>
-        <div class="project">
-          <h3>Experiment: Temporal Binding Game</h3>
-          <p>Experience the temporal binding phenomenon through an interactive game.</p>
-          <a href="https://meghnachennojirao.github.io/experiments/temporal-binding-game.html" class="btn btn-outline-light">Play Game</a>
+        <div class="backgroundSvgHolder">
+          <div style="position: relative; height: 100%;">
+            
+            <img class="backgroundSvgSlice" src="assets/images/main/background-6.svg" style="border-radius: 0px;" />
+            <img class="backgroundSvgSlice" src="assets/images/main/background-7.svg" />
+            <img class="backgroundSvgSlice" src="assets/images/main/background-5.svg" />
+            <img class="backgroundSvgSlice" src="assets/images/main/background-4.svg" />
+            <img class="backgroundSvgSlice" src="assets/images/main/background-3.svg" />
+            <img class="backgroundSvgSlice" src="assets/images/main/background-2.svg" />
+            <img class="backgroundSvgSlice" src="assets/images/main/background-1.svg" />
+            <div style="position: absolute; background-image: linear-gradient(180deg, hsla(0, 0%, 0%, 0.8), hsla(0, 0%, 0%, 0.8) 60%, transparent); width: 100%; height: 100%"></div>
+            
+          </div>
+          
         </div>
-        <div class="project">
-          <h3>Experiment: Flash Lag Illusion</h3>
-          <p>Explore the intriguing flash lag illusion and understand its perceptual implications.</p>
-          <a href="https://meghnachennojirao.github.io/experiments/flash-lag-illusion.html" class="btn btn-outline-light">View Experiment</a>
-        </div>
+        
       </div>
+      
     </div>
 
-    <svg class="svg-shape" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="gradient" gradientTransform="rotate(45)">
-          <stop offset="0%" stop-color="#4a47a3"></stop>
-          <stop offset="100%" stop-color="#874da1"></stop>
-        </linearGradient>
-      </defs>
-      <polygon points="0,0 100,0 0,100" fill="url(#gradient)"></polygon>
-    </svg>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
