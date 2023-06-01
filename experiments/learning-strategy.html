@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Strategy Assessment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .question {
+      margin-bottom: 10px;
+    }
+
+    .likert-scale {
+      display: flex;
+      justify-content: space-between;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .likert-scale li {
+      flex: 1;
+      text-align: center;
+    }
+
+    .likert-scale li label {
+      display: block;
+    }
+
+    .readings {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Learning Strategy Assessment</h1>
+  <form id="assessment-form">
+    <div class="question">
+      <label for="q1">1. I analyze in depth the task I have to complete so that it is clear to me what I have to do</label>
+      <ul class="likert-scale">
+        <li><label><input type="radio" name="q1" value="1">1</label></li>
+        <li><label><input type="radio" name="q1" value="2">2</label></li>
+        <li><label><input type="radio" name="q1" value="3">3</label></li>
+        <li><label><input type="radio" name="q1" value="4">4</label></li>
+        <li><label><input type="radio" name="q1" value="5">5</label></li>
+      </ul>
+    </div>
+
+    <!-- Add more questions using the same structure -->
+    
+    <div class="question">
+      <label for="q2">2. I often make diagrams or drawings to represent what I study</label>
+      <ul class="likert-scale">
+        <li><label><input type="radio" name="q2" value="1">1</label></li>
+        <li><label><input type="radio" name="q2" value="2">2</label></li>
+        <li><label><input type="radio" name="q2" value="3">3</label></li>
+        <li><label><input type="radio" name="q2" value="4">4</label></li>
+        <li><label><input type="radio" name="q2" value="5">5</label></li>
+      </ul>
+    </div>
+
+    <!-- Add more questions using the same structure -->
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div class="readings">
+    <h2>Readings:</h2>
+    <p id="assessment-results"></p>
+  </div>
+
+  <script>
+    document.getElementById('assessment-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      calculateResults();
+    });
+
+    function calculateResults() {
+      const form = document.getElementById('assessment-form');
+      const answers = form.elements;
+      let totalScore = 0;
+
+      for (let i = 0; i < answers.length; i++) {
+        if (answers[i].type === 'radio' && answers[i].checked) {
+          totalScore += parseInt(answers[i].value);
+        }
+      }
+
+      const averageScore = totalScore / (answers.length / 5);
+
+      const readings = {
+        low: "You seem to have a lower preference for this learning strategy.",
+        medium: "You have a moderate preference for this learning strategy.",
+        high: "You have a high preference for this learning strategy."
+      };
+
+      let result;
+      if (averageScore < 2.5) {
+        result = readings.low;
+      } else if (averageScore < 3.5) {
+        result = readings.medium;
+      } else {
+        result = readings.high;
+      }
+
+      document.getElementById('assessment-results').textContent = "Based on your answers, " + result;
+    }
+  </script>
+</body>
+
+</html>
