@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Motion After Effect</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 20px;
+      color: white;
+    }
+
+    #fullDiagram,
+    #fullDiagram-circle {
+      display: inline-block;
+      font-size: 0;
+    }
+
+    #fullDiagram-circle {
+      clip-path: circle(20% at 50% 50%);
+    }
+
+    .square {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .stripped-square {
+      position: absolute;
+    }
+
+    #stripped-direction-1 {
+      background: repeating-linear-gradient(-45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimation1 5s linear infinite;
+      width: 400px;
+      height: 400px;
+    }
+
+    #stripped-direction-2 {
+      background: repeating-linear-gradient(45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimation2 5s linear infinite;
+      width: 400px;
+      height: 400px;
+    }
+
+    #stripped-direction-3 {
+      background: repeating-linear-gradient(45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimation3 5s linear infinite;
+      width: 403.1px;
+      height: 403.1px;
+    }
+
+    #stripped-direction-4 {
+      background: repeating-linear-gradient(-45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimation4 5s linear infinite;
+      width: 403.1px;
+      height: 403.1px;
+    }
+
+    #stripped-direction-for-circle-1 {
+      background: repeating-linear-gradient(-45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimationCircle1 5s linear infinite;
+      width: 400px;
+      height: 400px;
+    }
+
+    #stripped-direction-for-circle-2 {
+      background: repeating-linear-gradient(45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimationCircle2 5s linear infinite;
+      width: 400px;
+      height: 400px;
+    }
+
+    #stripped-direction-for-circle-3 {
+      background: repeating-linear-gradient(45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimationCircle3 5s linear infinite;
+      width: 403.1px;
+      height: 403.1px;
+    }
+
+    #stripped-direction-for-circle-4 {
+      background: repeating-linear-gradient(-45deg, black, black 10px, white 10px, white 20px);
+      animation: stripeAnimationCircle4 5s linear infinite;
+      width: 403.1px;
+      height: 403.1px;
+    }
+
+    @keyframes stripeAnimation1 {
+      100% {
+        left: -200px;
+        top: -200px;
+      }
+      0% {
+        left: 0px;
+        top: 0px;
+      }
+    }
+
+    @keyframes stripeAnimation2 {
+      100% {
+        right: -200px;
+        top: -200px;
+      }
+      0% {
+        right: 0px;
+        top: 0px;
+      }
+    }
+
+    @keyframes stripeAnimation3 {
+      100% {
+        left: -203.1px;
+        bottom: -203.1px;
+      }
+      0% {
+        left: -3.1px;
+        bottom: -3.1px;
+      }
+    }
+
+    @keyframes stripeAnimation4 {
+      100% {
+        right: -203.1px;
+        bottom: -203.1px;
+      }
+      0% {
+        right: -3.1px;
+        bottom: -3.1px;
+      }
+    }
+
+    @keyframes stripeAnimationCircle1 {
+      0% {
+        left: -200px;
+        top: -200px;
+      }
+      100% {
+        left: 0px;
+        top: 0px;
+      }
+    }
+
+    @keyframes stripeAnimationCircle2 {
+      0% {
+        right: -200px;
+        top: -200px;
+      }
+      100% {
+        right: 0px;
+        top: 0px;
+      }
+    }
+
+    @keyframes stripeAnimationCircle3 {
+      0% {
+        left: -203.1px;
+        bottom: -203.1px;
+      }
+      100% {
+        left: -3.1px;
+        bottom: -3.1px;
+      }
+    }
+
+    @keyframes stripeAnimationCircle4 {
+      0% {
+        right: -203.1px;
+        bottom: -203.1px;
+      }
+      100% {
+        right: -3.1px;
+        bottom: -3.1px;
+      }
+    }
+  </style>
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-3H9JR6P5Z0"></script>
+   <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag() { dataLayer.push(arguments); }
+     gtag('js', new Date());
+
+     gtag('config', 'G-3H9JR6P5Z0');
+   </script>
+</head>
+<body style="background: black;">
+  <h1>Motion After-Effect</h1>
+  <p style="width: 100%; text-align: center; color: grey;">
+    By Dr. Meghna Rao, Prajwal D'Souza
+  </p>
+  <p style="width: 100%; text-align: center; color: grey;">
+    🔴👀 Welcome to the After Motion Effect! Are you ready for some visual fun? Follow these simple steps:<br/>
+    1️⃣ Look at the red square 🟥 for 10 seconds. ⏰<br/>
+    2️⃣ Then, shift your gaze to any distant object. 🌳🏞️<br/>
+    And... voila! Watch as the world around you starts to play tricks on your eyes! 🌀🌈 Enjoy the fascinating After Motion Effect! ✨🤩<br/>
+
+  </p>
+  <div style="position: relative;">
+    <div style="display: flex; justify-content: center; margin-top: 30px;">
+      <div id="fullDiagram">
+        <div class="square">
+          <div class="stripped-square" id="stripped-direction-1"></div>
+        </div>
+        <div class="square">
+          <div class="stripped-square" id="stripped-direction-2"></div>
+        </div>
+        <br/>
+        <div class="square">
+          <div class="stripped-square" id="stripped-direction-3"></div>
+        </div>
+        <div class="square">
+          <div class="stripped-square" id="stripped-direction-4"></div>
+        </div>
+      </div>
+      <div style="position: absolute;">
+        <div id="fullDiagram-circle">
+          <div class="square">
+            <div class="stripped-square" id="stripped-direction-for-circle-1"></div>
+          </div>
+          <div class="square">
+            <div class="stripped-square" id="stripped-direction-for-circle-2"></div>
+          </div>
+          <br/>
+          <div class="square">
+            <div class="stripped-square" id="stripped-direction-for-circle-3"></div>
+          </div>
+          <div class="square">
+            <div class="stripped-square" id="stripped-direction-for-circle-4"></div>
+          </div>
+        </div>
+      </div>
+      <div style="position: absolute; width: 10px; height: 10px; background: red; top: calc(200px - 10px/2);"></div>
+    </div>
+  </div>
+  <p style="text-align: center; color: rgb(178, 178, 252); margin-top: 30px;padding-left: 60px;padding-right: 60px">The MOTION AFTER-EFFECT illusion, also known as the waterfall illusion, occurs when the perception of motion continues even after the original motion stimulus has ceased. This phenomenon is due to the adaptation of direction-selective neurons in our visual system. These neurons become fatigued or adapted after prolonged exposure to a particular motion direction. When we shift our gaze to a stationary object, the previously adapted neurons continue to fire at a reduced rate, while the neighboring neurons selective to the opposite direction continue firing normally. This neural imbalance leads our brain to interpret the situation as motion in the opposite direction, resulting in the perception of motion where there is none. This illusion arises from a fundamental process called adaptation, which allows our visual system to adjust its sensitivity to different stimuli.</p>
+
+  <script>
+    // Optional JavaScript code
+  </script>
+</body>
+</html>
