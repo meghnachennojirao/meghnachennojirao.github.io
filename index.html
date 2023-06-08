@@ -23,15 +23,15 @@
           font-weight: bold;
       }
       .project-description {
-        color: #0c576b
+        color: #d6d6d6
       }
       .click-button {
-        color: #08178b;
+        color: #cbcbcb;
         font-weight: bold;
         padding: 10px 20px;
         text-decoration: none;
         border-radius: 12px;
-        border: 1px solid hsla(0, 0%, 33%, 0.3);
+        border: 1px solid hsla(0, 0%, 93%, 0.3);
         font-family: Nunito;
         font-size: 13px;
         font-weight: bold;
@@ -76,6 +76,14 @@
 
     <style>
       /* Custom styles */
+
+      .glass-container {
+        background-color: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 10px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+      }
+
       body {
         font-family: 'Raleway', Arial, sans-serif;
         background-color: hsla(193, 40%, 10%, 1);
@@ -96,11 +104,12 @@
         margin-bottom: 30px;
       }
       .project {
-        border-left: 2px solid hsla(230, 100%, 50%, 1);
+        /* border-left: 2px solid hsla(230, 100%, 50%, 1); */
         max-width: 900px;
       }
       .project-heading {
         font-weight: bold;
+        color: white;
       }
      
       
@@ -171,23 +180,23 @@
     
           <div class="projects mt-5 pt-2">
             <h5 class="theHeadings">PROJECTS</h5>
-            <p style="max-width: 800px;">I like working on projects related to Neuroscience, Psychology, and Medicine. </p>
-            <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
+            <p class="pb-3" style="max-width: 800px;">I like working on projects related to Neuroscience, Psychology, and Medicine. </p>
+            <div class="project pl-4 pr-5 pt-4 pb-5 mt-2 mb-3 glass-container">
               <h6 class="project-heading">Experiment: Temporal Binding Game</h6>
               <p class="project-description">Experience the temporal binding phenomenon through an interactive game.</p>
               <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/temporal-binding-game.html" class="click-button" target="_blank">Play Game</a>
             </div>
-            <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
+            <div class="project pl-4 pr-5 pt-4 pb-5 mt-2 mb-3 glass-container">
               <h6 class="project-heading">Experiment: Flash Lag Illusion</h6>
               <p class="project-description">Explore the intriguing flash lag illusion and understand its perceptual implications.</p>
               <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/flash-lag-illusion.html" class="click-button"  target="_blank">View Experiment</a>
             </div>
-            <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
+            <div class="project pl-4 pr-5 pt-4 pb-5 mt-2 mb-3 glass-container">
               <h6 class="project-heading">Experiment: Motion After-effect</h6>
               <p class="project-description">Experience the most powerful visual illusion of Motion After-Effect without any drugs or medical condition!😜</p>
               <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/motion-aftereffect.html" class="click-button"  target="_blank">View Experiment</a>
             </div>
-            <!-- <div class="project pl-4 pr-5 pt-3 pb-3 mt-4 mb-5">
+            <!-- <div class="project pl-4 pr-5 pt-4 pb-5 mt-2 mb-3 glass-container">
               <h6 class="project-heading">Experiment: Flash Lag Illusion</h6>
               <p class="project-description">Explore the intriguing flash lag illusion and understand its perceptual implications.</p>
               <a style="text-decoration: none;" href="https://meghnachennojirao.github.io/experiments/flash-lag-illusion.html" class="click-button"  target="_blank">View Experiment</a>
@@ -235,7 +244,7 @@
               for (var i = 0; i < backgroundParts.length; i++) {
                 partNumber = backgroundParts[i].id.split('background-part-')[1];
                 if (partNumber != 0) {
-                  backgroundParts[i].style.transform = 'translateY(' + ((scrollPercent* partNumber * 0.04 * 2400/window.innerWidth) + (-10*(3400/window.innerWidth))) + '%)';
+                  backgroundParts[i].style.transform = 'translateY(' + ((scrollPercent* partNumber * 0.03 * 2400/window.innerWidth) + (-10*(3400/window.innerWidth))) + '%)';
                 }
                 
               }
