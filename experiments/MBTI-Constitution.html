@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MBTI Personality Categorization Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MBTI Personality Categorization Tool</h1>
+        <label for="personality">Personality:</label>
+        <select id="personality">
+            <option value="">Select a personality type...</option>
+            <option value="ISTJ">ISTJ</option>
+            <option value="ISFJ">ISFJ</option>
+            <option value="INFJ">INFJ</option>
+            <option value="INTJ">INTJ</option>
+            <option value="ISTP">ISTP</option>
+            <option value="ISFP">ISFP</option>
+            <option value="INFP">INFP</option>
+            <option value="INTP">INTP</option>
+            <option value="ESTP">ESTP</option>
+            <option value="ESFP">ESFP</option>
+            <option value="ENFP">ENFP</option>
+            <option value="ENTP">ENTP</option>
+            <option value="ESTJ">ESTJ</option>
+            <option value="ESFJ">ESFJ</option>
+            <option value="ENFJ">ENFJ</option>
+            <option value="ENTJ">ENTJ</option>
+        </select>
+        <button onclick="categorize()">Categorize</button>
+        <p class="result" id="result"></p>
+    </div>
+
+    <script>
+        function categorize() {
+            const personality = document.getElementById('personality').value;
+            let result = '';
+
+            switch (personality) {
+                case 'ISTJ':
+                case 'ISFJ':
+                case 'INFJ':
+                case 'INTJ':
+                    result = 'You belong to the "Introvert - Intuitive - Thinking - Judging" (INTJ) type.';
+                    break;
+
+                case 'ISTP':
+                case 'ISFP':
+                case 'INFP':
+                case 'INTP':
+                    result = 'You belong to the "Introvert - Intuitive - Thinking - Perceiving" (INTP) type.';
+                    break;
+
+                case 'ESTP':
+                case 'ESFP':
+                case 'ENFP':
+                case 'ENTP':
+                    result = 'You belong to the "Extravert - Intuitive - Feeling - Perceiving" (ENFP) type.';
+                    break;
+
+                case 'ESTJ':
+                case 'ESFJ':
+                case 'ENFJ':
+                case 'ENTJ':
+                    result = 'You belong to the "Extravert - Intuitive - Thinking - Judging" (ENTJ) type.';
+                    break;
+
+                default:
+                    result = 'Please select a valid personality type.';
+            }
+
+            document.getElementById('result').textContent = result;
+        }
+    </script>
+</body>
+</html>

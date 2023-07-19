@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brain Lobes</title>
+  <style>
+    #brain {
+      position: relative;
+      width: 500px;
+      height: 400px;
+    }
+    
+    .lobe {
+      position: absolute;
+      border: 2px solid red;
+      opacity: 0.5;
+    }
+    
+    #frontal-lobe {
+      top: 80px;
+      left: 260px;
+      width: 120px;
+      height: 80px;
+    }
+    
+    #parietal-lobe {
+      top: 100px;
+      left: 80px;
+      width: 90px;
+      height: 120px;
+    }
+    
+    #temporal-lobe {
+      top: 220px;
+      left: 120px;
+      width: 100px;
+      height: 80px;
+    }
+    
+    #occipital-lobe {
+      top: 170px;
+      left: 300px;
+      width: 100px;
+      height: 110px;
+    }
+  </style>
+</head>
+<body>
+  <div id="brain">
+    <div id="frontal-lobe" class="lobe">
+      <img src="/meghnachennojirao.github.io/assets/images/brain/blue.jpg" alt="Frontal Lobe">
+    </div>
+    <div id="parietal-lobe" class="lobe">
+      <img src="/meghnachennojirao.github.io/assets/images/brain/green.jpg" alt="Parietal Lobe">
+    </div>
+    <div id="temporal-lobe" class="lobe">
+      <img src="/meghnachennojirao.github.io/assets/images/brain/orange.jpg" alt="Temporal Lobe">
+    </div>
+    <div id="occipital-lobe" class="lobe">
+      <img src="/meghnachennojirao.github.io/assets/images/brain/purple.jpg" alt="Occipital Lobe">
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const lobes = document.getElementsByClassName('lobe');
+      Array.from(lobes).forEach((lobe) => {
+        lobe.addEventListener('mouseover', () => {
+          lobe.style.opacity = '1';
+        });
+        
+        lobe.addEventListener('mouseout', () => {
+          lobe.style.opacity = '0.5';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
