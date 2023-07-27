@@ -80,7 +80,7 @@
                                     <div>
                                         <button class="btn-ignus btn-outline-dark-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button> 
                                         <button class="btn-ignus btn-outline-dark-ignus" id="main-reset" onclick="gameGraphBasic.reset()">Reset</button>
-                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-addplace" onclick="gameGraphBasic.handleAddPlaceCell()">Add Place Cell</button>
+                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-addplace" onclick="gameGraphBasic.handleAddPlaceCell()">Add Place Field</button>
                                         <span id="place-cell-colors" style="display: none">
                                             <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(198, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(198, [0.8, 0.5])">     &nbsp&nbsp</button>
                                             <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(30, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(30, [0.8, 0.5])">     &nbsp&nbsp</button>
@@ -91,8 +91,8 @@
                                     <div id="gameSpace" style="min-height: 600px;">
                                     </div>
                                     <div class="text-ignus text-grey-ignus text-small-ignus text-center pt-4 mt-3" style="color: grey;">
-                                        <span style="color: lightgrey">When the mouse reaches any of the blue place cells (zones), the blue neuron in the mouse's brain fire and thus firing the motor neurons and other behaviors that neuron pathway intends.</span>
-                                        It is your goal is to help the mouse navigate across the place to the reward by modifying the position of it's place cells. When a mouse enters the zone of a place cell, the corresponding neuron (blue etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
+                                        <span style="color: lightgrey">When the mouse reaches any of the blue place field, the blue neuron (place cell) in the mouse's brain fire and thus firing the motor neurons and other behaviors that neuron pathway intends.</span>
+                                        It is your goal is to help the mouse navigate across the place to the reward by modifying the position of it's place fields. When a mouse enters the place field, the corresponding neuron (blue, orange etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
                                     </div>
                                 </div>
                                 <div class="col-7">
@@ -105,7 +105,7 @@
                                                 </div>
                                                 <div class="col-3" style="font-size: larger;"><b>Neurons</b><br/>
                                                     <p style="font-size: small;">
-                                                        The neurons that are activated depending on the conditions that are determined by points in space.
+                                                        The neurons (place cells) that are activated depending on the conditions that are determined by points in space.
                                                     </p>
                                                 </div>
                                                 <div class="col-6" style="font-size: larger;"><b>Firings</b><br/>
@@ -273,7 +273,7 @@
 
                 viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.2, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.2)", stroke: "transparent"});
 
-                viewX.addText("mainGameCanvas", "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, 50%, 1)", text: "Place Cell", fontFamily: "Nunito", fontSize: 1.8});
+                viewX.addText("mainGameCanvas", "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, 50%, 1)", text: "Place Field", fontFamily: "Nunito", fontSize: 1.8});
 
 
                 viewX.addPoint("mainGameCanvas", "mainGame-placeCell-moveKnob-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], pointsize: 6, pointcolor: "transparent", stroke: "transparent",  draggability: "yes", runFunctionDuringDrag: "gameGraphBasic.movePlace(" + gameGraphBasic.placeCells[placeCellColorKey].id + ")"});
@@ -323,7 +323,7 @@
 
                 (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
                     setTimeout(function() {
-                        viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKeySnapshot, {text: "Place Cell"});
+                        viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKeySnapshot, {text: "Place Field"});
                     }, 700);
                 })(placeCellColorKey, placeCellColorFiring);
 
@@ -637,11 +637,11 @@
             gameGraphBasic.handleAddPlaceCell = function() {
                 if (document.getElementById("place-cell-colors").style.display == "inline-block") {
                     document.getElementById("place-cell-colors").style.display = "none"
-                    document.getElementById('main-addplace').innerText = "Add Place Cell"
+                    document.getElementById('main-addplace').innerText = "Add Place Field"
                 }
                 else {
                     document.getElementById("place-cell-colors").style.display = "inline-block"
-                    document.getElementById('main-addplace').innerText = "Hide Colors"
+                    document.getElementById('main-addplace').innerText = "Hide Field Options"
                 }
             }
 
