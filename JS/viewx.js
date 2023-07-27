@@ -2468,10 +2468,13 @@ viewX.removeRectangle = function(graphname, rectname) {
 }
 
 viewX.removeGraph = function(graphname) {
-	graphElement = document.getElementById(graphname)
-	graphElement.outerHTML = "";
-	delete viewX.graphData[graphname]
-	delete viewX.graphData.objectType[graphname]
+    if (typeof viewX.graphData[graphname] != 'undefined') {
+        graphElement = document.getElementById(graphname)
+        graphElement.outerHTML = "";
+        delete viewX.graphData[graphname]
+        delete viewX.graphData.objectType[graphname]
+    }
+	
 }
 
 viewX.basicSlider = function(graphname2, slidernamebasic, maxv, minv, currentv, thickness, coordinates) {
