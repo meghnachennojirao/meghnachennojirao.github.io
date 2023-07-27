@@ -255,16 +255,7 @@
                 
             }
 
-            gameGraphBasic.placeCells = {}
 
-            gameGraphBasic.placeCellColors = [198, 30, 320]
-            gameGraphBasic.behaviors = ['turnLeft', 'turnRight']
-
-            gameGraphBasic.behaviorCellConnections = {
-                198 : ['turnRight'],
-                30 : ['turnLeft'],
-                320 : ['turnLeft']
-            }
             
             gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
 
@@ -416,7 +407,6 @@
                 gameGraphBasic.playing = true
             }
 
-            gameGraphBasic.firingGraphElements = []
             gameGraphBasic.runGraph = function() {
                 firingGraphStart = 0.5
 
@@ -583,7 +573,17 @@
                 gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
             }
 
+            gameGraphBasic.placeCells = {}
+            gameGraphBasic.firingGraphElements = []
 
+            gameGraphBasic.placeCellColors = [198, 30, 320]
+            gameGraphBasic.behaviors = ['turnLeft', 'turnRight']
+
+            gameGraphBasic.behaviorCellConnections = {
+                198 : ['turnRight'],
+                30 : ['turnLeft'],
+                320 : ['turnLeft']
+            }
 
             gameGraphBasic.setUp();
             gameGraphBasic.configRun();
