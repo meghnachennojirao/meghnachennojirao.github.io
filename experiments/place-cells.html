@@ -231,6 +231,14 @@
             // Code For game Graph
 
             gameGraphBasic = {}
+
+            gameGraphBasic.uid = 0
+            function getUiD() {
+                gameGraphBasic.uid = gameGraphBasic.uid + 1
+                return gameGraphBasic.uid.toString()
+            }
+
+
             gameGraphBasic.setMouseLocation = function(x, y) {
                 gameGraphBasic.mouse.location = [x, y]
                 viewX.updatePointXY("mainGameCanvas", "mainGame-mouse", gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1]);
@@ -252,9 +260,9 @@
             gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
 
                 if (Object.keys(gameGraphBasic.placeCells).length < gameGraphBasic.placeCellColors.length) {
-                    placeCellColorKey = getIdFromTimestamp()
+                    placeCellColorKey = getUiD()
                     gameGraphBasic.placeCells[placeCellColorKey] = {}
-                    gameGraphBasic.placeCells[placeCellColorKey].id = getIdFromTimestamp()
+                    gameGraphBasic.placeCells[placeCellColorKey].id = placeCellColorKey
                     gameGraphBasic.placeCells[placeCellColorKey].location = cellLocation
                     gameGraphBasic.placeCells[placeCellColorKey].radius = 0.1
                     gameGraphBasic.placeCells[placeCellColorKey].placeCellColor = placeCellColor
@@ -468,13 +476,11 @@
                     gameGraphBasic.setMouseLocation(newlocation[0], newlocation[1])
                 }
             }
-            function getIdFromTimestamp() {
-                const timestamp = Date.now(); // Get the current timestamp in milliseconds
-                return timestamp.toString(); // Convert it to a string
-            }
+
+            
 
             gameGraphBasic.fireNeuronSpike = function(placeCellColor) {
-                idForSpike = "neuronCanvas-firing-Line-" + placeCellColor + "-" + getIdFromTimestamp()
+                idForSpike = "neuronCanvas-firing-Line-" + placeCellColor + "-" + getUiD()
                 viewX.addLine("neuronCanvas", idForSpike, {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.4)"});
 
 
