@@ -330,7 +330,17 @@
  
             }
 
-            gameGraphBasic.setUp = function() {
+            gameGraphBasic.setUp = function(configData) {
+
+                gameGraphBasic.placeCells = {}
+                gameGraphBasic.firingGraphElements = []
+
+                gameGraphBasic.placeCellColors = configData.neurons
+                gameGraphBasic.behaviors = configData.behaviors
+
+                gameGraphBasic.behaviorCellConnections = configData.brain
+
+
                 gameGraphBasic.graph = document.getElementById('gameSpace')
                 viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas", defaultGraphOptions)
 
@@ -341,19 +351,19 @@
                 gameGraphBasic.boundaryRect.setAttribute('rx','1.1');
 
                 gameGraphBasic.mouse = {}
-                gameGraphBasic.mouse.location = [0.2, 0.8]
-                gameGraphBasic.mouse.velocity = [0.2, 0]
+                gameGraphBasic.mouse.location = configData.mouse.location
+                gameGraphBasic.mouse.velocity = configData.mouse.velocity
 
 
                 viewX.addPoint("mainGameCanvas", "mainGame-mouse", {x: gameGraphBasic.mouse.location[0], y: gameGraphBasic.mouse.location[1], pointcolor: "hsla(199, 100%, 100%, 1)"});
                 viewX.addText("mainGameCanvas", "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, textcolor: "hsla(199, 100%, 100%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: 1.8});
 
                 gameGraphBasic.reward = {}
-                gameGraphBasic.reward.location = [0.3, 0.2]
-                gameGraphBasic.reward.radius = 0.07
-                viewX.addCircle("mainGameCanvas", "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(289, 100%, 50%, 0.5)", stroke: "transparent"});
+                gameGraphBasic.reward.location = configData.reward.location
+                gameGraphBasic.reward.radius = configData.reward.radius
+                viewX.addCircle("mainGameCanvas", "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(249, 100%, 50%, 0.5)", stroke: "transparent"});
 
-                viewX.addText("mainGameCanvas", "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(289, 100%, 50%, 1)", text: "Reward", fontFamily: "Nunito", fontSize: 1.8, textAlign: 'center'});
+                viewX.addText("mainGameCanvas", "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(249, 100%, 50%, 1)", text: "Reward", fontFamily: "Nunito", fontSize: 1.8, textAlign: 'center'});
 
 
 
@@ -391,19 +401,12 @@
                     }
                 }
 
-                
-                
-
-
                 // viewX.addText("neuronCanvas", "neuronCanvas-behavioursDescription", {x: 0, y: 0.95, textcolor: "hsla(289, 0%, 50%, 1)", text: "Set of actions the mouse will take", fontFamily: "Nunito", fontSize: 2});
 
 
+                cellPositions = configData.cellInitialPositions;
 
-
-
-
-                
-
+                gameGraphBasic.placeInitCells(cellPositions);
                 gameGraphBasic.playing = true
             }
 
@@ -559,39 +562,60 @@
             }
 
 
-            gameGraphBasic.configRun = function() {
-                placeCellColor = gameGraphBasic.placeCellColors[0]
-                gameGraphBasic.addPlaceCell(placeCellColor, [0.8, 0.8])
-
-                placeCellColor = gameGraphBasic.placeCellColors[1]
-                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
-
-                placeCellColor = gameGraphBasic.placeCellColors[2]
-                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
-
-                placeCellColor = gameGraphBasic.placeCellColors[0]
-                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
+            gameGraphBasic.placeInitCells = function(cellConfig) {
+                for (var placeCellColorData in cellConfig) {
+                    positions = cellConfig[placeCellColorData]
+                    for (pindex = 0; pindex < positions.length; pindex++) {
+                        gameGraphBasic.addPlaceCell(placeCellColorData, positions[pindex])
+                    }
+                }
+                
             }
 
-            gameGraphBasic.placeCells = {}
-            gameGraphBasic.firingGraphElements = []
 
-            gameGraphBasic.placeCellColors = [198, 30, 320]
-            gameGraphBasic.behaviors = ['turnLeft', 'turnRight']
 
-            gameGraphBasic.behaviorCellConnections = {
-                198 : ['turnRight'],
-                30 : ['turnLeft'],
-                320 : ['turnLeft']
+
+
+
+            configD = {
+                neurons : [198, 30, 320],
+                behaviors : ['turnLeft', 'turnRight'],
+                brain: {
+                    198 : ['turnRight'],
+                    30 : ['turnLeft'],
+                    320 : ['turnLeft']
+                },
+                mouse: {
+                    location: [0.2, 0.8],
+                    velocity: [0.2, 0]
+                },
+                reward: {
+                    location: [0.3, 0.2],
+                    radius: 0.07
+                },
+                cellInitialPositions : {
+                    198: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1], 
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ],
+                    30: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1], 
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ],
+                    320: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ]
+                }
             }
-
-            gameGraphBasic.setUp();
-            gameGraphBasic.configRun();
+            gameGraphBasic.setUp(configD);
+            
             
 
 
-            setInterval(gameGraphBasic.runMouse, 15)
 
+
+
+            setInterval(gameGraphBasic.runMouse, 15)
 
             gameGraphBasic.startPlaying = function() {
                 gameGraphBasic.playing = true
