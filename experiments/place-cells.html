@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Place Cells Game</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta charset="UTF-8">
+        <meta name="description" content="A game about Place Cells">
+        <meta name="keywords" content="plots.js, Dr Meghna Rao, prajwalsouza, Prajwal DSouza">
+        <meta name="author" content="Dr. Meghna Rao, Prajwal DSouza">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta property="og:title" content="Where is the Parabola? - The Universal Parabolic Constant Mystery" />
+        <meta property="og:description" content="A game about Place Cells" />
+        <meta property="og:image" content="https://meghnachennojirao.github.io/assets/images/blog/pexels-pixabay-355887.jpg" />
+        <meta property="og:url" content="https://meghnachennojirao.github.io/experiments/place-cells">
+        <meta property="og:type" content="game, educational game" />
+
+
+		<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+		<!-- Some times used library for icons -->
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.css">
+        <script src="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.js"></script>
+
+
+		<link rel="icon" href="square.png">
+		
+		<script type="application/ld+json">
+			{
+			  "@type": "blog",
+			  "name": "Place Cells Game",
+			  "author": "Dr. Meghna Rao, Prajwal DSouza",
+			  "description": "A game about Place Cells"
+			  }
+		</script>
+
+        <!-- <link rel="stylesheet" href="/css/universal-parabolic-constant/universal-parabolic-constant.css"/> -->
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3H9JR6P5Z0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+    
+            gtag('config', 'G-3H9JR6P5Z0');
+        </script>
+      
+
+	</head>
+	<body style='margin:0px; display: block;'>
+		<div id="containAll" class="p-sm-3 p-1" style=" overflow: hidden; ">
+            <div style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: var(--generalBackground); ">
+                
+                <header id="upc-header" class="pr-2 pr-sm-3" style="position: fixed;font-family: Raleway; overflow: hidden; width: calc(100%); top: 0; z-index: 3; opacity: 0; pointer-events: none;" onclick="placeCellsGame.headerClick()">
+                    <div style="background-image: linear-gradient(to bottom, var(--generalBackground),var(--generalBackground), transparent);color: hsl(0,0%,20%);font-size: small;min-height: 131px;" class="text-ignus p-4 pl-5 pr-5 p-md-3 pl-md-4 pr-md-4 text-md-left text-center">
+                        <span style="cursor: pointer;"> 
+                            <span style="font-size:x-small;">Neuro Navigator</span>
+                        </span>
+                        <br/>
+                    </div>
+                    
+                </header>
+
+                <main>
+                    <div class="p-4 pl-5 text-ignus">
+                        <b style="font-family: Raleway; color: royalblue; font-size: xx-large;">Neuro Navigator</b><br/>
+                        <span class="text-ignus" style="color: grey;">A game inspired by a video from <a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: royalblue;" target="_blank">Artem Kirsanov</a></span>
+                    </div>
+                    <div class="pt-0 pl-5 pr-5 pb-5">
+                        <div class="row">
+                            <div class="col-5">
+                                <div>
+                                    <button class="btn-ignus btn-outline-primary-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button>
+
+                                </div>
+                                <div id="gameSpace" style="min-height: 600px;">
+                                </div>
+                                <div class="text-ignus text-grey-ignus text-small-ignus text-center pt-4 mt-3" style="color: grey;">
+                                    It is your goal is to help the mouse navigate across the place to the reward by modifying the position of it's place cells. When a mouse enters the zone of a place cell, the corresponding neuron (blue etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div id="descriptions">
+                                    <div class="row text-ignus" style="color: grey;">
+                                        <div class="col-3" style="font-size: larger;"><b>Behaviours</b><br/>       
+                                            <p style="font-size: small;">Set of actions the mouse will take
+                                            </p>
+                                        </div>
+                                        <div class="col-3" style="font-size: larger;"><b>Neurons</b><br/>
+                                            <p style="font-size: small;">
+                                                The neurons that are activated depending on the conditions that are determined by points in space.
+                                            </p>
+                                        </div>
+                                        <div class="col-6" style="font-size: larger;"><b>Firings</b><br/>
+                                            <p style="font-size: small;">
+                                                The spike train for each neurons
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="neuronSpace" style="min-height: 600px;">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                    
+                </main>
+
+                <div style="position: fixed; height: 100%; width: 100vw; pointer-events: none; bottom: 0px; left: 0px; z-index: 5;" id="lottie-popper"></div>
+
+
+            </div>
+
+            
+			
+		</div>
+
+
+		<script type="text/javascript">		
+			darkmode = true
+
+			if (darkmode) {
+				document.body.style.background = 'black'
+			}
+		</script>
+
+        <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX@latest/viewx.js"></script>  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+
+        <script type="text/javascript" src="../JS/viewx.js"></script> 
+
+        
+
+
+        <script>
+
+            ignusTheme.baseHue = 210;
+            ignusTheme.baseLightness = 80;
+            ignusTheme.setUp();
+
+            placeCellsGame = {}
+            placeCellsGame.headerClick = function() {
+                console.log("Hola")
+            }
+
+            placeCellsGame.anim = {}
+
+            function loadPopperAnimation() {
+                var animationData = {
+                    container: document.getElementById('lottie-popper'),
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: false, 
+                    path: 'https://assets7.lottiefiles.com/packages/lf20_C51Bca6c0m.json' 
+                };
+
+                placeCellsGame.anim = bodymovin.loadAnimation(animationData);
+
+                placeCellsGame.anim.addEventListener('complete', function() {
+                    placeCellsGame.anim.hide();
+                });
+            }
+
+            loadPopperAnimation();
+
+            function playPopperAnimation() {
+                placeCellsGame.anim.show();
+                placeCellsGame.anim.goToAndPlay(0);
+                placeCellsGame.anim.setSpeed(2)
+                placeCellsGame.anim.play();
+            }
+
+            placeCellsGame.handlePlayPause = function() {
+                if (gameGraphBasic.playing) {
+                    gameGraphBasic.stopPlaying()
+                    document.getElementById("main-play-pause").innerText = "Play"
+                }
+                else {
+                    gameGraphBasic.startPlaying()
+                    document.getElementById("main-play-pause").innerText = "Pause"
+                }
+            }
+
+            
+            defaultGraphOptions = {
+                xmax: 1.1,
+                xmin: -0.1,
+
+                ymax: 1.03,
+                ymin: -0.03,
+
+                axislocationX: 0,
+                axislocationY: 0,
+
+                xaxislabelvisibility: 'no',
+                yaxislabelvisibility: 'no',
+
+                xaxisvisibility: 'no',
+                yaxisvisibility: 'no',
+
+                xmajorgridlabelvisibility: 'no',
+                ymajorgridlabelvisibility: 'no',
+
+                xmajorgridlinesvisibility: 'no',
+                ymajorgridlinesvisibility: 'no',
+
+                fontSize: 1.6,
+
+                unitAspectRatio: 'yes',
+                fixAxisStretchCentrally: 'yes',
+
+                scrollZoom: "no",
+            }
+
+
+            
+            // Code For game Graph
+
+            gameGraphBasic = {}
+            gameGraphBasic.setMouseLocation = function(x, y) {
+                gameGraphBasic.mouse.location = [x, y]
+                viewX.updatePointXY("mainGameCanvas", "mainGame-mouse", gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1]);
+                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04});
+                
+            }
+
+            gameGraphBasic.placeCells = {}
+
+            gameGraphBasic.placeCellColors = [40, 198, 270]
+            
+            gameGraphBasic.addPlaceCell = function(placeCellColor, connectToBehaviorArray) {
+
+                if (Object.keys(gameGraphBasic.placeCells).length < gameGraphBasic.placeCellColors.length) {
+                    
+                    gameGraphBasic.placeCells[placeCellColor] = {}
+                    gameGraphBasic.placeCells[placeCellColor].location = [0.8, 0.76]
+                    gameGraphBasic.placeCells[placeCellColor].radius = 0.1
+                    viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColor, {x: gameGraphBasic.placeCells[placeCellColor].location[0], y: gameGraphBasic.placeCells[placeCellColor].location[1], radius: gameGraphBasic.placeCells[placeCellColor].radius, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)", stroke: "transparent"});
+                    
+
+                    viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColor, {x: gameGraphBasic.placeCells[placeCellColor].location[0], y: gameGraphBasic.placeCells[placeCellColor].location[1], radius: gameGraphBasic.placeCells[placeCellColor].radius*0.6, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)", stroke: "transparent"});
+
+                    viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColor, {x: gameGraphBasic.placeCells[placeCellColor].location[0], y: gameGraphBasic.placeCells[placeCellColor].location[1], radius: gameGraphBasic.placeCells[placeCellColor].radius*0.2, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.2)", stroke: "transparent"});
+
+                    viewX.addText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColor, {x: gameGraphBasic.placeCells[placeCellColor].location[0], y: gameGraphBasic.placeCells[placeCellColor].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, 50%, 1)", text: "Place Cell", fontFamily: "Nunito", fontSize: 1.8});
+
+
+                    gameGraphBasic.placeCells[placeCellColor].behaviors = connectToBehaviorArray
+
+
+                    // viewX.addText("mainGameCanvas", "mainGame-placeCellMove-Text" + placeCellColor, {x: gameGraphBasic.placeCells[placeCellColor].location[0], y: gameGraphBasic.placeCells[placeCellColor].location[1] - 0.01, textcolor: "hsla(0, 0%, 100%, 0.4)", text: "⊕", fontFamily: "Nunito", fontSize: 3, textAlign: 'center', fontWeight: 'bold'});
+                }
+
+            }
+
+
+            gameGraphBasic.firePlaceCell = function(placeCellColor) {
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColor, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColor, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColor, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.5)"});
+
+                viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColor, {text: "Firing"});
+
+                setTimeout(function() {
+                    viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColor, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)"});
+                    viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColor, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)"});
+                    viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColor, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.2)"});
+                }, 20);
+
+                setTimeout(function() {
+                    viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColor, {text: "Place Cell"});
+                }, 700);
+            }
+
+            gameGraphBasic.setUp = function() {
+                gameGraphBasic.graph = document.getElementById('gameSpace')
+                viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas", defaultGraphOptions)
+
+                rectOptions = { x: 0, y: 1, w: 1, h: 1, stroke: "hsla(0, 0%, 30%, 0.5)", strokewidth: 1, rectcolor: "hsla(190, 100%, 50%, 0)"};
+
+                gameGraphBasic.boundaryRect = viewX.addRectangle("mainGameCanvas", "mainGame-boundary", rectOptions)[0];
+                
+                gameGraphBasic.boundaryRect.setAttribute('rx','1.1');
+
+                gameGraphBasic.mouse = {}
+                gameGraphBasic.mouse.location = [0.2, 0.8]
+                gameGraphBasic.mouse.velocity = [0.2, 0]
+
+
+                viewX.addPoint("mainGameCanvas", "mainGame-mouse", {x: gameGraphBasic.mouse.location[0], y: gameGraphBasic.mouse.location[1], pointcolor: "hsla(199, 100%, 100%, 1)"});
+                viewX.addText("mainGameCanvas", "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, textcolor: "hsla(199, 100%, 100%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: 1.8});
+
+                gameGraphBasic.reward = {}
+                gameGraphBasic.reward.location = [0.3, 0.2]
+                gameGraphBasic.reward.radius = 0.07
+                viewX.addCircle("mainGameCanvas", "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(289, 100%, 50%, 0.5)", stroke: "transparent"});
+
+                viewX.addText("mainGameCanvas", "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(289, 100%, 50%, 1)", text: "Reward", fontFamily: "Nunito", fontSize: 1.8, textAlign: 'center'});
+
+
+
+
+                gameGraphBasic.neuronGraph = document.getElementById('neuronSpace')
+                viewX.addGraph(gameGraphBasic.neuronGraph, "neuronCanvas", defaultGraphOptions)
+
+                // viewX.addText("neuronCanvas", "neuronCanvas-behavioursTitle", {x: 0, y: 1, textcolor: "hsla(289, 0%, 50%, 1)", text: "Behaviours", fontFamily: "Nunito", fontSize: 3});
+                // viewX.addText("neuronCanvas", "neuronCanvas-behavioursDescription", {x: 0, y: 0.95, textcolor: "hsla(289, 0%, 50%, 1)", text: "Set of actions the mouse will take", fontFamily: "Nunito", fontSize: 2});
+
+                useColorIndex = Object.keys(gameGraphBasic.placeCells).length
+                placeCellColor = gameGraphBasic.placeCellColors[useColorIndex]
+                gameGraphBasic.addPlaceCell(placeCellColor, ["turnLeft"])
+
+
+
+
+
+
+
+                gameGraphBasic.playing = true
+            }
+
+            gameGraphBasic.setUp();
+
+            gameGraphBasic.runMouse = function() {
+                if (gameGraphBasic.playing) {
+                    stepsize = 0.01
+
+                    newlocation = [gameGraphBasic.mouse.location[0] + stepsize*gameGraphBasic.mouse.velocity[0] , gameGraphBasic.mouse.location[1] + stepsize*gameGraphBasic.mouse.velocity[1]]
+
+
+                    for (var key in gameGraphBasic.placeCells) {
+                        if (gameGraphBasic.placeCells.hasOwnProperty(key)) {
+                            distanceFromPlaceCell = viewX.distF(newlocation, gameGraphBasic.placeCells[key].location)
+                            if (distanceFromPlaceCell < gameGraphBasic.placeCells[key].radius) {
+                                gameGraphBasic.triggerNeuron(key, distanceFromPlaceCell)
+                            }
+                        }
+                    }
+
+                    if (newlocation[0] > 1) {
+                        newlocation[0] = 1
+                        gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
+                    }
+                    if (newlocation[0] < 0) {
+                        newlocation[0] = 0
+                        gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
+                    }
+                    if (newlocation[1] > 1) {
+                        newlocation[1] = 1
+                        gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
+                    }
+                    if (newlocation[1] < 0) {
+                        newlocation[1] = 0
+                        gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
+                    }
+
+
+                    if (Math.sqrt((newlocation[0] - gameGraphBasic.reward.location[0])**2 + (newlocation[1] - gameGraphBasic.reward.location[1])**2) < gameGraphBasic.reward.radius) {
+                        playPopperAnimation()
+                        newlocation = [0.2, 0.8]
+                    }
+                    gameGraphBasic.setMouseLocation(newlocation[0], newlocation[1])
+                }
+            }
+
+
+            gameGraphBasic.triggerNeuron = function(placeColorColor, placeCellDistance) {
+                fireWithinRadius = (1 - Math.random())*gameGraphBasic.placeCells[placeColorColor].radius
+
+                if (placeCellDistance < fireWithinRadius) {
+
+                    gameGraphBasic.firePlaceCell(placeColorColor)
+                    behaviors = gameGraphBasic.placeCells[placeColorColor].behaviors
+
+                    for (b = 0; b < behaviors.length; b++) {
+                        behavior = behaviors[b]
+                        if (behavior == "turnLeft") {
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, 1)
+
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Left"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                            }, 700);
+
+
+                        }
+                        else if (behavior == "turnRight") {
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, -1)
+
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Right"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                            }, 700);
+
+                        }
+                        else if (behavior == "speedUp") {
+                            gameGraphBasic.mouse.velocity = gameGraphBasic.mouse.velocity*1.2
+
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Speeding Up"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                            }, 700);
+
+                        }
+                    }
+                }
+            }
+
+
+            setInterval(gameGraphBasic.runMouse, 15)
+
+
+
+            gameGraphBasic.startPlaying = function() {
+                gameGraphBasic.playing = true
+            }
+
+            gameGraphBasic.stopPlaying = function() {
+                gameGraphBasic.playing = false
+            }
+
+            gameGraphBasic.reset = function() {
+                gameGraphBasic.mouse.location = [0.2, 0.8]
+                gameGraphBasic.mouse.velocity = [0.2, 0]
+                gameGraphBasic.setMouseLocation(gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1])
+            }
+
+        </script>
+    </body>
+</html>
