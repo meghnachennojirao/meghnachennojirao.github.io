@@ -91,6 +91,7 @@
                                     <div id="gameSpace" style="min-height: 600px;">
                                     </div>
                                     <div class="text-ignus text-grey-ignus text-small-ignus text-center pt-4 mt-3" style="color: grey;">
+                                        <span style="color: lightgrey">When the mouse reaches any of the blue place cells (zones), the blue neuron in the mouse's brain fire and thus firing the motor neurons and other behaviors that neuron pathway intends.</span>
                                         It is your goal is to help the mouse navigate across the place to the reward by modifying the position of it's place cells. When a mouse enters the zone of a place cell, the corresponding neuron (blue etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
                                     </div>
                                 </div>
@@ -240,6 +241,7 @@
             gameGraphBasic = {}
 
             gameGraphBasic.uid = 0
+
             function getUiD() {
                 gameGraphBasic.uid = gameGraphBasic.uid + 1
                 return gameGraphBasic.uid.toString()
@@ -261,7 +263,7 @@
             gameGraphBasic.behaviorCellConnections = {
                 198 : ['turnRight'],
                 30 : ['turnLeft'],
-                320 : []
+                320 : ['turnLeft']
             }
             
             gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
@@ -313,22 +315,28 @@
 
 
             gameGraphBasic.firePlaceCell = function(placeCellColorKey) {
-                placeCellColor = gameGraphBasic.placeCells[placeCellColorKey].placeCellColor
-                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.5)"});
-                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.5)"});
-                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.5)"});
+                placeCellColorFiring = gameGraphBasic.placeCells[placeCellColorKey].placeCellColor
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
 
                 viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKey, {text: "Firing"});
 
-                setTimeout(function() {
-                    viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)"});
-                    viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)"});
-                    viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.2)"});
-                }, 20);
+                (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
+                    setTimeout(function() {
+                        viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.1)"});
+                        viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.1)"});
+                        viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.2)"});
+                    }, 20);
+                })(placeCellColorKey, placeCellColorFiring);
 
-                setTimeout(function() {
-                    viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKey, {text: "Place Cell"});
-                }, 700);
+                (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
+                    setTimeout(function() {
+                        viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKeySnapshot, {text: "Place Cell"});
+                    }, 700);
+                })(placeCellColorKey, placeCellColorFiring);
+
+ 
             }
 
             gameGraphBasic.setUp = function() {
@@ -403,18 +411,10 @@
 
 
 
-                useColorIndex = Object.keys(gameGraphBasic.placeCells).length
-                placeCellColor = gameGraphBasic.placeCellColors[useColorIndex]
-                gameGraphBasic.addPlaceCell(placeCellColor, [0.8, 0.8])
-
-                useColorIndex = Object.keys(gameGraphBasic.placeCells).length
-                placeCellColor = gameGraphBasic.placeCellColors[useColorIndex]
-                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
+                
 
                 gameGraphBasic.playing = true
             }
-
-            gameGraphBasic.setUp();
 
             gameGraphBasic.firingGraphElements = []
             gameGraphBasic.runGraph = function() {
@@ -556,20 +556,41 @@
 
                         viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {rectcolor: "hsla(" + placeCellColor + ", 100%, 70%, 1)"});
 
-                        setTimeout(function() {
+                        (function(behaviorSnapshot, placeCellColorSnapshot) {
+                            setTimeout(function() {
+                                viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behaviorSnapshot, {textcolor: "hsla(289, 0%, 50%, 1)"});
+                                viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColorSnapshot + "-" + behaviorSnapshot, {linecolor: "hsla(" + placeCellColorSnapshot + ", 100%, 70%, 0.7)"});
+                                viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColorSnapshot, {rectcolor: "hsla(" + placeCellColorSnapshot + ", 100%, 70%, 0.7)"});
+                            }, 100);
+                        })(behavior, placeCellColor);
 
-                            viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: "hsla(289, 0%, 50%, 1)"});
-                            viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + behavior, {linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.7)"});
-                            viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {rectcolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.7)"});
-
-                        }, 100);
                     }
                 }
             }
 
 
-            setInterval(gameGraphBasic.runMouse, 15)
+            gameGraphBasic.configRun = function() {
+                placeCellColor = gameGraphBasic.placeCellColors[0]
+                gameGraphBasic.addPlaceCell(placeCellColor, [0.8, 0.8])
 
+                placeCellColor = gameGraphBasic.placeCellColors[1]
+                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
+
+                placeCellColor = gameGraphBasic.placeCellColors[2]
+                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
+
+                placeCellColor = gameGraphBasic.placeCellColors[0]
+                gameGraphBasic.addPlaceCell(placeCellColor, [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1])
+            }
+
+
+
+            gameGraphBasic.setUp();
+            gameGraphBasic.configRun();
+            
+
+
+            setInterval(gameGraphBasic.runMouse, 15)
 
 
             gameGraphBasic.startPlaying = function() {
