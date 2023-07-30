@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Place Cells Game</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta charset="UTF-8">
+        <meta name="description" content="A game about Place Cells">
+        <meta name="keywords" content="plots.js, Dr Meghna Rao, prajwalsouza, Prajwal DSouza">
+        <meta name="author" content="Dr. Meghna Rao, Prajwal DSouza">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta property="og:title" content="Where is the Parabola? - The Universal Parabolic Constant Mystery" />
+        <meta property="og:description" content="A game about Place Cells" />
+        <meta property="og:image" content="https://meghnachennojirao.github.io/assets/images/blog/pexels-pixabay-355887.jpg" />
+        <meta property="og:url" content="https://meghnachennojirao.github.io/experiments/place-cells">
+        <meta property="og:type" content="game, educational game" />
+
+
+		<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+		<!-- Some times used library for icons -->
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.css">
+        <script src="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.js"></script>
+
+
+		<link rel="icon" href="square.png">
+		
+		<script type="application/ld+json">
+			{
+			  "@type": "blog",
+			  "name": "Place Cells Game",
+			  "author": "Dr. Meghna Rao, Prajwal DSouza",
+			  "description": "A game about Place Cells"
+			  }
+		</script>
+
+        <!-- <link rel="stylesheet" href="/css/universal-parabolic-constant/universal-parabolic-constant.css"/> -->
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3H9JR6P5Z0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+    
+            gtag('config', 'G-3H9JR6P5Z0');
+        </script>
+      
+
+	</head>
+	<body style='margin:0px; display: block;'>
+		<div id="containAll" class="p-sm-3 p-1" style=" overflow: hidden; ">
+            <div style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: var(--generalBackground); ">
+                
+                <header id="upc-header" class="pr-2 pr-sm-3" style="position: fixed;font-family: Raleway; overflow: hidden; width: calc(100%); top: 0; z-index: 3; opacity: 0; pointer-events: none;" onclick="placeCellsGame.headerClick()">
+                    <div style="background-image: linear-gradient(to bottom, var(--generalBackground),var(--generalBackground), transparent);color: hsl(0,0%,20%);font-size: small;min-height: 131px;" class="text-ignus p-4 pl-5 pr-5 p-md-3 pl-md-4 pr-md-4 text-md-left text-center">
+                        <span style="cursor: pointer;"> 
+                            <span style="font-size:x-small;">Neuro Navigator</span>
+                        </span>
+                        <br/>
+                    </div>
+                    
+                </header>
+
+                <main>
+                    <div class="p-4 pl-5 text-ignus">
+                        <b style="font-family: Raleway; color: royalblue; font-size: xx-large;">Neuro Navigator</b><br/>
+                        <span class="text-ignus" style="color: grey;">A game inspired by a video from <a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: royalblue;" target="_blank">Artem Kirsanov</a></span>
+                    </div>
+                    <div class="pt-0 pl-5 pr-5 pb-5">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div>
+                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button> 
+                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-reset" onclick="gameGraphBasic.reset()">Reset</button>
+                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-addplace" onclick="gameGraphBasic.handleAddPlaceCell()">Add Place Field</button>
+                                        <span id="place-cell-colors" style="display: none">
+                                            <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(198, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(198, [0.8, 0.5])">     &nbsp&nbsp</button>
+                                            <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(30, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(30, [0.8, 0.5])">     &nbsp&nbsp</button>
+                                            <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(320, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(320, [0.8, 0.5])">     &nbsp&nbsp</button>
+                                        </span>
+    
+                                    </div>
+                                    <div id="gameSpace" style="min-height: 600px;">
+                                    </div>
+                                    <div class="text-ignus text-grey-ignus text-small-ignus text-center pt-4 mt-3" style="color: grey;">
+                                        <span style="color: lightgrey">When the mouse reaches any of the blue place field, the blue neuron (place cell) in the mouse's brain fire and thus firing the motor neurons and other behaviors that neuron pathway intends.</span>
+                                        It is your goal is to help the mouse navigate across the place to the reward by modifying the position of it's place fields. When a mouse enters the place field, the corresponding neuron (blue, orange etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
+                                    </div>
+                                </div>
+                                <div class="col-7">
+                                    <div id="descriptions">
+                                        <div class="container-fluid">
+                                            <div class="row text-ignus" style="color: grey;">
+                                                <div class="col-3" style="font-size: larger;"><b>Behaviours</b><br/>       
+                                                    <p style="font-size: small;">Set of actions the mouse will take
+                                                    </p>
+                                                </div>
+                                                <div class="col-3" style="font-size: larger;"><b>Neurons</b><br/>
+                                                    <p style="font-size: small;">
+                                                        The neurons (place cells) that are activated depending on the conditions that are determined by points in space.
+                                                    </p>
+                                                </div>
+                                                <div class="col-6" style="font-size: larger;"><b>Firings</b><br/>
+                                                    <p style="font-size: small;">
+                                                        The spike train for each neurons
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="neuronSpace" style="min-height: 600px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+                </main>
+
+                <div style="position: fixed; height: 100%; width: 100vw; pointer-events: none; bottom: 0px; left: 0px; z-index: 5;" id="lottie-popper"></div>
+
+
+            </div>
+
+            
+			
+		</div>
+
+
+		<script type="text/javascript">		
+			darkmode = true
+
+			if (darkmode) {
+				document.body.style.background = 'black'
+			}
+		</script>
+
+        <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX@latest/viewx.js"></script>  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+
+        <script type="text/javascript" src="../JS/viewx.js"></script> 
+
+        
+
+
+        <script>
+
+            ignusTheme.baseHue = 210;
+            ignusTheme.baseLightness = 80;
+            ignusTheme.setUp();
+
+            placeCellsGame = {}
+            placeCellsGame.headerClick = function() {
+                console.log("Hola")
+            }
+
+            placeCellsGame.anim = {}
+
+            function loadPopperAnimation() {
+                var animationData = {
+                    container: document.getElementById('lottie-popper'),
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: false, 
+                    path: 'https://assets7.lottiefiles.com/packages/lf20_C51Bca6c0m.json' 
+                };
+
+                placeCellsGame.anim = bodymovin.loadAnimation(animationData);
+
+                placeCellsGame.anim.addEventListener('complete', function() {
+                    placeCellsGame.anim.hide();
+                });
+            }
+
+            loadPopperAnimation();
+
+            function playPopperAnimation() {
+                placeCellsGame.anim.show();
+                placeCellsGame.anim.goToAndPlay(0);
+                placeCellsGame.anim.setSpeed(2)
+                placeCellsGame.anim.play();
+            }
+
+            placeCellsGame.handlePlayPause = function() {
+                if (gameGraphBasic.playing) {
+                    gameGraphBasic.stopPlaying()
+                    document.getElementById("main-play-pause").innerText = "Play"
+                }
+                else {
+                    gameGraphBasic.startPlaying()
+                    document.getElementById("main-play-pause").innerText = "Pause"
+                }
+            }
+
+            
+            defaultGraphOptions = {
+                xmax: 1.1,
+                xmin: -0.1,
+
+                ymax: 1.03,
+                ymin: -0.03,
+
+                axislocationX: 0,
+                axislocationY: 0,
+
+                xaxislabelvisibility: 'no',
+                yaxislabelvisibility: 'no',
+
+                xaxisvisibility: 'no',
+                yaxisvisibility: 'no',
+
+                xmajorgridlabelvisibility: 'no',
+                ymajorgridlabelvisibility: 'no',
+
+                xmajorgridlinesvisibility: 'no',
+                ymajorgridlinesvisibility: 'no',
+
+                fontSize: 1.6,
+
+                unitAspectRatio: 'yes',
+                fixAxisStretchCentrally: 'yes',
+
+                scrollZoom: "no",
+            }
+
+
+            
+            // Code For game Graph
+
+            gameGraphBasic = {}
+
+            gameGraphBasic.uid = 0
+
+            function getUiD() {
+                gameGraphBasic.uid = gameGraphBasic.uid + 1
+                return gameGraphBasic.uid.toString()
+            }
+
+
+            gameGraphBasic.setMouseLocation = function(x, y) {
+                gameGraphBasic.mouse.location = [x, y]
+                viewX.updatePointXY("mainGameCanvas", "mainGame-mouse", gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1]);
+                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04});
+                
+            }
+
+
+            
+                gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
+
+                placeCellColorKey = getUiD()
+                gameGraphBasic.placeCells[placeCellColorKey] = {}
+                gameGraphBasic.placeCells[placeCellColorKey].id = placeCellColorKey
+                gameGraphBasic.placeCells[placeCellColorKey].location = cellLocation
+                gameGraphBasic.placeCells[placeCellColorKey].radius = 0.1
+                gameGraphBasic.placeCells[placeCellColorKey].placeCellColor = placeCellColor
+
+                viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)", stroke: "transparent"});
+                
+
+                viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.6, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)", stroke: "transparent"});
+
+                viewX.addCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.2, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.2)", stroke: "transparent"});
+
+                viewX.addText("mainGameCanvas", "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, 50%, 1)", text: "Place Field", fontFamily: "Nunito", fontSize: 1.8});
+
+
+                viewX.addPoint("mainGameCanvas", "mainGame-placeCell-moveKnob-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], pointsize: 6, pointcolor: "transparent", stroke: "transparent",  draggability: "yes", runFunctionDuringDrag: "gameGraphBasic.movePlace(" + gameGraphBasic.placeCells[placeCellColorKey].id + ")"});
+
+
+
+                // viewX.addText("mainGameCanvas", "mainGame-placeCellMove-Text" + placeCellColor, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - 0.01, textcolor: "hsla(0, 0%, 100%, 0.4)", text: "⊕", fontFamily: "Nunito", fontSize: 3, textAlign: 'center', fontWeight: 'bold'});
+
+
+            }
+
+
+            gameGraphBasic.movePlace = function(movingPlaceID) {
+                placeCellColorKey = movingPlaceID
+                movingPlaceCellData = viewX.graphData['mainGameCanvas'].pointData["mainGame-placeCell-moveKnob-"  + placeCellColorKey][1]
+
+                gameGraphBasic.placeCells[placeCellColorKey].location = [movingPlaceCellData.x, movingPlaceCellData.y]
+
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
+                    
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
+
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
+
+                viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07});
+                
+
+            }
+
+
+
+            gameGraphBasic.firePlaceCell = function(placeCellColorKey) {
+                placeCellColorFiring = gameGraphBasic.placeCells[placeCellColorKey].placeCellColor
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
+
+                viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKey, {text: "Firing"});
+
+                (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
+                    setTimeout(function() {
+                        viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.1)"});
+                        viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle2-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.1)"});
+                        viewX.updateCircle("mainGameCanvas", "mainGame-placeCell-Circle3-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.2)"});
+                    }, 20);
+                })(placeCellColorKey, placeCellColorFiring);
+
+                (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
+                    setTimeout(function() {
+                        viewX.updateText("mainGameCanvas", "mainGame-placeCell-Text-" + placeCellColorKeySnapshot, {text: "Place Field"});
+                    }, 700);
+                })(placeCellColorKey, placeCellColorFiring);
+
+ 
+            }
+
+            gameGraphBasic.setUp = function(configData) {
+
+                gameGraphBasic.placeCells = {}
+                gameGraphBasic.firingGraphElements = []
+
+                gameGraphBasic.placeCellColors = configData.neurons
+                gameGraphBasic.behaviors = []
+
+
+
+                gameGraphBasic.behaviorCellConnections = configData.brain
+
+
+                gameGraphBasic.graph = document.getElementById('gameSpace')
+                viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas", defaultGraphOptions)
+
+                rectOptions = { x: 0, y: 1, w: 1, h: 1, stroke: "hsla(0, 0%, 30%, 0.5)", strokewidth: 1, rectcolor: "hsla(190, 100%, 50%, 0)"};
+
+                gameGraphBasic.boundaryRect = viewX.addRectangle("mainGameCanvas", "mainGame-boundary", rectOptions)[0];
+                
+                gameGraphBasic.boundaryRect.setAttribute('rx','1.1');
+
+                gameGraphBasic.mouse = {}
+                gameGraphBasic.mouse.location = configData.mouse.location
+                gameGraphBasic.mouse.velocity = configData.mouse.velocity
+
+
+                viewX.addPoint("mainGameCanvas", "mainGame-mouse", {x: gameGraphBasic.mouse.location[0], y: gameGraphBasic.mouse.location[1], pointcolor: "hsla(199, 100%, 100%, 1)"});
+                viewX.addText("mainGameCanvas", "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, textcolor: "hsla(199, 100%, 100%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: 1.8});
+
+                gameGraphBasic.reward = {}
+                gameGraphBasic.reward.location = configData.reward.location
+                gameGraphBasic.reward.radius = configData.reward.radius
+                viewX.addCircle("mainGameCanvas", "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(249, 100%, 50%, 0.5)", stroke: "transparent"});
+
+                viewX.addText("mainGameCanvas", "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(249, 100%, 50%, 1)", text: "Reward", fontFamily: "Nunito", fontSize: 1.8, textAlign: 'center'});
+
+
+
+
+                gameGraphBasic.neuronGraph = document.getElementById('neuronSpace')
+                viewX.addGraph(gameGraphBasic.neuronGraph, "neuronCanvas", defaultGraphOptions)
+
+
+                for (m = 0; m < configData.behaviors.length; m++) {
+                    gameGraphBasic.behaviors.push(configData.behaviors[m].name.toString())
+
+                    behavior = configData.behaviors[m].name.toString()
+                    behaviorLabel = configData.behaviors[m].label.toString()
+                    viewX.addText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {x: -0.1, y: 0.7 - m*0.15, textcolor: "hsla(289, 0%, 50%, 1)", text: behaviorLabel, fontFamily: "Nunito", fontSize: 2});
+
+                    behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-" + behavior + "-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05 - m*0.15, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
+                    behaviorRect.setAttribute('rx','0.5');
+                }
+
+
+                placementIndex = 0
+                for (var key in gameGraphBasic.placeCellColors) {
+                    if (gameGraphBasic.placeCellColors.hasOwnProperty(key)) {
+                        placeCellColor = gameGraphBasic.placeCellColors[key]
+                        neuronRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {x: 0.2, y: 0.7 + 0.05 - placementIndex*0.15, w: 0.1, h: 0.08, stroke: "hsla(289, 0%, 50%, 0)", rectcolor: "hsla(" + placeCellColor  + ", 100%, 70%, 0.7)"})[0];
+                        placementIndex = placementIndex + 1
+
+                        neuronRect.setAttribute('rx','0.5');
+
+
+                        connectToBehaviorArray = gameGraphBasic.behaviorCellConnections[placeCellColor]
+                        for (bh = 0; bh < connectToBehaviorArray.length; bh++) {
+                            connection = connectToBehaviorArray[bh]
+                            neuronPositionIndex = gameGraphBasic.placeCellColors.indexOf(placeCellColor)
+                            connectionPositionIndex = gameGraphBasic.behaviors.indexOf(connection)
+                            viewX.addLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + connection, {x1: 0.2 , y1: 0.71 - neuronPositionIndex*0.15, x2: 0.06, y2: 0.71 - connectionPositionIndex*0.15, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.7)"});
+                        }
+                    }
+                }
+
+                // viewX.addText("neuronCanvas", "neuronCanvas-behavioursDescription", {x: 0, y: 0.95, textcolor: "hsla(289, 0%, 50%, 1)", text: "Set of actions the mouse will take", fontFamily: "Nunito", fontSize: 2});
+
+
+                cellPositions = configData.cellInitialPositions;
+
+                gameGraphBasic.placeInitCells(cellPositions);
+                gameGraphBasic.playing = true
+            }
+
+            gameGraphBasic.runGraph = function() {
+                firingGraphStart = 0.5
+
+                for (var key in gameGraphBasic.firingGraphElements) {
+                    if (gameGraphBasic.firingGraphElements.hasOwnProperty(key)) {
+                        gameGraphBasic.firingGraphElements[key].x1 = gameGraphBasic.firingGraphElements[key].x1 + 0.0008
+                        gameGraphBasic.firingGraphElements[key].x2 = gameGraphBasic.firingGraphElements[key].x2 + 0.0008
+
+                        viewX.updateLine("neuronCanvas", key, gameGraphBasic.firingGraphElements[key])
+
+                        if (gameGraphBasic.firingGraphElements[key].x1 > 1) {
+                            delete gameGraphBasic.firingGraphElements[key]
+                            viewX.removeLine("neuronCanvas", key)
+                        }
+                    }
+                }
+            }
+
+            gameGraphBasic.runMouse = function() {
+
+                
+                if (gameGraphBasic.playing) {
+
+                    gameGraphBasic.runGraph()
+                    stepsize = 0.01
+
+                    newlocation = [gameGraphBasic.mouse.location[0] + stepsize*gameGraphBasic.mouse.velocity[0] , gameGraphBasic.mouse.location[1] + stepsize*gameGraphBasic.mouse.velocity[1]]
+
+
+                    for (var key in gameGraphBasic.placeCells) {
+                        if (gameGraphBasic.placeCells.hasOwnProperty(key)) {
+                            distanceFromPlaceCell = viewX.distF(newlocation, gameGraphBasic.placeCells[key].location)
+                            if (distanceFromPlaceCell < gameGraphBasic.placeCells[key].radius) {
+
+                                gameGraphBasic.triggerNeuron(gameGraphBasic.placeCells[key].id, distanceFromPlaceCell)
+                            }
+                        }
+                    }
+
+                    if (newlocation[0] > 1) {
+                        newlocation[0] = 1
+                        gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
+                    }
+                    if (newlocation[0] < 0) {
+                        newlocation[0] = 0
+                        gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
+                    }
+                    if (newlocation[1] > 1) {
+                        newlocation[1] = 1
+                        gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
+                    }
+                    if (newlocation[1] < 0) {
+                        newlocation[1] = 0
+                        gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
+                    }
+
+
+                    if (Math.sqrt((newlocation[0] - gameGraphBasic.reward.location[0])**2 + (newlocation[1] - gameGraphBasic.reward.location[1])**2) < gameGraphBasic.reward.radius) {
+                        playPopperAnimation()
+                        newlocation = [0.2, 0.8]
+                    }
+                    gameGraphBasic.setMouseLocation(newlocation[0], newlocation[1])
+                }
+            }
+
+            
+
+            gameGraphBasic.fireNeuronSpike = function(placeCellColor) {
+                idForSpike = "neuronCanvas-firing-Line-" + placeCellColor + "-" + getUiD()
+                viewX.addLine("neuronCanvas", idForSpike, {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.4)"});
+
+
+                gameGraphBasic.firingGraphElements[idForSpike] = {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08}
+            }
+
+            gameGraphBasic.triggerNeuron = function(placeCellColorFullKey, placeCellDistance) {
+                placeCellColor = gameGraphBasic.placeCells[placeCellColorFullKey].placeCellColor
+                
+                fireWithinRadius = (1 - Math.random())*gameGraphBasic.placeCells[placeCellColorKey].radius
+
+                if (placeCellDistance < fireWithinRadius) {
+
+                    gameGraphBasic.firePlaceCell(placeCellColorFullKey)
+                    gameGraphBasic.fireNeuronSpike(placeCellColor)
+
+
+                    behaviors = gameGraphBasic.behaviorCellConnections[placeCellColor]
+
+                    for (b = 0; b < behaviors.length; b++) {
+                        behavior = behaviors[b]
+                        
+                        if (behavior == "turnLeft") {
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, 1)
+
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Left"});
+                            
+                
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                            
+                            }, 700);
+
+                        }
+                        
+                        if (behavior == "turnRight") {
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, -1)
+
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Right"});
+
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                                
+
+                            }, 700);
+
+        
+                        }
+
+                        if (behavior == "turnNorth") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, 1])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning North"});
+                
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                            
+                            }, 700);
+                        }
+
+
+                        if (behavior == "turnSouth") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, -1])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning South"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+
+                            }, 700);
+                        }
+
+                        if (behavior == "turnEast") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [1, 0])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning East"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+
+                            }, 700);
+                        }
+
+                        if (behavior == "turnWest") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [-1, 0])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning West"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+
+                            }, 700);
+                        }
+                        
+                        
+                        // if (behavior == "speedUp") {
+                        //     gameGraphBasic.mouse.velocity = gameGraphBasic.mouse.velocity*1.2
+
+                        //     viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Speeding Up"});
+
+                        //     setTimeout(function() {
+                        //         viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                        //     }, 700);
+
+                        // }
+
+                        
+                        
+                        
+                        viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: "white"});
+
+                        viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + behavior, {linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 1)"});
+
+                        viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {rectcolor: "hsla(" + placeCellColor + ", 100%, 70%, 1)"});
+
+                        (function(behaviorSnapshot, placeCellColorSnapshot) {
+                            setTimeout(function() {
+                                viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behaviorSnapshot, {textcolor: "hsla(289, 0%, 50%, 1)"});
+                                viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColorSnapshot + "-" + behaviorSnapshot, {linecolor: "hsla(" + placeCellColorSnapshot + ", 100%, 70%, 0.7)"});
+                                viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColorSnapshot, {rectcolor: "hsla(" + placeCellColorSnapshot + ", 100%, 70%, 0.7)"});
+                            }, 100);
+                        })(behavior, placeCellColor);
+
+                    }
+                }
+            }
+
+
+            gameGraphBasic.placeInitCells = function(cellConfig) {
+                for (var placeCellColorData in cellConfig) {
+                    positions = cellConfig[placeCellColorData]
+                    for (pindex = 0; pindex < positions.length; pindex++) {
+                        gameGraphBasic.addPlaceCell(placeCellColorData, positions[pindex])
+                    }
+                }
+                
+            }
+
+            
+            gameGraphBasic.angleToRotateAToGetB = function(A, B) {
+                // First calculate the dot product
+                let dotProduct = A[0]*B[0] + A[1]*B[1];
+
+                // Then calculate the magnitudes
+                let magnitudeA = Math.sqrt(A[0]*A[0] + A[1]*A[1]);
+                let magnitudeB = Math.sqrt(B[0]*B[0] + B[1]*B[1]);
+
+                // Angle in radians
+                let theta = Math.acos(dotProduct / (magnitudeA * magnitudeB));
+
+                // Convert to degrees
+                let angleInDegrees = theta * (180 / Math.PI);
+
+                // Calculate the cross product to get the direction
+                let crossProduct = A[0]*B[1] - A[1]*B[0];
+
+                // If cross product is negative, B is clockwise from A so we subtract the result from 360
+                if (crossProduct < 0) {
+                    angleInDegrees = 360 - angleInDegrees;
+                }
+
+                if (angleInDegrees > 180) {
+                    angleInDegrees = angleInDegrees - 360;
+                }
+
+                return angleInDegrees;
+            }
+
+
+
+            configD = {
+                neurons : [198, 30, 320, 100],
+                behaviors : [{name: 'turnNorth', label: 'Turn North'}, {name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}, {name: 'turnWest', label: 'Turn West'}],
+                brain: {
+                    198 : ['turnEast', 'turnSouth'],
+                    30 : ['turnWest'],
+                    320 : ['turnNorth'],
+                    100: ['turnSouth']
+                },
+                mouse: {
+                    location: [0.2, 0.8],
+                    velocity: [0.2, 0]
+                },
+                reward: {
+                    location: [0.3, 0.2],
+                    radius: 0.07
+                },
+                cellInitialPositions : {
+                    198: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1], 
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ],
+                    30: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1], 
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1], 
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ],
+                    320: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ],
+                    100: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ]
+                }
+            }
+
+
+            gameGraphBasic.setUp(configD);
+            
+            
+
+
+
+
+
+            setInterval(gameGraphBasic.runMouse, 15)
+
+            gameGraphBasic.startPlaying = function() {
+                gameGraphBasic.playing = true
+            }
+
+            gameGraphBasic.stopPlaying = function() {
+                gameGraphBasic.playing = false
+            }
+
+            gameGraphBasic.reset = function() {
+                gameGraphBasic.mouse.location = [0.2, 0.8]
+                gameGraphBasic.mouse.velocity = [0.2, 0]
+                gameGraphBasic.setMouseLocation(gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1])
+            }
+
+            gameGraphBasic.handleAddPlaceCell = function() {
+                if (document.getElementById("place-cell-colors").style.display == "inline-block") {
+                    document.getElementById("place-cell-colors").style.display = "none"
+                    document.getElementById('main-addplace').innerText = "Add Place Field"
+                }
+                else {
+                    document.getElementById("place-cell-colors").style.display = "inline-block"
+                    document.getElementById('main-addplace').innerText = "Hide Field Options"
+                }
+            }
+
+
+
+
+
+
+        </script>
+    </body>
+</html>
