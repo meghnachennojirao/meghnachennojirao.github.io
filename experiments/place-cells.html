@@ -336,7 +336,9 @@
                 gameGraphBasic.firingGraphElements = []
 
                 gameGraphBasic.placeCellColors = configData.neurons
-                gameGraphBasic.behaviors = configData.behaviors
+                gameGraphBasic.behaviors = []
+
+
 
                 gameGraphBasic.behaviorCellConnections = configData.brain
 
@@ -371,14 +373,16 @@
                 gameGraphBasic.neuronGraph = document.getElementById('neuronSpace')
                 viewX.addGraph(gameGraphBasic.neuronGraph, "neuronCanvas", defaultGraphOptions)
 
-                for (var key in gameGraphBasic.behaviors) {
-                    if (gameGraphBasic.behaviors.hasOwnProperty(key)) {
-                        behavior = gameGraphBasic.behaviors[key]
-                        viewX.addText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {x: -0.1, y: 0.7 - key*0.15, textcolor: "hsla(289, 0%, 50%, 1)", text: behavior, fontFamily: "Nunito", fontSize: 2});
 
-                        behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-" + behavior + "-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05 - key*0.15, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
-                        behaviorRect.setAttribute('rx','0.5');
-                    }
+                for (m = 0; m < configData.behaviors.length; m++) {
+                    gameGraphBasic.behaviors.push(configData.behaviors[m].name.toString())
+
+                    behavior = configData.behaviors[m].name.toString()
+                    behaviorLabel = configData.behaviors[m].label.toString()
+                    viewX.addText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {x: -0.1, y: 0.7 - m*0.15, textcolor: "hsla(289, 0%, 50%, 1)", text: behaviorLabel, fontFamily: "Nunito", fontSize: 2});
+
+                    behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-" + behavior + "-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05 - m*0.15, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
+                    behaviorRect.setAttribute('rx','0.5');
                 }
 
 
@@ -661,7 +665,7 @@
 
             configD = {
                 neurons : [198, 30, 320, 100],
-                behaviors : ['turnNorth', 'turnSouth', 'turnEast', 'turnWest'],
+                behaviors : [{name: 'turnNorth', label: 'Turn North'}, {name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}, {name: 'turnWest', label: 'Turn West'}],
                 brain: {
                     198 : ['turnEast', 'turnSouth'],
                     30 : ['turnWest'],
