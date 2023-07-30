@@ -257,7 +257,7 @@
 
 
             
-            gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
+                gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
 
                 placeCellColorKey = getUiD()
                 gameGraphBasic.placeCells[placeCellColorKey] = {}
@@ -371,15 +371,16 @@
                 gameGraphBasic.neuronGraph = document.getElementById('neuronSpace')
                 viewX.addGraph(gameGraphBasic.neuronGraph, "neuronCanvas", defaultGraphOptions)
 
-                viewX.addText("neuronCanvas", "neuronCanvas-behaviour-turnLeft", {x: -0.1, y: 0.7, textcolor: "hsla(289, 0%, 50%, 1)", text: "Turn Left", fontFamily: "Nunito", fontSize: 2});
+                for (var key in gameGraphBasic.behaviors) {
+                    if (gameGraphBasic.behaviors.hasOwnProperty(key)) {
+                        behavior = gameGraphBasic.behaviors[key]
+                        viewX.addText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {x: -0.1, y: 0.7 - key*0.15, textcolor: "hsla(289, 0%, 50%, 1)", text: behavior, fontFamily: "Nunito", fontSize: 2});
 
-                behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-turnLeft-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
-                behaviorRect.setAttribute('rx','0.5');
+                        behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-" + behavior + "-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05 - key*0.15, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
+                        behaviorRect.setAttribute('rx','0.5');
+                    }
+                }
 
-                viewX.addText("neuronCanvas", "neuronCanvas-behaviour-turnRight", {x: -0.1, y: 0.55, textcolor: "hsla(289, 0%, 50%, 1)", text: "Turn Right", fontFamily: "Nunito", fontSize: 2});
-
-                behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-turnRight-Box", {x: -0.1 - 0.04, y: 0.55 + 0.05, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
-                behaviorRect.setAttribute('rx','0.5');
 
                 placementIndex = 0
                 for (var key in gameGraphBasic.placeCellColors) {
@@ -500,6 +501,7 @@
 
                     for (b = 0; b < behaviors.length; b++) {
                         behavior = behaviors[b]
+                        
                         if (behavior == "turnLeft") {
                             gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, 1)
 
@@ -511,11 +513,9 @@
                             
                             }, 700);
 
-
-
-
                         }
-                        else if (behavior == "turnRight") {
+                        
+                        if (behavior == "turnRight") {
                             gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, -1)
 
                             viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Right"});
@@ -527,22 +527,77 @@
 
                             }, 700);
 
-                            
-
-
-
+        
                         }
-                        else if (behavior == "speedUp") {
-                            gameGraphBasic.mouse.velocity = gameGraphBasic.mouse.velocity*1.2
 
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Speeding Up"});
+                        if (behavior == "turnNorth") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, 1])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning North"});
+                
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                            
+                            }, 700);
+                        }
+
+
+                        if (behavior == "turnSouth") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, -1])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning South"});
 
                             setTimeout(function() {
                                 viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
-                            }, 700);
 
+                            }, 700);
                         }
 
+                        if (behavior == "turnEast") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [1, 0])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning East"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+
+                            }, 700);
+                        }
+
+                        if (behavior == "turnWest") {
+
+                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [-1, 0])
+                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
+                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning West"});
+
+                            setTimeout(function() {
+                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+
+                            }, 700);
+                        }
+                        
+                        
+                        // if (behavior == "speedUp") {
+                        //     gameGraphBasic.mouse.velocity = gameGraphBasic.mouse.velocity*1.2
+
+                        //     viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Speeding Up"});
+
+                        //     setTimeout(function() {
+                        //         viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
+                        //     }, 700);
+
+                        // }
+
+                        
+                        
+                        
                         viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: "white"});
 
                         viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + behavior, {linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 1)"});
@@ -572,18 +627,46 @@
                 
             }
 
+            
+            gameGraphBasic.angleToRotateAToGetB = function(A, B) {
+                // First calculate the dot product
+                let dotProduct = A[0]*B[0] + A[1]*B[1];
 
+                // Then calculate the magnitudes
+                let magnitudeA = Math.sqrt(A[0]*A[0] + A[1]*A[1]);
+                let magnitudeB = Math.sqrt(B[0]*B[0] + B[1]*B[1]);
 
+                // Angle in radians
+                let theta = Math.acos(dotProduct / (magnitudeA * magnitudeB));
+
+                // Convert to degrees
+                let angleInDegrees = theta * (180 / Math.PI);
+
+                // Calculate the cross product to get the direction
+                let crossProduct = A[0]*B[1] - A[1]*B[0];
+
+                // If cross product is negative, B is clockwise from A so we subtract the result from 360
+                if (crossProduct < 0) {
+                    angleInDegrees = 360 - angleInDegrees;
+                }
+
+                if (angleInDegrees > 180) {
+                    angleInDegrees = angleInDegrees - 360;
+                }
+
+                return angleInDegrees;
+            }
 
 
 
             configD = {
-                neurons : [198, 30, 320],
-                behaviors : ['turnLeft', 'turnRight'],
+                neurons : [198, 30, 320, 100],
+                behaviors : ['turnNorth', 'turnSouth', 'turnEast', 'turnWest'],
                 brain: {
-                    198 : ['turnRight'],
-                    30 : ['turnLeft'],
-                    320 : ['turnLeft']
+                    198 : ['turnEast', 'turnSouth'],
+                    30 : ['turnWest'],
+                    320 : ['turnNorth'],
+                    100: ['turnSouth']
                 },
                 mouse: {
                     location: [0.2, 0.8],
@@ -604,6 +687,9 @@
                         [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
                     ],
                     320: [
+                        [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
+                    ],
+                    100: [
                         [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
                     ]
                 }
@@ -644,6 +730,11 @@
                     document.getElementById('main-addplace').innerText = "Hide Field Options"
                 }
             }
+
+
+
+
+
 
         </script>
     </body>
