@@ -503,88 +503,65 @@
 
                     behaviors = gameGraphBasic.behaviorCellConnections[placeCellColor]
 
+                    behaviorsExecutedString = ""
                     for (b = 0; b < behaviors.length; b++) {
                         behavior = behaviors[b]
                         
                         if (behavior == "turnLeft") {
                             gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, 1)
-
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Left"});
-                            
-                
-                            setTimeout(function() {
-                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
-                            
-                            }, 700);
-
+                            behaviorsExecutedString = behaviorsExecutedString + "Turning Left, "
+ 
                         }
                         
                         if (behavior == "turnRight") {
                             gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, -1)
+                            behaviorsExecutedString = behaviorsExecutedString + "Turning Right, "
 
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning Right"});
-
-
-                            setTimeout(function() {
-                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
-                                
-
-                            }, 700);
 
         
                         }
 
                         if (behavior == "turnNorth") {
-
-                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, 1])
-                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
-                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning North"});
-                
-                            setTimeout(function() {
-                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
                             
-                            }, 700);
+                            angleNeededForTurn = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, 1])
+                            
+                            behaviorsExecutedString = behaviorsExecutedString + "Turning North, "
+                            // const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, angleNeededForTurn/20)
+                
+
                         }
 
 
                         if (behavior == "turnSouth") {
 
-                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, -1])
-                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
-                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning South"});
+                            angleNeededForTurn = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [0, -1])
+                            behaviorsExecutedString = behaviorsExecutedString + "Turning South, "
+                            // const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, angleNeededForTurn/20)
 
-                            setTimeout(function() {
-                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
 
-                            }, 700);
+
                         }
 
                         if (behavior == "turnEast") {
 
-                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [1, 0])
-                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
-                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning East"});
+                            angleNeededForTurn = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [1, 0])
+                            behaviorsExecutedString = behaviorsExecutedString + "Turning East, "
+                            // const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, angleNeededForTurn/20)
 
-                            setTimeout(function() {
-                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
 
-                            }, 700);
                         }
 
                         if (behavior == "turnWest") {
 
-                            angleForNorth = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [-1, 0])
-                            const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
-                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, sign*3)
-                            viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Turning West"});
+                            angleNeededForTurn = gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, [-1, 0])
+                            behaviorsExecutedString = behaviorsExecutedString + "Turning West, "
+                            // const sign = angleForNorth > 0 ? 1 : angleForNorth < 0 ? -1 : 0;
+                            gameGraphBasic.mouse.velocity = viewX.rotatedVec(gameGraphBasic.mouse.velocity, angleNeededForTurn/20)
 
-                            setTimeout(function() {
-                                viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});
 
-                            }, 700);
                         }
                         
                         
@@ -598,6 +575,8 @@
                         //     }, 700);
 
                         // }
+                        
+
 
                         
                         
@@ -617,6 +596,22 @@
                         })(behavior, placeCellColor);
 
                     }
+
+                    if (behaviorsExecutedString.length > 0) {
+                        behaviorsExecutedString = behaviorsExecutedString.substring(0, behaviorsExecutedString.length - 2)
+                    }
+                    else {
+                        behaviorsExecutedString = "Mouse"
+                    }
+                    
+                    viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: behaviorsExecutedString});
+
+                    setTimeout(function() {
+                        viewX.updateText("mainGameCanvas", "mainGame-mouseText", {text: "Mouse"});  
+                    }, 700);
+
+
+                    
                 }
             }
 
