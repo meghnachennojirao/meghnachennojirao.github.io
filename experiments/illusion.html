@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rotating Plus Signs Square</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* Hide any overflowing content from the rotation */
+    }
+
+    .plus-sign-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      animation: rotateSquare 10s linear infinite; /* CSS animation for rotation */
+    }
+
+    @keyframes rotateSquare {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .plus-sign {
+      width: 4px;
+      height: 4px;
+      background-color: rgb(143, 123, 162);
+      position: absolute;
+      /* Center the plus sign within the container */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="plus-sign-container">
+    <script>
+      // Function to create a plus sign at a given position
+      function createPlusSign(x, y) {
+        const plusSign = document.createElement("div");
+        plusSign.classList.add("plus-sign");
+        plusSign.style.left = x + "px";
+        plusSign.style.top = y + "px";
+        document.querySelector('.plus-sign-container').appendChild(plusSign);
+      }
+
+      // Number of plus signs in each row and column
+      const numRows = 10;
+      const numCols = 10;
+
+      // Spacing between plus signs
+      const spacing = 12;
+
+      // Calculate the center of the container
+      const centerX = (numCols - 1) * spacing / 2;
+      const centerY = (numRows - 1) * spacing / 2;
+
+      // Loop to create plus signs in a square grid
+      for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols; j++) {
+          const x = (j * spacing) - centerX;
+          const y = (i * spacing) - centerY;
+          createPlusSign(x, y);
+        }
+      }
+    </script>
+  </div>
+</body>
+</html>
