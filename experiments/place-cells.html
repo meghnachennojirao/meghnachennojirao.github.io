@@ -647,6 +647,11 @@
                         // gameGraphBasic.stopPlaying()
                         console.log(Object.keys(gameGraphBasic.levels).length)
                         gameGraphBasic.currentLevel = (gameGraphBasic.currentLevel + 1) % Object.keys(gameGraphBasic.levels).length
+                        
+                        gameData = {
+                            currentLevel : gameGraphBasic.currentLevel,
+                        }
+                        gameGraphBasic.writeToLocalStorage('place-cells-game', gameData)
                         gameGraphBasic.reset()
                     }
                     else {
@@ -1211,11 +1216,18 @@
             }
 
 
-            gameGraphBasic.currentLevel = 0
-            gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
             
+            gameData = gameGraphBasic.readFromLocalStorage('place-cells-game')
 
 
+            if (gameData != null) {
+                gameGraphBasic.currentLevel = gameData.currentLevel
+            }
+            else {
+                gameGraphBasic.currentLevel = 0
+            }
+            
+            gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
 
         </script>
     </body>
