@@ -257,7 +257,7 @@
 
 
             
-                gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
+            gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
 
                 placeCellColorKey = getUiD()
                 gameGraphBasic.placeCells[placeCellColorKey] = {}
@@ -330,6 +330,35 @@
  
             }
 
+
+
+            
+
+            gameGraphBasic.addCollider = function(name, type, colliderData) {
+
+                gameGraphBasic.colliders[name] = {}
+                gameGraphBasic.colliders[name].type = type
+
+                if (type == 'polygon') {
+                    gameGraphBasic.colliders[name].points = colliderData.points
+                }
+            }
+
+
+            gameGraphBasic.addWall = function(name, betweenPoints, visible=true) {
+                perpendicularSmallDisplacement = viewX.scalarMultiplyVec(0.001, viewX.unitVec(viewX.rotatedVec(viewX.subtractVec(betweenPoints[0], betweenPoints[1]), 90)))
+                perpendicularPoint1 = viewX.addVec(betweenPoints[1], perpendicularSmallDisplacement)
+                perpendicularPoint0 = viewX.addVec(betweenPoints[0], perpendicularSmallDisplacement)
+                colliderData = [betweenPoints[0], betweenPoints[1], perpendicularPoint1, perpendicularPoint0]
+
+                gameGraphBasic.addCollider(name, 'polygon', {points: colliderData})
+
+                if (visible) {
+                    viewX.addLine('mainGameCanvas', name, {x1: betweenPoints[0][0], y1: betweenPoints[0][1], x2: betweenPoints[1][0], y2: betweenPoints[1][1], strokewidth: 2, linecolor: 'hsla(0, 0%, 16%, 1)'})
+                }
+            }
+
+
             gameGraphBasic.setUp = function(configData) {
 
                 gameGraphBasic.placeCells = {}
@@ -337,6 +366,9 @@
 
                 gameGraphBasic.placeCellColors = configData.neurons
                 gameGraphBasic.behaviors = []
+
+                
+                gameGraphBasic.colliders = {}
 
 
 
@@ -412,6 +444,22 @@
                 cellPositions = configData.cellInitialPositions;
 
                 gameGraphBasic.placeInitCells(cellPositions);
+
+                gameGraphBasic.addWall('boundary-right', [[1, 0], [1, 1]], visible=false)
+                gameGraphBasic.addWall('boundary-left', [[0, 0], [0, 1]], visible=false)
+                gameGraphBasic.addWall('boundary-down', [[0, 0], [1, 0]], visible=false)
+                gameGraphBasic.addWall('boundary-up', [[0, 1], [1, 1]], visible=false)
+
+
+                for (var wallName in configData.walls) {
+                    if (configData.walls.hasOwnProperty(wallName)) {
+                        wall = configData.walls[wallName]
+                        gameGraphBasic.addWall(wallName, wall, visible=true)
+                    }
+                }
+
+
+
                 gameGraphBasic.playing = true
             }
 
@@ -441,8 +489,20 @@
                     gameGraphBasic.runGraph()
                     stepsize = 0.01
 
-                    newlocation = [gameGraphBasic.mouse.location[0] + stepsize*gameGraphBasic.mouse.velocity[0] , gameGraphBasic.mouse.location[1] + stepsize*gameGraphBasic.mouse.velocity[1]]
 
+                    for (var colliderName in gameGraphBasic.colliders) {
+                        collisionData = viewX.reflectionOnCollision(gameGraphBasic.mouse.location, gameGraphBasic.mouse.velocity, gameGraphBasic.colliders[colliderName].points)
+                        if (collisionData) {
+                            gameGraphBasic.mouse.velocity = collisionData.velocity
+                            console.log(colliderName)
+                        }
+                    }
+
+                    newlocation = [gameGraphBasic.mouse.location[0] + stepsize*gameGraphBasic.mouse.velocity[0] , gameGraphBasic.mouse.location[1] + stepsize*gameGraphBasic.mouse.velocity[1]]
+                    
+                    
+
+                    // viewX.libraryFunctions.closestIntersectionBetweenRayAndPolygon()
 
                     for (var key in gameGraphBasic.placeCells) {
                         if (gameGraphBasic.placeCells.hasOwnProperty(key)) {
@@ -454,22 +514,25 @@
                         }
                     }
 
-                    if (newlocation[0] > 1) {
-                        newlocation[0] = 1
-                        gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
-                    }
-                    if (newlocation[0] < 0) {
-                        newlocation[0] = 0
-                        gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
-                    }
-                    if (newlocation[1] > 1) {
-                        newlocation[1] = 1
-                        gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
-                    }
-                    if (newlocation[1] < 0) {
-                        newlocation[1] = 0
-                        gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
-                    }
+
+
+
+                    // if (newlocation[0] > 1) {
+                    //     newlocation[0] = 1
+                    //     gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
+                    // }
+                    // if (newlocation[0] < 0) {
+                    //     newlocation[0] = 0
+                    //     gameGraphBasic.mouse.velocity[0] = -gameGraphBasic.mouse.velocity[0]
+                    // }
+                    // if (newlocation[1] > 1) {
+                    //     newlocation[1] = 1
+                    //     gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
+                    // }
+                    // if (newlocation[1] < 0) {
+                    //     newlocation[1] = 0
+                    //     gameGraphBasic.mouse.velocity[1] = -gameGraphBasic.mouse.velocity[1]
+                    // }
 
 
                     if (Math.sqrt((newlocation[0] - gameGraphBasic.reward.location[0])**2 + (newlocation[1] - gameGraphBasic.reward.location[1])**2) < gameGraphBasic.reward.radius) {
@@ -611,7 +674,7 @@
                     }, 700);
 
 
-                    
+
                 }
             }
 
@@ -672,7 +735,7 @@
                     velocity: [0.2, 0]
                 },
                 reward: {
-                    location: [0.3, 0.2],
+                    location: [0.9, 0.2],
                     radius: 0.07
                 },
                 cellInitialPositions : {
@@ -691,6 +754,9 @@
                     100: [
                         [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
                     ]
+                },
+                walls: {
+                    'random-wall': [[0.8, 0.8], [0.8, 0]]
                 }
             }
 
@@ -731,9 +797,7 @@
             }
 
 
-
-
-
+            
 
         </script>
     </body>
