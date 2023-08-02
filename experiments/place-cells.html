@@ -103,10 +103,10 @@
                                     </div>
                                 </div>
 
-                                <div class="d-lg-none d-block pt-5 pb-5 pl-5"></div>
-                                <div class="d-lg-none d-block pt-5 pb-5 pl-5"></div>
+                                <div class="d-lg-none d-block pt-1 pb-1 pl-5"></div>
+                                <div class="d-lg-none d-block pt-1 pb-1 pl-5"></div>
                                 <div class="col-12 col-lg-6 col-xl-7">
-                                    <div id="descriptions">
+                                    <div id="descriptions" class="d-none d-lg-block">
                                         <div class="container-fluid">
                                             <div class="row text-ignus" style="color: grey;">
                                                 <div class="col-4 col-xl-3" style="font-size: larger;"><b>Behaviours</b><br/>       
@@ -127,6 +127,26 @@
                                         </div>
                                     </div>
                                     <div id="neuronSpace" style="min-height: 400px;">
+                                    </div>
+                                    <div id="descriptions"  class="d-block d-lg-none">
+                                        <div class="container-fluid">
+                                            <div class="row text-ignus" style="color: grey;">
+                                                <div class="col-4 col-xl-3" style="font-size: larger;"><b>Behaviours</b><br/>       
+                                                    <p style="font-size: small;">Set of actions the mouse will take
+                                                    </p>
+                                                </div>
+                                                <div class="col-4 col-xl-3" style="font-size: larger;"><b>Neurons</b><br/>
+                                                    <p style="font-size: small;">
+                                                        The neurons (place cells) that are activated depending on the conditions that are determined by points in space.
+                                                    </p>
+                                                </div>
+                                                <div class="col-4 col-xl-6" style="font-size: larger;"><b>Firings</b><br/>
+                                                    <p style="font-size: small;">
+                                                        The spike train for each neurons
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -180,13 +200,13 @@
 
             if (window.innerWidth < 400) {
                 document.getElementById('gameSpace').style.minHeight = '440px';
-                document.getElementById('neuronSpace').style.minHeight = '510px'
+                document.getElementById('neuronSpace').style.minHeight = '300px'
 
                
-                neuronalGraph['xmin'] = -0.2
-                neuronalGraph['xmax'] = 0.7
-                neuronalGraph['ymin'] = 0.05
-                neuronalGraph['ymax'] = 1.1
+                neuronalGraph['xmin'] = -0.3
+                neuronalGraph['xmax'] = 0.5
+                neuronalGraph['ymin'] = -0.2
+                neuronalGraph['ymax'] = 0.5
                 mouseGraph['font-size'] = 3
             }
 
@@ -620,7 +640,7 @@
                         collisionData = viewX.reflectionOnCollision(gameGraphBasic.mouse.location, gameGraphBasic.mouse.velocity, gameGraphBasic.colliders[colliderName].points)
                         if (collisionData) {
                             gameGraphBasic.mouse.velocity = collisionData.velocity
-                            console.log(colliderName)
+                            // console.log(colliderName)
                         }
                     }
 
@@ -645,7 +665,7 @@
                     if (viewX.distF(newlocation, gameGraphBasic.reward.location) < gameGraphBasic.reward.radius) {
                         playPopperAnimation()
                         // gameGraphBasic.stopPlaying()
-                        console.log(Object.keys(gameGraphBasic.levels).length)
+                        // console.log(Object.keys(gameGraphBasic.levels).length)
                         gameGraphBasic.currentLevel = (gameGraphBasic.currentLevel + 1) % Object.keys(gameGraphBasic.levels).length
                         
                         gameData = {
@@ -1226,7 +1246,7 @@
             else {
                 gameGraphBasic.currentLevel = 0
             }
-            
+
             gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
 
         </script>
