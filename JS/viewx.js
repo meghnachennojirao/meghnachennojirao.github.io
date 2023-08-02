@@ -2560,21 +2560,24 @@ viewX.currentMovingPoint = ''
 viewX.pointDrag = function(event) {
 	gphname = viewX.reverseGraphElementMap[event.target.id][0]
 	ptname = viewX.reverseGraphElementMap[event.target.id][1]
-	if (viewX.graphData[gphname].pointData[ptname][1].currentlyDraggable == 'yes') {
-		if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
-			document.getElementById(gphname).removeEventListener('mousedown', viewX.graphDragHandle)
-			document.getElementById(gphname).removeEventListener('touchstart', viewX.graphDragHandle)
+	if (viewX.graphData[gphname] != null) {
+		if (viewX.graphData[gphname].pointData[ptname][1].currentlyDraggable == 'yes') {
+			if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
+				document.getElementById(gphname).removeEventListener('mousedown', viewX.graphDragHandle)
+				document.getElementById(gphname).removeEventListener('touchstart', viewX.graphDragHandle)
+			}
+			event.target.removeEventListener('mousedown', viewX.pointDrag)
+			event.target.removeEventListener('touchstart', viewX.pointDrag)
+			window.addEventListener('mousemove', viewX.pointMoveEvent)
+			window.addEventListener('mouseup', viewX.pointUpEvent)
+			event.preventDefault()
+			window.addEventListener('touchmove', viewX.pointMoveEvent, { passive: false })
+			window.addEventListener('touchend', viewX.pointUpEvent)
+			// window.addEventListener('mouseout', viewX.pointUpEvent)
+			viewX.currentMovingPoint = event.target
 		}
-		event.target.removeEventListener('mousedown', viewX.pointDrag)
-		event.target.removeEventListener('touchstart', viewX.pointDrag)
-		window.addEventListener('mousemove', viewX.pointMoveEvent)
-		window.addEventListener('mouseup', viewX.pointUpEvent)
-		event.preventDefault()
-		window.addEventListener('touchmove', viewX.pointMoveEvent, { passive: false })
-		window.addEventListener('touchend', viewX.pointUpEvent)
-		// window.addEventListener('mouseout', viewX.pointUpEvent)
-		viewX.currentMovingPoint = event.target
 	}
+
 		
 }
 
@@ -2584,38 +2587,40 @@ viewX.svgPTVariable = {}
 viewX.pointMoveEvent = function(event) {
 	event.preventDefault()
 	gphname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][0]
-	ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
-	var rect = document.getElementById(gphname).getBoundingClientRect();
-	posx = event.clientX - rect.left;
-	posy = event.clientY - rect.top;
-	viewX.svgPTVariable[gphname].x = event.clientX;
-	viewX.svgPTVariable[gphname].y = event.clientY;
+	if (viewX.graphData[gphname] != null) {
+		ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
+		var rect = document.getElementById(gphname).getBoundingClientRect();
+		posx = event.clientX - rect.left;
+		posy = event.clientY - rect.top;
+		viewX.svgPTVariable[gphname].x = event.clientX;
+		viewX.svgPTVariable[gphname].y = event.clientY;
 
-	if (event.clientX == undefined) {
-		posx = event.changedTouches[0].clientX - rect.left;
-		posy = event.changedTouches[0].clientY - rect.top;
-		viewX.svgPTVariable[gphname].x = event.changedTouches[0].clientX;
-		viewX.svgPTVariable[gphname].y = event.changedTouches[0].clientY;
-	}
+		if (event.clientX == undefined) {
+			posx = event.changedTouches[0].clientX - rect.left;
+			posy = event.changedTouches[0].clientY - rect.top;
+			viewX.svgPTVariable[gphname].x = event.changedTouches[0].clientX;
+			viewX.svgPTVariable[gphname].y = event.changedTouches[0].clientY;
+		}
 
-	var cursorpt =  viewX.svgPTVariable[gphname].matrixTransform(document.getElementById(gphname).getScreenCTM().inverse());
+		var cursorpt =  viewX.svgPTVariable[gphname].matrixTransform(document.getElementById(gphname).getScreenCTM().inverse());
 
-	moveX = viewX.svgToGraphX(cursorpt.x, viewX.graphData[gphname].xmin,viewX.graphData[gphname].xmax, viewX.graphData[gphname].aspectratio)
-	moveY = viewX.svgToGraphY(cursorpt.y, viewX.graphData[gphname].ymin,viewX.graphData[gphname].ymax, viewX.graphData[gphname].aspectratio)
+		moveX = viewX.svgToGraphX(cursorpt.x, viewX.graphData[gphname].xmin,viewX.graphData[gphname].xmax, viewX.graphData[gphname].aspectratio)
+		moveY = viewX.svgToGraphY(cursorpt.y, viewX.graphData[gphname].ymin,viewX.graphData[gphname].ymax, viewX.graphData[gphname].aspectratio)
 
-	if (typeof eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) != undefined) {
-		if (eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) == true) {
-			if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'bothXY') {
-				viewX.updatePointXY(gphname, ptname, moveX, moveY)
-				eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
-			}
-			else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyY') {
-				viewX.updatePointXY(gphname, ptname, viewX.graphData[gphname].pointData[ptname][1].x, moveY)
-				eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
-			}
-			else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyX') {
-				viewX.updatePointXY(gphname, ptname, moveX, viewX.graphData[gphname].pointData[ptname][1].y)
-				eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+		if (typeof eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) != undefined) {
+			if (eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) == true) {
+				if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'bothXY') {
+					viewX.updatePointXY(gphname, ptname, moveX, moveY)
+					eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+				}
+				else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyY') {
+					viewX.updatePointXY(gphname, ptname, viewX.graphData[gphname].pointData[ptname][1].x, moveY)
+					eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+				}
+				else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyX') {
+					viewX.updatePointXY(gphname, ptname, moveX, viewX.graphData[gphname].pointData[ptname][1].y)
+					eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+				}
 			}
 		}
 	}
@@ -2650,20 +2655,22 @@ viewX.getCoordinatesOfEvent = (gphname, runFunctionAtEnd) => (event) => {
 
 viewX.pointUpEvent = function(event) {
 	gphname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][0]
-	ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
-	if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
-		document.getElementById(gphname).addEventListener('mousedown', viewX.graphDragHandle)
-		document.getElementById(gphname).addEventListener('touchstart', viewX.graphDragHandle)
-	}
-	viewX.currentMovingPoint.addEventListener('mousedown', viewX.pointDrag)
-	viewX.currentMovingPoint.addEventListener('touchstart', viewX.pointDrag)
-	window.removeEventListener('mousemove', viewX.pointMoveEvent)
-	window.removeEventListener('mouseup', viewX.pointUpEvent)
-	window.removeEventListener('touchmove', viewX.pointMoveEvent)
-	window.removeEventListener('touchend', viewX.pointUpEvent)
+	if (viewX.graphData[gphname] != null) {
+		ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
+		if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
+			document.getElementById(gphname).addEventListener('mousedown', viewX.graphDragHandle)
+			document.getElementById(gphname).addEventListener('touchstart', viewX.graphDragHandle)
+		}
+		viewX.currentMovingPoint.addEventListener('mousedown', viewX.pointDrag)
+		viewX.currentMovingPoint.addEventListener('touchstart', viewX.pointDrag)
+		window.removeEventListener('mousemove', viewX.pointMoveEvent)
+		window.removeEventListener('mouseup', viewX.pointUpEvent)
+		window.removeEventListener('touchmove', viewX.pointMoveEvent)
+		window.removeEventListener('touchend', viewX.pointUpEvent)
 
-	// window.removeEventListener('mouseout', viewX.pointUpEvent)
-	eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionOnDragEnd)
+		// window.removeEventListener('mouseout', viewX.pointUpEvent)
+		eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionOnDragEnd)
+	}
 }
 
 viewX.wheelHandle = (gphname) => (event) => {
@@ -3019,6 +3026,20 @@ viewX.addVec = function(pt1, pt2) {
 	} 
 }
 
+viewX.dotProduct = function(v1, v2) {
+	if (v1.length == v2.length) {
+		sum = 0
+		for (var i = 0; i < v1.length; i++) {
+			sum = sum + v1[i]*v2[i]
+		}
+		return sum
+	}
+	else {
+		console.log("Vector dimensions do not match")
+	}
+		
+}
+
 viewX.scalarMultiplyVec = function(c, pt1) {
 	return [c*pt1[0], c*pt1[1]]
 }
@@ -3029,8 +3050,12 @@ viewX.subtractVec = function(pt1, pt2) {
 
 viewX.directionVec = function(pt1, pt2) {
 	diff = [pt2[0] - pt1[0], pt2[1] - pt1[1]]
-	difflen = viewX.distF(diff, [0,0])
+	difflen = viewX.mod(diff)
 	return [diff[0]/difflen, diff[1]/difflen]
+}
+
+viewX.unitVec = function(vec) {
+	return viewX.directionVec([0, 0], vec)
 }
 
 viewX.rotatedVec = function(ofVector, angle) {
@@ -3060,6 +3085,33 @@ viewX.shuffle = function(array) {
 		array[randomIndex] = temporaryValue;
 	}
 	return array;
+}
+
+viewX.reflectionOnCollision = function(position, velocity, collidingPolygon, collisionZoneWidth=1e-2) {
+	smallVelocityVec = viewX.scalarMultiplyVec(collisionZoneWidth/2, viewX.unitVec(velocity))
+    smallStep = viewX.addVec(position, smallVelocityVec)
+
+	ray = {
+		from: position,
+		to: smallStep
+	}
+
+	possibleCollisionData = viewX.libraryFunctions.closestIntersectionBetweenRayAndPolygon(ray, collidingPolygon)
+
+	if (possibleCollisionData) {
+		if (viewX.distF(possibleCollisionData.point, position) < collisionZoneWidth) {
+			return {
+				position: position,
+				velocity: viewX.scalarMultiplyVec(viewX.mod(velocity), possibleCollisionData.reflection)
+			}
+		}
+		else {
+			return null
+		}
+	}
+	else {
+		return null
+	}
 }
 
 
@@ -3373,6 +3425,83 @@ viewX.libraryFunctions.findClosestRightAndLeftNumbersInArray = function(theArray
 	return [valueLeft, valueRight];
 
 }
+
+// Tested At https://www.desmos.com/calculator/etwtxbulcu
+
+viewX.libraryFunctions.intersectionBetweenRayAndLineSegment = function(ray, lineSegment) {
+	A = ray.from;
+	B = ray.to;
+	C = lineSegment.betweenPoint1;
+	D = lineSegment.betweenPoint2;
+
+	let AB = viewX.subtractVec(B, A);
+	let AC = viewX.subtractVec(C, A);
+	let CD = viewX.subtractVec(D, C);
+	
+	// Detecting parallelism
+	let determinant = CD[0]*AB[1] - CD[1]*AB[0];
+	if (determinant == 0) { // lines are parallel
+		return null;
+	}
+	
+	let r = ((AC[1]*CD[0]) - (AC[0]*CD[1])) / determinant;
+	let s = ((AC[1]*AB[0]) - (AC[0]*AB[1])) / determinant;
+	
+	if (r >= 0 && (s >= 0 && s <= 1)) {
+		// Point of intersection
+		let x = A[0] + r * AB[0];
+		let y = A[1] + r * AB[1];
+
+		return [x, y];
+	}
+	return null;
+}
+
+viewX.libraryFunctions.closestIntersectionBetweenRayAndPolygon =  function(ray, polygon) {
+
+	let closestIntersect = null;
+	let closestDist = Infinity;
+	let closestLine = null;
+
+
+	for (let i = 0; i < polygon.length; i++) {
+		lineSegment = {
+			betweenPoint1: polygon[i],
+			betweenPoint2: polygon[(i + 1) % polygon.length]
+		}
+
+		const intersect = viewX.libraryFunctions.intersectionBetweenRayAndLineSegment(ray, lineSegment);
+		
+		if (intersect) {
+			const dist = viewX.distF(ray.to, intersect);
+			if (dist < closestDist) {
+				closestDist = dist;
+				closestIntersect = intersect;
+				closestLine = lineSegment;
+			}
+		}
+	}
+
+	if (closestIntersect) {
+		let AB = viewX.subtractVec(ray.to, ray.from);
+		let CD = viewX.subtractVec(closestLine.betweenPoint1, closestLine.betweenPoint2);
+		let normal = [-CD[1], CD[0]];
+		normalDirectionVec = viewX.unitVec(normal)
+		dot = viewX.dotProduct(AB, normalDirectionVec)
+
+		let reflection = [2*dot*normalDirectionVec[0] - AB[0], 2*dot*normalDirectionVec[1] - AB[1]];
+		reflection = viewX.directionVec(reflection, [0,0])
+		return { 
+			point: closestIntersect, 
+			reflection: reflection
+		};
+	} else {
+		return null; // No intersection
+	}
+}
+
+
+
 
 viewX.uid = 0
 viewX.graphData = {}
