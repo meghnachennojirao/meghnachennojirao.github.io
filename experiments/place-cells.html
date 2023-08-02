@@ -78,7 +78,7 @@
                             <div class="row">
                                 <div class="col-5">
                                     <div class="ml-2 text-ignus text-small-ignus mb-2">
-                                        <span style="font-size: large">Level 1</span>
+                                        <span style="font-size: large" id="level-text">Level 1</span>
                                     </div>
                                     <div>
                                         <button class="btn-ignus btn-outline-dark-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button> 
@@ -355,16 +355,35 @@
 
 
             gameGraphBasic.addWall = function(name, betweenPoints, visible=true) {
-                perpendicularSmallDisplacement = viewX.scalarMultiplyVec(0.001, viewX.unitVec(viewX.rotatedVec(viewX.subtractVec(betweenPoints[0], betweenPoints[1]), 90)))
-                perpendicularPoint1 = viewX.addVec(betweenPoints[1], perpendicularSmallDisplacement)
-                perpendicularPoint0 = viewX.addVec(betweenPoints[0], perpendicularSmallDisplacement)
-                colliderData = [betweenPoints[0], betweenPoints[1], perpendicularPoint1, perpendicularPoint0]
 
-                gameGraphBasic.addCollider(name, 'polygon', {points: colliderData})
+                if (betweenPoints.length == 2) {
+                    perpendicularSmallDisplacement = viewX.scalarMultiplyVec(0.001, viewX.unitVec(viewX.rotatedVec(viewX.subtractVec(betweenPoints[0], betweenPoints[1]), 90)))
+                    perpendicularPoint1 = viewX.addVec(betweenPoints[1], perpendicularSmallDisplacement)
+                    perpendicularPoint0 = viewX.addVec(betweenPoints[0], perpendicularSmallDisplacement)
+                    colliderData = [betweenPoints[0], betweenPoints[1], perpendicularPoint1, perpendicularPoint0]
 
-                if (visible) {
-                    viewX.addLine('mainGameCanvas-' + gameGraphBasic.graphNameIndex, name, {x1: betweenPoints[0][0], y1: betweenPoints[0][1], x2: betweenPoints[1][0], y2: betweenPoints[1][1], strokewidth: 2, linecolor: 'hsla(0, 0%, 16%, 1)'})
+                    gameGraphBasic.addCollider(name, 'polygon', {points: colliderData})
+
+                    if (visible) {
+                        viewX.addLine('mainGameCanvas-' + gameGraphBasic.graphNameIndex, name, {x1: betweenPoints[0][0], y1: betweenPoints[0][1], x2: betweenPoints[1][0], y2: betweenPoints[1][1], strokewidth: 2, linecolor: 'hsla(0, 0%, 16%, 1)'})
+                    }
                 }
+                else {
+                    for (k = 0; k < betweenPoints.length - 1; k++) {
+                        pointData = [betweenPoints[k], betweenPoints[k+1]]
+                        perpendicularSmallDisplacement = viewX.scalarMultiplyVec(0.001, viewX.unitVec(viewX.rotatedVec(viewX.subtractVec(betweenPoints[k], betweenPoints[k + 1]), 90)))
+                        perpendicularPoint1 = viewX.addVec(betweenPoints[k + 1], perpendicularSmallDisplacement)
+                        perpendicularPoint0 = viewX.addVec(betweenPoints[k], perpendicularSmallDisplacement)
+                        colliderData = [betweenPoints[k], betweenPoints[k + 1], perpendicularPoint1, perpendicularPoint0]
+
+                        gameGraphBasic.addCollider(name + "#" + k, 'polygon', {points: colliderData})
+
+                        if (visible) {
+                            viewX.addLine('mainGameCanvas-' + gameGraphBasic.graphNameIndex, name + "#" + k, {x1: betweenPoints[k][0], y1: betweenPoints[k][1], x2: betweenPoints[k + 1][0], y2: betweenPoints[k + 1][1], strokewidth: 2, linecolor: 'hsla(0, 0%, 16%, 1)'})
+                        }
+                    }
+                }
+                
             }
 
 
@@ -384,6 +403,9 @@
                 gameGraphBasic.time = configData.timer ? configData.timer.timeRemaining : null
                 gameGraphBasic.timeRemaining = configData.timer ? configData.timer.timeRemaining : null
                 gameGraphBasic.behaviorCellConnections = configData.brain
+
+
+                document.getElementById("level-text").innerText = "Level " + (gameGraphBasic.currentLevel + 1)
 
 
                 gameGraphBasic.graph = document.getElementById('gameSpace')
@@ -437,7 +459,6 @@
                         placementIndex = placementIndex + 1
 
                         neuronRect.setAttribute('rx','0.5');
-
 
                         connectToBehaviorArray = gameGraphBasic.behaviorCellConnections[placeCellColor]
                         for (bh = 0; bh < connectToBehaviorArray.length; bh++) {
@@ -546,10 +567,13 @@
                     if (viewX.distF(newlocation, gameGraphBasic.reward.location) < gameGraphBasic.reward.radius) {
                         playPopperAnimation()
                         // gameGraphBasic.stopPlaying()
+                        console.log(Object.keys(gameGraphBasic.levels).length)
+                        gameGraphBasic.currentLevel = (gameGraphBasic.currentLevel + 1) % Object.keys(gameGraphBasic.levels).length
                         gameGraphBasic.reset()
                     }
                     else {
                         gameGraphBasic.setMouseLocation(newlocation[0], newlocation[1])
+                        
                     }
                     
                 }
@@ -803,7 +827,7 @@
                 }
 
                 gameGraphBasic.timeouts = []
-                gameGraphBasic.setUp(gameGraphBasic.levels[0])
+                gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel])
                 
             }
 
@@ -820,43 +844,9 @@
                 }
             }
 
-            gameGraphBasic.levels = {
-                0 : {
-                    neurons : [198, 30],
-                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
-                    brain: {
-                        198 : ['turnEast'],
-                        30: ['turnSouth']
-                    },
-                    mouse: {
-                        location: [0.2, 0.8],
-                        velocity: [0.2, 0]
-                    },
-                    reward: {
-                        location: [0.7, 0.2],
-                        radius: 0.07
-                    },
-                    cellInitialPositions : {
-                        30: [
-                            [0.8, 0.8], 
-                            [0.1 + 0.8*Math.random(), 0.8*Math.random() + 0.1]
-                        ],
-                        198: [
-                            [0.4, 0.5]
-                        ]
-
-                    },
-                    walls: {},
-                    timer: {
-                        timeRemaining: 20
-                    }
-                }
-            }
-
-
+            
             gameGraphBasic.graphNameIndex = 0
 
-            gameGraphBasic.setUp(gameGraphBasic.levels[0]);
             
             
             gameGraphBasic.writeToLocalStorage = function(key, data) {
@@ -889,6 +879,104 @@
             }
 
 
+
+
+
+
+            gameGraphBasic.levels = {
+                0 : {
+                    neurons : [198, 30],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        30: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.2, 0.8],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.7, 0.2],
+                        radius: 0.07
+                    },
+                    cellInitialPositions : {
+                        30: [
+                            [0.8, 0.8], 
+                            [0.4, 0.5]
+                        ],
+                        198: [
+                            [0.9, 0.6]
+                        ]
+
+                    },
+                    walls: {},
+                    timer: {
+                        timeRemaining: 20
+                    }
+                },
+                1 : {
+                    neurons : [198],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
+                    brain: {
+                        198 : ['turnEast', 'turnSouth'],
+                    },
+                    mouse: {
+                        location: [0.2, 0.8],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.9, 0.3],
+                        radius: 0.05
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76]
+                        ]
+
+                    },
+                    walls: {
+                        'wall-1': [[0.8, 0.7], [0.8, 0.2]]
+                    },
+                    timer: {
+                        timeRemaining: 10
+                    }
+                },
+                2 : {
+                    neurons : [198, 310],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.9, 0.1],
+                        velocity: [0.15, 0.15]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76],
+                        ],
+                        310: [
+                            [0.3, 0.1],
+                        ]
+
+                    },
+                    walls: {
+                        'spiral-wall-1': [[0.4, 0.4], [0.4, 0.6], [0.6, 0.6], [0.6, 0.25], [0.25, 0.25], [0.25, 0.8], [0.8, 0.8], [0.8, 0.1]]
+                    },
+                    timer: {
+                        timeRemaining: 30
+                    }
+                },
+            }
+
+
+            gameGraphBasic.currentLevel = 0
+            gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
             
 
 
