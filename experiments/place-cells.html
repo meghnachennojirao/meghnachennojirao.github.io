@@ -82,7 +82,7 @@
                                     </div>
                                     <div>
                                         <button class="btn-ignus btn-outline-dark-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button> 
-                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-reset" onclick="gameGraphBasic.reset()">Reset</button>
+                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-reset" onclick="gameGraphBasic.reset()">Restart</button>
                                         <span class="ml-2 text-ignus text-grey-ignus" id="time-data">Time : NA</span>
                                         <!-- <button class="btn-ignus btn-outline-dark-ignus" id="main-addplace" onclick="gameGraphBasic.handleAddPlaceCell()">Add Place Field</button> -->
                                         <!-- <span id="place-cell-colors" style="display: none">
@@ -126,7 +126,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="neuronSpace" style="min-height: 500px;">
+                                    <div id="neuronSpace" style="min-height: 400px;">
                                     </div>
                                 </div>
                             </div>
@@ -155,22 +155,7 @@
 				document.body.style.background = 'black'
 			}
 
-            neuronalGraph = {}
-            neuronalGraph['xmin'] = -0.1
-            neuronalGraph['xmax'] = 1.1
-            neuronalGraph['ymin'] = -0.1
-            neuronalGraph['ymax'] = 1.1
-
-            if (window.innerWidth < 400) {
-                document.getElementById('gameSpace').style.minHeight = '440px';
-                document.getElementById('neuronSpace').style.minHeight = '510px'
-
-               
-                neuronalGraph['xmin'] = -0.2
-                neuronalGraph['xmax'] = 0.7
-                neuronalGraph['ymin'] = 0.05
-                neuronalGraph['ymax'] = 1.1
-            }
+           
 		</script>
 
         <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX@latest/viewx.js"></script>  -->
@@ -182,6 +167,23 @@
 
 
         <script>
+
+            neuronalGraph = {}
+            neuronalGraph['xmin'] = -0.1
+            neuronalGraph['xmax'] = 1.1
+            neuronalGraph['ymin'] = -0.03
+            neuronalGraph['ymax'] = 1.03
+
+            if (window.innerWidth < 400) {
+                document.getElementById('gameSpace').style.minHeight = '440px';
+                document.getElementById('neuronSpace').style.minHeight = '510px'
+
+               
+                neuronalGraph['xmin'] = -0.2
+                neuronalGraph['xmax'] = 0.7
+                neuronalGraph['ymin'] = 0.05
+                neuronalGraph['ymax'] = 1.1
+            }
 
             ignusTheme.baseHue = 210;
             ignusTheme.baseLightness = 80;
@@ -429,8 +431,8 @@
 
                 defaultGraphOptions['xmin'] = -0.1
                 defaultGraphOptions['xmax'] = 1.1
-                defaultGraphOptions['ymin'] = -0.1
-                defaultGraphOptions['ymax'] = 1.1
+                defaultGraphOptions['ymin'] = -0.03
+                defaultGraphOptions['ymax'] = 1.03
                 gameGraphBasic.graph = document.getElementById('gameSpace')
                 viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas-" + gameGraphBasic.graphNameIndex, defaultGraphOptions)
 
@@ -1102,10 +1104,41 @@
                         timeRemaining: 35
                     }
                 },
+                6 : {
+                    neurons : [198, 310],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.9, 0.1],
+                        velocity: [0.15, 0.15]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76],
+                        ],
+                        310: [  
+                            [0.3, 0.1],
+                        ]
+
+                    },
+                    walls: {
+                        'wall-1': [[0, 1], [0.9, 0.1]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    }
+                },
             }
 
 
-            gameGraphBasic.currentLevel = 0
+            gameGraphBasic.currentLevel = 6
             gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
             
 
