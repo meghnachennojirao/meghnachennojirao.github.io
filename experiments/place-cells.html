@@ -942,6 +942,77 @@
                     }
                 },
                 2 : {
+                    neurons : [198, 40, 310],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}, {name: 'turnWest', label: 'Turn West'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        310: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.1, 0.95],
+                        velocity: [0.15, -0.1]
+                    },
+                    reward: {
+                        location: [0.05, 0.85],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76],
+                        ],
+                        310: [  
+                            [0.3, 0.1],
+                        ],
+                        40: [  
+                            [0.1, 0.1],
+                        ]
+
+                    },
+                    walls: {
+                        'wall-1': [[0, 1], [0.9, 0.1]]
+                    },
+                    timer: {
+                        timeRemaining: 25
+                    }
+                },
+                3 : {
+                    neurons : [198, 40, 310],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}, {name: 'turnWest', label: 'Turn West'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        310: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.01, 0.05],
+                        velocity: [0, -0.2]
+                    },
+                    reward: {
+                        location: [0.98, 0.95],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76],
+                        ],
+                        310: [  
+                            [0.7, 0.5],
+                        ],
+                        40: [  
+                            [0.1, 0.8],
+                        ]
+
+                    },
+                    walls: {
+                        'wall-1': [[0.2, 0.8], [1, 0.8]],
+                        'wall-2': [[0, 0.2], [0.8, 0.2]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    }
+                },
+                4 : {
                     neurons : [198, 310],
                     behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
                     brain: {
@@ -960,7 +1031,39 @@
                         198: [
                             [0.4, 0.76],
                         ],
-                        310: [
+                        310: [  
+                            [0.3, 0.1],
+                        ]
+
+                    },
+                    walls: {
+                        'wall-1': [[0.8, 0.6], [0.8, 0.1]],
+                        'spiral-wall-1': [[0.4, 0.4], [0.4, 0.6], [0.6, 0.6], [0.6, 0.25], [0.25, 0.25], [0.25, 0.8], [0.8, 0.8]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    }
+                },
+                5 : {
+                    neurons : [198, 310],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.9, 0.1],
+                        velocity: [0.15, 0.15]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76],
+                        ],
+                        310: [  
                             [0.3, 0.1],
                         ]
 
@@ -969,13 +1072,13 @@
                         'spiral-wall-1': [[0.4, 0.4], [0.4, 0.6], [0.6, 0.6], [0.6, 0.25], [0.25, 0.25], [0.25, 0.8], [0.8, 0.8], [0.8, 0.1]]
                     },
                     timer: {
-                        timeRemaining: 30
+                        timeRemaining: 35
                     }
                 },
             }
 
 
-            gameGraphBasic.currentLevel = 0
+            gameGraphBasic.currentLevel = 1 
             gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
             
 
