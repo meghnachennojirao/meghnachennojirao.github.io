@@ -73,10 +73,10 @@
                         <b style="font-family: Raleway; color: hsla(220, 100%, 80%, 1); font-size: xx-large;">Neuro Navigator</b><br/>
                         <span class="text-ignus" style="color: grey;">A game inspired by a video from <a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: royalblue;" target="_blank">Artem Kirsanov</a></span>
                     </div>
-                    <div class="pt-0 pl-4 pr-5 pb-5">
+                    <div class="pt-0 pl-2 pr-2 pb-5 pt-lg-0 pl-lg-4 pr-lg-5 pb-lg-5">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-5">
+                                <div class="col-12 col-lg-6 col-xl-5">
                                     <div class="ml-2 text-ignus text-small-ignus mb-2">
                                         <span style="font-size: large" id="level-text">Level 1</span>
                                     </div>
@@ -102,20 +102,23 @@
                                         It is your goal is to help the mouse navigate across the place to the food (reward) by modifying the position of it's place fields. When a mouse enters the place field, the corresponding neuron (blue, orange etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
                                     </div>
                                 </div>
-                                <div class="col-7">
+
+                                <div class="d-lg-none d-block pt-5 pb-5 pl-5"></div>
+                                <div class="d-lg-none d-block pt-5 pb-5 pl-5"></div>
+                                <div class="col-12 col-lg-6 col-xl-7">
                                     <div id="descriptions">
                                         <div class="container-fluid">
                                             <div class="row text-ignus" style="color: grey;">
-                                                <div class="col-3" style="font-size: larger;"><b>Behaviours</b><br/>       
+                                                <div class="col-4 col-xl-3" style="font-size: larger;"><b>Behaviours</b><br/>       
                                                     <p style="font-size: small;">Set of actions the mouse will take
                                                     </p>
                                                 </div>
-                                                <div class="col-3" style="font-size: larger;"><b>Neurons</b><br/>
+                                                <div class="col-4 col-xl-3" style="font-size: larger;"><b>Neurons</b><br/>
                                                     <p style="font-size: small;">
                                                         The neurons (place cells) that are activated depending on the conditions that are determined by points in space.
                                                     </p>
                                                 </div>
-                                                <div class="col-6" style="font-size: larger;"><b>Firings</b><br/>
+                                                <div class="col-4 col-xl-6" style="font-size: larger;"><b>Firings</b><br/>
                                                     <p style="font-size: small;">
                                                         The spike train for each neurons
                                                     </p>
@@ -151,6 +154,23 @@
 			if (darkmode) {
 				document.body.style.background = 'black'
 			}
+
+            neuronalGraph = {}
+            neuronalGraph['xmin'] = -0.1
+            neuronalGraph['xmax'] = 1.1
+            neuronalGraph['ymin'] = -0.1
+            neuronalGraph['ymax'] = 1.1
+
+            if (window.innerWidth < 400) {
+                document.getElementById('gameSpace').style.minHeight = '370px';
+                document.getElementById('neuronSpace').style.minHeight = '510px'
+
+               
+                neuronalGraph['xmin'] = -0.2
+                neuronalGraph['xmax'] = 0.7
+                neuronalGraph['ymin'] = 0.05
+                neuronalGraph['ymax'] = 1.1
+            }
 		</script>
 
         <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX@latest/viewx.js"></script>  -->
@@ -407,7 +427,10 @@
 
                 document.getElementById("level-text").innerText = "Level " + (gameGraphBasic.currentLevel + 1)
 
-
+                defaultGraphOptions['xmin'] = -0.1
+                defaultGraphOptions['xmax'] = 1.1
+                defaultGraphOptions['ymin'] = -0.1
+                defaultGraphOptions['ymax'] = 1.1
                 gameGraphBasic.graph = document.getElementById('gameSpace')
                 viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas-" + gameGraphBasic.graphNameIndex, defaultGraphOptions)
 
@@ -436,6 +459,10 @@
 
 
                 gameGraphBasic.neuronGraph = document.getElementById('neuronSpace')
+                defaultGraphOptions['xmin'] = neuronalGraph['xmin']
+                defaultGraphOptions['xmax'] = neuronalGraph['xmax']
+                defaultGraphOptions['ymin'] = neuronalGraph['ymin']
+                defaultGraphOptions['ymax'] = neuronalGraph['ymax']
                 viewX.addGraph(gameGraphBasic.neuronGraph, "neuronCanvas", defaultGraphOptions)
 
 
