@@ -2560,21 +2560,24 @@ viewX.currentMovingPoint = ''
 viewX.pointDrag = function(event) {
 	gphname = viewX.reverseGraphElementMap[event.target.id][0]
 	ptname = viewX.reverseGraphElementMap[event.target.id][1]
-	if (viewX.graphData[gphname].pointData[ptname][1].currentlyDraggable == 'yes') {
-		if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
-			document.getElementById(gphname).removeEventListener('mousedown', viewX.graphDragHandle)
-			document.getElementById(gphname).removeEventListener('touchstart', viewX.graphDragHandle)
+	if (viewX.graphData[gphname] != null) {
+		if (viewX.graphData[gphname].pointData[ptname][1].currentlyDraggable == 'yes') {
+			if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
+				document.getElementById(gphname).removeEventListener('mousedown', viewX.graphDragHandle)
+				document.getElementById(gphname).removeEventListener('touchstart', viewX.graphDragHandle)
+			}
+			event.target.removeEventListener('mousedown', viewX.pointDrag)
+			event.target.removeEventListener('touchstart', viewX.pointDrag)
+			window.addEventListener('mousemove', viewX.pointMoveEvent)
+			window.addEventListener('mouseup', viewX.pointUpEvent)
+			event.preventDefault()
+			window.addEventListener('touchmove', viewX.pointMoveEvent, { passive: false })
+			window.addEventListener('touchend', viewX.pointUpEvent)
+			// window.addEventListener('mouseout', viewX.pointUpEvent)
+			viewX.currentMovingPoint = event.target
 		}
-		event.target.removeEventListener('mousedown', viewX.pointDrag)
-		event.target.removeEventListener('touchstart', viewX.pointDrag)
-		window.addEventListener('mousemove', viewX.pointMoveEvent)
-		window.addEventListener('mouseup', viewX.pointUpEvent)
-		event.preventDefault()
-		window.addEventListener('touchmove', viewX.pointMoveEvent, { passive: false })
-		window.addEventListener('touchend', viewX.pointUpEvent)
-		// window.addEventListener('mouseout', viewX.pointUpEvent)
-		viewX.currentMovingPoint = event.target
 	}
+
 		
 }
 
@@ -2584,38 +2587,40 @@ viewX.svgPTVariable = {}
 viewX.pointMoveEvent = function(event) {
 	event.preventDefault()
 	gphname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][0]
-	ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
-	var rect = document.getElementById(gphname).getBoundingClientRect();
-	posx = event.clientX - rect.left;
-	posy = event.clientY - rect.top;
-	viewX.svgPTVariable[gphname].x = event.clientX;
-	viewX.svgPTVariable[gphname].y = event.clientY;
+	if (viewX.graphData[gphname] != null) {
+		ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
+		var rect = document.getElementById(gphname).getBoundingClientRect();
+		posx = event.clientX - rect.left;
+		posy = event.clientY - rect.top;
+		viewX.svgPTVariable[gphname].x = event.clientX;
+		viewX.svgPTVariable[gphname].y = event.clientY;
 
-	if (event.clientX == undefined) {
-		posx = event.changedTouches[0].clientX - rect.left;
-		posy = event.changedTouches[0].clientY - rect.top;
-		viewX.svgPTVariable[gphname].x = event.changedTouches[0].clientX;
-		viewX.svgPTVariable[gphname].y = event.changedTouches[0].clientY;
-	}
+		if (event.clientX == undefined) {
+			posx = event.changedTouches[0].clientX - rect.left;
+			posy = event.changedTouches[0].clientY - rect.top;
+			viewX.svgPTVariable[gphname].x = event.changedTouches[0].clientX;
+			viewX.svgPTVariable[gphname].y = event.changedTouches[0].clientY;
+		}
 
-	var cursorpt =  viewX.svgPTVariable[gphname].matrixTransform(document.getElementById(gphname).getScreenCTM().inverse());
+		var cursorpt =  viewX.svgPTVariable[gphname].matrixTransform(document.getElementById(gphname).getScreenCTM().inverse());
 
-	moveX = viewX.svgToGraphX(cursorpt.x, viewX.graphData[gphname].xmin,viewX.graphData[gphname].xmax, viewX.graphData[gphname].aspectratio)
-	moveY = viewX.svgToGraphY(cursorpt.y, viewX.graphData[gphname].ymin,viewX.graphData[gphname].ymax, viewX.graphData[gphname].aspectratio)
+		moveX = viewX.svgToGraphX(cursorpt.x, viewX.graphData[gphname].xmin,viewX.graphData[gphname].xmax, viewX.graphData[gphname].aspectratio)
+		moveY = viewX.svgToGraphY(cursorpt.y, viewX.graphData[gphname].ymin,viewX.graphData[gphname].ymax, viewX.graphData[gphname].aspectratio)
 
-	if (typeof eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) != undefined) {
-		if (eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) == true) {
-			if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'bothXY') {
-				viewX.updatePointXY(gphname, ptname, moveX, moveY)
-				eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
-			}
-			else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyY') {
-				viewX.updatePointXY(gphname, ptname, viewX.graphData[gphname].pointData[ptname][1].x, moveY)
-				eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
-			}
-			else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyX') {
-				viewX.updatePointXY(gphname, ptname, moveX, viewX.graphData[gphname].pointData[ptname][1].y)
-				eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+		if (typeof eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) != undefined) {
+			if (eval(viewX.graphData[gphname].pointData[ptname][1].dragIfCondition) == true) {
+				if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'bothXY') {
+					viewX.updatePointXY(gphname, ptname, moveX, moveY)
+					eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+				}
+				else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyY') {
+					viewX.updatePointXY(gphname, ptname, viewX.graphData[gphname].pointData[ptname][1].x, moveY)
+					eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+				}
+				else if (viewX.graphData[gphname].pointData[ptname][1].dragDirection == 'onlyX') {
+					viewX.updatePointXY(gphname, ptname, moveX, viewX.graphData[gphname].pointData[ptname][1].y)
+					eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionDuringDrag)
+				}
 			}
 		}
 	}
@@ -2650,20 +2655,22 @@ viewX.getCoordinatesOfEvent = (gphname, runFunctionAtEnd) => (event) => {
 
 viewX.pointUpEvent = function(event) {
 	gphname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][0]
-	ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
-	if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
-		document.getElementById(gphname).addEventListener('mousedown', viewX.graphDragHandle)
-		document.getElementById(gphname).addEventListener('touchstart', viewX.graphDragHandle)
-	}
-	viewX.currentMovingPoint.addEventListener('mousedown', viewX.pointDrag)
-	viewX.currentMovingPoint.addEventListener('touchstart', viewX.pointDrag)
-	window.removeEventListener('mousemove', viewX.pointMoveEvent)
-	window.removeEventListener('mouseup', viewX.pointUpEvent)
-	window.removeEventListener('touchmove', viewX.pointMoveEvent)
-	window.removeEventListener('touchend', viewX.pointUpEvent)
+	if (viewX.graphData[gphname] != null) {
+		ptname = viewX.reverseGraphElementMap[viewX.currentMovingPoint.id][1]
+		if (viewX.graphData[gphname].currentlyDraggableGraph == 'yes') {
+			document.getElementById(gphname).addEventListener('mousedown', viewX.graphDragHandle)
+			document.getElementById(gphname).addEventListener('touchstart', viewX.graphDragHandle)
+		}
+		viewX.currentMovingPoint.addEventListener('mousedown', viewX.pointDrag)
+		viewX.currentMovingPoint.addEventListener('touchstart', viewX.pointDrag)
+		window.removeEventListener('mousemove', viewX.pointMoveEvent)
+		window.removeEventListener('mouseup', viewX.pointUpEvent)
+		window.removeEventListener('touchmove', viewX.pointMoveEvent)
+		window.removeEventListener('touchend', viewX.pointUpEvent)
 
-	// window.removeEventListener('mouseout', viewX.pointUpEvent)
-	eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionOnDragEnd)
+		// window.removeEventListener('mouseout', viewX.pointUpEvent)
+		eval(viewX.graphData[gphname].pointData[ptname][1].runFunctionOnDragEnd)
+	}
 }
 
 viewX.wheelHandle = (gphname) => (event) => {
