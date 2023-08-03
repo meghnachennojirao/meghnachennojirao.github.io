@@ -1267,7 +1267,7 @@
                         timeRemaining: 35
                     }
                 },
-                6 : {
+                7 : {
                     neurons : [198, 310],
                     behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}],
                     brain: {
@@ -1323,6 +1323,51 @@
                     },
                     timer: {
                         timeRemaining: 35
+                    },
+                    levelInfo : {
+                        instruction: "Moving <b style='color: hsla(198,100%,80%, 1)'>place fields</b> is only possible in the <b style='color: orange;'>beginning</b> of this level."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                6 : {
+                    neurons : [198, 310, 30, 120],
+                    behaviors : [{name: 'turnSouth', label: 'Turn South'}, {name: 'turnEast', label: 'Turn East'}, {name: 'turnWest', label: 'Turn West'}, {name: 'turnNorth', label: 'Turn North'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth', 'turnWest'],
+                        30: ['turnNorth'],
+                        120: ['turnWest']
+                    },
+                    mouse: {
+                        location: [0.1, 0.8],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.3],
+                        ],
+                        310: [  
+                            [0.8, 0.8],
+                        ],
+                        30: [  
+                            [0.1, 0.2],
+                        ],
+                        120: [  
+                            [0.6, 0.9],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.8, 0.8], [0.8, 0.2]],
+                        'wall-2': [[0.8, 0.8], [0.2, 0.8]],
+                        'wall-3': [[0.2, 0.8], [0.2, 0.2]],
+                        'wall-4': [[0.2, 0.2], [0.6, 0.2]]
+                    },
+                    timer: {
+                        timeRemaining: 30
                     },
                     levelInfo : {
                         instruction: "Moving <b style='color: hsla(198,100%,80%, 1)'>place fields</b> is only possible in the <b style='color: orange;'>beginning</b> of this level."
