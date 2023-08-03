@@ -117,7 +117,7 @@
     
                                     </div>
                                     <div>
-                                        <div class="ml-2 pt-2 text-ignus text-grey-ignus" id="time-data">Time : NA</div>
+                                        <div class="ml-2 pt-2 text-ignus text-grey-ignus" id="time-data">Time Remaining : NA</div>
                                     </div>
                                     <div class="ml-2 text-ignus text-small-ignus mt-3" id="info-box">
                                         Move the <b style="color: hsla(198,100%,80%, 1)">place fields</b>. To move them, click/tap and drag the place fields.
@@ -193,6 +193,10 @@
             
 			
 		</div>
+        <audio id="failure-sound" src="/assets/audio/error-2-126514.mp3"></audio>
+        <audio id="success-sound" src="/assets/audio/scale-e6-14577.mp3"></audio>
+        <audio id="activation-sound" src="/assets/audio/mixkit-game-ball-tap-2073.mp3"></audio>
+        <audio id="wall-sound" src="/assets/audio/cartoon_wink_magic_sparkle-6896.mp3"></audio>
 
 
 		<script type="text/javascript">		
@@ -202,7 +206,13 @@
 				document.body.style.background = 'black'
 			}
 
-           
+            function playSound(audio_id) {
+                // Get the audio element using its ID
+                const audioElement = document.getElementById(audio_id);
+
+                // Play the audio
+                audioElement.play();
+            }
 		</script>
 
         <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/prajwalsouza/viewX@latest/viewx.js"></script>  -->
@@ -514,7 +524,7 @@
                 gameGraphBasic.timeRemaining = configData.timer ? configData.timer.timeRemaining : null
                 gameGraphBasic.behaviorCellConnections = configData.brain
 
-                document.getElementById("time-data").innerText = "Time : " + gameGraphBasic.timeRemaining
+                document.getElementById("time-data").innerText = "Time Remaining : " + gameGraphBasic.timeRemaining
 
 
                 document.getElementById("level-text").innerText = "Level " + (gameGraphBasic.currentLevel + 1)
@@ -658,9 +668,11 @@
                         if ( gameGraphBasic.time < 15/1000) {
                             gameGraphBasic.stopPlaying()
                             document.getElementById("main-play-pause").innerText = "Play"
+
+                            playSound('failure-sound')
                             gameGraphBasic.reset();
                         }
-                        document.getElementById("time-data").innerText = "Time : " + gameGraphBasic.time.toFixed(2)
+                        document.getElementById("time-data").innerText = "Time Remaining : " + gameGraphBasic.time.toFixed(2)
                     }
 
                     stepsize = 0.01
@@ -671,6 +683,8 @@
                         if (collisionData) {
                             gameGraphBasic.mouse.velocity = collisionData.velocity
                             // console.log(colliderName)
+
+                            playSound('wall-sound')
                         }
                     }
 
@@ -694,6 +708,8 @@
 
                     if (viewX.distF(newlocation, gameGraphBasic.reward.location) < gameGraphBasic.reward.radius) {
                         playPopperAnimation()
+
+                        playSound('success-sound')
                         // gameGraphBasic.stopPlaying()
                         // console.log(Object.keys(gameGraphBasic.levels).length)
                         gameGraphBasic.currentLevel = (gameGraphBasic.currentLevel + 1) % Object.keys(gameGraphBasic.levels).length
@@ -729,6 +745,8 @@
             }
 
             gameGraphBasic.triggerNeuron = function(placeCellColorFullKey, placeCellDistance) {
+
+                playSound('activation-sound')
                 placeCellColor = gameGraphBasic.placeCells[placeCellColorFullKey].placeCellColor
                 
                 fireWithinRadius = (1 - Math.random())*gameGraphBasic.placeCells[placeCellColorKey].radius
