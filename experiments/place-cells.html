@@ -51,15 +51,52 @@
     
             gtag('config', 'G-3H9JR6P5Z0');
         </script>
-      
+        <style>
+            #main-title-name {
+                color: hsla(220, 100%, 80%, 1);
+            }
+
+        
+            body {
+                background: hsla(0, 0%, 0%, 1);
+            }
+
+            #main-explanation-text {
+                color: lightgrey;
+            }
+
+            #time-data {
+                color: lightgray;
+            }
+
+            @media (prefers-color-scheme: light) {
+                #main-title-name {
+                    color: hsla(220, 100%, 0%, 1);
+                }
+
+                body {
+                    background: hsla(0, 0%, 60%, 1);
+                }
+
+                #main-explanation-text {
+                    color: black;
+                }
+
+                #time-data {
+                    color: black
+                }
+
+
+            }
+        </style>
 
 	</head>
 	<body style='margin:0px; display: block;'>
 		<div id="containAll" class="p-sm-3 p-1" style=" overflow: hidden; ">
-            <div style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: hsla(0, 0%, 6%, 1); ">
+            <div style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: var(--generalBackground); ">
                 
                 <header id="upc-header" class="pr-2 pr-sm-3" style="position: fixed;font-family: Raleway; overflow: hidden; width: calc(100%); top: 0; z-index: 3; opacity: 0; pointer-events: none;" onclick="placeCellsGame.headerClick()">
-                    <div style="background-image: linear-gradient(to bottom, hsla(0, 0%, 6%, 1),hsla(0, 0%, 6%, 1), transparent);color: hsl(0,0%,20%);font-size: small;min-height: 131px;" class="text-ignus p-4 pl-5 pr-5 p-md-3 pl-md-4 pr-md-4 text-md-left text-center">
+                    <div style="background-image: linear-gradient(to bottom, var(--generalBackground),var(--generalBackground), transparent);color: hsl(0,0%,20%);font-size: small;min-height: 131px;" class="text-ignus p-4 pl-5 pr-5 p-md-3 pl-md-4 pr-md-4 text-md-left text-center">
                         <span style="cursor: pointer;"> 
                             <span style="font-size:x-small;">Neuro Navigator</span>
                         </span>
@@ -70,7 +107,7 @@
 
                 <main>
                     <div class="p-4 pl-5 text-ignus text-center text-md-left">
-                        <b style="font-family: Raleway; color: hsla(220, 100%, 80%, 1); font-size: xx-large;">Neuro Navigator</b><br/>
+                        <b style="font-family: Raleway; font-size: xx-large;" id="main-title-name">Neuro Navigator</b><br/>
                         <span class="text-ignus" style="color: grey;">A game inspired by a video from <a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: royalblue;" target="_blank">Artem Kirsanov</a></span>
                     </div>
                     <div class="pt-0 pl-2 pr-2 pb-5 pt-lg-0 pl-lg-4 pr-lg-5 pb-lg-5">
@@ -125,7 +162,7 @@
                                     <div id="gameSpace" style="min-height: 500px;">
                                     </div>
                                     <div class="text-ignus text-grey-ignus text-small-ignus text-center pt-4 mt-3" style="color: grey;">
-                                        <span style="color: lightgrey">When the mouse reaches any of the blue place field, the blue neuron (place cell) in the mouse's brain fire and thus firing the motor neurons and other behaviors that neuron pathway intends.</span>
+                                        <span id="main-explanation-text">When the mouse reaches any of the blue place field, the blue neuron (place cell) in the mouse's brain fire and thus firing the motor neurons and other behaviors that neuron pathway intends.</span>
                                         It is your goal is to help the mouse navigate across the place to the food (reward) by modifying the position of it's place fields. When a mouse enters the place field, the corresponding neuron (blue, orange etc) is triggered, which then triggers the behavior (action) eg. Turn right, left etc.
                                     </div>
                                 </div>
@@ -200,11 +237,12 @@
 
 
 		<script type="text/javascript">		
-			darkmode = true
 
-			if (darkmode) {
-				document.body.style.background = 'black'
-			}
+
+
+			// if (darkmode) {
+			// 	document.body.style.background = 'black'
+			// }
 
             function playSound(audio_id) {
                 // Get the audio element using its ID
@@ -224,6 +262,16 @@
 
 
         <script>
+
+            darkmode = true
+
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                // console.log('User prefers light color scheme');
+                darkmode = false
+            } else {
+                // console.log('User does not prefer light color scheme');
+                darkmode = true
+            }
 
             neuronalGraph = {}
             neuronalGraph['xmin'] = -0.1
@@ -357,14 +405,14 @@
                 gameGraphBasic.placeCells[placeCellColorKey].radius = 0.1
                 gameGraphBasic.placeCells[placeCellColorKey].placeCellColor = placeCellColor
 
-                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)", stroke: "transparent"});
+                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius, circlecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")", stroke: "transparent"});
                 
 
-                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.6, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.1)", stroke: "transparent"});
+                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.6, circlecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")", stroke: "transparent"});
 
-                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.2, circlecolor: "hsla(" + placeCellColor + ", 100%, 50%, 0.2)", stroke: "transparent"});
+                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.2, circlecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.2: 0.3) + ")", stroke: "transparent"});
 
-                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, 50%, 1)", text: "Place Field", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
+                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 20) +  "%, 1)", text: "Place Field", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
 
 
                 viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-moveKnob-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], pointsize: 9, pointcolor: "transparent", stroke: "transparent",  draggability: "yes", runFunctionDuringDrag: "gameGraphBasic.movePlace(" + gameGraphBasic.placeCells[placeCellColorKey].id + ")"});
@@ -418,17 +466,17 @@
 
             gameGraphBasic.firePlaceCell = function(placeCellColorKey) {
                 placeCellColorFiring = gameGraphBasic.placeCells[placeCellColorKey].placeCellColor
-                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
-                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
-                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, 50%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 30) +  "%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 30) +  "%, 0.5)"});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 30) +  "%, 0.5)"});
 
                 viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-" + placeCellColorKey, {text: "Firing"});
 
                 (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
                     timeOutInfo = setTimeout(function() {
-                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.1)"});
-                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.1)"});
-                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, 50%, 0.2)"});
+                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")"});
+                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")"});
+                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellColorKeySnapshot, {circlecolor: "hsla(" + placeCellColorFiringSnapshot + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.2: 0.3) + ")"});
                     }, 20);
                     gameGraphBasic.timeouts.push(timeOutInfo)
                 })(placeCellColorKey, placeCellColorFiring);
@@ -469,7 +517,7 @@
                     gameGraphBasic.addCollider(name, 'polygon', {points: colliderData})
 
                     if (visible) {
-                        viewX.addLine('mainGameCanvas-' + gameGraphBasic.graphNameIndex, name, {x1: betweenPoints[0][0], y1: betweenPoints[0][1], x2: betweenPoints[1][0], y2: betweenPoints[1][1], strokewidth: 2, linecolor: 'hsla(0, 0%, 16%, 1)'})
+                        viewX.addLine('mainGameCanvas-' + gameGraphBasic.graphNameIndex, name, {x1: betweenPoints[0][0], y1: betweenPoints[0][1], x2: betweenPoints[1][0], y2: betweenPoints[1][1], strokewidth: 2, linecolor: 'hsla(0, 0%, ' + (darkmode ? 16: 75) +  '%, 1)'})
                     }
                 }
                 else {
@@ -536,7 +584,7 @@
                 gameGraphBasic.graph = document.getElementById('gameSpace')
                 viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas-" + gameGraphBasic.graphNameIndex, defaultGraphOptions)
 
-                rectOptions = { x: 0, y: 1, w: 1, h: 1, stroke: "hsla(0, 0%, 30%, 0.5)", strokewidth: 1, rectcolor: "hsla(190, 100%, 50%, 0)"};
+                rectOptions = { x: 0, y: 1, w: 1, h: 1, stroke: "hsla(0, 0%, " + (darkmode ? 30: 50) + "%, 0.5)", strokewidth: 1, rectcolor: "hsla(190, 100%, " + (darkmode ? 50 : 30) +  "%, 0)"};
 
                 gameGraphBasic.boundaryRect = viewX.addRectangle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-boundary", rectOptions)[0];
                 
@@ -547,15 +595,15 @@
                 gameGraphBasic.mouse.velocity = configData.mouse.velocity
 
 
-                viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouse", {x: gameGraphBasic.mouse.location[0], y: gameGraphBasic.mouse.location[1], pointcolor: "hsla(199, 100%, 100%, 1)"});
-                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, textcolor: "hsla(199, 100%, 100%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
+                viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouse", {x: gameGraphBasic.mouse.location[0], y: gameGraphBasic.mouse.location[1], pointcolor: "hsla(199, 100%, " + (darkmode ? 100: 0) + "%, 1)"});
+                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, textcolor: "hsla(199, 100%, " + (darkmode ? 100: 0) + "%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
 
                 gameGraphBasic.reward = {}
                 gameGraphBasic.reward.location = configData.reward.location
                 gameGraphBasic.reward.radius = configData.reward.radius
-                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(249, 100%, 80%, 0.5)", stroke: "transparent"});
+                viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(249, 100%, " + (darkmode ? 80: 20) + "%, 0.5)", stroke: "transparent"});
 
-                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(249, 100%, 80%, 1)", text: "Food", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
+                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(249, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "Food", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
 
 
 
@@ -573,9 +621,9 @@
 
                     behavior = configData.behaviors[m].name.toString()
                     behaviorLabel = configData.behaviors[m].label.toString()
-                    viewX.addText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {x: -0.1, y: 0.7 - m*0.15, textcolor: "hsla(289, 0%, 50%, 1)", text: behaviorLabel, fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
+                    viewX.addText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {x: -0.1, y: 0.7 - m*0.15, textcolor: "hsla(289, 0%, " + (darkmode ? 50: 10) + "%, 1)", text: behaviorLabel, fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
 
-                    behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-" + behavior + "-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05 - m*0.15, w: 0.2, h: 0.08, stroke: "hsla(289, 0%, 50%, 1)", rectcolor: "transparent"})[0];
+                    behaviorRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-behaviour-" + behavior + "-Box", {x: -0.1 - 0.04, y: 0.7 + 0.05 - m*0.15, w: 0.2, h: 0.08, strokewidth: 1, stroke: "hsla(289, 0%, "+ (darkmode ? 20: 80) + "%, 1)", rectcolor: "transparent"})[0];
                     behaviorRect.setAttribute('rx','0.5');
                 }
 
@@ -584,7 +632,7 @@
                 for (var key in gameGraphBasic.placeCellColors) {
                     if (gameGraphBasic.placeCellColors.hasOwnProperty(key)) {
                         placeCellColor = gameGraphBasic.placeCellColors[key]
-                        neuronRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {x: 0.2, y: 0.7 + 0.05 - placementIndex*0.15, w: 0.1, h: 0.08, stroke: "hsla(289, 0%, 50%, 0)", rectcolor: "hsla(" + placeCellColor  + ", 100%, 70%, 0.7)"})[0];
+                        neuronRect = viewX.addRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {x: 0.2, y: 0.7 + 0.05 - placementIndex*0.15, w: 0.1, h: 0.08, stroke: "hsla(289, 0%, "+ (darkmode ? 50: 20) + "%, 0)", rectcolor: "hsla(" + placeCellColor  + ", 100%, "+ (darkmode ? 70: 50) + "%, " + (darkmode ? 0.7: 1) + ")"})[0];
                         placementIndex = placementIndex + 1
 
                         neuronRect.setAttribute('rx','0.5');
@@ -594,7 +642,7 @@
                             connection = connectToBehaviorArray[bh]
                             neuronPositionIndex = gameGraphBasic.placeCellColors.indexOf(placeCellColor)
                             connectionPositionIndex = gameGraphBasic.behaviors.indexOf(connection)
-                            viewX.addLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + connection, {x1: 0.2 , y1: 0.71 - neuronPositionIndex*0.15, x2: 0.06, y2: 0.71 - connectionPositionIndex*0.15, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.7)"});
+                            viewX.addLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + connection, {x1: 0.2 , y1: 0.71 - neuronPositionIndex*0.15, x2: 0.06, y2: 0.71 - connectionPositionIndex*0.15, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, "+ (darkmode ? 70: 50) + "%, " + (darkmode ? 0.7: 1) + ")"});
                         }
                     }
                 }
@@ -738,7 +786,7 @@
 
             gameGraphBasic.fireNeuronSpike = function(placeCellColor) {
                 idForSpike = "neuronCanvas-firing-Line-" + placeCellColor + "-" + getUiD()
-                viewX.addLine("neuronCanvas", idForSpike, {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 0.4)"});
+                viewX.addLine("neuronCanvas", idForSpike, {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08, strokewidth: 1, linecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 70: 50) +  "%, 0.4)"});
 
 
                 gameGraphBasic.firingGraphElements[idForSpike] = {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08}
@@ -837,17 +885,17 @@
                         
                         
                         
-                        viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: "white"});
+                        viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: (darkmode ? "white": "grey")});
 
-                        viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + behavior, {linecolor: "hsla(" + placeCellColor + ", 100%, 70%, 1)"});
+                        viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + behavior, {linecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 70: 50) + "%, 1)"});
 
-                        viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {rectcolor: "hsla(" + placeCellColor + ", 100%, 70%, 1)"});
+                        viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColor, {rectcolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 70: 50) + "%, 1)"});
 
                         (function(behaviorSnapshot, placeCellColorSnapshot) {
                             timeOutInfo = setTimeout(function() {
-                                viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behaviorSnapshot, {textcolor: "hsla(289, 0%, 50%, 1)"});
-                                viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColorSnapshot + "-" + behaviorSnapshot, {linecolor: "hsla(" + placeCellColorSnapshot + ", 100%, 70%, 0.7)"});
-                                viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColorSnapshot, {rectcolor: "hsla(" + placeCellColorSnapshot + ", 100%, 70%, 0.7)"});
+                                viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behaviorSnapshot, {textcolor: "hsla(289, 0%, " + (darkmode ? 50: 0) + "%, 1)"});
+                                viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColorSnapshot + "-" + behaviorSnapshot, {linecolor: "hsla(" + placeCellColorSnapshot + ", 100%, " + (darkmode ? 70: 50) + "%, 0.7)"});
+                                viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColorSnapshot, {rectcolor: "hsla(" + placeCellColorSnapshot + ", 100%, " + (darkmode ? 70: 50) + "%, 0.7)"});
                             }, 100);
                             gameGraphBasic.timeouts.push(timeOutInfo)
                         })(behavior, placeCellColor);
@@ -1267,37 +1315,6 @@
                         timeRemaining: 32
                     }
                 },
-                7 : {
-                    neurons : [198, 310],
-                    behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
-                    brain: {
-                        198 : ['turnEast'],
-                        310: ['turnSouth']
-                    },
-                    mouse: {
-                        location: [0.9, 0.1],
-                        velocity: [0.15, 0.15]
-                    },
-                    reward: {
-                        location: [0.5, 0.5],
-                        radius: 0.03
-                    },
-                    cellInitialPositions : {
-                        198: [
-                            [0.4, 0.76],
-                        ],
-                        310: [  
-                            [0.3, 0.1],
-                        ]
-
-                    },
-                    walls: {
-                        'spiral-wall-1': [[0.4, 0.4], [0.4, 0.6], [0.6, 0.6], [0.6, 0.25], [0.25, 0.25], [0.25, 0.8], [0.8, 0.8], [0.8, 0.1]]
-                    },
-                    timer: {
-                        timeRemaining: 35
-                    }
-                },
                 5 : {
                     neurons : [198, 310],
                     behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
@@ -1373,6 +1390,37 @@
                         instruction: "Moving <b style='color: hsla(198,100%,80%, 1)'>place fields</b> is only possible in the <b style='color: orange;'>beginning</b> of this level."
                     },
                     placeFieldsOnlyInBeginning: true
+                },
+                7 : {
+                    neurons : [198, 310],
+                    behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth']
+                    },
+                    mouse: {
+                        location: [0.9, 0.1],
+                        velocity: [0.15, 0.15]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.4, 0.76],
+                        ],
+                        310: [  
+                            [0.3, 0.1],
+                        ]
+
+                    },
+                    walls: {
+                        'spiral-wall-1': [[0.4, 0.4], [0.4, 0.6], [0.6, 0.6], [0.6, 0.25], [0.25, 0.25], [0.25, 0.8], [0.8, 0.8], [0.8, 0.1]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    }
                 },
             }
 
