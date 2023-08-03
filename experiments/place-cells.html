@@ -81,9 +81,33 @@
                                         <span style="font-size: large" id="level-text">Level 1</span>
                                     </div>
                                     <div>
-                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button> 
-                                        <button class="btn-ignus btn-outline-dark-ignus" id="main-reset" onclick="gameGraphBasic.reset()">Restart</button>
-                                        <span class="ml-2 text-ignus text-grey-ignus" id="time-data">Time : NA</span>
+                                        <div class="hs-container-outer-ignus ">
+                                            <div class="d-none d-sm-flex hs-container-left-button-ignus" onclick="ignusTheme.hsMoveLeft('#theHS', 70)">
+                                                <i class="fa fa-angle-left"></i>
+                                            </div>
+                                            <div class="d-none d-sm-flex hs-container-right-button-ignus" onclick="ignusTheme.hsMoveRight('#theHS', 70)">
+                                                <i class="fa fa-angle-right"></i>
+                                            </div>
+                                            <div id="theHS" class="hs-container-inner-ignus">
+                                                <div class="hs-container-element-ignus">
+                                                    <button class="btn-ignus btn-outline-dark-ignus" id="main-play-pause" onclick="placeCellsGame.handlePlayPause()">Pause</button>
+                                                </div>
+                                                <div class="hs-container-element-ignus">
+                                                    <button class="btn-ignus btn-outline-dark-ignus" id="main-reset" onclick="gameGraphBasic.reset()">Restart</button>
+                                                </div>
+                                                <div class="hs-container-element-ignus">
+                                                    <button class="btn-ignus btn-outline-dark-ignus" id="prev-level-button" onclick="gameGraphBasic.prevLevelClick()">Previous Level</button>
+                                                </div>
+                                                <div class="hs-container-element-ignus">
+                                                    
+                                                    <button class="btn-ignus btn-outline-dark-ignus" id="next-level-button" onclick="gameGraphBasic.nextLevelClick()">Next Level</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
                                         <!-- <button class="btn-ignus btn-outline-dark-ignus" id="main-addplace" onclick="gameGraphBasic.handleAddPlaceCell()">Add Place Field</button> -->
                                         <!-- <span id="place-cell-colors" style="display: none">
                                             <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(198, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(198, [0.8, 0.5])">     &nbsp&nbsp</button>
@@ -91,6 +115,9 @@
                                             <button class="btn-ignus btn-outline-dark-ignus" style="border: 0px solid black; background: hsla(320, 100%, 70%, 0.7);" onclick="gameGraphBasic.addPlaceCell(320, [0.8, 0.5])">     &nbsp&nbsp</button>
                                         </span> -->
     
+                                    </div>
+                                    <div>
+                                        <div class="ml-2 pt-2 text-ignus text-grey-ignus" id="time-data">Time : NA</div>
                                     </div>
                                     <div class="ml-2 text-ignus text-small-ignus mt-3" id="info-box">
                                         Move the <b style="color: hsla(198,100%,80%, 1)">place fields</b>. To move them, click/tap and drag the place fields.
@@ -592,6 +619,9 @@
                     document.getElementById("main-play-pause").innerText = "Pause"
                 }
 
+
+                gameGraphBasic.levelOptionsSetup()
+
                 
 
 
@@ -667,10 +697,16 @@
                         // gameGraphBasic.stopPlaying()
                         // console.log(Object.keys(gameGraphBasic.levels).length)
                         gameGraphBasic.currentLevel = (gameGraphBasic.currentLevel + 1) % Object.keys(gameGraphBasic.levels).length
+
+                        if (gameGraphBasic.maxLevel < gameGraphBasic.currentLevel) {
+                            gameGraphBasic.maxLevel = gameGraphBasic.currentLevel
+                        }
                         
                         gameData = {
                             currentLevel : gameGraphBasic.currentLevel,
+                            maxLevel : gameGraphBasic.maxLevel
                         }
+
                         gameGraphBasic.writeToLocalStorage('place-cells-game', gameData)
                         gameGraphBasic.reset()
                     }
@@ -1006,9 +1042,51 @@
             }
 
 
+            
+            
+            gameData = gameGraphBasic.readFromLocalStorage('place-cells-game')
 
 
+            if (gameData != null) {
+                gameGraphBasic.currentLevel = gameData.currentLevel
+                if (gameData.maxLevel != null) {
+                    gameGraphBasic.maxLevel = gameData.maxLevel
+                }
+                else {
+                    gameGraphBasic.maxLevel = gameData.currentLevel
+                }
+            }
+            else {
+                gameGraphBasic.currentLevel = 0
+                gameGraphBasic.maxLevel = 0
+            }
 
+            gameGraphBasic.levelOptionsSetup = function() {
+                if (gameGraphBasic.currentLevel == gameGraphBasic.maxLevel) {
+                    document.getElementById("next-level-button").style.display = "none"
+                }
+                else {
+                    document.getElementById("next-level-button").style.display = "inline-block"
+                }
+
+                if (gameGraphBasic.currentLevel == 0) {
+                    document.getElementById("prev-level-button").style.display = "none"
+                }
+                else {
+                    document.getElementById("prev-level-button").style.display = "inline-block"
+                }
+            }
+
+
+            gameGraphBasic.prevLevelClick = function() {
+                gameGraphBasic.currentLevel = gameGraphBasic.currentLevel - 1
+                gameGraphBasic.reset()
+            }
+
+            gameGraphBasic.nextLevelClick = function() {
+                gameGraphBasic.currentLevel = (gameGraphBasic.currentLevel + 1) % Object.keys(gameGraphBasic.levels).length
+                gameGraphBasic.reset()
+            }
 
             gameGraphBasic.levels = {
                 0 : {
@@ -1236,16 +1314,6 @@
             }
 
 
-            
-            gameData = gameGraphBasic.readFromLocalStorage('place-cells-game')
-
-
-            if (gameData != null) {
-                gameGraphBasic.currentLevel = gameData.currentLevel
-            }
-            else {
-                gameGraphBasic.currentLevel = 0
-            }
 
             gameGraphBasic.setUp(gameGraphBasic.levels[gameGraphBasic.currentLevel]);
 
