@@ -675,7 +675,7 @@
                         document.getElementById("time-data").innerText = "Time Remaining : " + gameGraphBasic.time.toFixed(2)
                     }
 
-                    stepsize = 0.01
+                    stepsize = 0.02
 
 
                     for (var colliderName in gameGraphBasic.colliders) {
@@ -963,7 +963,7 @@
 
 
 
-            setInterval(gameGraphBasic.runMouse, 15)
+            setInterval(gameGraphBasic.runMouse, 30)
 
             gameGraphBasic.startPlaying = function() {
                 gameGraphBasic.playing = true
