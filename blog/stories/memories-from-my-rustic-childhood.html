@@ -60,7 +60,7 @@
       /* Custom styles */
       body {
         font-family: 'Raleway', Arial, sans-serif;
-        background-color: hsl(202, 90%, 4%);
+        background-color: hsl(0, 0%, 0%);
         
       }
       .profile {
@@ -83,7 +83,15 @@
       }
 
       .container-inner {
-        background-color: hsl(203, 97%, 11%);
+        background-color: hsl(0, 0%, 0%);
+      }
+
+      .scroll-parallax-img-element {
+        width: 100%; 
+        border-radius: 18px; 
+        background-position: center; 
+        background-size: cover; 
+        transition: background-position 0.4s ease-in-out;
       }
 
     </style>
@@ -139,7 +147,16 @@
 
           </div>
 
-          <img src="/assets/images/blog/stories/rustic-childhood-memories/rain-drops.png" style="width: 100%;">
+          <div class="text-center">
+            <div  class="d-block d-md-none">
+              <div class="scroll-parallax-img-element" style="width: 100%; border-radius: 18px; background-image: url('/assets/images/blog/stories/rustic-childhood-memories/rain-drops.png'); background-position: center; background-size: cover; height: 350px; border-radius: 0px;"></div>
+            </div>
+            
+            <div class="d-none d-md-block ml-5 mr-5">
+              <div class="scroll-parallax-img-element" style="width: 100%; border-radius: 18px; background-image: url('/assets/images/blog/stories/rustic-childhood-memories/rain-drops.png'); background-position: center; background-size: cover; height: 500px;"></div>
+            </div>
+          </div>
+          
 
           <div class="p-md-5 p-4 ml-3 mr-3">
             <p>
@@ -181,4 +198,67 @@
     </div>
 
   </body>
+
+  <script>
+    const handleIntersection = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          console.log('Element is in view!');
+          // You can stop observing after it's seen once
+          // observer.unobserve(entry.target);
+        }
+      });
+    };
+
+    // Setting up the observer
+    const options = {
+      root: null, // using the viewport
+      rootMargin: '0px',
+      threshold: 0.1 // at least 10% of the target is visible
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, options);
+    const target = document.querySelector('.scroll-parallax-img-element'); // replace with your target
+    observer.observe(target);
+
+
+    const isInViewport = (elem) => {
+      const bounding = elem.getBoundingClientRect();
+      return (
+        bounding.top >= 0 &&
+        bounding.left >= 0 &&
+        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    };
+
+    window.addEventListener('scroll', function(event) {
+      const element = document.querySelector('.scroll-parallax-img-element');
+      if (isInViewport(element)) {
+        bounds = element.getBoundingClientRect();
+        scrollparam = (bounds.top/(bounds.bottom - bounds.top));
+        scrollparam = linearValue(scrollparam, valuesAreBetween=[0, 1], needValuesBetween=[0, 100])
+
+        if (window.innerWidth < 300) {
+          element.style.backgroundPosition = "center " + scrollparam/2 + "%";
+        }
+        else {
+          element.style.backgroundPosition = "center " + scrollparam + "%";
+        }
+        
+        element.style.filter = "grayscale(" + ((scrollparam/100)) + ")";
+      }
+    });
+
+
+    function linearValue(value, valuesAreBetween=[0, 1], needValuesBetween=[0, 100]) {
+        if (valuesAreBetween[1] - valuesAreBetween[0] > 0) {
+            return ((value - valuesAreBetween[0])*(needValuesBetween[1] - needValuesBetween[0])/(valuesAreBetween[1] - valuesAreBetween[0])) + needValuesBetween[0]
+        }
+        else {
+            return (needValuesBetween[1] + needValuesBetween[0])/2
+        }
+
+    }
+  </script>
 </html>
