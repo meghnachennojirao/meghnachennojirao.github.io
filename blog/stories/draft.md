@@ -30,7 +30,7 @@ I too had a little guava tree which bloomed and bore fruits much later. I'd figh
 
 Right next to it was the yellow oleander tree, with a peculiar odor and its narrow, long, lanceolate, dark green shiny leaves.
 
-In the forest, we'd play games, mostly climbing the trees. Each tree was a home, and each branch a room! We could climb and jump off the trees as effortlessly as monkeys. I suppose many of the trees leaned, slanted, or lay close to the ground because of our antics! 😂 
+    In the forest, we'd play games, mostly climbing the trees. Each tree was a home, and each branch a room! We could climb and jump off the trees as effortlessly as monkeys. I suppose many of the trees leaned, slanted, or lay close to the ground because of our antics! 😂 
 
 We'd dress up the two long rocks, which marked boundaries and were at the entrance of the forest, as a man and wife and have them 'marry' every other day! Our neighbor was a tailor. We'd take the leftover fabric pieces from him and use them to decorate the stones. It was always fun to be on the girl's side; as the boy's side didn't require as much decoration or dressing up!
 
