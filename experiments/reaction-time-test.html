@@ -228,6 +228,9 @@
                 }
 
                 if (app.cueState == 'starting') {
+                    stopSound('activation-sound');
+                    document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
+                    app.reactionTime = app.touchClickTime;
                     document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
                     document.getElementById('tryAgainStartButton').style.display = 'block';
                     document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
