@@ -111,8 +111,10 @@
                         Hi. This is a reaction test. <br/>
                         Click/tap on the screen when you see a flash on the screen (color change), or when you hear a sound. 
                         
-                        <div id="lastReactionTime"></div>
-                        <span class="btn-ignus mt-5" id="tryAgainStartButton" onclick="displayCue()">Start</span>
+                        <div id="lastReactionTime" style="font-size: xx-large;"></div>
+                        <span class="btn-ignus mt-5" id="tryAgainStartButton" onclick="startTest()">Start</span>
+
+                        <div id="lastCue"></div>
                     </div>
 
                     <div>
@@ -131,7 +133,7 @@
 		</div>
         <audio id="failure-sound" src="/assets/audio/error-2-126514.mp3"></audio>
         <audio id="success-sound" src="/assets/audio/scale-e6-14577.mp3"></audio>
-        <audio id="activation-sound" src="/assets/audio/mixkit-game-ball-tap-2073.mp3"></audio>
+        <audio id="activation-sound" src="/assets/audio/072807_heavy-machine-gun-50-caliber-39765.mp3"></audio>
         <audio id="wall-sound" src="/assets/audio/cartoon_wink_magic_sparkle-6896.mp3"></audio>
 
 
@@ -143,6 +145,7 @@
                 const audioElement = document.getElementById(audio_id);
 
                 // Play the audio
+                audioElement.currentTime = 0;
                 audioElement.play();
             }
 
@@ -151,12 +154,14 @@
                 const audioElement = document.getElementById(audio_id);
 
                 // Play the audio
-                audioElement.stop();
+                audioElement.pause();
+                audioElement.currentTime = 0;
+
             }
 
 
             app = {}
-            app.cueTypes = ['sound', 'light', 'sound=light']
+            app.cueTypes = ['sound', 'light', 'sound-light']
             app.cueState = 'starting'
 
             app.reactionTimes = {
@@ -168,6 +173,7 @@
             function displayCue() {
                 app.cueType = app.cueTypes[parseInt(Math.random()*app.cueTypes.length)];
 
+                console.log(app.cueType)
 
                 if (app.cueType == 'sound') {
                     playSound('activation-sound')
@@ -189,12 +195,13 @@
             }
 
             function startTest() {
-                minimumTimeToStart = 3
-                maxTimeToStart = 7
+                minimumTimeToStart = 2
+                maxTimeToStart = 5
                 randomTimeToStart = minimumTimeToStart + Math.random()*(maxTimeToStart - minimumTimeToStart);
                 app.cueState = 'starting';
 
                 document.getElementById('tryAgainStartButton').style.display = 'none';
+                document.getElementById('lastCue').innerHTML = ""
 
                 setTimeout(displayCue, randomTimeToStart*1000)
             }
@@ -204,9 +211,9 @@
                 // Your code here
                 if (app.cueState == 'ready') {
                     app.touchClickTime = performance.now();
-                    app.reactionTime = app.cueStartTime - app.touchClickTime;
+                    app.reactionTime = app.touchClickTime - app.cueStartTime;
 
-                    document.getElementById('lastReactionTime').innerHTML = app.reactionTimes + "ms"
+                    document.getElementById('lastReactionTime').innerHTML = app.reactionTime + "ms"
 
                     document.getElementById('tryAgainStartButton').style.display = 'block';
                     document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
@@ -214,6 +221,10 @@
                     document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
 
                     stopSound('activation-sound');
+
+                    document.getElementById('lastCue').innerHTML = app.cueType;
+
+                    app.cueState = 'starting';
                 }
 
                 console.log('Touch?')
