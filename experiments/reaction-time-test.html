@@ -224,7 +224,14 @@
 
                     document.getElementById('lastCue').innerHTML = app.cueType;
 
-                    app.cueState = 'starting';
+                    app.cueState = 'done';
+                }
+
+                if (app.cueState == 'starting') {
+                    document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
+                    document.getElementById('tryAgainStartButton').style.display = 'block';
+                    document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
                 }
 
                 console.log('Touch?')
