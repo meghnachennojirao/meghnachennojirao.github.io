@@ -100,28 +100,23 @@
 	</head>
 	<body style='margin:0px; display: block;'>
 		<div id="containAll" class="p-sm-3 p-1" style=" overflow: hidden; ">
-            <div style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: var(--generalBackground); ">
-                
-                <header id="upc-header" class="pr-2 pr-sm-3" style="position: fixed;font-family: Raleway; overflow: hidden; width: calc(100%); top: 0; z-index: 3; opacity: 0; pointer-events: none;" onclick="placeCellsGame.headerClick()">
-                    <div style="background-image: linear-gradient(to bottom, var(--generalBackground),var(--generalBackground), transparent);color: hsl(0,0%,20%);font-size: small;min-height: 131px;" class="text-ignus p-4 pl-5 pr-5 p-md-3 pl-md-4 pr-md-4 text-md-left text-center">
-                        <span style="cursor: pointer;"> 
-                            <span style="font-size:x-small;">Reaction Time Test</span>
-                        </span>
-                        <br/>
-                    </div>
-                    
-                </header>
+            <div id="fullScreenColor" style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: hsla(0, 0%, 10%, 1) ">
 
-                <main>
-                    <div class="p-4 pl-5 text-ignus text-center text-md-left">
-                        <b style="font-family: Raleway; font-size: xx-large;" id="main-title-name">Reaction Time Test</b><br/>
-                        <span class="text-ignus" style="color: grey;">A game inspired by<a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: royalblue;" target="_blank"> David Eagleman's book - Brain : Story of you. </a></span>
+                <main style="min-height: 100vh;">
+                    <div class="p-4 pt-5 text-ignus text-center">
+                        <b style="font-family: Raleway; font-size: xx-large; color: white;" id="main-title-name">Reaction Time Test</b><br/>
+                        <span class="text-ignus" style="color: grey;">A game inspired by<a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: white;" target="_blank"> David Eagleman's book - Brain : Story of you. </a></span>
                     </div>
-                    <div class="pt-0 pl-2 pr-2 pb-5 pt-lg-0 pl-lg-4 pr-lg-5 pb-lg-5">
+                    <div class="p-5 text-center" style="color: hsla(0, 0%, 60%, 1); font-size: large;">
+                        Hi. This is a reaction test. <br/>
+                        Click/tap on the screen when you see a flash on the screen (color change), or when you hear a sound. 
                         
-                        
-                        
+                        <div id="lastReactionTime"></div>
+                        <span class="btn-ignus mt-5" id="tryAgainStartButton" onclick="displayCue()">Start</span>
+                    </div>
 
+                    <div>
+                        <!-- Older Reaction Times. -->
                     </div>
                     
                 </main>
@@ -143,11 +138,6 @@
 		<script type="text/javascript">		
 
 
-
-			// if (darkmode) {
-			// 	document.body.style.background = 'black'
-			// }
-
             function playSound(audio_id) {
                 // Get the audio element using its ID
                 const audioElement = document.getElementById(audio_id);
@@ -155,6 +145,85 @@
                 // Play the audio
                 audioElement.play();
             }
+
+            function stopSound(audio_id) {
+                // Get the audio element using its ID
+                const audioElement = document.getElementById(audio_id);
+
+                // Play the audio
+                audioElement.stop();
+            }
+
+
+            app = {}
+            app.cueTypes = ['sound', 'light', 'sound=light']
+            app.cueState = 'starting'
+
+            app.reactionTimes = {
+                'sound': [],
+                'light': [],
+                'sound-light': []
+            }
+
+            function displayCue() {
+                app.cueType = app.cueTypes[parseInt(Math.random()*app.cueTypes.length)];
+
+
+                if (app.cueType == 'sound') {
+                    playSound('activation-sound')
+                }
+
+                if (app.cueType == 'light') {
+                    document.getElementById('fullScreenColor').style.background = 'white';
+                }
+
+                if (app.cueType == 'sound-light') {
+                    document.getElementById('fullScreenColor').style.background = 'white';
+                    playSound('activation-sound');
+                }
+
+                app.cueStartTime = performance.now();
+                app.cueState = 'ready';
+                
+
+            }
+
+            function startTest() {
+                minimumTimeToStart = 3
+                maxTimeToStart = 7
+                randomTimeToStart = minimumTimeToStart + Math.random()*(maxTimeToStart - minimumTimeToStart);
+                app.cueState = 'starting';
+
+                document.getElementById('tryAgainStartButton').style.display = 'none';
+
+                setTimeout(displayCue, randomTimeToStart*1000)
+            }
+
+            // Function to handle touch start or click event
+            function handleTouchOrClick(event) {
+                // Your code here
+                if (app.cueState == 'ready') {
+                    app.touchClickTime = performance.now();
+                    app.reactionTime = app.cueStartTime - app.touchClickTime;
+
+                    document.getElementById('lastReactionTime').innerHTML = app.reactionTimes + "ms"
+
+                    document.getElementById('tryAgainStartButton').style.display = 'block';
+                    document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
+                    document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
+
+                    stopSound('activation-sound');
+                }
+
+                console.log('Touch?')
+            }
+
+            // Add event listener for touch start
+            window.addEventListener('touchstart', handleTouchOrClick);
+
+            // Add event listener for click
+            window.addEventListener('mousedown', handleTouchOrClick);
 
 
 		</script>
