@@ -173,7 +173,7 @@
             function displayCue() {
                 app.cueType = app.cueTypes[parseInt(Math.random()*app.cueTypes.length)];
 
-                console.log(app.cueType)
+                console.log("Cue displayed : ", app.cueType)
 
                 if (app.cueType == 'sound') {
                     playSound('activation-sound')
@@ -204,6 +204,8 @@
                 document.getElementById('lastCue').innerHTML = ""
 
                 app.timeout = setTimeout(displayCue, randomTimeToStart*1000)
+
+                console.log("Cue starting in " + randomTimeToStart + " seconds")
             }
 
             // Function to handle touch start or click event
@@ -212,6 +214,8 @@
                 if (app.cueState == 'ready') {
                     app.touchClickTime = performance.now();
                     app.reactionTime = app.touchClickTime - app.cueStartTime;
+
+                    console.log("User Reacted in ", app.reactionTime, "ms")
 
                     document.getElementById('lastReactionTime').innerHTML = app.reactionTime + "ms"
 
@@ -239,7 +243,6 @@
 
                 }
 
-                console.log('Touch?')
             }
 
             // Add event listener for touch start
