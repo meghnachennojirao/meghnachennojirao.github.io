@@ -223,7 +223,7 @@
                     stopSound('activation-sound');
 
                     document.getElementById('lastCue').innerHTML = app.cueType;
-                    clearTimeout(app.timeout);
+
                     app.cueState = 'done';
                 }
 
@@ -234,14 +234,9 @@
                     document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
                     document.getElementById('tryAgainStartButton').style.display = 'block';
                     document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
-                    app.cueState = 'done';
 
-<<<<<<< HEAD
                     clearTimeout(app.timeout)
 
-=======
-                    clearTimeout(app.timeout);
->>>>>>> 782dbbbca6a11ae220a6b242631ae507f2446f3c
                 }
 
                 console.log('Touch?')
