@@ -162,7 +162,7 @@
 
             app = {}
             app.cueTypes = ['sound', 'light', 'sound-light']
-            app.cueState = 'starting'
+            app.cueState = 'done'
 
             app.reactionTimes = {
                 'sound': [],
@@ -203,7 +203,7 @@
                 document.getElementById('tryAgainStartButton').style.display = 'none';
                 document.getElementById('lastCue').innerHTML = ""
 
-                setTimeout(displayCue, randomTimeToStart*1000)
+                app.timeout = setTimeout(displayCue, randomTimeToStart*1000)
             }
 
             // Function to handle touch start or click event
@@ -234,6 +234,8 @@
                     document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
                     document.getElementById('tryAgainStartButton').style.display = 'block';
                     document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
+                    clearTimeout(app.timeout)
 
                 }
 
