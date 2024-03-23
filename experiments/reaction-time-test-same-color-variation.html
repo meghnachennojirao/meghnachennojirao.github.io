@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Reaction Time Test</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta charset="UTF-8">
+        <meta name="description" content="A reaction time test inspired by David Eagleman's book - Brain : story of you">
+        <meta name="keywords" content=" Dr Meghna Rao">
+        <meta name="author" content="Dr. Meghna Rao">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta property="og:title" content="Reaction Time Test" />
+        <meta property="og:description" content="A reaction time test inspired by David Eagleman's book - Brain : story of you" />
+        <meta property="og:image" content="https://meghnachennojirao.github.io/assets/images/Icon.png" />
+        <meta property="og:url" content="https://meghnachennojirao.github.io/experiments/place-cells">
+        <meta property="og:type" content="game, educational game" />
+
+        <!-- Twitter Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta property="twitter:domain" content="meghnachennojirao.github.io">
+        <meta property="twitter:url" content="https://meghnachennojirao.github.io/experiments/place-cells">
+        <meta name="twitter:title" content="Reaction Time Test">
+        <meta name="twitter:description" content="A reaction time test inspired by David Eagleman's book - Brain : story of you">
+        <meta name="twitter:image" content="https://meghnachennojirao.github.io/assets/images/Icon.png">
+
+		<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+		<!-- Some times used library for icons -->
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.css">
+        <script src="https://cdn.jsdelivr.net/gh/prajwalsouza/IgnusTheme@1.3/ignus-theme.js"></script>
+
+
+		<link rel="icon" href="../assets/images/Icon.png">
+		
+		<script type="application/ld+json">
+			{
+			  "@type": "game",
+			  "name": "Reaction time test",
+			  "author": "Dr. Meghna Rao",
+			  "description": "A reaction time test inspired by David Eagleman's book - Brain : story of you"
+			  }
+		</script>
+
+        <!-- <link rel="stylesheet" href="/css/universal-parabolic-constant/universal-parabolic-constant.css"/> -->
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3H9JR6P5Z0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+    
+            gtag('config', 'G-3H9JR6P5Z0');
+        </script>
+        <style>
+            #main-title-name {
+                color: hsla(220, 100%, 80%, 1);
+            }
+
+        
+            body {
+                background: hsla(0, 0%, 0%, 1);
+            }
+
+            #main-explanation-text {
+                color: lightgrey;
+            }
+
+            #time-data {
+                color: lightgray;
+            }
+
+            @media (prefers-color-scheme: light) {
+                #main-title-name {
+                    color: hsla(220, 100%, 0%, 1);
+                }
+
+                body {
+                    background: hsla(0, 0%, 60%, 1);
+                }
+
+                #main-explanation-text {
+                    color: black;
+                }
+
+                #time-data {
+                    color: black
+                }
+
+
+            }
+        </style>
+
+	</head>
+	<body style='margin:0px; display: block;'>
+		<div id="containAll" class="p-sm-3 p-1" style=" overflow: hidden; ">
+            <div id="fullScreenColor" style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: hsla(0, 0%, 10%, 1) ">
+
+                <main style="min-height: 100vh;">
+                    <div class="p-4 pt-5 text-ignus text-center">
+                        <b style="font-family: Raleway; font-size: xx-large; color: white;" id="main-title-name">Reaction Time Test</b><br/>
+                        <span class="text-ignus" style="color: grey;">A game inspired by<a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: white;" target="_blank"> David Eagleman's book - Brain : Story of you. </a></span>
+                    </div>
+                    <div class="p-5 text-center" style="color: hsla(0, 0%, 60%, 1); font-size: large;">
+                        Hi. This is a reaction test. <br/>
+                        Click/tap on the screen when you see a flash on the screen (color change)
+                        
+                        <div id="lastReactionTime" style="font-size: xx-large;"></div>
+                        <span class="btn-ignus mt-5" id="tryAgainStartButton" onclick="startTest()">Start</span>
+
+                        <div id="lastCue"></div>
+                    </div>
+
+                    <div>
+                        <!-- Older Reaction Times. -->
+                    </div>
+                    
+                </main>
+
+                <!-- <div style="position: fixed; height: 100%; width: 100vw; pointer-events: none; bottom: 0px; left: 0px; z-index: 5;" id="lottie-popper"></div> -->
+
+
+            </div>
+
+            
+			
+		</div>
+        <audio id="failure-sound" src="/assets/audio/error-2-126514.mp3"></audio>
+        <audio id="success-sound" src="/assets/audio/scale-e6-14577.mp3"></audio>
+        <audio id="activation-sound" src="/assets/audio/072807_heavy-machine-gun-50-caliber-39765.mp3"></audio>
+        <audio id="wall-sound" src="/assets/audio/cartoon_wink_magic_sparkle-6896.mp3"></audio>
+
+
+		<script type="text/javascript">		
+
+
+            function playSound(audio_id) {
+                // Get the audio element using its ID
+                const audioElement = document.getElementById(audio_id);
+
+                // Play the audio
+                audioElement.currentTime = 0;
+                audioElement.play();
+            }
+
+            function stopSound(audio_id) {
+                // Get the audio element using its ID
+                const audioElement = document.getElementById(audio_id);
+
+                // Play the audio
+                audioElement.pause();
+                audioElement.currentTime = 0;
+
+            }
+
+
+            app = {}
+            app.cueTypes = ['sound', 'light', 'sound-light']
+            app.cueState = 'done'
+
+            app.reactionTimes = {
+                'sound': [],
+                'light': [],
+                'sound-light': []
+            }
+
+            function displayCue() {
+                app.cueType = app.cueTypes[1];
+
+                console.log("Cue displayed : ", app.cueType)
+
+                if (app.cueType == 'sound') {
+                    playSound('activation-sound')
+                }
+
+                if (app.cueType == 'light') {
+
+                    // random cue hue color
+                    app.randomHue = Math.random()*360;
+
+                    document.getElementById('fullScreenColor').style.background = 'hsla(' + app.randomHue + ', 100%, 100%, 1)';
+                }
+
+                if (app.cueType == 'sound-light') {
+                    document.getElementById('fullScreenColor').style.background = 'white';
+                    playSound('activation-sound');
+                }
+
+                app.cueStartTime = performance.now();
+                app.cueState = 'ready';
+                
+
+            }
+
+            function startTest() {
+                minimumTimeToStart = 2
+                maxTimeToStart = 5
+                randomTimeToStart = minimumTimeToStart + Math.random()*(maxTimeToStart - minimumTimeToStart);
+                app.cueState = 'starting';
+
+                document.getElementById('tryAgainStartButton').style.display = 'none';
+                document.getElementById('lastCue').innerHTML = ""
+
+                app.timeout = setTimeout(displayCue, randomTimeToStart*1000)
+
+                console.log("Cue starting in " + randomTimeToStart + " seconds")
+            }
+
+            // Function to handle touch start or click event
+            function handleTouchOrClick(event) {
+                // Your code here
+                if (app.cueState == 'ready') {
+                    app.touchClickTime = performance.now();
+                    app.reactionTime = app.touchClickTime - app.cueStartTime;
+
+                    console.log("User Reacted in ", app.reactionTime, "ms")
+
+                    document.getElementById('lastReactionTime').innerHTML = app.reactionTime + "ms"
+
+                    document.getElementById('tryAgainStartButton').style.display = 'block';
+                    document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
+                    document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
+
+                    stopSound('activation-sound');
+
+                    document.getElementById('lastCue').innerHTML = "flash";
+
+                    app.cueState = 'done';
+                }
+
+                if (app.cueState == 'starting') {
+                    stopSound('activation-sound');
+                    document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
+                    app.reactionTime = app.touchClickTime;
+                    document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
+                    document.getElementById('tryAgainStartButton').style.display = 'block';
+                    document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
+                    clearTimeout(app.timeout)
+
+                }
+
+            }
+
+            // Add event listener for touch start
+            window.addEventListener('touchstart', handleTouchOrClick);
+
+            // Add event listener for click
+            window.addEventListener('mousedown', handleTouchOrClick);
+
+
+		</script>
+
+
+
+        
+    </body>
+</html>
