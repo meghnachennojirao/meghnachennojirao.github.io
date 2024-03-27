@@ -252,6 +252,47 @@
             window.addEventListener('mousedown', handleTouchOrClick);
 
 
+
+            function handleKey(event) {
+                if (event.keyCode == 13) {
+                    if (app.cueState == 'ready') {
+                        app.touchClickTime = performance.now();
+                        app.reactionTime = app.touchClickTime - app.cueStartTime;
+
+                        console.log("User Reacted in ", app.reactionTime, "ms")
+
+                        document.getElementById('lastReactionTime').innerHTML = app.reactionTime + "ms"
+
+                        document.getElementById('tryAgainStartButton').style.display = 'block';
+                        document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
+                        document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
+
+                        stopSound('activation-sound');
+
+                        document.getElementById('lastCue').innerHTML = app.cueType;
+
+                        app.cueState = 'done';
+                    }
+
+                    if (app.cueState == 'starting') {
+                        stopSound('activation-sound');
+                        document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
+                        app.reactionTime = app.touchClickTime;
+                        document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
+                        document.getElementById('tryAgainStartButton').style.display = 'block';
+                        document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
+
+                        clearTimeout(app.timeout)
+
+                    }
+                }
+            }
+
+            
+            window.addEventListener('keydown', handleKey);
+
+
 		</script>
 
 

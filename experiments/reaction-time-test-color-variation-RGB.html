@@ -183,8 +183,20 @@
 
                     // random cue hue color
                     app.randomHue = Math.random()*360;
+                    rgbs = ['Red', 'Green', 'Blue'];
 
-                    document.getElementById('fullScreenColor').style.background = 'hsla(' + app.randomHue + ', 100%, 100%, 1)';
+                    app.randomRGB = rgbs[parseInt(Math.random()*3)]
+                    if (app.randomRGB == 'Red') {
+                        app.color = 'rgba(255, 0, 0, 1)';
+                    }
+                    else if (app.randomRGB == 'Blue') {
+                        app.color = 'rgba(0, 0, 255, 1)';
+                    }
+                    else if (app.randomRGB == 'Green') {
+                        app.color = 'rgba(0, 255, 0, 1)';
+                    }
+
+                    document.getElementById('fullScreenColor').style.background = app.color;
                 }
 
                 if (app.cueType == 'sound-light') {
@@ -230,7 +242,7 @@
 
                     stopSound('activation-sound');
 
-                    document.getElementById('lastCue').innerHTML = "flash";
+                    document.getElementById('lastCue').innerHTML = "Cue Color : " + app.randomRGB;
 
                     app.cueState = 'done';
                 }
@@ -255,6 +267,8 @@
             // Add event listener for click
             window.addEventListener('mousedown', handleTouchOrClick);
 
+
+            
             function handleKey(event) {
                 if (event.keyCode == 13) {
                     if (app.cueState == 'ready') {
@@ -272,7 +286,7 @@
 
                         stopSound('activation-sound');
 
-                        document.getElementById('lastCue').innerHTML = "flash";
+                        document.getElementById('lastCue').innerHTML = "Cue Color : " + app.randomRGB;
 
                         app.cueState = 'done';
                     }
@@ -291,7 +305,7 @@
                 }
             }
 
-
+            
             window.addEventListener('keydown', handleKey);
 
 
