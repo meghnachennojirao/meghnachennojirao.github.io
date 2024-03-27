@@ -117,8 +117,14 @@
                         <div id="lastCue"></div>
                     </div>
 
-                    <div>
+                    <div style="padding-top: 400px; padding-bottom: 100px; color: white;">
                         <!-- Older Reaction Times. -->
+                        <!-- table -->
+                        <table id="reaction-times-old" style="text-align: center; display: flex; justify-content: center;"></table>
+                        
+                    </div>
+                    <div>
+                        <button class="btn-ignus" onclick="exportToCSV()">Export Data</button>
                     </div>
                     
                 </main>
@@ -170,6 +176,9 @@
                 'sound-light': []
             }
 
+
+            app.reactionTimeData = []
+
             function displayCue() {
                 app.cueType = app.cueTypes[1];
 
@@ -212,6 +221,38 @@
                 console.log("Cue starting in " + randomTimeToStart + " seconds")
             }
 
+            function deleteEntry(index) {
+                app.reactionTimeData.splice(index, 1);
+                createTableForReactionTimes();
+            }
+
+            function exportToCSV() {
+                var csv = 'SI No., Cue Type, Reaction Time (ms)\n';
+
+                for (var i = 0; i < app.reactionTimeData.length; i++) {
+                    csv += (i+1) + ', ' + app.reactionTimeData[i].cueType + ', ' + app.reactionTimeData[i].reactionTime + '\n';
+                }
+
+                var hiddenElement = document.createElement('a');
+                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = 'reaction-time-data.csv';
+                hiddenElement.click();
+            }
+
+            function createTableForReactionTimes() {
+                var table = document.getElementById('reaction-times-old');
+
+                var tableHTML = "<tr><th>Cue Type</th><th>Reaction Time (ms)</th><th>Delete Entry</th></tr>";
+
+                for (var i = 0; i < app.reactionTimeData.length; i++) {
+                    // with a delete entry button
+                    tableHTML += "<tr><td>" + app.reactionTimeData[i].cueType + "</td><td>" + app.reactionTimeData[i].reactionTime + "</td><td><button onclick='deleteEntry(" + i + ")'>Delete</button></td></tr>";
+                }
+
+                table.innerHTML = tableHTML;
+            } 
+
             // Function to handle touch start or click event
             function handleTouchOrClick(event) {
                 // Your code here
@@ -231,6 +272,14 @@
                     stopSound('activation-sound');
 
                     document.getElementById('lastCue').innerHTML = "Cue Color Hue (0 - 360): " + app.randomHue + "°";
+
+
+                    app.reactionTimeData.push({
+                        'cueType': app.cueType,
+                        'reactionTime': app.reactionTime
+                    })
+
+                    createTableForReactionTimes();
 
                     app.cueState = 'done';
                 }
@@ -254,47 +303,6 @@
 
             // Add event listener for click
             window.addEventListener('mousedown', handleTouchOrClick);
-
-
-            
-            function handleKey(event) {
-                if (event.keyCode == 13) {
-                    if (app.cueState == 'ready') {
-                        app.touchClickTime = performance.now();
-                        app.reactionTime = app.touchClickTime - app.cueStartTime;
-
-                        console.log("User Reacted in ", app.reactionTime, "ms")
-
-                        document.getElementById('lastReactionTime').innerHTML = app.reactionTime + "ms"
-
-                        document.getElementById('tryAgainStartButton').style.display = 'block';
-                        document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
-
-                        document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
-
-                        stopSound('activation-sound');
-
-                        document.getElementById('lastCue').innerHTML = "Cue Color Hue (0 - 360): " + app.randomHue + "°";
-
-                        app.cueState = 'done';
-                    }
-
-                    if (app.cueState == 'starting') {
-                        stopSound('activation-sound');
-                        document.getElementById('fullScreenColor').style.background = 'hsla(0, 0%, 10%, 1)';
-                        app.reactionTime = app.touchClickTime;
-                        document.getElementById('lastCue').innerHTML = "Wait for the cue to start please"
-                        document.getElementById('tryAgainStartButton').style.display = 'block';
-                        document.getElementById('tryAgainStartButton').innerHTML = 'Try Again';
-
-                        clearTimeout(app.timeout)
-
-                    }
-                }
-            }
-
-            
-            window.addEventListener('keydown', handleKey);
 
 
 		</script>

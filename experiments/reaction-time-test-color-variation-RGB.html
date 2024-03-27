@@ -117,8 +117,14 @@
                         <div id="lastCue"></div>
                     </div>
 
-                    <div>
+                    <div style="padding-top: 400px; padding-bottom: 100px; color: white;">
                         <!-- Older Reaction Times. -->
+                        <!-- table -->
+                        <table id="reaction-times-old" style="text-align: center; display: flex; justify-content: center;"></table>
+                        
+                    </div>
+                    <div>
+                        <button class="btn-ignus" onclick="exportToCSV()">Export Data</button>
                     </div>
                     
                 </main>
@@ -164,11 +170,50 @@
             app.cueTypes = ['sound', 'light', 'sound-light']
             app.cueState = 'done'
 
+            app.reactionTimeData = []
+
             app.reactionTimes = {
                 'sound': [],
                 'light': [],
                 'sound-light': []
             }
+
+
+
+
+            function deleteEntry(index) {
+                app.reactionTimeData.splice(index, 1);
+                createTableForReactionTimes();
+            }
+
+            function exportToCSV() {
+                var csv = 'SI No., Cue Color, Reaction Time (ms)\n';
+
+                for (var i = 0; i < app.reactionTimeData.length; i++) {
+                    csv += (i+1) + ', ' + app.reactionTimeData[i].cueType + ', ' + app.reactionTimeData[i].reactionTime + '\n';
+                }
+
+                var hiddenElement = document.createElement('a');
+                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = 'reaction-time-data.csv';
+                hiddenElement.click();
+            }
+
+            function createTableForReactionTimes() {
+                var table = document.getElementById('reaction-times-old');
+
+                var tableHTML = "<tr><th>Cue Type</th><th>Reaction Time (ms)</th><th>Delete Entry</th></tr>";
+
+                for (var i = 0; i < app.reactionTimeData.length; i++) {
+                    // with a delete entry button
+                    tableHTML += "<tr><td>" + app.reactionTimeData[i].cueType + "</td><td>" + app.reactionTimeData[i].reactionTime + "</td><td><button onclick='deleteEntry(" + i + ")'>Delete</button></td></tr>";
+                }
+
+                table.innerHTML = tableHTML;
+            } 
+
+
 
             function displayCue() {
                 app.cueType = app.cueTypes[1];
@@ -243,6 +288,13 @@
                     stopSound('activation-sound');
 
                     document.getElementById('lastCue').innerHTML = "Cue Color : " + app.randomRGB;
+
+                    app.reactionTimeData.push({
+                        'cueType':  app.randomRGB,
+                        'reactionTime': app.reactionTime
+                    })
+
+                    createTableForReactionTimes();
 
                     app.cueState = 'done';
                 }
