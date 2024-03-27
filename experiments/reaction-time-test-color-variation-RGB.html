@@ -340,6 +340,13 @@
 
                         document.getElementById('lastCue').innerHTML = "Cue Color : " + app.randomRGB;
 
+                        app.reactionTimeData.push({
+                            'cueType':  app.randomRGB,
+                            'reactionTime': app.reactionTime
+                        })
+
+                        createTableForReactionTimes();
+
                         app.cueState = 'done';
                     }
 
