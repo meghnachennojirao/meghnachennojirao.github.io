@@ -334,7 +334,9 @@ function generatePopularTopics(data) {
         topicElement.classList.add('topic');
         topicElement.innerHTML = `
             <strong>${topic}</strong> - Total Marks: ${totalMarks}
-            <div class="expand" onclick="toggleTopicDetails(this)">Expand</div>
+            <div class="expand" onclick="toggleTopicDetails(this)">
+                <i class="fas fa-chevron-${questions.length > 5 ? 'down' : 'up'} me-1"></i>Has  ${questions.length} Questions
+            </div>
             <div class="metadata">
                 <h4>Top 5 Questions</h4>
                 <ul>
