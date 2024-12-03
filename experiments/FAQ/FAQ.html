@@ -129,6 +129,11 @@
                         <i class="fas fa-th-list me-2"></i>All Questions
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="pill" href="#mock-test">
+                        <i class="fas fa-file-alt me-2"></i>Mock Test
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -162,6 +167,30 @@
                         
                         
                     <div id="all-questions-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mock-test" class="tab-pane fade">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h4><i class="fas fa-cog me-2"></i>Test Configuration</h4>
+                            <div class="form-group mb-3">
+                                <label for="max-marks" class="form-label">Maximum Marks</label>
+                                <input type="number" id="max-marks" class="form-control" value="100" min="20" max="200">
+                            </div>
+                            <button class="btn btn-primary" onclick="generateMockTest()">
+                                <i class="fas fa-random me-2"></i>Generate Test
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mock-test-paper" class="card">
+                        <div class="card-body">
+                            <div id="test-content"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -412,6 +441,122 @@ function generateRandomPrimaryColor() {
 
 // Call the function to generate a random primary color
 generateRandomPrimaryColor();
+
+
+
+
+function getRandomQuestions(data, count, marks) {
+    // Filter questions by marks
+    const eligibleQuestions = data.filter(q => q.marks === marks);
+    
+    // Shuffle and pick required number of questions
+    return shuffleArray(eligibleQuestions).slice(0, count);
+}
+
+function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
+
+
+function getAvailableMarks(data, subject) {
+    // Get unique mark values from filtered data
+    const filteredData = subject ? 
+        data.filter(item => item.main_exam_subject === subject) : 
+        data;
+    return [...new Set(filteredData.map(q => q.marks))].sort((a,b) => a-b);
+}
+
+function determineSections(availableMarks) {
+    // Categorize marks into short, medium and long answer sections
+    const short = availableMarks.filter(m => m <= 3);
+    const medium = availableMarks.filter(m => m > 3 && m <= 8);
+    const long = availableMarks.filter(m => m > 8);
+
+    return [
+        { name: 'Section A - Short Answer Questions', marks: short[0] || null, percent: 0.3 },
+        { name: 'Section B - Medium Answer Questions', marks: medium[0] || null, percent: 0.4 },
+        { name: 'Section C - Long Answer Questions', marks: long[0] || null, percent: 0.3 }
+    ].filter(section => section.marks !== null);
+}
+
+// Replace existing generateMockTest() with this version
+function generateMockTest() {
+    const maxMarks = parseInt(document.getElementById('max-marks').value);
+    const selectedSubject = document.getElementById('subject-select').value;
+    const testContent = document.getElementById('test-content');
+    testContent.innerHTML = '';
+
+    const availableMarks = getAvailableMarks(globalData, selectedSubject);
+    const sections = determineSections(availableMarks);
+
+    if (sections.length === 0) {
+        testContent.innerHTML = '<div class="alert alert-warning">No questions available for selected criteria</div>';
+        return;
+    }
+
+    // Adjust percentages based on available sections
+    const percentPerSection = 1 / sections.length;
+    sections.forEach(section => section.percent = percentPerSection);
+
+    sections.forEach(section => {
+        const sectionMarks = Math.floor(maxMarks * section.percent);
+        const numQuestions = Math.floor(sectionMarks / section.marks);
+        
+        const sectionDiv = document.createElement('div');
+        sectionDiv.className = 'mb-4';
+        sectionDiv.innerHTML = `
+            <h3 class="mb-3">${section.name}</h3>
+            <p class="text-muted">Answer any ${numQuestions} questions. Each question carries ${section.marks} marks.</p>
+        `;
+
+        // Get random questions for this section
+        const questions = getRandomQuestions(
+            selectedSubject ? globalData.filter(q => q.main_exam_subject === selectedSubject) : globalData,
+            numQuestions, 
+            section.marks
+        );
+        
+        const questionList = document.createElement('ol');
+        questions.forEach(q => {
+            const li = document.createElement('li');
+            li.className = 'mb-3';
+            li.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-2">${q.question}</p>
+                        <small class="text-muted">
+                            <i class="fas fa-bookmark me-1"></i>
+                            Topic: ${q.topic}
+                            ${selectedSubject ? '' : `<br>Subject: ${q.main_exam_subject}`}
+                        </small>
+                    </div>
+                </div>
+            `;
+            questionList.appendChild(li);
+        });
+
+        sectionDiv.appendChild(questionList);
+        testContent.appendChild(sectionDiv);
+    });
+
+    // Add summary of mark distribution
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'alert alert-info mt-3';
+    summaryDiv.innerHTML = `
+        <h4>Mark Distribution</h4>
+        ${sections.map(s => 
+            `${s.name}: ${Math.floor(maxMarks * s.percent)} marks (${s.marks} marks × ${Math.floor((maxMarks * s.percent)/s.marks)} questions)`
+        ).join('<br>')}
+    `;
+    testContent.insertBefore(summaryDiv, testContent.firstChild);
+}
+
+
 </script>
 
 </body>
