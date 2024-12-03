@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Frequently Asked Questions</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Material Design Colors -->
+    <style>
+        :root {
+            --primary-color: #6200ee;
+            --primary-light: #bb86fc;
+            --surface-color: #ffffff;
+            --background-color: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-pills .nav-link {
+            color: var(--primary-color);
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .question-card, .topic-card {
+            cursor: pointer;
+        }
+
+        .metadata {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .expand-button {
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .form-select {
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <h1 class="text-center">
+            <i class="fas fa-question-circle me-2"></i>
+            FAQ
+        </h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="subject-select" class="form-label">
+                    <i class="fas fa-book me-2"></i>Select Subject
+                </label>
+                <select id="subject-select" class="form-select">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <ul class="nav nav-pills justify-content-center" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#popular-questions">
+                        <i class="fas fa-star me-2"></i>Popular Questions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="pill" href="#popular-topics">
+                        <i class="fas fa-list me-2"></i>Popular Topics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="pill" href="#all-questions">
+                        <i class="fas fa-th-list me-2"></i>All Questions
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <div id="popular-questions" class="tab-pane fade show active">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div id="popular-questions-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="popular-topics" class="tab-pane fade">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div id="popular-topics-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="all-questions" class="tab-pane fade">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <label for="toggle-sort" class="form-check-label">
+                                <i class="fas fa-sort me-2"></i>Sort by Marks
+                            </label>
+                            <input type="checkbox" id="toggle-sort" class="form-check-input" onchange="updateAllSections(globalData)">
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="generateRandomPrimaryColor()">
+                                <i class="fas fa-random me-2"></i>Random Color
+                            </button>
+                        </div>
+                    <div id="all-questions-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+// Fetch JSON data from the same folder
+// Add at the start of script section
+let globalData = []; // Store the original data
+
+// Update the fetch handler
+fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+
+        // go through every entry and if main_exam_subject is "General Biochemistry" then change it to "Biochemistry"
+        // and if main_exam_subject is "Molecular Biology" then change it to "Cell and Molecular Biology"
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].main_exam_subject === "General Biochemistry") {
+                data[i].main_exam_subject = "Biochemistry";
+            }
+            if (data[i].main_exam_subject === "Molecular Biology") {
+                data[i].main_exam_subject = "Cell and Molecular Biology";
+            }
+        }
+
+
+        
+        globalData = data; // Store data globally
+        populateSubjectDropdown(data);
+        updateAllSections(data);
+    })
+    .catch(error => console.error("Error loading JSON data:", error));
+
+// Add new function to handle updates
+function updateAllSections(data) {
+    // Clear existing content
+    document.getElementById('popular-questions-list').innerHTML = '';
+    document.getElementById('popular-topics-list').innerHTML = '';
+    document.getElementById('all-questions-list').innerHTML = '';
+    
+    // Regenerate all sections
+    generatePopularQuestions(data);
+    generatePopularTopics(data);
+    generateAllQuestions(data);
+}
+
+// Function to display the correct section
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.classList.remove('active'));
+
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    document.getElementById(sectionId).classList.add('active');
+    const activeButton = Array.from(buttons).find(button => button.innerText.toLowerCase().replace(/\s+/g, '-') === sectionId);
+    activeButton.classList.add('active');
+}
+
+
+
+// Update subject dropdown handler
+function populateSubjectDropdown(data) {
+    const dropdown = document.getElementById('subject-select');
+    const subjects = [...new Set(data.map(item => item.main_exam_subject))];
+    
+    // Add "All Subjects" option
+    const allOption = document.createElement('option');
+    allOption.value = '';
+    allOption.textContent = 'All Subjects';
+    dropdown.appendChild(allOption);
+
+    subjects.forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        dropdown.appendChild(option);
+    });
+
+    // Add change event listener
+    dropdown.addEventListener('change', () => {
+        const selectedSubject = dropdown.value;
+        const filteredData = selectedSubject ? 
+            globalData.filter(item => item.main_exam_subject === selectedSubject) : 
+            globalData;
+        updateAllSections(filteredData);
+    });
+}
+
+// Function to generate Most Popular Questions
+function generatePopularQuestions(data) {
+    const container = document.getElementById('popular-questions-list');
+    const groupedByMarks = {};
+
+    // Group questions by marks
+    data.forEach(item => {
+        if (!groupedByMarks[item.marks]) {
+            groupedByMarks[item.marks] = [];
+        }
+        groupedByMarks[item.marks].push(item);
+    });
+
+    // Sort by marks (ascending order)
+    const sortedMarks = Object.keys(groupedByMarks).sort((a, b) => a - b);
+
+    // Render questions for each marks section
+    sortedMarks.forEach(marks => {
+        const section = document.createElement('div');
+        section.innerHTML = `<h3>Marks: ${marks}</h3>`;
+
+        groupedByMarks[marks].slice(0, 20).forEach(question => {
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `
+                <div class="card question-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-question-circle me-2"></i>${question.question}
+                        </h5>
+                        <div class="expand-button" onclick="toggleMetadata(this)">
+                            <i class="fas fa-chevron-down me-1"></i>Show Details
+                        </div>
+                        <div class="metadata d-none">
+                            <h6><i class="fas fa-book me-2"></i>References:</h6>
+                            <ul class="list-unstyled">
+                                ${question.reference.map(ref => `
+                                    <li><i class="fas fa-bookmark me-2"></i>${ref[0]} (${ref[1]} ${ref[2]})</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            section.appendChild(questionElement);
+        });
+
+        container.appendChild(section);
+    });
+}
+
+// Function to generate Most Popular Topics
+function generatePopularTopics(data) {
+    const container = document.getElementById('popular-topics-list');
+    const topicMarks = {};
+
+    // Group questions by topic and add marks
+    data.forEach(item => {
+        if (!topicMarks[item.topic]) {
+            topicMarks[item.topic] = { totalMarks: 0, questions: [] };
+        }
+        topicMarks[item.topic].totalMarks += item.marks;
+        topicMarks[item.topic].questions.push(item);
+    });
+
+    // Sort topics by total marks
+    const sortedTopics = Object.entries(topicMarks).sort((a, b) => b[1].totalMarks - a[1].totalMarks);
+
+    // Render topics and their questions
+    sortedTopics.slice(0, 30).forEach(([topic, { totalMarks, questions }]) => {
+        const topicElement = document.createElement('div');
+        topicElement.classList.add('topic');
+        topicElement.innerHTML = `
+            <strong>${topic}</strong> - Total Marks: ${totalMarks}
+            <div class="expand" onclick="toggleTopicDetails(this)">Expand</div>
+            <div class="metadata">
+                <h4>Top 5 Questions</h4>
+                <ul>
+                    ${questions.slice(0, 5).map(q => `<li>${q.question}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+        container.appendChild(topicElement);
+    });
+}
+
+// Function to generate All Questions
+function generateAllQuestions(data) {
+    const container = document.getElementById('all-questions-list');
+
+    // Sort questions by frequency (number of references) or marks depending on the toggle selected
+    const toggleType = document.getElementById('toggle-sort').checked ? 'marks' : 'frequency';
+    
+    if (toggleType === 'frequency') {
+        var sortedQuestions = data.sort((a, b) => b.reference.length - a.reference.length);
+    } else {
+        var sortedQuestions = data.sort((a, b) => b.marks - a.marks);
+    }
+    // const sortedQuestions = data.sort((a, b) => (b.reference.length * b.marks) - (a.reference.length * a.marks));
+
+    // Render all questions
+    sortedQuestions.forEach(question => {
+        const questionElement = document.createElement('div');
+        questionElement.classList.add('question');
+        questionElement.innerHTML = `
+            <strong>${question.question}</strong> - Marks: ${question.marks} - Frequency: ${question.reference.length}
+        `;
+        container.appendChild(questionElement);
+    });
+}
+
+function toggleMetadata(element) {
+    const metadata = element.nextElementSibling;
+    metadata.classList.toggle('d-none');
+    const icon = element.querySelector('i');
+    icon.classList.toggle('fa-chevron-down');
+    icon.classList.toggle('fa-chevron-up');
+}
+
+// Toggle topic details visibility
+function toggleTopicDetails(element) {
+    const metadata = element.nextElementSibling;
+    metadata.style.display = metadata.style.display === 'block' ? 'none' : 'block';
+}
+
+function generateRandomPrimaryColor() {
+    const allowedHues = [40, 198, 270, 300]; // Allowed hues for the primary color
+    const hue = allowedHues[Math.floor(Math.random() * allowedHues.length)];
+    const primary = `hsl(${hue}, 100%, 47%)`;
+    const primaryLight = `hsl(${hue}, 100%, 76%)`;
+    
+    document.documentElement.style.setProperty('--primary-color', primary);
+    document.documentElement.style.setProperty('--primary-light', primaryLight);
+}
+
+// Call the function to generate a random primary color
+generateRandomPrimaryColor();
+</script>
+
+</body>
+</html>
