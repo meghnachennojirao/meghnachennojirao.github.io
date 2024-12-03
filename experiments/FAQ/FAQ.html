@@ -17,6 +17,17 @@
             --background-color: #f5f5f5;
         }
 
+        .form-check-input {
+            cursor: pointer;
+            width: 1.2em;
+            height: 1.2em;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
@@ -290,6 +301,7 @@ function populateSubjectDropdown(data) {
 function generatePopularQuestions(data) {
     const container = document.getElementById('popular-questions-list');
     const groupedByMarks = {};
+    const checkedQuestions = getCheckedQuestions();
 
     // Group questions by marks
     data.forEach(item => {
@@ -311,13 +323,22 @@ function generatePopularQuestions(data) {
         groupedByMarks[marks].sort((a, b) => b.reference.length - a.reference.length);
 
         groupedByMarks[marks].slice(0, 20).forEach(question => {
+
+            const questionId = `${question.question.substring(0, 50)}_${question.marks}`;
+            const isChecked = checkedQuestions[questionId] || false;
+            
             const questionElement = document.createElement('div');
             questionElement.classList.add('question');
             questionElement.innerHTML = `
                 <div class="card question-card">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <i class="fas fa-question-circle me-2"></i>${question.question}<span style="color: var(--primary-color); font-size: 0.8rem;"><i class="fas fa-star ms-2 pl-5"></i> ${question.reference.length}</span>
+                                <input type="checkbox" 
+                                    class="form-check-input question-checkbox m-2 mt-0" 
+                                    id="${questionId}"
+                                    ${isChecked ? 'checked' : ''}
+                                    onchange="setQuestionChecked('${questionId}', this.checked)">
+                            ${question.question}<span style="color: var(--primary-color); font-size: 0.8rem;"><i class="fas fa-star ms-2 pl-5"></i> ${question.reference.length}</span>
                         </h5>
                         <div class="expand-button" onclick="toggleMetadata(this)">
                             <i class="fas fa-chevron-down me-1"></i>Show Details
@@ -377,9 +398,24 @@ function generatePopularTopics(data) {
     });
 }
 
+// Functions to manage localStorage
+function getCheckedQuestions() {
+    const checked = localStorage.getItem('checkedQuestions');
+    return checked ? JSON.parse(checked) : {};
+}
+
+function setQuestionChecked(questionId, isChecked) {
+    const checked = getCheckedQuestions();
+    checked[questionId] = isChecked;
+    localStorage.setItem('checkedQuestions', JSON.stringify(checked));
+}
+
+
+
 // Function to generate All Questions
 function generateAllQuestions(data) {
     const container = document.getElementById('all-questions-list');
+    const checkedQuestions = getCheckedQuestions();
 
     // Sort questions by frequency (number of references) or marks depending on the toggle selected
     const toggleType = document.getElementById('toggle-sort').checked ? 'marks' : 'frequency';
@@ -393,10 +429,27 @@ function generateAllQuestions(data) {
 
     // Render all questions
     sortedQuestions.forEach(question => {
+
+        const questionId = `${question.question.substring(0, 50)}_${question.marks}`;
+        const isChecked = checkedQuestions[questionId] || false;
+
+
         const questionElement = document.createElement('div');
         questionElement.classList.add('question');
         questionElement.innerHTML = `
-            <strong>${question.question}</strong>  (${question.marks} marks, ${question.reference.length} references. Total Marks: ${question.marks * question.reference.length})
+            <div class="d-flex align-items-start mb-2">
+                <div class="form-check me-2">
+                    <input type="checkbox" 
+                        class="form-check-input question-checkbox" 
+                        id="${questionId}"
+                        ${isChecked ? 'checked' : ''}
+                        onchange="setQuestionChecked('${questionId}', this.checked)">
+                </div>
+                <div>
+                    <strong>${question.question}</strong> 
+                    (${question.marks} marks, ${question.reference.length} references)
+                </div>
+            </div>
         `;
 
         // Add references
@@ -499,6 +552,8 @@ function generateMockTest() {
         return;
     }
 
+    var checkedQuestions = getCheckedQuestions();
+
     // Adjust percentages based on available sections
     const percentPerSection = 1 / sections.length;
     sections.forEach(section => section.percent = percentPerSection);
@@ -523,12 +578,24 @@ function generateMockTest() {
         
         const questionList = document.createElement('ol');
         questions.forEach(q => {
+
+            const questionId = `${q.question.substring(0, 50)}_${q.marks}`;
+            const isChecked = checkedQuestions[questionId] || false;
+            
+
             const li = document.createElement('li');
             li.className = 'mb-3';
             li.innerHTML = `
                 <div class="card">
                     <div class="card-body">
-                        <p class="mb-2">${q.question}</p>
+                        <div>
+                            <input type="checkbox" 
+                                        class="form-check-input question-checkbox mr-3" 
+                                        id="${questionId}"
+                                        ${isChecked ? 'checked' : ''}
+                                        onchange="setQuestionChecked('${questionId}', this.checked)">
+                            <span class="mb-2 ml-2 pl-3">${q.question}</span>
+                        </div>
                         <small class="text-muted">
                             <i class="fas fa-bookmark me-1"></i>
                             Topic: ${q.topic}
