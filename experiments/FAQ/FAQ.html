@@ -171,7 +171,7 @@
                 <div class="col-md-8">
                     <div>
                         <label for="toggle-sort" class="form-check-label pb-4">
-                            <i class="fas fa-sort me-2"></i>Sort by Total Marks
+                            <i class="fas fa-sort me-2"></i>Sort by Marks
                         </label>
                         <input type="checkbox" id="toggle-sort" class="form-check-input" onchange="updateAllSections(globalData)">
                     </div>
@@ -462,6 +462,9 @@ function generateAllQuestions(data) {
             references.appendChild(reference);
         });
         questionElement.appendChild(references);
+
+        // add class mb-4
+        questionElement.classList.add('mb-4');
 
 
         container.appendChild(questionElement);
