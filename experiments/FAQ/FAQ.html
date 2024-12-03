@@ -143,18 +143,14 @@
         <div id="all-questions" class="tab-pane fade">
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <label for="toggle-sort" class="form-check-label">
-                                <i class="fas fa-sort me-2"></i>Sort by Marks
-                            </label>
-                            <input type="checkbox" id="toggle-sort" class="form-check-input" onchange="updateAllSections(globalData)">
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" onclick="generateRandomPrimaryColor()">
-                                <i class="fas fa-random me-2"></i>Random Color
-                            </button>
-                        </div>
+                    <div>
+                        <label for="toggle-sort" class="form-check-label pb-4">
+                            <i class="fas fa-sort me-2"></i>Sort by Total Marks
+                        </label>
+                        <input type="checkbox" id="toggle-sort" class="form-check-input" onchange="updateAllSections(globalData)">
+                    </div>
+                        
+                        
                     <div id="all-questions-list"></div>
                 </div>
             </div>
@@ -265,12 +261,15 @@ function generatePopularQuestions(data) {
     });
 
     // Sort by marks (ascending order)
-    const sortedMarks = Object.keys(groupedByMarks).sort((a, b) => a - b);
+    const sortedMarks = Object.keys(groupedByMarks).sort((a, b) => b - a);
 
     // Render questions for each marks section
     sortedMarks.forEach(marks => {
         const section = document.createElement('div');
         section.innerHTML = `<h3>Marks: ${marks}</h3>`;
+
+        // sort by frequency
+        groupedByMarks[marks].sort((a, b) => b.reference.length - a.reference.length);
 
         groupedByMarks[marks].slice(0, 20).forEach(question => {
             const questionElement = document.createElement('div');
@@ -279,7 +278,7 @@ function generatePopularQuestions(data) {
                 <div class="card question-card">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <i class="fas fa-question-circle me-2"></i>${question.question}
+                            <i class="fas fa-question-circle me-2"></i>${question.question}<span style="color: var(--primary-color); font-size: 0.8rem;"><i class="fas fa-star ms-2 pl-5"></i> ${question.reference.length}</span>
                         </h5>
                         <div class="expand-button" onclick="toggleMetadata(this)">
                             <i class="fas fa-chevron-down me-1"></i>Show Details
@@ -356,8 +355,21 @@ function generateAllQuestions(data) {
         const questionElement = document.createElement('div');
         questionElement.classList.add('question');
         questionElement.innerHTML = `
-            <strong>${question.question}</strong> - Marks: ${question.marks} - Frequency: ${question.reference.length}
+            <strong>${question.question}</strong>  (${question.marks} marks, ${question.reference.length} references. Total Marks: ${question.marks * question.reference.length})
         `;
+
+        // Add references
+        const references = document.createElement('span');
+        question.reference.forEach(ref => {
+            const reference = document.createElement('span');
+            reference.innerHTML = `
+                (${ref[1]} ${ref[2]})
+            `;
+            references.appendChild(reference);
+        });
+        questionElement.appendChild(references);
+
+
         container.appendChild(questionElement);
     });
 }
