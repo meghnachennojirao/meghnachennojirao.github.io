@@ -87,7 +87,87 @@
             line-height: 1.6;
         }
 
-        
+        :root {
+            /* Analogous color scheme */
+            --md-sys-color-primary: #006C51;
+            --md-sys-color-secondary: #00696B;
+            --md-sys-color-tertiary: #006687;
+            
+            /* Surface colors */
+            --md-sys-color-surface: #FBFDF9;
+            --md-sys-color-surface-container: #EFF1EE;
+            
+            /* Text hierarchy with opacity */
+            --text-primary: rgba(25, 28, 26, 0.95);
+            --text-secondary: rgba(25, 28, 26, 0.75);
+            --text-tertiary: rgba(25, 28, 26, 0.6);
+            
+            /* Base styles */
+            --elevation-1: 0px 1px 3px 1px rgba(0,0,0,0.15);
+            --elevation-2: 0px 2px 6px 2px rgba(0,0,0,0.15);
+            --spacing-base: 8px;
+        }
+
+        body {
+            color: var(--text-primary);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-secondary));
+        }
+
+        .section-title {
+            color: var(--md-sys-color-primary);
+            opacity: 0.9;
+        }
+
+        .card h3 {
+            color: var(--text-primary);
+            margin-bottom: calc(var(--spacing-base) * 2);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+        }
+
+        .lab-description {
+            color: var(--text-secondary);
+        }
+
+        .material-icons-round {
+            color: var(--md-sys-color-secondary);
+            opacity: 0.9;
+        }
+
+        .hero h1 {
+            opacity: 0.95;
+        }
+
+        .hero p {
+            opacity: 0.8;
+        }
+
+        /* Add subtle gradient overlays to cards */
+        .card {
+            background: linear-gradient(
+                45deg,
+                var(--md-sys-color-surface),
+                var(--md-sys-color-surface-container)
+            );
+        }
+
+        /* Update hover states */
+        .card:hover {
+            background: linear-gradient(
+                45deg,
+                var(--md-sys-color-surface-container),
+                var(--md-sys-color-surface)
+            );
+        }
+
+        .lowerOpacity {
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
@@ -110,25 +190,36 @@
 
     <div class="container">
         <p class="lab-description">
-            Led by Dr. Meghna Rao, Turya Lab investigates the intricate relationships between cognition, behavior, and consciousness. Our research combines neuroscientific methods with psychological insights to understand human experience.
+            Led by Dr. Meghna Rao, Turiya Lab investigates the intricate relationships between genes, molecules, cognition, and consciousness. Our integrative approach spans from genomics to behavior, combining molecular neuroscience, cognitive psychology, and consciousness studies to understand the human experience across multiple levels of analysis.
         </p>
+        
 
         <h2 class="section-title">Research Focus</h2>
         <div class="grid">
             <div class="card">
                 <span class="material-icons-round">psychology</span>
                 <h3>Cognitive Neuroscience</h3>
-                <p>Investigating neural mechanisms underlying attention, memory, and decision-making processes.</p>
+                <p class="lowerOpacity">Investigating neural mechanisms underlying attention, memory, and decision-making processes.</p>
             </div>
+            <div class="card">
+                <span class="material-icons-round">biotech</span>
+                <h3>Molecular Neuroscience</h3>
+                <p class="lowerOpacity">Investigating cellular and molecular mechanisms underlying neural function and behavior.</p>
+            </div>
+            <div class="card">
+                <span class="material-icons-round">biotech</span>
+                <h3>Neurogenomics and Epigenetics</h3>
+                <p class="lowerOpacity">Studying genetic variations and their impact on brain function and cognitive traits.</p>
+            </div>            
             <div class="card">
                 <span class="material-icons-round">hub</span>
                 <h3>Behavioral Analysis</h3>
-                <p>Studying human behavior patterns and their relationship with cognitive processes.</p>
+                <p class="lowerOpacity">Studying human behavior patterns and their relationship with cognitive processes.</p>
             </div>
             <div class="card">
                 <span class="material-icons-round">self_improvement</span>
                 <h3>Consciousness Studies</h3>
-                <p>Exploring the nature of conscious experience and its neural correlates.</p>
+                <p class="lowerOpacity">Exploring the nature of conscious experience and its neural correlates.</p>
             </div>
         </div>
 
@@ -136,15 +227,31 @@
         <div class="grid">
             <div class="card">
                 <h3>Neural Correlates of Mindfulness</h3>
-                <p>Investigating how mindfulness practices affect brain activity and cognitive performance.</p>
+                <p class="lowerOpacity">Investigating how mindfulness practices affect brain activity and cognitive performance.</p>
             </div>
             <div class="card">
                 <h3>Temporal Perception Study</h3>
-                <p>Understanding how the brain processes and integrates temporal information.</p>
+                <p class="lowerOpacity">Understanding how the brain processes and integrates temporal information.</p>
+            </div>
+            <div class="card">
+                <h3>Gene-Environment Interactions</h3>
+                <p class="lowerOpacity">Examining how genetic variants interact with environmental factors to influence cognitive abilities and behavior.</p>
+            </div>
+            <div class="card">
+                <h3>Molecular Basis of Consciousness</h3>
+                <p class="lowerOpacity">Investigating genetic and molecular pathways involved in conscious experience and altered states.</p>
+            </div>
+            <div class="card">
+                <h3>Epigenetics of Learning</h3>
+                <p class="lowerOpacity">Studying epigenetic modifications during learning and memory formation.</p>
+            </div>
+            <div class="card">
+                <h3>Multi-omics Integration</h3>
+                <p class="lowerOpacity">Combining genomics, transcriptomics, and proteomics data to understand neural circuit development and function.</p>
             </div>
             <div class="card">
                 <h3>Attention Networks</h3>
-                <p>Mapping the neural networks involved in different forms of attention.</p>
+                <p class="lowerOpacity">Mapping the neural networks involved in different forms of attention.</p>
             </div>
         </div>
 
@@ -152,12 +259,12 @@
         <div class="grid">
             <div class="card">
                 <h3>Dr. Meghna Rao</h3>
-                <p>Lab Director</p>
-                <p>Specializing in cognitive neuroscience and consciousness studies</p>
+                <p class="lowerOpacity">Lab Director</p>
+                <p class="lowerOpacity">Specializing in molecular neuroscience, cognitive psychology, and consciousness studies. Leading interdisciplinary research from genes to behavior.</p>
             </div>
             <div class="card">
                 <h3>Join Our Team</h3>
-                <p>We're looking for passionate researchers interested in cognitive neuroscience and behavior studies.</p>
+                <p class="lowerOpacity">We're looking for passionate researchers interested in cognitive neuroscience and behavior studies.</p>
             </div>
         </div>
     </div>
