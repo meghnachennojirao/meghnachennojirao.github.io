@@ -226,6 +226,52 @@
             color: var(--md-sys-color-secondary);
             font-size: 0.875rem;
         }
+
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .email-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .email-contact a {
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--md-sys-color-surface-container);
+            color: var(--md-sys-color-primary);
+            transition: transform 0.2s;
+        }
+
+        .icon-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .icon-button .material-icons-round {
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -384,6 +430,36 @@
             <div class="card">
                 <h3>Join Our Team</h3>
                 <p class="lowerOpacity">We're looking for passionate researchers interested in cognitive neuroscience and behavior studies.</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">Connect</h2>
+            
+            <div class="contact-container">
+                <div class="email-contact">
+                    <span class="material-icons-round">email</span>
+                    <a href="mailto:drmeghnacrao@gmail.com">drmeghnacrao@gmail.com</a>
+                </div>
+                
+                <div class="social-icons">
+                    <a href="#twitter" class="icon-button" aria-label="Twitter">
+                        <span class="material-icons-round">flutter_dash</span>
+                    </a>
+                    <a href="#github" class="icon-button" aria-label="GitHub">
+                        <span class="material-icons-round">code</span>
+                    </a>
+                    <a href="#linkedin" class="icon-button" aria-label="LinkedIn">
+                        <span class="material-icons-round">group</span>
+                    </a>
+                </div>
+            </div>
+        
+            <div class="card community-card">
+                <span class="material-icons-round" style="font-size: 2rem;">forum</span>
+                <h3>Join Our Community</h3>
+                <p class="lowerOpacity">Connect with fellow researchers, students, and mindfulness practitioners in our Slack community.</p>
+                <a href="#slack" class="register-button">Join Slack Channel</a>
             </div>
         </div>
     </div>
