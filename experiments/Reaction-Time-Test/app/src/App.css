@@ -1,0 +1,199 @@
+.App {
+  background-color: hsla(0, 0%, var(--light65), 1);
+}
+
+.App-base {
+  background-color: hsla(0, 0%, var(--light95), 1);
+  border-radius: 0px;
+  min-height: 100vh;
+  font-family: Nunito;;
+}
+
+.themeSwitch {
+  color: hsla(0, 0%, var(--light50), 1);
+  cursor: pointer;
+}
+
+.themeSwitch:hover {
+  color: hsla(0, 0%, var(--light10), 1);
+}
+
+.Logo {
+  width: 85px;
+  min-width: 60px;
+}
+
+.textButton {
+  color: hsla(0, 0%, var(--light60), 1);
+  cursor: pointer;
+  transition: color 0.3s;
+  font-weight: bold;
+}
+
+.textButton:hover {
+  color: hsla(0, 0%, var(--light5), 1);
+}
+
+.textButtonSelected {
+  color: hsla(0, 0%, var(--light5), 1);
+  cursor: pointer;
+  transition: color 0.3s;
+  font-weight: bold;
+}
+
+.textButtonSelected:hover {
+  color: hsla(0, 0%, var(--light5), 1);
+}
+
+
+.selectButton {
+  color: hsla(0, 0%, var(--light40), 1);
+  cursor: pointer;
+  transition: color 0.3s, border 0.3s;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 1px solid hsla(0, 0%, var(--light60m), 1);
+}
+
+.selectButton:hover {
+  color: hsla(0, 0%, var(--light5), 1);
+  border: 1px solid hsla(0, 0%, var(--light40), 1);
+}
+
+
+.selectButtonSelected {
+  color: hsla(var(--themeColorHue), 70%, var(--light30), 1);
+  cursor: pointer;
+  transition: color 0.3s;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 0px solid hsla(0, 0%, var(--light5), 1);
+  background-color: hsla(var(--themeColorHue), 10%, var(--light80), 1);
+}
+
+
+.selectButtonSelected:hover {
+  color: hsla(var(--themeColorHue), 40%, var(--light5), 1);
+}
+
+
+.textBasic {
+  color: hsla(0, 0%, var(--light40), 1);
+  font-size: normal;
+}
+
+.textBasicHighlight {
+  color: hsla(0, 0%, var(--light30), 1);
+  font-size: normal;
+}
+
+.textBasicHighlightBold {
+  color: hsla(0, 0%, var(--light30), 1);
+  font-size: normal;
+  font-weight: bold;
+}
+
+.textSmall {
+  color: hsla(0, 0%, var(--light40), 1);
+  font-size: small;
+}
+
+.textSmallHighlight {
+  color: hsla(0, 0%, var(--light30), 1);
+  font-size: small;
+}
+
+.textSmallHighlightBold {
+  color: hsla(0, 0%, var(--light30), 1);
+  font-size: small;
+  font-weight: bold;
+}
+
+.textInform {
+  color: hsla(0, 0%, var(--light40), 1);
+  font-size: medium;
+}
+
+.textInformHighlight {
+  color: hsla(0, 0%, var(--light30), 1);
+  font-size: medium;
+  font-weight: bold;
+}
+
+
+.buttonMain {
+  color: hsla(var(--themeColorHue), 40%, var(--light5), 1);
+  cursor: pointer;
+  transition: color 0.3s;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 0px solid hsla(0, 0%, var(--light5), 1);
+  background-color: hsla(var(--themeColorHue), 10%, var(--light70), 1);
+}
+
+.buttonMain:hover {
+  
+  background-color: hsla(var(--themeColorHue), 10%, var(--light5), 1);
+  color: hsla(var(--themeColorHue), 20%, var(--light80), 1);
+}
+
+.buttonMainDisabled {
+  color: hsla(0, 0%, var(--light60), 1);
+  cursor: not-allowed;
+  font-weight: bold;
+  border-radius: 10px;
+  pointer-events: none;
+  border: 0px solid hsla(0, 0%, var(--light5), 1);
+  background-color: hsla(0, 0%, var(--light70), 1);
+}
+
+.greyCardMeasure {
+  background-color: hsla(var(--themeColorHue), 0%, var(--light75), 1);
+  border-radius: 20px;
+}
+
+
+
+
+
+.measureCard {
+  background-color: hsla(0, 0%, var(--light90), 1);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px;
+  margin-left: 70px;  
+  margin-right: 70px;
+  min-height: 300px;
+}
+
+.welcomeCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+@media (max-width: 768px) {
+  .Logo {
+    width: 80px;
+    min-width: 75px;
+  }
+
+  .App-base {
+    border-radius: 0px;
+  }
+
+  .greyCardMeasure {
+    border-radius: 20px 0px 0px 20px;
+  }
+
+  .measureCard {
+    margin-left: 40px;  
+    margin-right: 40px;
+  }
+}

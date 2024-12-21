@@ -1,0 +1,79 @@
+{
+    "name": "MBTI",
+    "shortName": "mbti",
+    "instructions": "Make sure blah blah blah",
+    "questions": {
+        "1": {
+            "questionType": "multipleChoice",
+            "question": "At a party do you:",
+            "additionalInfo": "Answer the following question based on your preference, not what you think you should do.",
+            "choices": {
+                "a": "Interact with many, including strangers",
+                "b": "Interact with a few, known to you"
+            },
+            "image": ["https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/home.htm?bhcp=1"],
+            "measure": {
+                "extraversion": {
+                    "a": 1,
+                    "b": 0
+                },
+                "introversion": {
+                    "a": 0,
+                    "b": 1
+                },
+                "sensing": {
+                    "a": 1,
+                    "b": 0
+                }
+            }
+        },
+        "2": {
+            "questionType": "multipleChoice",
+            "question": "Are you more:",
+            "choices": {
+                "a": "Realistic than speculative",
+                "b": "Speculative than realistic"
+            },
+            "image": ["https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/home.htm?bhcp=1"],
+            "measure": {
+                "sensing": {
+                    "a": 1,
+                    "b": 0
+                },
+                "intuition": {
+                    "a": 0,
+                    "b": 1
+                }
+            }
+        },
+        "3": {
+            "questionType": "multipleChoice",
+            "question": "I like to have things decided.",
+            "choices": {
+                "1": "Strongly Disagree",
+                "2": "Disagree",
+                "3": "Neutral",
+                "4": "Agree",
+                "5": "Strongly Agree"
+            },
+            "image": ["https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/home.htm?bhcp=1"],
+            "measure": {
+                "judging": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 1,
+                    "5": 1
+                },
+                "perceiving": {
+                    "1": 1,
+                    "2": 1,
+                    "3": 1,
+                    "4": 0,
+                    "5": 0
+                }
+            }
+
+        }
+    }
+}

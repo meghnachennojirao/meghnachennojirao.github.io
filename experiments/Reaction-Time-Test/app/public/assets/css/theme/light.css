@@ -1,0 +1,20 @@
+/* light css */
+:root {
+    --light60: 60%;
+    --light10: 10%;
+    --light80: 80%;
+    --light65: 65%; 
+    --light50: 50%;
+    --light30: 30%;
+    --light70: 70%;
+    --light75: 75%;
+    --light40: 40%;
+    --light5: 5%;
+    --light90: 90%;
+    --light95: 95%;
+
+    --light30Logo: 30%;
+    --light70Logo: 70%;
+
+    --light60m: 60%
+}

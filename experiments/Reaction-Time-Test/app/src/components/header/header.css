@@ -1,0 +1,21 @@
+.AppName {
+    font-family: Raleway, sans-serif;
+    font-size: x-large;
+    font-weight: bold;
+    color: hsla(0, 0%, var(--light10), 1);
+  }
+  
+  
+.AppTagline {
+    font-size: medium;
+    color: hsla(0, 0%, var(--light60), 1);
+}
+
+@media (max-width: 768px) {
+    .AppName {
+      font-size: larger;
+    }
+    .AppTagline {
+      font-size: medium;
+    }
+  }

@@ -1,0 +1,23 @@
+{
+  "mbti": {
+    "name": "MBTI",
+    "description": "The Myers-Briggs Type Indicator (MBTI) is a self-report questionnaire designed to make Jung's theory of psychological types understandable and useful in everyday life. The MBTI instrument sorts for preferences and does not measure trait, ability, or character.",
+    "reference": "https://www.myersbriggs.org/my-mbti-personality-type/mbti-basics/home.htm?bhcp=1",
+    "measures": ["Extraversion", "Introversion", "Sensing", "Intuition", "Thinking", "Feeling", "Judging", "Perceiving"],
+    "numberOfQuestions": 93
+  },
+  "big5": {
+    "name": "Big Five",
+    "description": "The Big Five personality traits, also known as the five-factor model (FFM) and the OCEAN model, is a taxonomy for personality traits. When factor analysis (a statistical technique) is applied to personality survey data, some words used to describe aspects of personality are often applied to the same person.",
+    "reference": "https://en.wikipedia.org/wiki/Big_Five_personality_traits",
+    "measures": ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"],
+    "numberOfQuestions": 50
+  },
+  "vviq2": {
+    "name": "Vividness of Visual Imagery Questionnaire",
+    "description": "The Vividness of Visual Imagery Questionnaire (VVIQ) is a self-report questionnaire that is used to measure individual differences in visual imagery vividness. The VVIQ is a widely used psychometric instrument that has been shown to be reliable and valid.",
+    "reference": "https://en.wikipedia.org/wiki/Vividness_of_Visual_Imagery_Questionnaire",
+    "measures": ["Imagination", "Visual Imagery"],
+    "numberOfQuestions": 16
+  }
+}
