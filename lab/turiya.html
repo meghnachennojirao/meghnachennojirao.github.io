@@ -173,6 +173,59 @@
             --svg-primary-fill: hsla(153, 70%, 50%, 0.2);
             --svg-secondary-fill: hsla(200, 30%, 80%, 0.3);
         }
+
+        .subsection-title {
+            color: var(--md-sys-color-secondary);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            opacity: 0.9;
+        }
+
+        .tag {
+            background: var(--md-sys-color-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .workshop-card.past {
+            opacity: 0.7;
+        }
+
+        .register-button, .details-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 8px 16px;
+            background: var(--md-sys-color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .date {
+            color: var(--md-sys-color-secondary);
+            font-weight: 500;
+            margin: 0.5rem 0;
+        }
+
+        .papers-container .year-header {
+            color: var(--md-sys-color-primary);
+            margin: 2rem 0 1rem;
+            font-size: 1.25rem;
+        }
+
+        .paper-card {
+            margin-bottom: 1rem;
+        }
+
+        .paper-card .doi {
+            color: var(--md-sys-color-secondary);
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -257,6 +310,67 @@
             <div class="card">
                 <h3>Attention Networks</h3>
                 <p class="lowerOpacity">Mapping the neural networks involved in different forms of attention.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Workshops</h2>
+        <h3 class="subsection-title">Upcoming</h3>
+        <div class="grid">
+            <div class="card workshop-card">
+                <span class="tag">Open for Registration</span>
+                <h3>Mindfulness & Neural Correlates</h3>
+                <p class="date">June 15-16, 2024</p>
+                <p class="lowerOpacity">A public workshop exploring the science of mindfulness and its effects on brain function. Combines theory with practical meditation sessions.</p>
+                <a href="#register" class="register-button">Register Now</a>
+            </div>
+            <div class="card workshop-card">
+                <span class="tag">By Invitation</span>
+                <h3>Advanced Genomics Methods</h3>
+                <p class="date">July 20-22, 2024</p>
+                <p class="lowerOpacity">Hands-on training in latest genomic analysis techniques for neuroscience research.</p>
+            </div>
+        </div>
+
+        <h3 class="subsection-title">Past</h3>
+        <div class="grid">
+            <div class="card workshop-card past">
+                <h3>Single-Cell Sequencing in Neural Tissue</h3>
+                <p class="date">March 2024</p>
+                <p class="lowerOpacity">Technical workshop on single-cell RNA sequencing methods.</p>
+            </div>
+            <div class="card workshop-card past">
+                <h3>Mind-Body Integration</h3>
+                <p class="date">January 2024</p>
+                <p class="lowerOpacity">Public workshop on yoga and mindfulness practices backed by neuroscience.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Conferences</h2>
+        <div class="conference-timeline">
+            <div class="card conference-card">
+                <h3>Consciousness & Cognition 2024</h3>
+                <p class="date">September 15-17, 2024</p>
+                <p class="lowerOpacity">International conference bringing together researchers in consciousness studies, cognitive neuroscience, and molecular biology.</p>
+                <a href="#details" class="details-button">Conference Details</a>
+            </div>
+        </div>
+
+        <h2 class="section-title">Publications</h2>
+        <div class="papers-container">
+            <h3 class="year-header">2024</h3>
+            <div class="card paper-card">
+                <h4>Neural Correlates of Conscious Experience: A Multi-modal Analysis</h4>
+                <p class="authors">Rao M., et al.</p>
+                <p class="journal">Nature Neuroscience (2024)</p>
+                <p class="doi">DOI: 10.1038/xxx</p>
+            </div>
+
+            <h3 class="year-header">2023</h3>
+            <div class="card paper-card">
+                <h4>Genetic Variants Associated with Meditation Response</h4>
+                <p class="authors">Rao M., Smith J., et al.</p>
+                <p class="journal">Science Advances (2023)</p>
+                <p class="doi">DOI: 10.1126/xxx</p>
             </div>
         </div>
 
