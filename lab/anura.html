@@ -3,24 +3,20 @@
 <head>
     <title>Anura Labs - Dr. Meghna Rao</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Fonts and Material Icons -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Color Palette - Pastel HSLA */
-
+        /* CSS Variables for Light Mode */
         :root {
-            --base-hue-primary: 120;
+            --base-hue-primary: 120; /* Default Hue */
             --base-hue-secondary: 200;
             --base-hue-tertiary: 270;
-        }
 
-        :root {
-
-
-            --color-primary: hsla(var(--base-hue-primary), 40%, 70%, 1); /* Pastel Green */
-            --color-secondary: hsla(var(--base-hue-secondary), 40%, 70%, 1); /* Pastel Blue */
-            --color-tertiary: hsla(var(--base-hue-tertiary), 40%, 70%, 1); /* Pastel Purple */
+            --color-primary: hsla(var(--base-hue-primary), 40%, 70%, 1); /* Pastel Primary */
+            --color-secondary: hsla(var(--base-hue-secondary), 40%, 70%, 1); /* Pastel Secondary */
+            --color-tertiary: hsla(var(--base-hue-tertiary), 40%, 70%, 1); /* Pastel Tertiary */
             --color-surface: hsla(0, 0%, 98%, 1); /* Near White */
             --color-on-surface: hsla(0, 0%, 10%, 1); /* Dark */
             --color-surface-container: hsla(0, 0%, 95%, 1); /* Light Gray */
@@ -28,24 +24,40 @@
             --color-svg-primary: hsla(var(--base-hue-primary), 40%, 50%, 1);
             --color-svg-secondary: hsla(var(--base-hue-primary), 30%, 15%, 1);
 
+
             --color-primary-background: hsla(var(--base-hue-primary), 40%, 30%, 1); /* Pastel Green */
             --color-secondary-background: hsla(var(--base-hue-secondary), 40%, 20%, 1); /* Pastel Blue */
-            
-            
-            /* Text Colors */
+
+            --color-link-hover: hsla(0, 0%, 10%, 1);
+
             --text-primary: hsla(0, 0%, 10%, 0.95);
             --text-secondary: hsla(0, 0%, 10%, 0.75);
             --text-tertiary: hsla(0, 0%, 10%, 0.6);
-            
+
             /* Elevation Shadows */
             --elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.15);
             --elevation-2: 0px 2px 6px rgba(0, 0, 0, 0.15);
-            
+
             /* Spacing */
             --spacing-base: 8px;
-            
+
             /* Transition */
             --transition-speed: 0.3s;
+        }
+
+        /* Dark Mode Variables */
+        .dark-mode {
+            --color-surface: hsla(0, 0%, 15%, 1); /* Dark Background */
+            --color-on-surface: hsla(0, 0%, 95%, 1); /* Light Text */
+            --color-surface-container: hsla(0, 0%, 20%, 1); /* Darker Gray */
+            --text-primary: hsla(0, 0%, 95%, 0.95);
+            --text-secondary: hsla(0, 0%, 95%, 0.75);
+            --text-tertiary: hsla(0, 0%, 95%, 0.6);
+            --color-svg-primary: hsla(var(--base-hue-primary), 40%, 60%, 1);
+            --color-svg-secondary: hsla(var(--base-hue-primary), 30%, 25%, 1);
+            --color-primary-background: hsla(var(--base-hue-primary), 40%, 40%, 1);
+            --color-secondary-background: hsla(var(--base-hue-secondary), 40%, 30%, 1);
+            --color-link-hover: hsla(0, 0%, 95%, 1);
         }
 
         /* Reset and Base Styles */
@@ -60,6 +72,7 @@
             background-color: var(--color-surface);
             color: var(--text-primary);
             line-height: 1.6;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
         a {
@@ -69,7 +82,42 @@
         }
 
         a:hover {
-            color: var(--color-secondary);
+            color:  var(--color-link-hover);
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            top: var(--spacing-base);
+            right: var(--spacing-base);
+            background: var(--color-surface-container);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--elevation-1);
+            transition: background var(--transition-speed), transform var(--transition-speed);
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: translateY(-2px);
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .dark-mode-toggle i {
+            font-size: 20px;
+            color: var(--color-primary);
+            transition: color var(--transition-speed);
+        }
+
+        .dark-mode .dark-mode-toggle i {
+            color: white;
         }
 
         /* Hero Section */
@@ -80,7 +128,10 @@
             text-align: center;
             border-bottom-left-radius: 32px;
             border-bottom-right-radius: 32px;
+            position: relative;
         }
+
+
 
         .hero h1 {
             font-size: 3rem;
@@ -107,6 +158,7 @@
             margin: calc(var(--spacing-base) * 4) auto;
             text-align: center;
             color: var(--text-secondary);
+            padding: 0 1rem;
         }
 
         /* Section Titles */
@@ -134,6 +186,10 @@
             padding: calc(var(--spacing-base) * 3);
             box-shadow: var(--elevation-1);
             transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .card:hover {
@@ -153,7 +209,7 @@
         }
 
         /* Icons */
-        .material-icons-round {
+        .card .fa {
             font-size: 32px;
             color: var(--color-primary);
             margin-bottom: var(--spacing-base);
@@ -179,6 +235,7 @@
             border-radius: 25px;
             font-size: 0.875rem;
             transition: background var(--transition-speed), transform var(--transition-speed);
+            margin-top: var(--spacing-base);
         }
 
         .button:hover {
@@ -247,7 +304,7 @@
             justify-content: center;
             background: var(--color-surface-container);
             color: var(--color-primary);
-            transition: transform var(--transition-speed), background var(--transition-speed);
+            transition: transform var(--transition-speed), background var(--transition-speed), color var(--transition-speed);
         }
 
         .icon-button:hover {
@@ -256,7 +313,7 @@
             color: white;
         }
 
-        .icon-button .material-icons-round {
+        .icon-button .fa {
             font-size: 20px;
         }
 
@@ -285,7 +342,7 @@
             margin-bottom: 1rem;
         }
 
-        .youtube-header .material-icons-round {
+        .youtube-header .fa {
             font-size: 2rem;
             color: var(--color-primary);
         }
@@ -308,9 +365,10 @@
             font-size: 0.875rem;
             color: var(--text-secondary);
             box-shadow: var(--elevation-1);
+            transition: background var(--transition-speed), color var(--transition-speed);
         }
 
-        .topic-chip .material-icons-round {
+        .topic-chip .fa {
             font-size: 1.2rem;
             color: var(--color-primary);
         }
@@ -343,6 +401,7 @@
             border-radius: 16px;
             box-shadow: var(--elevation-1);
             transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+            margin-top: 2rem;
         }
 
         .community-card:hover {
@@ -350,7 +409,7 @@
             transform: translateY(-4px);
         }
 
-        .community-card .material-icons-round {
+        .community-card .fa {
             font-size: 2rem;
             color: var(--color-primary);
             margin-bottom: var(--spacing-base);
@@ -365,10 +424,19 @@
             .section-title {
                 font-size: 1.75rem;
             }
+
+            .lab-description {
+                padding: 0 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <!-- Hero Section -->
     <div class="hero">
         <div class="logo-container">
@@ -396,27 +464,27 @@
         <h2 class="section-title">Research Focus</h2>
         <div class="grid">
             <div class="card">
-                <span class="material-icons-round">psychology</span>
+                <i class="fas fa-brain"></i>
                 <h3>Cognitive Neuroscience</h3>
                 <p>Investigating neural mechanisms underlying attention, memory, and decision-making processes.</p>
             </div>
             <div class="card">
-                <span class="material-icons-round">biotech</span>
+                <i class="fas fa-vials"></i>
                 <h3>Molecular Neuroscience</h3>
                 <p>Investigating cellular and molecular mechanisms underlying neural function and behavior.</p>
             </div>
             <div class="card">
-                <span class="material-icons-round">biotech</span>
+                <i class="fas fa-dna"></i>
                 <h3>Neurogenomics and Epigenetics</h3>
                 <p>Studying genetic variations and their impact on brain function and cognitive traits.</p>
             </div>            
             <div class="card">
-                <span class="material-icons-round">hub</span>
+                <i class="fas fa-network-wired"></i>
                 <h3>Behavioral Analysis</h3>
                 <p>Studying human behavior patterns and their relationship with cognitive processes.</p>
             </div>
             <div class="card">
-                <span class="material-icons-round">self_improvement</span>
+                <i class="fas fa-award"></i>
                 <h3>Consciousness Studies</h3>
                 <p>Exploring the nature of conscious experience and its neural correlates.</p>
             </div>
@@ -523,28 +591,28 @@
         <h2 class="section-title">Science Communication</h2>
         <div class="youtube-card">
             <div class="youtube-header">
-                <span class="material-icons-round">smart_display</span>
+                <i class="fas fa-video"></i>
                 <h3>Sahasrara Talks</h3>
             </div>
             <p>Join us on our journey exploring the intersection of neuroscience, genetics, and consciousness through accessible video content.</p>
             
             <div class="video-topics">
                 <div class="topic-chip">
-                    <span class="material-icons-round">psychology</span>
+                    <i class="fas fa-brain"></i>
                     Brain & Behavior
                 </div>
                 <div class="topic-chip">
-                    <span class="material-icons-round">biotech</span>
+                    <i class="fas fa-vials"></i>
                     Molecular Stories
                 </div>
                 <div class="topic-chip">
-                    <span class="material-icons-round">self_improvement</span>
+                    <i class="fas fa-meditation"></i>
                     Mindfulness Science
                 </div>
             </div>
     
             <a href="#youtube" class="youtube-button">
-                Visit Channel
+                <i class="fas fa-play"></i> Visit Channel
             </a>
         </div>
 
@@ -566,29 +634,92 @@
         <h2 class="section-title">Connect</h2>
         <div class="contact-container">
             <div class="email-contact">
-                <span class="material-icons-round">email</span>
+                <i class="fas fa-envelope"></i>
                 <a href="mailto:drmeghnacrao@gmail.com">drmeghnacrao@gmail.com</a>
             </div>
             
             <div class="social-icons">
                 <a href="#twitter" class="icon-button" aria-label="Twitter">
-                    <span class="material-icons-round">twitter</span>
+                    <i class="fab fa-twitter"></i>
                 </a>
                 <a href="#github" class="icon-button" aria-label="GitHub">
-                    <span class="material-icons-round">code</span>
+                    <i class="fab fa-github"></i>
                 </a>
                 <a href="#linkedin" class="icon-button" aria-label="LinkedIn">
-                    <span class="material-icons-round">group</span>
+                    <i class="fab fa-linkedin"></i>
                 </a>
             </div>
         </div>
 
         <div class="community-card">
-            <span class="material-icons-round">forum</span>
+            <i class="fas fa-comments"></i>
             <h3>Join Our Community</h3>
             <p>Connect with fellow researchers, students, and mindfulness practitioners in our Slack community.</p>
             <a href="#slack" class="button">Join Slack Channel</a>
         </div>
     </div>
+
+    <!-- JavaScript for Dynamic Hues and Dark Mode -->
+    <script>
+        // Function to set CSS variables based on selected hues
+        function setHues(primaryHue) {
+            const root = document.documentElement;
+            root.style.setProperty('--base-hue-primary', primaryHue);
+            // Define secondary and tertiary hues based on primary hue
+            // For example, secondary = primary + 100, tertiary = primary + 160
+            const secondaryHue = (primaryHue + 100) % 360;
+            const tertiaryHue = (primaryHue + 160) % 360;
+            root.style.setProperty('--base-hue-secondary', secondaryHue);
+            root.style.setProperty('--base-hue-tertiary', tertiaryHue);
+        }
+
+        // Function to randomly select a primary hue from [120, 220, 280]
+        function randomizeHues() {
+            const hues = [120, 220, 280];
+            const selectedHue = hues[Math.floor(Math.random() * hues.length)];
+            setHues(selectedHue);
+        }
+
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            // Update toggle icon
+            const toggleIcon = document.querySelector('.dark-mode-toggle i');
+            if (body.classList.contains('dark-mode')) {
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+            } else {
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+            }
+            // Save preference to localStorage
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            randomizeHues();
+
+            // Check for saved dark mode preference
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                const toggleIcon = document.querySelector('.dark-mode-toggle i');
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+            }
+
+            // Add event listener to dark mode toggle button
+            const toggleButton = document.querySelector('.dark-mode-toggle');
+            toggleButton.addEventListener('click', toggleDarkMode);
+        });
+    </script>
 </body>
 </html>
+
+
