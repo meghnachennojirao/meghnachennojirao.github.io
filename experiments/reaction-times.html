@@ -153,6 +153,8 @@
             const [attemptCount, setAttemptCount] = React.useState(0);
             const [deviceInfo, setDeviceInfo] = React.useState({});
 
+            const [delay, setDelay] = React.useState(0);
+
             const [stage, setStage] = React.useState("idle"); // idle, waiting, reacting, tooEarly, done
             const [reactionTimes, setReactionTimes] = React.useState([]);
             const [startTime, setStartTime] = React.useState(0);
@@ -260,7 +262,9 @@
                     const endTime = performance.now();
                     const elapsed = Math.round(endTime - startTime);
 
-                    setReactionTimes((prev) => [...prev, { color: currentColor, time: elapsed, colorName: config.colorsToChooseFrom.find(c => c.rgb === currentColor).name }]);
+                    setReactionTimes((prev) => [...prev, { color: currentColor, time: elapsed, colorName: config.colorsToChooseFrom.find(c => c.rgb === currentColor).name ,
+                        delay: delay, 
+                        }]);
 
                     // Find the color object to get the name
                     const colorObj = config.colorsToChooseFrom.find(
@@ -286,12 +290,14 @@
                 setStage("waiting");
                 setCurrentColor(config.defaultColor); // Reset to muted grey
 
-                var delay = 0;
+                // var delay = 0;
                 if (config.useRandomTimeBeforeCue) {
-                    var delay = Math.random() * (config.maxRandomTimeBeforeCue - config.randomMinimumTimeBeforeCue) + config.randomMinimumTimeBeforeCue;
+                    var delayValue = Math.random() * (config.maxRandomTimeBeforeCue - config.randomMinimumTimeBeforeCue) + config.randomMinimumTimeBeforeCue;
                 } else {
-                    var delay = config.timeBeforeCueInFixedCondition;
+                    var delayValue = config.timeBeforeCueInFixedCondition;
                 }
+
+                setDelay(delayValue);
 
                 // Clear any existing timeout before setting a new one
                 if (timeoutRef.current) {
@@ -307,7 +313,7 @@
                     setStage("reacting");
                     setStartTime(performance.now());
                     timeoutRef.current = null; // Clear the reference
-                }, delay);
+                }, delayValue);
             };
 
             const validAttempts = reactionTimes.slice(config.trialCount);
