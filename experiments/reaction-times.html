@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reaction Time Test</title>
+    <!-- Nunito font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- React (18.2.0) -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18.2.0/umd/react.development.js"
+    ></script>
+    <!-- ReactDOM (18.2.0) -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"
+    ></script>
+    <!-- Babel 6 -->
+    <script
+      src="https://unpkg.com/babel-standalone@6/babel.min.js"
+      crossorigin
+    ></script>
+
+    <style>
+      :root {
+        --base-hue: 220;
+        --primary-s: 70%;
+        --primary-l: 52%;
+        --surface-s: 10%;
+        --surface-l: 98%;
+        --surface2-s: 10%;
+        --surface2-l: 94%;
+        --text-h: 0;
+        --text-s: 0%;
+        --text-l: 20%;
+        --subtitle-opacity: 0.7;
+      }
+
+      body {
+        font-family: "Nunito", sans-serif;
+        background: hsl(var(--text-h), var(--text-s), 98%);
+        color: hsl(var(--text-h), var(--text-s), var(--text-l));
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .primary-text {
+        color: hsl(var(--base-hue), var(--primary-s), var(--primary-l));
+        font-weight: 700;
+      }
+      .subtitle {
+        opacity: var(--subtitle-opacity);
+      }
+      .card {
+        background-color: hsl(var(--base-hue), var(--surface2-s), var(--surface2-l));
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .reaction-screen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 280px;
+        width: 100%;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        background-color: lightgray;
+        transition: background-color 0.3s, color 0.3s;
+        user-select: none;
+        cursor: pointer;
+      }
+      .results-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 10px;
+      }
+      .result-box {
+        flex: 1;
+        min-width: 90px;
+        background: hsl(var(--text-h), var(--surface2-s), calc(var(--surface2-l) - 2%));
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+      }
+      .attempt-item {
+        margin-bottom: 6px;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react,es2015">
+      // Global Configuration
+
+    //   50% of the participants are shows the results for individual colors, and answers for each trial, but only the last attempt value. Not even the average of all the attempts. 
+    //   50% of the participants are not affected by randomTimeBeforeCue, they are given fixed time before the cue of say, 2000ms
+
+    // global configuration is adjusted based on the above two conditions
+
+      const config = {
+        trialCount: 5,
+        showIndividualResults: Math.random() < 0.5,
+        useRandomTimeBeforeCue: Math.random() < 0.5,
+        randomMinimumTimeBeforeCue: 1000, // in milliseconds
+        maxRandomTimeBeforeCue: 3000,     // in milliseconds
+        timeBeforeCueInFixedCondition: 2000, // in milliseconds
+        colorsToChooseFrom: [
+          { name: "Red", rgb: "rgb(255, 0, 0)" },
+          { name: "Green", rgb: "rgb(0, 255, 0)" },
+          { name: "Blue", rgb: "rgb(0, 0, 255)" },
+          { name: "Yellow", rgb: "rgb(255, 255, 0)" },
+          { name: "Black", rgb: "rgb(0, 0, 0)" },
+          { name: "White", rgb: "rgb(255, 255, 255)" },
+        ],
+        defaultColor: "rgb(211,211,211)", // lightgray
+      };
+
+      // Utility function to calculate brightness
+      function getBrightness(rgb) {
+        const rgbValues = rgb
+          .replace(/[^\d,]/g, "")
+          .split(",")
+          .map(Number);
+        // Using the YIQ formula to calculate brightness
+        return (rgbValues[0] * 299 + rgbValues[1] * 587 + rgbValues[2] * 114) / 1000;
+      }
+
+      // Determine appropriate text color based on background brightness
+      function getContrastingTextColor(rgb) {
+        const brightness = getBrightness(rgb);
+        if (brightness > 200) return "black";
+        if (brightness > 125) return "grey";
+        return "white";
+      }
+
+      function App() {
+        const [stage, setStage] = React.useState("idle"); // idle, waiting, reacting, tooEarly, done
+        const [reactionTimes, setReactionTimes] = React.useState([]);
+        const [startTime, setStartTime] = React.useState(0);
+        const [currentColor, setCurrentColor] = React.useState(config.defaultColor); // Start with muted grey
+        const [colorStats, setColorStats] = React.useState(
+          config.colorsToChooseFrom.reduce((acc, color) => {
+            acc[color.name] = [];
+            return acc;
+          }, {})
+        );
+
+        // To store the timeout ID so that it can be cleared if needed
+        const timeoutRef = React.useRef(null);
+
+        React.useEffect(() => {
+          // Cleanup on unmount to prevent memory leaks
+          return () => {
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
+          };
+        }, []);
+
+        const handleClick = () => {
+          if (stage === "idle" || stage === "done") {
+            startTrial();
+          } else if (stage === "waiting") {
+            // Clicked too early
+            setStage("tooEarly");
+            // Clear the existing timeout to prevent the color from changing
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = null;
+            }
+            // Reset background to defaultColor to ensure it's grey
+            setCurrentColor(config.defaultColor);
+          } else if (stage === "reacting") {
+            const endTime = performance.now();
+            const elapsed = Math.round(endTime - startTime);
+
+            setReactionTimes((prev) => [...prev, { color: currentColor, time: elapsed }]);
+            // Find the color object to get the name
+            const colorObj = config.colorsToChooseFrom.find(
+              (c) => c.rgb === currentColor
+            );
+            if (colorObj) {
+              setColorStats((prevStats) => ({
+                ...prevStats,
+                [colorObj.name]: [...prevStats[colorObj.name], elapsed],
+              }));
+            }
+
+            // Reset background to defaultColor for 'done' stage
+            setCurrentColor(config.defaultColor);
+            setStage("done");
+          } else if (stage === "tooEarly") {
+            // Retry the attempt without counting it
+            startTrial();
+          }
+        };
+
+        const startTrial = () => {
+          setStage("waiting");
+          setCurrentColor(config.defaultColor); // Reset to muted grey
+
+        var delay = 0;
+        if (config.useRandomTimeBeforeCue) {
+            var delay = Math.random() * (config.maxRandomTimeBeforeCue - config.randomMinimumTimeBeforeCue) + config.randomMinimumTimeBeforeCue;
+        } else {
+            var delay = config.timeBeforeCueInFixedCondition;
+        }
+
+          // Clear any existing timeout before setting a new one
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+          }
+
+          timeoutRef.current = setTimeout(() => {
+            const randomColor =
+              config.colorsToChooseFrom[
+                Math.floor(Math.random() * config.colorsToChooseFrom.length)
+              ];
+            setCurrentColor(randomColor.rgb);
+            setStage("reacting");
+            setStartTime(performance.now());
+            timeoutRef.current = null; // Clear the reference
+          }, delay);
+        };
+
+        const validAttempts = reactionTimes.slice(config.trialCount);
+        const overallAverage =
+          validAttempts.reduce((acc, { time }) => acc + time, 0) /
+            (validAttempts.length || 1) || 0;
+
+        const colorAverages = config.colorsToChooseFrom.map((color) => {
+          const times = colorStats[color.name].slice(config.trialCount);
+          const avg =
+            times.reduce((a, b) => a + b, 0) / (times.length || 1);
+          return { color: color.name, avg: Math.round(avg) };
+        });
+
+        // Determine text color based on current background
+        const textColor =
+          stage === "tooEarly"
+            ? "black"
+            : getContrastingTextColor(currentColor);
+
+        let displayText = "";
+        if (stage === "idle" || stage === "done") {
+          displayText = stage === "idle" ? "Click or tap to start" : "Click or tap to continue";
+        } else if (stage === "waiting") {
+          displayText = "Wait for the color to change...";
+        } else if (stage === "reacting") {
+          displayText = "Click as fast as you can!";
+        } else if (stage === "tooEarly") {
+          displayText = "That was too early. No color was shown. Click to retry this attempt.";
+        }
+
+        return (
+          <div>
+            <h1 className="primary-text">Reaction Time Test</h1>
+            <p className="subtitle">Fastest finger first?</p>
+
+            <div
+              className="reaction-screen"
+              style={{
+                backgroundColor: currentColor,
+                color: textColor,
+              }}
+              onClick={handleClick}
+            >
+              <p>{displayText}</p>
+            </div>
+
+            <div className="card">
+                
+              {config.showIndividualResults && (
+                <h2 className="card-title">
+                Overall Average: {Math.round(overallAverage)} ms
+              </h2>
+                )}
+              {reactionTimes.length > 0 && (
+                 <h3 className="card-title">
+                Recent attempt: {reactionTimes.slice(-1)[0].time} ms
+              </h3>
+                )}
+
+            {config.showIndividualResults && (
+              <p className="subtitle">
+                Excludes first {config.trialCount} trial attempts
+              </p>
+            )}
+
+            {config.showIndividualResults && (
+              <div className="results-container">
+                {colorAverages.map(({ color, avg }) => (
+                  <div key={color} className="result-box">
+                    <strong>{color}</strong>
+                    <p className="subtitle">{avg} ms</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {config.showIndividualResults && (
+              <div className="attempts-list">
+                <h3>All Attempts</h3>
+                {reactionTimes.map(({ color, time }, idx) => (
+                  <div key={idx} className="attempt-item">
+                    Attempt {idx + 1}: {color} - {time} ms{" "}
+                    {idx < config.trialCount && (
+                      <span className="subtitle">(Trial)</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              )}
+            </div>
+            
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
