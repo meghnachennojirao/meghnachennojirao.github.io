@@ -62,13 +62,13 @@
         .reaction-screen {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
             height: 680px;
             width: 100%;
             border-radius: 12px;
             font-size: 1.5rem;
             background-color: lightgray;
-            transition: background-color 0.3s, color 0.3s;
+            /* transition: background-color 0.3s, color 0.3s; */
             user-select: none;
             cursor: pointer;
             padding: 30px;
@@ -354,7 +354,7 @@
             } else if (stage === "waiting") {
                 displayText = "Wait for the color to change...";
             } else if (stage === "reacting") {
-                displayText = "Click as fast as you can!";
+                displayText = "Wait for the color to change...";
             } else if (stage === "tooEarly") {
                 displayText = "That was too early. No color was shown. Click to retry this attempt.";
             }
