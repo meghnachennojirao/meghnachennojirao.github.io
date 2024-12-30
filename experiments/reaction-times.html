@@ -113,8 +113,8 @@
 
         const config = {
             trialCount: 5,
-            showIndividualResults: Math.random() < 0.5,
-            useRandomTimeBeforeCue: Math.random() < 0.5,
+            showIndividualResults: true,
+            useRandomTimeBeforeCue: true,
             randomMinimumTimeBeforeCue: 1000, // in milliseconds
             maxRandomTimeBeforeCue: 3000,     // in milliseconds
             timeBeforeCueInFixedCondition: 2000, // in milliseconds
@@ -128,6 +128,8 @@
             ],
             defaultColor: "rgb(211,211,211)", // lightgray
         };
+
+        console.log("Configuration:", config);
 
         // Utility function to calculate brightness
         function getBrightness(rgb) {
@@ -258,7 +260,8 @@
                     const endTime = performance.now();
                     const elapsed = Math.round(endTime - startTime);
 
-                    setReactionTimes((prev) => [...prev, { color: currentColor, time: elapsed }]);
+                    setReactionTimes((prev) => [...prev, { color: currentColor, time: elapsed, colorName: config.colorsToChooseFrom.find(c => c.rgb === currentColor).name }]);
+
                     // Find the color object to get the name
                     const colorObj = config.colorsToChooseFrom.find(
                         (c) => c.rgb === currentColor
@@ -401,9 +404,9 @@
                         {config.showIndividualResults && (
                             <div className="attempts-list">
                                 <h3>All Attempts</h3>
-                                {reactionTimes.map(({ color, time }, idx) => (
+                                {reactionTimes.map(({ color, time, colorName }, idx) => (
                                     <div key={idx} className="attempt-item">
-                                        Attempt {idx + 1}: {color} - {time} ms{" "}
+                                        Attempt {idx + 1}: {colorName} - {time} ms{" "}
                                         {idx < config.trialCount && (
                                             <span className="subtitle">(Trial)</span>
                                         )}
