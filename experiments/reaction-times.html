@@ -146,6 +146,9 @@
       }
 
       function App() {
+        const [attemptCount, setAttemptCount] = React.useState(0);
+        const [deviceInfo, setDeviceInfo] = React.useState({});
+
         const [stage, setStage] = React.useState("idle"); // idle, waiting, reacting, tooEarly, done
         const [reactionTimes, setReactionTimes] = React.useState([]);
         const [startTime, setStartTime] = React.useState(0);
@@ -169,9 +172,76 @@
           };
         }, []);
 
+
+                
+        const runPerformanceTest = () => {
+    const runSingleTest = (testNumber) => {
+        const start = performance.now();
+        // Simple CPU-intensive task: calculating prime numbers up to 10000
+        let count = 0;
+        for (let i = 2; i < 10000; i++) {
+            let isPrime = true;
+            for (let j = 2; j <= Math.sqrt(i); j++) {
+                if (i % j === 0) {
+                    isPrime = false;
+                    break;
+                }
+            }
+            if (isPrime) count++;
+        }
+        const end = performance.now();
+        const duration = end - start;
+        console.log(`Performance Test ${testNumber}: Calculated ${count} prime numbers in ${duration.toFixed(2)} ms`);
+        return duration;
+    };
+
+    const performTests = async () => {
+        const results = [];
+        for (let i = 1; i <= 3; i++) {
+            await new Promise(resolve => setTimeout(resolve, 700)); // 0.7 seconds delay
+            const duration = runSingleTest(i);
+            results.push(duration);
+        }
+        console.log(`All Performance Tests Completed. Results: ${results.map((d, idx) => `Test ${idx + 1}: ${d.toFixed(2)} ms`).join(', ')}`);
+    };
+
+    performTests();
+};
+
+        const captureDeviceInfo = () => {
+    const info = {
+      screenWidth: window.screen.width,
+      screenHeight: window.screen.height,
+      windowInnerWidth: window.innerWidth,
+      windowInnerHeight: window.innerHeight,
+      devicePixelRatio: window.devicePixelRatio,
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      platform: navigator.platform,
+      hardwareConcurrency: navigator.hardwareConcurrency || 'N/A',
+      deviceMemory: navigator.deviceMemory || 'N/A',
+    };
+    setDeviceInfo(info);
+    console.log('Device Information:', info);
+  };
+
+        React.useEffect(() => {
+            // Run performance test on load
+            runPerformanceTest();
+
+            captureDeviceInfo();
+        }, []);
+
         const handleClick = () => {
           if (stage === "idle" || stage === "done") {
             startTrial();
+            setAttemptCount(prev => {
+                const newCount = prev + 1;
+                if (newCount % 5 === 0) {
+                    runPerformanceTest();
+                }
+                return newCount;
+            });
           } else if (stage === "waiting") {
             // Clicked too early
             setStage("tooEarly");
