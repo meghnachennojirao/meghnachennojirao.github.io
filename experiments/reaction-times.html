@@ -331,6 +331,8 @@
                 return { color: color.name, avg: Math.round(avg), stdDev: standardDeviation, attempts: numberOfAttempts };
             });
 
+            console.log(reactionTimes)
+
             // Determine text color based on current background
             const textColor =
                 stage === "tooEarly"
