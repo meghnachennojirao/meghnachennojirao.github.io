@@ -88,6 +88,7 @@
 
         p {
             font-family: Nunito, Arial, sans-serif;
+            line-height: 1.6;
         }
 
         .container-inner {
@@ -106,6 +107,47 @@
         .references li {
             margin-bottom: 10px;
             font-size: 0.95em;
+        }
+
+        /* Highlighted Quote Styling */
+        .highlight-quote {
+            background-color: #2c3e50;
+            border-left: 5px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #ecf0f1;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+        /* Additional Image Styling */
+        .article-image {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        /* Citation Links Styling */
+        a.citation {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a.citation:hover {
+            text-decoration: underline;
+        }
+
+        /* Back to citation link styling */
+        .back-to-citation {
+            margin-left: 5px;
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.8em;
+        }
+
+        .back-to-citation:hover {
+            text-decoration: underline;
         }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3H9JR6P5Z0"></script>
@@ -155,29 +197,32 @@
             <!-- Article Content -->
             <div class="pt-5 pb-5" style="z-index: 2; position: relative;">
                 <div class="p-md-5 p-4 ml-3 mr-3">
-                    <h5 class="theHeadings">"Understanding the Biological Underpinnings of Mood and Appetite"</h5>
                     <p>
-                        Tumor necrosis factor-alpha (TNF-alpha) initially gained attention for its role in tumor regression and immune defense. As a pro-inflammatory cytokine, TNF-alpha’s influence extends beyond immune regulation and into neurobiological processes associated with mood and behavior [1]. This article explores the various mechanisms that may explain how TNF-alpha contributes to depressive symptoms and inappetence.
+                        Tumor necrosis factor-alpha (TNF-alpha) initially gained attention for its role in tumor regression and immune defense. As a pro-inflammatory cytokine, TNF-alpha’s influence extends beyond immune regulation and into neurobiological processes associated with mood and behavior <a href="#ref1" class="citation">[1]</a>. This article explores the various mechanisms that may explain how TNF-alpha contributes to depressive symptoms and inappetence.
                     </p>
 
-                    <h5 class="theHeadings">The HPA Axis and Stress Response</h5>
+           
                     <p>
-                        The HPA axis is crucial for the body’s response to stress. Stress activates the hypothalamus, particularly the paraventricular nucleus (PVN), which releases corticotropin-releasing hormone (CRH)—one of the factors why one might not feel hungry in the early hours of the day, leading to skipping breakfast. CRH stimulates the anterior pituitary gland to produce adrenocorticotropic hormone (ACTH), which then triggers the adrenal glands to release cortisol. Under normal conditions, cortisol provides negative feedback to limit continued activation of the HPA axis. However, high levels of TNF-alpha can disrupt this feedback loop [2]. When TNF-alpha is chronically elevated, the hypothalamus increases CRH release to manage perceived stress, leading to overproduction of cortisol. Elevated cortisol can then affect neurotransmitter systems like serotonin and dopamine [3]. CRH also suppresses appetite by reducing Neuropeptide Y (NPY) in the hypothalamus.
+                        The HPA axis is crucial for the body’s response to stress. Stress activates the hypothalamus, particularly the paraventricular nucleus (PVN), which releases corticotropin-releasing hormone (CRH)—one of the factors why one might not feel hungry in the early hours of the day, leading to skipping breakfast. CRH stimulates the anterior pituitary gland to produce adrenocorticotropic hormone (ACTH), which then triggers the adrenal glands to release cortisol. Under normal conditions, cortisol provides negative feedback to limit continued activation of the HPA axis. However, high levels of TNF-alpha can disrupt this feedback loop <a href="#ref2" class="citation">[2]</a>. When TNF-alpha is chronically elevated, the hypothalamus increases CRH release to manage perceived stress, leading to overproduction of cortisol. Elevated cortisol can then affect neurotransmitter systems like serotonin and dopamine <a href="#ref3" class="citation">[3]</a>. CRH also suppresses appetite by reducing Neuropeptide Y (NPY) in the hypothalamus.
                     </p>
 
-                    <h5 class="theHeadings">Tryptophan Metabolism and Serotonin Levels</h5>
-                    <p>
-                        Tryptophan, the precursor to serotonin, can be diverted from serotonin production by inflammation. The enzyme indoleamine 2,3-dioxygenase (IDO), which is activated during inflammation, shunts tryptophan into the kynurenine pathway [4]. TNF-alpha is one of the cytokines that can increase IDO activity. This reduced availability of tryptophan for serotonin synthesis can lead to depressive-like symptoms, while certain kynurenine metabolites, such as quinolinic acid, 3-hydroxykynurenine, and 3-hydroxyanthranilic acid, are neurotoxic [5]. This shift in tryptophan metabolism is one potential mechanism through which TNF-alpha and other pro-inflammatory cytokines affect mood.
-                    </p>
+                    <div class="highlight-quote">
+                        <p>
+                            <em>Tryptophan</em>, the precursor to serotonin, can be diverted from serotonin production by inflammation. The enzyme <em>indoleamine 2,3-dioxygenase (IDO)</em>, which is activated during inflammation, shunts tryptophan into the <em>kynurenine pathway</em> <a href="#ref4" class="citation">[4]</a>. TNF-alpha is one of the cytokines that can increase IDO activity. This reduced availability of tryptophan for serotonin synthesis can lead to depressive-like symptoms, while certain kynurenine metabolites, such as quinolinic acid, 3-hydroxykynurenine, and 3-hydroxyanthranilic acid, are neurotoxic <a href="#ref5" class="citation">[5]</a>. This shift in tryptophan metabolism is one potential mechanism through which TNF-alpha and other pro-inflammatory cytokines affect mood.
+                        </p>
+                    </div>
 
-                    <h5 class="theHeadings">Microglial Activation and Neuroinflammation</h5>
-                    <p>
-                        Microglia, the resident immune cells in the central nervous system, release pro-inflammatory mediators, including interleukin-1 beta (IL-1β), interleukin-6 (IL-6), and additional TNF-alpha when activated by TNF-alpha [6]. Prolonged activation of microglia results in neuroinflammation, which can disrupt synaptic plasticity by affecting brain-derived neurotrophic factor (BDNF), a growth factor essential for neuronal survival and differentiation. Low levels of BDNF are often observed in depression [7]. Chronic inflammation also triggers oxidative stress and excitotoxicity, processes that are observed in neurodegenerative diseases, cerebrovascular accidents, and traumatic brain injury, further impairing brain function and mood regulation.
-                    </p>
+                    <div class="highlight-quote">
+                        <p>
+                            <em>Microglia</em>, the resident immune cells in the central nervous system, release pro-inflammatory mediators, including interleukin-1 beta (IL-1β), interleukin-6 (IL-6), and additional TNF-alpha when activated by TNF-alpha <a href="#ref6" class="citation">[6]</a>. Prolonged activation of microglia results in neuroinflammation, which can disrupt synaptic plasticity by affecting <em>brain-derived neurotrophic factor (BDNF)</em>, a growth factor essential for neuronal survival and differentiation. Low levels of BDNF are often observed in depression <a href="#ref7" class="citation">[7]</a>. Chronic inflammation also triggers oxidative stress and excitotoxicity, processes that are observed in neurodegenerative diseases, cerebrovascular accidents, and traumatic brain injury, further impairing brain function and mood regulation.
+                        </p>
+                    </div>
 
-                    <h5 class="theHeadings">Neurotransmitter Signaling Disruption</h5>
+                    <!-- <img src="https://images.pexels.com/photos/2582932/pexels-photo-2582932.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        alt="Neurotransmitter Signaling" class="article-image"> -->
+
                     <p>
-                        TNF-alpha can alter the signaling of key neurotransmitters, including serotonin, dopamine, and glutamate [3]. By modifying their release, uptake, and receptor sensitivity, TNF-alpha destabilizes processes that are vital to motivation, reward, and emotional regulation:
+                        TNF-alpha can alter the signaling of key neurotransmitters, including serotonin, dopamine, and glutamate <a href="#ref3" class="citation">[3]</a>. By modifying their release, uptake, and receptor sensitivity, TNF-alpha destabilizes processes that are vital to motivation, reward, and emotional regulation:
                     </p>
                     <ul>
                         <li><strong>Serotonin:</strong> TNF-alpha-induced inflammation reduces tryptophan levels and alters serotonin reuptake.</li>
@@ -185,50 +230,50 @@
                         <li><strong>Glutamate:</strong> Excessive glutamate activity due to inflammation can lead to excitotoxicity, which stresses neuronal circuits involved in cognitive and emotional processing.</li>
                     </ul>
 
-                    <h5 class="theHeadings">Metabolic Hormones and Appetite Regulation</h5>
+                    <!-- <img src="https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        alt="Metabolic Hormones" class="article-image"> -->
+
                     <p>
-                        TNF-alpha also influences metabolic hormones like leptin and insulin [8]. Leptin is associated with satiety, and insulin is essential for regulating blood glucose levels. TNF-alpha binds to its receptors (TNFR1 or TNFR2) on adipocytes, activating signaling pathways like NF-κB, which upregulates the LEP gene responsible for leptin production. It also triggers the MAPK/ERK pathway, further enhancing gene expression and secretion.
+                        TNF-alpha also influences metabolic hormones like leptin and insulin <a href="#ref8" class="citation">[8]</a>. Leptin is associated with satiety, and insulin is essential for regulating blood glucose levels. TNF-alpha binds to its receptors (TNFR1 or TNFR2) on adipocytes, activating signaling pathways like NF-κB, which upregulates the LEP gene responsible for leptin production. It also triggers the MAPK/ERK pathway, further enhancing gene expression and secretion.
                     </p>
                     <p>
                         TNF-alpha impairs the phosphorylation of insulin receptor substrate proteins, suppresses adiponectin production (which in turn affects insulin sensitivity), and increases circulating free fatty acids by stimulating lipolysis. Dysregulation of these hormones can disrupt appetite and energy balance, as seen in certain forms of depression.
                     </p>
                     <p>
-                        Moreover, TNF-alpha affects neuropeptides in the hypothalamus that regulate hunger and energy expenditure. For instance, TNF-alpha decreases NPY expression (orexigenic - appetite inducing) and increases pro-opiomelanocortin (POMC) expression [9].
+                        Moreover, TNF-alpha affects neuropeptides in the hypothalamus that regulate hunger and energy expenditure. For instance, TNF-alpha decreases NPY expression (orexigenic - appetite inducing) and increases pro-opiomelanocortin (POMC) expression <a href="#ref9" class="citation">[9]</a>.
                     </p>
                     <p>
                         POMC, a precursor to anorexigenic (appetite-suppressing) neuropeptides like α-MSH (melanocyte-stimulating hormone), activates melanocortin receptors (MC3R/MC4R) to suppress appetite.
                     </p>
 
-                    <h5 class="theHeadings">Cytokine Networks and Chronic Inflammation</h5>
                     <p>
-                        TNF-alpha often coordinates with other cytokines like IL-1, IL-6, and interferon-gamma (IFN-gamma). These cytokines amplify one another’s effects, creating a network of feedback loops that sustain inflammation [1]. This network contributes to further disruptions in neurotransmission, HPA-axis balance, and metabolic regulation.
+                        TNF-alpha often coordinates with other cytokines like IL-1, IL-6, and interferon-gamma (IFN-gamma). These cytokines amplify one another’s effects, creating a network of feedback loops that sustain inflammation <a href="#ref1" class="citation">[1]</a>. This network contributes to further disruptions in neurotransmission, HPA-axis balance, and metabolic regulation.
                     </p>
 
-                    <h5 class="theHeadings">Individual Variability and Therapeutic Implications</h5>
                     <p>
-                        Although TNF-alpha plays a role in depressive symptoms and inappetence, it is important to note that not all individuals with high TNF-alpha levels experience depression. Genetic factors, previous exposure to stress, and differences in cytokine receptor sensitivity may explain why some individuals are more susceptible to TNF-alpha-related mood changes [10]. TNF-alpha inhibitors have been tested in treatment-resistant depression, but the results are mixed, suggesting that depression is multifactorial and involves other immune and non-immune pathways [11].
+                        Although TNF-alpha plays a role in depressive symptoms and inappetence, it is important to note that not all individuals with high TNF-alpha levels experience depression. Genetic factors, previous exposure to stress, and differences in cytokine receptor sensitivity may explain why some individuals are more susceptible to TNF-alpha-related mood changes <a href="#ref10" class="citation">[10]</a>. TNF-alpha inhibitors have been tested in treatment-resistant depression, but the results are mixed, suggesting that depression is multifactorial and involves other immune and non-immune pathways <a href="#ref11" class="citation">[11]</a>.
                     </p>
                 </div>
 
                 <!-- Relevant Image -->
-                <img src="https://images.pexels.com/photos/414517/pexels-photo-414517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    alt="Neuroscience Illustration" style="width: 100%;">
+                <img src="https://images.pexels.com/photos/358574/pexels-photo-358574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    alt="Research and Data Analysis" class="article-image">
 
                 <!-- References Section -->
                 <div class="p-md-5 p-4 ml-3 mr-3 references">
                     <h5 class="theHeadings">References</h5>
                     <ol>
-                        <li>Miller AH, Maletic V, Raison CL. Inflammation and its discontents: the role of cytokines in the pathophysiology of major depression. Biol Psychiatry. 2009;65(9):732-741.</li>
-                        <li>Smith RS. The macrophage theory of depression. Med Hypotheses. 2012;35(4):298-306.</li>
-                        <li>Dantzer R, O’Connor JC, Freund GG, Johnson RW, Kelley KW. From inflammation to sickness and depression: when the immune system subjugates the brain. Nat Rev Neurosci. 2008;9(1):46-56.</li>
-                        <li>Wichers MC, Maes M. The role of indoleamine 2,3-dioxygenase (IDO) in the development of depressive disorders. Curr Opin Psychiatry. 2002;15(1):7-11.</li>
-                        <li>Schwarcz R, Bruno JP, Muchowski PJ, Wu H-Q. Kynurenines in the mammalian brain: when physiology meets pathology. Nat Rev Neurosci. 2012;13(7):465-477.</li>
-                        <li>Brites D, Brites T. The puzzle of neuroinflammation. J Neural Transm. 2018;125(6):909-941.</li>
-                        <li>Yirmiya R, Rimmerman N, Reshef R. Depression as a microglial disease. Trends Neurosci. 2015;38(10):637-658.</li>
-                        <li>Carson MJ, et al. CNS immune privilege: hiding in plain sight. Immunol Rev. 2013;248(1):5-24.</li>
-                        <li>Clark IA, Alleva LM, Vissel B. The roles of TNF in brain dysfunction and disease. Pharmacol Ther. 2016;158:145-158.</li>
-                        <li>Kuhlman KR, Robles TF, Bower JE, Carroll JE. Inflammatory signaling pathways in depression: Clinical studies and emerging immune biomarkers. J Clin Child Adolesc Psychol. 2018;47(2):321-338.</li>
-                        <li>Raison CL, Rutherford RE, Woolwine BJ, et al. A randomized controlled trial of the tumor necrosis factor-alpha antagonist infliximab for treatment-resistant depression: the role of baseline inflammatory biomarkers. JAMA Psychiatry. 2013;70(1):31-41.</li>
+                        <li id="ref1">Miller AH, Maletic V, Raison CL. Inflammation and its discontents: the role of cytokines in the pathophysiology of major depression. Biol Psychiatry. 2009;65(9):732-741. <a href="#citation1" class="back-to-citation">↩</a></li>
+                        <li id="ref2">Smith RS. The macrophage theory of depression. Med Hypotheses. 2012;35(4):298-306. <a href="#citation2" class="back-to-citation">↩</a></li>
+                        <li id="ref3">Dantzer R, O’Connor JC, Freund GG, Johnson RW, Kelley KW. From inflammation to sickness and depression: when the immune system subjugates the brain. Nat Rev Neurosci. 2008;9(1):46-56. <a href="#citation3" class="back-to-citation">↩</a></li>
+                        <li id="ref4">Wichers MC, Maes M. The role of indoleamine 2,3-dioxygenase (IDO) in the development of depressive disorders. Curr Opin Psychiatry. 2002;15(1):7-11. <a href="#citation4" class="back-to-citation">↩</a></li>
+                        <li id="ref5">Schwarcz R, Bruno JP, Muchowski PJ, Wu H-Q. Kynurenines in the mammalian brain: when physiology meets pathology. Nat Rev Neurosci. 2012;13(7):465-477. <a href="#citation5" class="back-to-citation">↩</a></li>
+                        <li id="ref6">Brites D, Brites T. The puzzle of neuroinflammation. J Neural Transm. 2018;125(6):909-941. <a href="#citation6" class="back-to-citation">↩</a></li>
+                        <li id="ref7">Yirmiya R, Rimmerman N, Reshef R. Depression as a microglial disease. Trends Neurosci. 2015;38(10):637-658. <a href="#citation7" class="back-to-citation">↩</a></li>
+                        <li id="ref8">Carson MJ, et al. CNS immune privilege: hiding in plain sight. Immunol Rev. 2013;248(1):5-24. <a href="#citation8" class="back-to-citation">↩</a></li>
+                        <li id="ref9">Clark IA, Alleva LM, Vissel B. The roles of TNF in brain dysfunction and disease. Pharmacol Ther. 2016;158:145-158. <a href="#citation9" class="back-to-citation">↩</a></li>
+                        <li id="ref10">Kuhlman KR, Robles TF, Bower JE, Carroll JE. Inflammatory signaling pathways in depression: Clinical studies and emerging immune biomarkers. J Clin Child Adolesc Psychol. 2018;47(2):321-338. <a href="#citation10" class="back-to-citation">↩</a></li>
+                        <li id="ref11">Raison CL, Rutherford RE, Woolwine BJ, et al. A randomized controlled trial of the tumor necrosis factor-alpha antagonist infliximab for treatment-resistant depression: the role of baseline inflammatory biomarkers. JAMA Psychiatry. 2013;70(1):31-41. <a href="#citation11" class="back-to-citation">↩</a></li>
                     </ol>
                 </div>
 
