@@ -2,645 +2,582 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Reaction Time Test</title>
-    <!-- Nunito font -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
-    <!-- React (18.2.0) -->
-    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
-    <!-- ReactDOM (18.2.0) -->
-    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
-    <!-- Babel 6 -->
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+  <meta charset="UTF-8" />
+  <title>Reaction Time Test with Stats</title>
+  <!-- Nunito font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- React (18.2.0) -->
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <!-- ReactDOM (18.2.0) -->
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <!-- Babel 6 -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+  
+  <!-- (1) Include jStat library so we can do real stats (F-distribution, t-distribution, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 
-    <style>
-        :root {
-            --base-hue: 220;
-            --primary-s: 70%;
-            --primary-l: 52%;
-            --surface-s: 10%;
-            --surface-l: 98%;
-            --surface2-s: 10%;
-            --surface2-l: 94%;
-            --text-h: 0;
-            --text-s: 0%;
-            --text-l: 20%;
-            --subtitle-opacity: 0.7;
-        }
+  <style>
+    :root {
+      --base-hue: 220;
+      --primary-s: 70%;
+      --primary-l: 52%;
+      --surface-s: 10%;
+      --surface-l: 98%;
+      --surface2-s: 10%;
+      --surface2-l: 94%;
+      --text-h: 0;
+      --text-s: 0%;
+      --text-l: 20%;
+      --subtitle-opacity: 0.7;
+    }
 
-        body {
-            font-family: "Nunito", sans-serif;
-            background: hsl(var(--text-h), var(--text-s), 98%);
-            color: hsl(var(--text-h), var(--text-s), var(--text-l));
-            margin: 0;
-            padding: 0;
-        }
+    body {
+      font-family: "Nunito", sans-serif;
+      background: hsl(var(--text-h), var(--text-s), 98%);
+      color: hsl(var(--text-h), var(--text-s), var(--text-l));
+      margin: 0;
+      padding: 0;
+    }
 
-        #root {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    #root {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-        .primary-text {
-            color: hsl(var(--base-hue), var(--primary-s), var(--primary-l));
-            font-weight: 700;
-        }
+    .primary-text {
+      color: hsl(var(--base-hue), var(--primary-s), var(--primary-l));
+      font-weight: 700;
+    }
 
-        .subtitle {
-            opacity: var(--subtitle-opacity);
-        }
+    .subtitle {
+      opacity: var(--subtitle-opacity);
+    }
 
-        .card {
-            background-color: hsl(var(--base-hue), var(--surface2-s), var(--surface2-l));
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+    .card {
+      background-color: hsl(var(--base-hue), var(--surface2-s), var(--surface2-l));
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
 
-        .reaction-screen {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            height: 680px;
-            width: 100%;
-            border-radius: 12px;
-            font-size: 1.5rem;
-            background-color: lightgray;
-            /* transition: background-color 0.3s, color 0.3s; */
-            user-select: none;
-            cursor: pointer;
-            padding: 30px;
-            padding-left: 40px;
-            padding-right: 40px;
-            margin-bottom: 60px;
-        }
+    .reaction-screen {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 680px;
+      width: 100%;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      background-color: lightgray;
+      user-select: none;
+      cursor: pointer;
+      padding: 30px 40px;
+      margin-bottom: 60px;
+    }
 
-        .results-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 10px;
-        }
+    .results-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
 
-        .result-box {
-            flex: 1;
-            min-width: 90px;
-            background: hsl(var(--text-h), var(--surface2-s), calc(var(--surface2-l) - 2%));
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-        }
+    .result-box {
+      flex: 1;
+      min-width: 90px;
+      background: hsl(var(--text-h), var(--surface2-s), calc(var(--surface2-l) - 2%));
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
 
-        .attempt-item {
-            margin-bottom: 6px;
-            line-height: 1.4;
-        }
-    </style>
+    .attempt-item {
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="root"></div>
+  <div id="root"></div>
 
-    <script type="text/babel" data-presets="react,es2015">
-        // Global Configuration
+  <script type="text/babel" data-presets="react,es2015">
+    // =========================
+    // STATS FUNCTIONS (using jStat)
+    // =========================
 
-        //   50% of the participants are shows the results for individual colors, and answers for each trial, but only the last attempt value. Not even the average of all the attempts. 
-        //   50% of the participants are not affected by randomTimeBeforeCue, they are given fixed time before the cue of say, 2000ms
+    // --- (1) One-way ANOVA ---
+    // groups = array of arrays of data (e.g. [[times for color A], [times for color B], ...])
+    function oneWayANOVA(groups) {
+      const k = groups.length;
+      const allData = groups.flat();
+      const n = allData.length;
 
-        // global configuration is adjusted based on the above two conditions
+      // Basic check: need at least 2 groups with data
+      if (k < 2) {
+        return { fValue: null, pValue: null, canComputeANOVA: false };
+      }
 
-                
-        // =========================
-        // === ADDED FOR STATS ===
-        // =========================
+      // Overall (grand) mean
+      const grandMean = jStat.mean(allData);
 
-        // 1) Simple One-Way ANOVA function
-        function oneWayANOVA(groups) {
-        // groups is an array of arrays, e.g. [[rt1, rt2], [rt3, rt4, rt5], ...]
-        // Each sub-array is the data for one "group" (color).
-        // Returns {fValue, pValue, dfBetween, dfWithin, canComputeANOVA}
+      // SSB (sum of squares between) and SSW (within)
+      let ssBetween = 0;
+      let ssWithin = 0;
 
-        const k = groups.length;              // number of groups
-        const allData = groups.flat();
-        const n = allData.length;             // total number of observations
+      // For each group, compute group mean, then add to SSB and SSW
+      for (let g of groups) {
+        if (g.length === 0) continue;
+        const groupMean = jStat.mean(g);
+        ssBetween += g.length * Math.pow(groupMean - grandMean, 2);
 
-        // We need at least 2 groups, each with >=2 data points to do a meaningful ANOVA
-        const validGroupCount = groups.filter(g => g.length >= 2).length;
-        if (k < 2 || validGroupCount < 2) {
-            return { fValue: null, pValue: null, canComputeANOVA: false };
+        // SS within this group
+        let sumSq = 0;
+        for (let val of g) {
+          sumSq += Math.pow(val - groupMean, 2);
         }
+        ssWithin += sumSq;
+      }
 
-        // Overall mean
-        const grandMean = allData.reduce((acc, val) => acc + val, 0) / n;
+      // Degrees of freedom
+      const dfBetween = k - 1;
+      const dfWithin = n - k;
 
-        // SS_Between (sum of squares between groups)
-        let ssBetween = 0;
-        // SS_Within (sum of squares within groups)
-        let ssWithin = 0;
+      // If no data or dfWithin <= 0, can't do ANOVA
+      if (dfWithin < 1) {
+        return { fValue: null, pValue: null, canComputeANOVA: false };
+      }
 
-        for (let i = 0; i < k; i++) {
-            const group = groups[i];
-            if (group.length === 0) continue;
-            const mean = group.reduce((acc, val) => acc + val, 0) / group.length;
+      // Mean squares
+      const msBetween = ssBetween / dfBetween;
+      const msWithin = ssWithin / dfWithin;
 
-            ssBetween += group.length * (mean - grandMean) ** 2;
-            // sum of squares within
-            let sumSquares = 0;
-            for (let val of group) {
-            sumSquares += (val - mean) ** 2;
-            }
-            ssWithin += sumSquares;
-        }
+      // F-statistic
+      const fValue = msBetween / msWithin;
 
-        // Degrees of freedom
-        const dfBetween = k - 1;
-        const dfWithin = n - k;
+      // p-value from F-distribution CDF
+      const cdf = jStat.centralF.cdf(fValue, dfBetween, dfWithin);
+      // p-value = 1 - cdf (right-tail test)
+      const pValue = 1 - cdf;
 
-        // Mean squares
-        const msBetween = ssBetween / dfBetween;
-        const msWithin = ssWithin / dfWithin;
+      return {
+        fValue,
+        pValue,
+        dfBetween,
+        dfWithin,
+        canComputeANOVA: true
+      };
+    }
 
-        // F-statistic
-        const fValue = msWithin === 0 ? null : msBetween / msWithin;
-        if (!fValue) {
-            return { fValue: null, pValue: null, canComputeANOVA: false };
-        }
+    // --- (2) Pearson correlation test + two-sided p-value with t-distribution
+    // xs, ys are data arrays. Must have the same length.
+    function correlationTest(xs, ys) {
+      if (xs.length < 2 || ys.length < 2 || xs.length !== ys.length) {
+        return { r: null, pValue: null, canComputeCorrelation: false };
+      }
 
-        // We now need an approximation for the p-value from the F-distribution
-        // For an accurate result, you'd typically call a library. 
-        // We'll do a rough approach with an F-distribution CDF approximation:
+      // Pearson r
+      const r = jStat.corrcoeff(xs, ys);
+      const n = xs.length;
+      const df = n - 2;
 
-        function fCDF(f, df1, df2) {
-            // Very rough approximation. Use a real library for accurate stats.
-            // We'll do a numeric integration or a series expansion for a quick approach.
-            // Here we’ll skip the actual integration for brevity and do a naive approach:
-            //  - if F is far above typical thresholds, we guess p<0.01
-            //  - if F is moderate, guess near 0.05
-            //  - else guess near 0.2
-            // This is obviously not a real solution but demonstrates how you'd wire it.
-            if (f > 5) return 0.99;  
-            if (f > 3) return 0.95;
-            if (f > 1.5) return 0.8;
-            return 0.3;
-        }
+      if (df < 1) {
+        return { r: r, pValue: null, canComputeCorrelation: false };
+      }
 
-        const cdfVal = fCDF(fValue, dfBetween, dfWithin);
-        const pValue = 1 - cdfVal;   // p = 1 - F_CDF
+      // t-statistic for correlation
+      // t = r * sqrt( (n-2)/(1-r^2) )
+      const t = r * Math.sqrt(df / (1 - r * r));
 
-        return { fValue, pValue, dfBetween, dfWithin, canComputeANOVA: true };
-        }
+      // For two-sided test: p = 2 * (1 - Tcdf(|t|, df))
+      const tCDF = jStat.studentt.cdf(Math.abs(t), df);
+      // Probability of T <= |t| is tCDF, so upper tail is 1 - tCDF
+      // For two-sided: multiply by 2
+      const pValue = 2 * (1 - tCDF);
 
-        // 2) Simple correlation + approximate p-value
-        function correlationTest(xs, ys) {
-        // xs, ys are same-length arrays
-        // Returns {r, pValue, canComputeCorrelation}
-        // r is Pearson correlation, pValue approx from t-dist.
+      return {
+        r,
+        pValue,
+        canComputeCorrelation: true
+      };
+    }
 
-        if (xs.length < 3 || ys.length < 3 || xs.length !== ys.length) {
-            return { r: null, pValue: null, canComputeCorrelation: false };
-        }
+    // --- (3) Attempt Number vs. Reaction Time test
+    // We'll do a correlation between attempt indices [1..N] and RT.
+    // Just another correlation test with x = attempt #, y = reaction time.
+    function attemptNumberTest(reactionTimes) {
+      // Make sure we ONLY consider valid attempts
+      // We'll assume "reactionTimes" array is already filtered if you want to exclude practice attempts.
+      // x-values: 1..N
+      const xs = reactionTimes.map((_, i) => i + 1);
+      const ys = reactionTimes.map(obj => obj.time);
 
-        const n = xs.length;
-        const meanX = xs.reduce((acc, x) => acc + x, 0) / n;
-        const meanY = ys.reduce((acc, y) => acc + y, 0) / n;
+      return correlationTest(xs, ys);
+    }
 
-        let num = 0, denX = 0, denY = 0;
-        for (let i = 0; i < n; i++) {
-            const dx = xs[i] - meanX;
-            const dy = ys[i] - meanY;
-            num += dx * dy;
-            denX += dx * dx;
-            denY += dy * dy;
-        }
-        const r = num / Math.sqrt(denX * denY);
 
-        // t-statistic for correlation
-        const df = n - 2;
-        const t = r * Math.sqrt(df / (1 - r * r));
+    // =========================
+    // APP CONFIG + COMPONENT
+    // =========================
 
-        // Approx p-value from t-dist (two-sided)
-        // We'll do a very rough approach:
-        function tCDF(value, df) {
-            // Again, in real code you’d call a numeric library or store a small table.
-            // We'll do a simple hack:
-            // If |t| is > 2.0 for ~df >= 10, we guess ~0.05 or below
-            // If |t| > 2.6, guess ~0.01
-            // etc.
-            const absT = Math.abs(value);
-            if (absT > 2.6) return 0.995;  // ~ p=0.01
-            if (absT > 2.0) return 0.975;  // ~ p=0.05
-            if (absT > 1.3) return 0.90;   // ~ p=0.2
-            return 0.5;
-        }
+    const config = {
+      trialCount: 5,
+      showIndividualResults: true,
+      useRandomTimeBeforeCue: true,
+      randomMinimumTimeBeforeCue: 3000, // in ms
+      maxRandomTimeBeforeCue: 7000,     // in ms
+      timeBeforeCueInFixedCondition: 2600, // in ms
+      colorsToChooseFrom: [
+        { name: "Red",    rgb: "rgb(255, 0, 0)" },
+        { name: "Green",  rgb: "rgb(0, 255, 0)" },
+        { name: "Blue",   rgb: "rgb(0, 0, 255)" },
+        { name: "Yellow", rgb: "rgb(255, 255, 0)" },
+        { name: "Black",  rgb: "rgb(0, 0, 0)" },
+        { name: "White",  rgb: "rgb(255, 255, 255)" },
+      ],
+      defaultColor: "rgb(211,211,211)", // lightgray
+    };
 
-        const cdfVal = tCDF(t, df);
-        const pValue = 1 - cdfVal;  // 2-sided => approx
+    function getBrightness(rgb) {
+      const rgbValues = rgb
+        .replace(/[^\d,]/g, "")
+        .split(",")
+        .map(Number);
+      return (rgbValues[0] * 299 + rgbValues[1] * 587 + rgbValues[2] * 114) / 1000;
+    }
 
-        return { r, pValue, canComputeCorrelation: true };
-        }
+    function getContrastingTextColor(rgb) {
+      const brightness = getBrightness(rgb);
+      if (brightness > 200) return "black";
+      if (brightness > 125) return "grey";
+      return "white";
+    }
 
-        // =========================
-        // End stats helper methods
-        // =========================
+    function App() {
+      const [stage, setStage] = React.useState("idle"); // idle, waiting, reacting, tooEarly, done
+      const [attemptCount, setAttemptCount] = React.useState(0);
+      const [reactionTimes, setReactionTimes] = React.useState([]);
+      const [delay, setDelay] = React.useState(0);
+      const [startTime, setStartTime] = React.useState(0);
+      const [currentColor, setCurrentColor] = React.useState(config.defaultColor);
 
-        const config = {
-            trialCount: 5,
-            showIndividualResults: true,
-            useRandomTimeBeforeCue: true,
-            randomMinimumTimeBeforeCue: 1000, // in milliseconds
-            maxRandomTimeBeforeCue: 3000,     // in milliseconds
-            timeBeforeCueInFixedCondition: 2000, // in milliseconds
-            colorsToChooseFrom: [
-                { name: "Red", rgb: "rgb(255, 0, 0)" },
-                { name: "Green", rgb: "rgb(0, 255, 0)" },
-                { name: "Blue", rgb: "rgb(0, 0, 255)" },
-                { name: "Yellow", rgb: "rgb(255, 255, 0)" },
-                { name: "Black", rgb: "rgb(0, 0, 0)" },
-                { name: "White", rgb: "rgb(255, 255, 255)" },
-            ],
-            defaultColor: "rgb(211,211,211)", // lightgray
+      // We'll store color-based arrays of RT in "colorStats"
+      const [colorStats, setColorStats] = React.useState(
+        config.colorsToChooseFrom.reduce((acc, color) => {
+          acc[color.name] = [];
+          return acc;
+        }, {})
+      );
+
+      const timeoutRef = React.useRef(null);
+
+      // (Optional) We run some performance tests or gather device info, etc.
+      React.useEffect(() => {
+        return () => {
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
+      }, []);
 
-        function getBrightness(rgb) {
-            const rgbValues = rgb
-                .replace(/[^\d,]/g, "")
-                .split(",")
-                .map(Number);
-            // Using the YIQ formula
-            return (rgbValues[0] * 299 + rgbValues[1] * 587 + rgbValues[2] * 114) / 1000;
+      // --------------------------------------------------------------------------------------
+      // Handlers
+      // --------------------------------------------------------------------------------------
+      const handleClick = () => {
+        if (stage === "idle" || stage === "done") {
+          startTrial();
+          setAttemptCount(prev => prev + 1);
+        } else if (stage === "waiting") {
+          // Too early
+          setStage("tooEarly");
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+          setCurrentColor(config.defaultColor);
+        } else if (stage === "reacting") {
+          // Measure RT
+          const endTime = performance.now();
+          const elapsed = endTime - startTime;
+
+          const timeOfMeasurement = performance.now();
+          const dateTimeOfMeasurement = new Date().toISOString();
+
+          // Add to reactionTimes
+          setReactionTimes(prev => [
+            ...prev,
+            {
+              color: currentColor,
+              time: elapsed,
+              colorName: config.colorsToChooseFrom.find(c => c.rgb === currentColor).name,
+              delay: delay,
+              timeOfMeasurement,
+              dateTimeOfMeasurement
+            }
+          ]);
+
+          // Add to colorStats
+          const colorObj = config.colorsToChooseFrom.find((c) => c.rgb === currentColor);
+          if (colorObj) {
+            setColorStats(prevStats => ({
+              ...prevStats,
+              [colorObj.name]: [...prevStats[colorObj.name], elapsed],
+            }));
+          }
+
+          setCurrentColor(config.defaultColor);
+          setStage("done");
+        } else if (stage === "tooEarly") {
+          // Retry same attempt
+          startTrial();
+        }
+      };
+
+      const startTrial = () => {
+        setStage("waiting");
+        setCurrentColor(config.defaultColor);
+
+        let delayValue = 0;
+        if (config.useRandomTimeBeforeCue) {
+          delayValue = Math.random() * (config.maxRandomTimeBeforeCue - config.randomMinimumTimeBeforeCue) 
+                       + config.randomMinimumTimeBeforeCue;
+        } else {
+          delayValue = config.timeBeforeCueInFixedCondition;
+        }
+        setDelay(delayValue);
+
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
         }
 
-        function getContrastingTextColor(rgb) {
-            const brightness = getBrightness(rgb);
-            if (brightness > 200) return "black";
-            if (brightness > 125) return "grey";
-            return "white";
-        }
+        timeoutRef.current = setTimeout(() => {
+          const randomColor =
+            config.colorsToChooseFrom[
+              Math.floor(Math.random() * config.colorsToChooseFrom.length)
+            ];
+          setCurrentColor(randomColor.rgb);
+          setStage("reacting");
+          setStartTime(performance.now());
+          timeoutRef.current = null;
+        }, delayValue);
+      };
 
-        function App() {
-            const [attemptCount, setAttemptCount] = React.useState(0);
-            const [deviceInfo, setDeviceInfo] = React.useState({});
-            const [delay, setDelay] = React.useState(0);
+      // --------------------------------------------------------------------------------------
+      // Post-Processing Stats
+      // --------------------------------------------------------------------------------------
+      // Exclude the first 'trialCount' attempts from official stats
+      const validAttempts = reactionTimes.slice(config.trialCount);
 
-            const [stage, setStage] = React.useState("idle"); // idle, waiting, reacting, tooEarly, done
-            const [reactionTimes, setReactionTimes] = React.useState([]);
+      // Overall average (ms) of valid attempts
+      const overallAverage = validAttempts.length
+        ? jStat.mean(validAttempts.map(a => a.time))
+        : 0;
 
-            const [performanceScore, setPerformanceScore] = React.useState(0);
-            const [startTime, setStartTime] = React.useState(0);
-            const [currentColor, setCurrentColor] = React.useState(config.defaultColor);
-            const [colorStats, setColorStats] = React.useState(
-                config.colorsToChooseFrom.reduce((acc, color) => {
-                    acc[color.name] = [];
-                    return acc;
-                }, {})
-            );
+      // Overall SD
+      const overallSD = validAttempts.length
+        ? jStat.stdev(validAttempts.map(a => a.time), true) // population stdev => second param = true
+        : 0;
 
-            const timeoutRef = React.useRef(null);
+      // Stats per color (excluding trial attempts)
+      const colorAverages = config.colorsToChooseFrom.map((color) => {
+        const times = colorStats[color.name].slice(config.trialCount);
+        return {
+          color: color.name,
+          avg:  times.length ? jStat.mean(times) : 0,
+          stdDev: times.length ? jStat.stdev(times, true) : 0,
+          attempts: times.length
+        };
+      });
 
-            React.useEffect(() => {
-                return () => {
-                    if (timeoutRef.current) {
-                        clearTimeout(timeoutRef.current);
-                    }
-                };
-            }, []);
+      // --------------------------------------------------------------------------------------
+      // Hypothesis Tests
+      // --------------------------------------------------------------------------------------
 
-            const runPerformanceTest = () => {
-                const runSingleTest = (testNumber) => {
-                    const start = performance.now();
-                    let count = 0;
-                    for (let i = 2; i < 10000; i++) {
-                        let isPrime = true;
-                        for (let j = 2; j <= Math.sqrt(i); j++) {
-                            if (i % j === 0) {
-                                isPrime = false;
-                                break;
-                            }
-                        }
-                        if (isPrime) count++;
-                    }
-                    const end = performance.now();
-                    const duration = end - start;
-                    console.log(`Performance Test ${testNumber}: Calculated ${count} prime numbers in ${duration.toFixed(2)} ms`);
-                    return duration;
-                };
+      // (1) One-Way ANOVA across colors => is color associated with RT differences?
+      const groupsByColor = config.colorsToChooseFrom.map(c => {
+        return colorStats[c.name].slice(config.trialCount);
+      });
+      const { fValue, pValue: pColor, canComputeANOVA } = oneWayANOVA(groupsByColor);
 
-                const performTests = async () => {
-                    const results = [];
-                    for (let i = 1; i <= 3; i++) {
-                        await new Promise(resolve => setTimeout(resolve, 700)); // 0.7s delay
-                        const duration = runSingleTest(i);
-                        results.push(duration);
-                    }
-                    console.log(`All Performance Tests Completed.`, results);
-                    setPerformanceScore(results);
-                };
-                performTests();
-            };
+      // (2) Delay vs. Reaction Time => correlation
+      const delayValues = validAttempts.map(a => a.delay);
+      const rtValues    = validAttempts.map(a => a.time);
+      const {
+        r: rDelay,
+        pValue: pDelay,
+        canComputeCorrelation: canComputeDelayCorr
+      } = correlationTest(delayValues, rtValues);
 
-            const captureDeviceInfo = () => {
-                const info = {
-                    screenWidth: window.screen.width,
-                    screenHeight: window.screen.height,
-                    windowInnerWidth: window.innerWidth,
-                    windowInnerHeight: window.innerHeight,
-                    devicePixelRatio: window.devicePixelRatio,
-                    userAgent: navigator.userAgent,
-                    language: navigator.language,
-                    platform: navigator.platform,
-                    hardwareConcurrency: navigator.hardwareConcurrency || 'N/A',
-                    deviceMemory: navigator.deviceMemory || 'N/A',
-                };
-                setDeviceInfo(info);
-                console.log('Device Information:', info);
-            };
+      // (3) Serial effect => previous 5 attempts average vs. current attempt
+      const rollingAverages = [];
+      const rollingRTs      = [];
+      for (let i = 0; i < validAttempts.length; i++) {
+        const startIndex = Math.max(0, i - 5);
+        const subset = validAttempts.slice(startIndex, i);
+        if (subset.length === 0) continue;
+        const avgPrev = jStat.mean(subset.map(obj => obj.time));
+        rollingAverages.push(avgPrev);
+        rollingRTs.push(validAttempts[i].time);
+      }
+      const {
+        r: rSerial,
+        pValue: pSerial,
+        canComputeCorrelation: canComputeSerialCorr
+      } = correlationTest(rollingAverages, rollingRTs);
 
-            React.useEffect(() => {
-                runPerformanceTest();
-                captureDeviceInfo();
-            }, []);
+      // (4) Attempt Number vs. Reaction Time => do people get faster over attempts?
+      // We'll just do a correlation test of [1..N] vs. RT
+      const { 
+        r: rAttempts,
+        pValue: pAttempts,
+        canComputeCorrelation: canComputeAttemptCorr
+      } = attemptNumberTest(validAttempts);
 
-            const handleClick = () => {
-                if (stage === "idle" || stage === "done") {
-                    startTrial();
-                    setAttemptCount(prev => {
-                        const newCount = prev + 1;
-                        if (newCount % 1 === 0) {
-                            runPerformanceTest();
-                        }
-                        return newCount;
-                    });
-                } else if (stage === "waiting") {
-                    setStage("tooEarly");
-                    if (timeoutRef.current) {
-                        clearTimeout(timeoutRef.current);
-                        timeoutRef.current = null;
-                    }
-                    setCurrentColor(config.defaultColor);
-                } else if (stage === "reacting") {
-                    const endTime = performance.now();
-                    const elapsed = endTime - startTime;
-                    const timeOfMeasurement = performance.now();
-                    const dateTimeOfMeasurement = new Date().toISOString();
+      // --------------------------------------------------------------------------------------
+      // Display logic
+      // --------------------------------------------------------------------------------------
+      const textColor = stage === "tooEarly"
+        ? "black"
+        : getContrastingTextColor(currentColor);
 
-                    setReactionTimes((prev) => [...prev, {
-                        color: currentColor,
-                        time: elapsed,
-                        colorName: config.colorsToChooseFrom.find(c => c.rgb === currentColor).name,
-                        delay: delay,
-                        timeOfMeasurement: timeOfMeasurement,
-                        dateTimeOfMeasurement: dateTimeOfMeasurement
-                    }]);
+      let displayText = "";
+      if (stage === "idle" || stage === "done") {
+        displayText = (stage === "idle")
+          ? "Click or tap to start"
+          : "Click or tap to continue";
+      } else if (stage === "waiting") {
+        displayText = "Wait for the color to change...";
+      } else if (stage === "reacting") {
+        displayText = "Wait for the color to change...";
+      } else if (stage === "tooEarly") {
+        displayText = "Too early! Click to retry.";
+      }
 
-                    console.log(reactionTimes)
+      return (
+        <div>
+          <h1 className="primary-text">Reaction Time Test</h1>
+          <p className="subtitle">Fastest finger first?</p>
 
-                    const colorObj = config.colorsToChooseFrom.find(
-                        (c) => c.rgb === currentColor
-                    );
-                    if (colorObj) {
-                        setColorStats((prevStats) => ({
-                            ...prevStats,
-                            [colorObj.name]: [...prevStats[colorObj.name], elapsed],
-                        }));
-                    }
-                    setCurrentColor(config.defaultColor);
-                    setStage("done");
-                } else if (stage === "tooEarly") {
-                    startTrial();
-                }
-            };
+          <div
+            className="reaction-screen"
+            style={{
+              backgroundColor: currentColor,
+              color: textColor,
+            }}
+            onClick={handleClick}
+          >
+            <p>{displayText}</p>
+          </div>
 
-            const startTrial = () => {
-                setStage("waiting");
-                setCurrentColor(config.defaultColor);
+          <div className="card">
+            {config.showIndividualResults && (
+              <h2>
+                Overall Average: {Math.round(overallAverage)} ms 
+                {" "} (n={validAttempts.length}, SD={overallSD.toFixed(2)} ms)
+              </h2>
+            )}
+            {reactionTimes.length > 0 && (
+              <h3>
+                Recent attempt: {Math.round(reactionTimes.slice(-1)[0].time)} ms
+              </h3>
+            )}
+            {config.showIndividualResults && (
+              <p className="subtitle">
+                Excludes first {config.trialCount} trial attempts
+              </p>
+            )}
 
-                let delayValue = 0;
-                if (config.useRandomTimeBeforeCue) {
-                    delayValue = Math.random() * (config.maxRandomTimeBeforeCue - config.randomMinimumTimeBeforeCue) + config.randomMinimumTimeBeforeCue;
-                } else {
-                    delayValue = config.timeBeforeCueInFixedCondition;
-                }
-                setDelay(delayValue);
+            {/* Color-specific stats */}
+            {config.showIndividualResults && (
+              <div className="results-container">
+                {colorAverages.map(({ color, avg, stdDev, attempts }) => (
+                  <div key={color} className="result-box">
+                    <strong>{color}</strong>
+                    <p className="subtitle">
+                      Avg: {Math.round(avg)} ms, SD: {stdDev.toFixed(1)} ms (n={attempts})
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
 
-                if (timeoutRef.current) {
-                    clearTimeout(timeoutRef.current);
-                }
+            {config.showIndividualResults && (
+              <div className="attempts-list">
+                <h3>All Attempts</h3>
+                {reactionTimes.map(({ colorName, time }, idx) => (
+                  <div key={idx} className="attempt-item">
+                    Attempt {idx + 1}: {colorName} - {Math.round(time)} ms{" "}
+                    {idx < config.trialCount && (
+                      <span className="subtitle">(Trial)</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-                timeoutRef.current = setTimeout(() => {
-                    const randomColor =
-                        config.colorsToChooseFrom[
-                            Math.floor(Math.random() * config.colorsToChooseFrom.length)
-                        ];
-                    setCurrentColor(randomColor.rgb);
-                    setStage("reacting");
-                    setStartTime(performance.now());
-                    timeoutRef.current = null;
-                }, delayValue);
-            };
+          {/* 
+            ===========================
+            === STATS RESULTS CARD ===
+            ===========================
+          */}
+          <div className="card">
+            <h2>Statistical Analysis</h2>
 
-            // Exclude first 'config.trialCount' attempts (which are "practice" or "trial")
-            const validAttempts = reactionTimes.slice(config.trialCount);
+            {/* (1) ANOVA for color effect */}
+            <div>
+              <h3>1) Color Effect (One-Way ANOVA)</h3>
+              {canComputeANOVA ? (
+                <p>
+                  F = {fValue.toFixed(2)}, p = {pColor.toExponential(3)}
+                </p>
+              ) : (
+                <p>Not enough data to compute ANOVA.</p>
+              )}
+            </div>
 
-            const overallAverage = validAttempts.length
-            ? validAttempts.reduce((acc, { time }) => acc + time, 0) / validAttempts.length
-            : 0;
+            {/* (2) Delay vs Reaction Time */}
+            <div>
+              <h3>2) Delay vs. Reaction Time</h3>
+              {canComputeDelayCorr ? (
+                <p>
+                  r = {rDelay.toFixed(2)}, p = {pDelay.toExponential(3)}
+                </p>
+              ) : (
+                <p>Not enough data for correlation test.</p>
+              )}
+            </div>
 
-            const overallSD = validAttempts.length
-            ? Math.sqrt(
-                validAttempts.reduce((acc, { time }) => acc + Math.pow(time - overallAverage, 2), 0) /
-                validAttempts.length
-                )
-            : 0;
+            {/* (3) Previous 5 reading average vs. Reaction Time */}
+            <div>
+              <h3>3) Serial Effect (Prev 5 Attempts)</h3>
+              {canComputeSerialCorr ? (
+                <p>
+                  r = {rSerial.toFixed(2)}, p = {pSerial.toExponential(3)}
+                </p>
+              ) : (
+                <p>Not enough data for correlation test.</p>
+              )}
+            </div>
 
-            const colorAverages = config.colorsToChooseFrom.map((color) => {
-                const times = colorStats[color.name].slice(config.trialCount);
-                const avg = times.length
-                ? times.reduce((a, b) => a + b, 0) / times.length
-                : 0;
-                const stdDev = times.length
-                ? Math.sqrt(times.reduce((acc, val) => acc + (val - avg) ** 2, 0) / times.length)
-                : 0;
-                return {
-                    color: color.name,
-                    avg: Math.round(avg),
-                    stdDev,
-                    attempts: times.length,
-                };
-            });
+            {/* (4) Attempt # vs Reaction Time */}
+            <div>
+              <h3>4) Attempt Number vs. Reaction Time</h3>
+              {canComputeAttemptCorr ? (
+                <p>
+                  r = {rAttempts.toFixed(2)}, p = {pAttempts.toExponential(3)}
+                </p>
+              ) : (
+                <p>Not enough data for correlation test.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
 
-            // =========================
-            // === ADDED FOR STATS ===
-            // =========================
-
-            // 1) ANOVA across colors (Hypothesis: color affects reaction time)
-            //    Build an array-of-arrays: each sub-array = reaction times for that color
-            //    Only use valid attempts (excluded early trials).
-            const groupsByColor = config.colorsToChooseFrom.map((c) => {
-            const times = colorStats[c.name].slice(config.trialCount);
-            return times;
-            });
-
-            const { fValue, pValue: pColor, canComputeANOVA } = oneWayANOVA(groupsByColor);
-
-            // 2) Delay vs. Reaction Time (Hypothesis: the random delay 1000–3000 ms affects RT)
-            //    We do a correlation between 'delay' and 'reaction time' from validAttempts
-            const delayValues = validAttempts.map(a => a.delay);
-            const rtValues    = validAttempts.map(a => a.time);
-            const { r: rDelay, pValue: pDelay, canComputeCorrelation: canComputeDelayCorr } =
-            correlationTest(delayValues, rtValues);
-
-            // 3) Previous 5 readings vs. current reading (Hypothesis: serial effect)
-            //    For each attempt i, look at average of previous 5 attempts (i-5...i-1), then correlate with attempt i's RT
-            const rollingAverages = [];
-            const rollingRTs      = [];
-            // only do this for valid attempts (indexing among valid attempts)
-            for (let i = 0; i < validAttempts.length; i++) {
-            const startIndex = Math.max(0, i - 5);
-            const subset = validAttempts.slice(startIndex, i);  // previous 5
-            if (subset.length === 0) {
-                // no previous data
-                continue;
-            }
-            const avgPrev = subset.reduce((acc, obj) => acc + obj.time, 0) / subset.length;
-            rollingAverages.push(avgPrev);
-            rollingRTs.push(validAttempts[i].time);
-            }
-
-            const { r: rSerial, pValue: pSerial, canComputeCorrelation: canComputeSerialCorr } =
-            correlationTest(rollingAverages, rollingRTs);
-
-            // Determine text
-            const textColor = stage === "tooEarly"
-                ? "black"
-                : getContrastingTextColor(currentColor);
-
-            let displayText = "";
-            if (stage === "idle" || stage === "done") {
-                displayText = stage === "idle"
-                ? "Click or tap to start"
-                : "Click or tap to continue";
-            } else if (stage === "waiting") {
-                displayText = "Wait for the color to change...";
-            } else if (stage === "reacting") {
-                displayText = "Wait for the color to change...";
-            } else if (stage === "tooEarly") {
-                displayText = "Too early! Click to retry.";
-            }
-
-            return (
-                <div>
-                    <h1 className="primary-text">Reaction Time Test</h1>
-                    <p className="subtitle">Fastest finger first?</p>
-
-                    <div
-                        className="reaction-screen"
-                        style={{
-                            backgroundColor: currentColor,
-                            color: textColor,
-                        }}
-                        onClick={handleClick}
-                    >
-                        <p>{displayText}</p>
-                    </div>
-
-                    <div className="card">
-                        {config.showIndividualResults && (
-                        <h2>
-                            Overall Average: {Math.round(overallAverage)} ms 
-                            {" "} (n={validAttempts.length}, SD={overallSD.toFixed(2)} ms)
-                        </h2>
-                        )}
-                        {reactionTimes.length > 0 && (
-                        <h3>Recent attempt: {Math.round(reactionTimes.slice(-1)[0].time)} ms</h3>
-                        )}
-                        {config.showIndividualResults && (
-                        <p className="subtitle">
-                            Excludes first {config.trialCount} trial attempts
-                        </p>
-                        )}
-
-                        {/* Color-specific stats */}
-                        {config.showIndividualResults && (
-                        <div className="results-container">
-                            {colorAverages.map(({ color, avg, stdDev, attempts }) => (
-                            <div key={color} className="result-box">
-                                <strong>{color}</strong>
-                                <p className="subtitle">
-                                Avg: {avg} ms, SD: {stdDev.toFixed(1)} ms (n={attempts})
-                                </p>
-                            </div>
-                            ))}
-                        </div>
-                        )}
-
-                        {config.showIndividualResults && (
-                        <div className="attempts-list">
-                            <h3>All Attempts</h3>
-                            {reactionTimes.map(({ colorName, time }, idx) => (
-                            <div key={idx} className="attempt-item">
-                                Attempt {idx + 1}: {colorName} - {Math.round(time)} ms{" "}
-                                {idx < config.trialCount && (
-                                <span className="subtitle">(Trial)</span>
-                                )}
-                            </div>
-                            ))}
-                        </div>
-                        )}
-                    </div>
-
-                    {/* 
-                    ===========================
-                    === ADDED FOR STATS UI ===
-                    ===========================
-                    */}
-                    <div className="card">
-                        <h2>Statistical Analysis</h2>
-
-                        {/* 1) ANOVA for color effect */}
-                        <div>
-                        <h3>1) Color Effect (ANOVA)</h3>
-                        {canComputeANOVA ? (
-                            <p>
-                            F = {fValue.toFixed(2)}, p = {pColor.toFixed(3)} 
-                            </p>
-                        ) : (
-                            <p>Not enough data to compute ANOVA.</p>
-                        )}
-                        </div>
-
-                        {/* 2) Delay vs Reaction Time */}
-                        <div>
-                        <h3>2) Delay vs. Reaction Time</h3>
-                        {canComputeDelayCorr ? (
-                            <p>
-                            r = {rDelay.toFixed(2)}, p = {pDelay.toFixed(3)}
-                            </p>
-                        ) : (
-                            <p>Not enough data for correlation test.</p>
-                        )}
-                        </div>
-
-                        {/* 3) Previous 5 reading average vs. Reaction Time */}
-                        <div>
-                        <h3>3) Serial Effect (Prev 5 Attempts)</h3>
-                        {canComputeSerialCorr ? (
-                            <p>
-                            r = {rSerial.toFixed(2)}, p = {pSerial.toFixed(3)}
-                            </p>
-                        ) : (
-                            <p>Not enough data for correlation test.</p>
-                        )}
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-
-        </script>
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 
 </html>
