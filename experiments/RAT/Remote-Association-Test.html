@@ -291,7 +291,7 @@
         // Main state variables
         const [stage, setStage] = useState("instructions");
         const [currentTrial, setCurrentTrial] = useState(null);
-        const [timer, setTimer] = useState(30); // 30-second countdown
+        const [timer, setTimer] = useState(10); // 10-second countdown
         const [reactionTime, setReactionTime] = useState(null);
         const [startTime, setStartTime] = useState(null);
         const [userAnswer, setUserAnswer] = useState("");
@@ -318,7 +318,7 @@
           });
 
           setStage("triad");
-          setTimer(30);
+          setTimer(10);
           setUserAnswer("");
           setPressedSpace(false);
           setReactionTime(null);
@@ -567,11 +567,11 @@
                     them.
                   </p>
                   <p>
-                    You have 30 seconds to guess. If you know it, type it before
+                    You have 10 seconds to guess. If you know it, type it before
                     time runs out (the trial will be discarded).
                   </p>
                   <p>
-                    After 30s, a word will briefly flash on the left or right.
+                    After 10s, a word will briefly flash on the left or right.
                     Press spacebar as soon as you see it!
                   </p>
                   <p>
@@ -631,20 +631,23 @@
               {/* Feedback stage */}
               {stage === "feedback" && currentTrial && (
                 <div className="glass-card center-block">
-                  <p>
+                    <p>
                     Reaction time: {reactionTime ? reactionTime.toFixed(0) : "(missed)"} ms
-                  </p>
-                  <p>The solution for the question : {currentTrial.words.join(" – ")} --->  
+                    </p>
+                    <p>The solution for the question : {currentTrial.words.join(" – ")} --->  
                     was: {currentTrial.solution}</p>
-                  <p>Did you realize the answer WHEN you saw the flashed word? (No, if you knew it earlier or realize it now)</p>
-                  <button className="button" onClick={() => recordTrial(true)}>
-                    Yes
-                  </button>
-                  <button className="button" onClick={() => recordTrial(false)}>
-                    No
-                  </button>
+                    <p>When did you realize the answer?</p>
+                    <button className="button" onClick={() => recordTrial("before")}>
+                    Before the word was flashed
+                    </button>
+                    <button className="button" onClick={() => recordTrial("during")}>
+                    WHEN the word was flashed
+                    </button>
+                    <button className="button" onClick={() => recordTrial("after")}>
+                    After the word was flashed (Now)
+                    </button>
                 </div>
-              )}
+                )}
 
               {/* Done stage: go to next trial */}
               {stage === "done" && (
