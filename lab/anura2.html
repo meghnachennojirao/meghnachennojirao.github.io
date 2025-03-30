@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Anura Research - Dr. Meghna Rao</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* ─── Theme & Metrics (inspired by your ThemeProvider and Metrics.js) ───────── */
+    :root {
+      --base-hue-primary: 120; /* Default Hue */
+      --base-hue-secondary: 200;
+      --base-hue-tertiary: 270;
+      
+      --color-primary: hsla(var(--base-hue-primary), 40%, 70%, 1); /* Pastel Primary */
+      --color-secondary: hsla(var(--base-hue-secondary), 40%, 70%, 1); /* Pastel Secondary */
+      --color-tertiary: hsla(var(--base-hue-tertiary), 40%, 70%, 1); /* Pastel Tertiary */
+      --color-surface: hsla(0, 0%, 98%, 1); /* Near White */
+      --color-on-surface: hsla(0, 0%, 10%, 1); /* Dark */
+      --color-surface-container: hsla(0, 0%, 95%, 1); /* Light Gray */
+      
+      --color-svg-primary: hsla(var(--base-hue-primary), 40%, 50%, 1);
+      --color-svg-secondary: hsla(var(--base-hue-primary), 30%, 15%, 1);
+      
+      --color-primary-background: hsla(var(--base-hue-primary), 40%, 30%, 1); /* Pastel Green */
+      --color-secondary-background: hsla(var(--base-hue-secondary), 40%, 20%, 1); /* Pastel Blue */
+      
+      --color-link-hover: hsla(0, 0%, 10%, 1);
+      
+      --text-primary: hsla(0, 0%, 10%, 0.95);
+      --text-secondary: hsla(0, 0%, 10%, 0.75);
+      --text-tertiary: hsla(0, 0%, 10%, 0.6);
+      
+      /* Elevation Shadows */
+      --elevation-1: 0px 1px 3px rgba(0,0,0,0.15);
+      --elevation-2: 0px 2px 6px rgba(0,0,0,0.15);
+      
+      /* Spacing – base unit is 8px */
+      --spacing-base: 8px;
+      
+      /* Transition speed */
+      --transition-speed: 0.3s;
+      
+      /* Smart constraint: Maximum card width for two–column cards */
+      --card-max-width: 300px;
+    }
+    
+    /* Dark Mode Variables (activated via adding .dark-mode to body) */
+    .dark-mode {
+      --color-surface: hsla(0, 0%, 15%, 1);
+      --color-on-surface: hsla(0, 0%, 95%, 1);
+      --color-surface-container: hsla(0, 0%, 20%, 1);
+      --text-primary: hsla(0, 0%, 95%, 0.95);
+      --text-secondary: hsla(0, 0%, 95%, 0.75);
+      --text-tertiary: hsla(0, 0%, 95%, 0.6);
+      --color-svg-primary: hsla(var(--base-hue-primary), 40%, 60%, 1);
+      --color-svg-secondary: hsla(var(--base-hue-primary), 20%, 25%, 1);
+      --color-primary-background: hsla(var(--base-hue-primary), 40%, 40%, 1);
+      --color-secondary-background: hsla(var(--base-hue-secondary), 40%, 30%, 1);
+      --color-link-hover: hsla(0, 0%, 95%, 1);
+    }
+    
+    /* ─── Reset & Base Styles ───────────────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Google Sans', sans-serif;
+      background-color: var(--color-surface);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+    }
+    
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition-speed);
+    }
+    a:hover {
+      color: var(--color-link-hover);
+    }
+    
+    /* ─── Dark Mode Toggle (using Font Awesome icons) ───────────────────── */
+    .dark-mode-toggle {
+      position: fixed;
+      top: var(--spacing-base);
+      right: var(--spacing-base);
+      background: var(--color-surface-container);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--elevation-1);
+      transition: background var(--transition-speed), transform var(--transition-speed);
+      z-index: 1000;
+      margin-right: 1rem;
+      margin-top: 1rem;
+    }
+    .dark-mode-toggle:hover {
+      transform: translateY(-2px);
+      background: var(--color-primary);
+      color: white;
+    }
+    .dark-mode-toggle i {
+      font-size: 20px;
+      color: var(--color-primary);
+      transition: color var(--transition-speed);
+    }
+    .dark-mode .dark-mode-toggle i {
+      color: white;
+    }
+    
+    /* ─── Hero Section (Original Header with SVG Logo) ───────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--color-primary-background), var(--color-secondary-background));
+      color: white;
+      padding: calc(var(--spacing-base) * 10) var(--spacing-base);
+      text-align: center;
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      position: relative;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 500;
+      margin-bottom: calc(var(--spacing-base) / 2);
+    }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+    .logo-container {
+      margin-bottom: var(--spacing-base);
+    }
+    
+    /* ─── Container & Section Titles ───────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: calc(var(--spacing-base) * 3);
+    }
+    .section-title {
+      color: var(--color-primary);
+      font-size: 2rem;
+      font-weight: 500;
+      opacity: 0.8;
+      margin: calc(var(--spacing-base) * 6) 0 calc(var(--spacing-base) * 3);
+      text-align: center;
+    }
+    
+    /* ─── Licenses–Style Two–Column Layout ─────────────────────────────── */
+    .licenses-container {
+      padding: var(--spacing-base);
+    }
+    .license-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: calc(var(--spacing-base) * 4);
+    }
+    .license-column {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin: var(--spacing-base);
+      max-width: var(--card-max-width);
+      min-width: 280px;
+    }
+    
+    /* ─── Card Styles ───────────────────────────────────────────────────── */
+    .card {
+      background: var(--color-surface-container);
+      border-radius: 20px;
+      padding: calc(var(--spacing-base) * 3);
+      margin-top: calc(var(--spacing-base) * 3);
+      box-shadow: var(--elevation-1);
+      transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+      overflow-wrap: break-word;
+    }
+    .card:hover {
+      box-shadow: var(--elevation-2);
+      transform: translateY(-4px);
+    }
+    .card h3 {
+      color: var(--text-primary);
+      margin: calc(var(--spacing-base) * 2) 0 calc(var(--spacing-base) / 2);
+      font-size: 1.5rem;
+    }
+    .card p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    .card .fa {
+      font-size: 32px;
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-base);
+    }
+    
+    /* ─── Image Card Specific Styles ───────────────────────────────────── */
+    .card-image {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .card-image img {
+      width: 100%;
+      display: block;
+    }
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: calc(var(--spacing-base) * 3);
+      text-align: center;
+    }
+    
+    /* ─── Typewriter Effect ───────────────────────────────────────────── */
+    .typewriter {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .section-title {
+        font-size: 1.75rem;
+      }
+      .lab-description {
+        padding: 0 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <!-- React, ReactDOM, Babel -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- React Code -->
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    
+    // Utility functions for hue (if needed)
+    const setHues = (primaryHue) => {
+      const root = document.documentElement;
+      root.style.setProperty('--base-hue-primary', primaryHue);
+      const secondaryHue = (primaryHue + 100) % 360;
+      const tertiaryHue = (primaryHue + 160) % 360;
+      root.style.setProperty('--base-hue-secondary', secondaryHue);
+      root.style.setProperty('--base-hue-tertiary', tertiaryHue);
+    };
+    
+    const randomizeHues = () => {
+      const hues = [120, 220, 280];
+      const selectedHue = hues[Math.floor(Math.random() * hues.length)];
+      setHues(selectedHue);
+    };
+    
+    // Dark Mode Toggle Component
+    const DarkModeToggle = ({ darkMode, toggleDarkMode }) => {
+      return (
+        <button className="dark-mode-toggle" aria-label="Toggle Dark Mode" onClick={toggleDarkMode}>
+          <i className={`fas ${darkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+        </button>
+      );
+    };
+    
+    // Hero Component (Original Header with SVG Logo)
+    const Hero = () => {
+      return (
+        <div className="hero">
+          <div className="logo-container">
+            <svg width="150" viewBox="0 0 136 132" xmlns="http://www.w3.org/2000/svg">
+              <path d="M56.0002 6.99998C58.4002 3.79998 69.0002 3.33332 74.0002 3.49998C75.1668 4.16665 76.8 5.8 74.0002 6.99998C70.5004 8.49996 67.5 14 64.5 19C61.5 24 58.5 34 58.5 37.5V54.5C58.5 60 60.5 59 58.5 59C56.5 59 52 57.5 48 57C44 56.5 36.0002 53.5 31.5002 51C27.0002 48.5 26.5002 42 29.0002 37.5C31.5002 33 36.5002 24 40.5002 19C44.5002 14 53.0002 11 56.0002 6.99998Z" fill="var(--color-svg-primary)" />
+              <path d="M10.3009 131.618C6.22704 127.086 -4.26047 122.51 1.88817 115.457C8.92389 100.059 18.1516 85.6378 29.9947 73.4935C36.3127 69.0305 22.1119 66.2814 24.8623 59.2652C25.1705 52.2586 23.8599 44.9787 25.7336 38.1582C26.6392 33.3657 33.3674 32.2805 32.8059 27.2598C34.1678 20.6965 40.4463 18.1311 43.9567 12.8838C49.594 7.66545 56.2372 4.58119 63.0722 1.34264C68.7516 -1.73475 75.1076 1.41161 80.5374 1.62486C85.8365 -0.472395 92.4071 -0.233 96.8913 3.57802C103.726 0.163812 112.188 4.67424 115.292 11.1963C123.315 13.1152 125.838 21.5913 130.689 27.0595C134.38 33.2524 136.816 39.7813 135.747 47.2722C135.449 51.5942 136.841 56.6118 132.951 59.8167C127.726 64.315 123.737 71.6881 115.759 71.0062C111.948 74.8979 114.923 85.7996 106.933 88.0354C103.301 90.1753 97.7366 85.0649 98.6955 91.8624C96.8252 103.589 95.2202 115.594 90.6499 126.62C84.1902 135.618 77.5727 123.226 78.7193 116.536C77.0845 111.039 79.5488 101.632 75.4563 98.5232C74.2466 107.949 74.6462 117.934 70.8069 126.777C64.1502 135.354 58.9894 121.541 58.8058 115.68C56.9878 107.501 55.7454 99.2097 54.2127 90.9759C48.4968 90.9661 46.4822 78.3787 43.0598 87.324C34.7353 98.3072 26.8873 109.653 20.1499 121.693C16.9308 123.961 15.0867 134.075 10.3009 131.618ZM13.3992 124.951C17.0398 121.678 10.0601 119.536 8.21776 117.384C4.22501 113.235 2.19031 123.049 7.3769 123.907C9.59719 125.43 11.8536 129.482 13.3992 124.951ZM9.50585 123.284C3.72705 120.102 12.262 115.942 11.7357 122.236C11.4294 122.935 10.3803 124.36 9.50585 123.284ZM86.8746 124.908C91.386 115.002 91.9699 103.799 94.3058 93.2448C94.8508 88.2105 98.4906 85.7488 93.5417 82.4722C95.2602 75.3779 105.118 90.3497 108.48 80.9328C110.174 77.4068 111.273 70.0903 105.399 74.4008C88.0072 79.4361 69.5785 79.6228 51.775 76.9891C45.2448 77.3376 52.5056 90.7838 55.2749 83.2119C60.0123 88.7339 58.8417 98.041 61.0135 105.054C62.9773 111.253 62.253 120.792 66.7502 124.884C70.3524 119.218 69.3001 111.667 70.3009 105.15C70.1761 99.3805 70.0803 91.8948 78.2361 94.1654C84.1504 97.3737 81.2684 107.093 82.7684 113.057C83.7612 116.287 81.8608 125.538 86.8746 124.908ZM18.615 117.539C22.7023 112.549 12.0294 111.23 10.2538 106.941C4.03801 112.22 13.7336 118.642 17.6742 119.07L18.1171 118.374L18.615 117.539ZM22.6474 110.315C24.5394 106.799 27.6131 104.715 22.1583 103.895C18.2539 101.783 14.7428 94.5184 12.6434 102.317C10.6905 106.808 20.1053 107.679 21.5722 112.16L21.9373 111.621L22.6474 110.315ZM28.6666 100.803C34.0301 95.9002 22.9034 94.9196 21.7734 89.8188C20.6964 89.6242 15.8835 95.2148 17.8345 96.2533C21.7013 96.5377 26.4218 107.096 28.6666 100.803ZM33.3106 94.4009C41.5921 88.9381 26.7077 87.075 30.1105 81.6617C35.2767 81.6856 38.0397 91.8901 41.4464 83.6589C43.1003 81.4194 33.2698 75.3077 40.9169 77.5149C43.1658 81.5654 44.7257 79.9289 45.4047 75.9735C38.4498 70.672 31.7486 75.1025 27.7797 81.6561C24.0705 85.1347 21.1076 88.2886 27.3055 90.7183C29.4648 91.3096 31.4584 98.0159 33.3106 94.4009ZM83.8039 73.7444C99.0702 72.1659 114.928 68.9301 127.573 59.7142C130.668 57.5368 133.026 54.5568 131.993 50.6837C133.542 44.1207 129.267 43.2323 127.3 48.735C127.834 51.6115 129.323 60.7486 124.055 56.9384C126.136 50.9555 120.938 48.8775 118.694 53.2841C117.955 56.1481 120.703 60.7052 117.872 62.6959C111.875 63.2914 118.356 49.683 110.539 55.789C107.714 57.3683 110.597 62.847 109.141 65.6573C102.244 69.5466 109.059 52.7764 101.079 58.9157C97.2754 59.7026 101.33 65.7525 99.2119 68.3868C91.9419 71.9532 99.7666 55.3571 90.9778 60.4512C87.9879 61.2811 90.595 75.4754 85.5993 68.9648C85.7913 64.6205 86.0947 59.552 80.2549 61.6728C76.9274 62.1913 80.5863 68.7575 78.6819 71.1232C73.6316 74.1305 75.4423 65.6084 74.9852 62.4614C73.8316 61.9983 68.9108 61.177 68.4922 62.7702C68.1039 66.0348 70.6825 73.9214 65.0584 71.8432C63.3319 69.037 65.9454 63.5334 63.8042 61.5741C59.4345 60.0302 57.4174 60.9205 58.3684 65.3452C60.8818 70.4846 53.0842 73.2067 54.3092 66.7684C54.1476 63.9249 55.7363 59.6695 51.3651 60.2817C44.5671 55.6445 50.5893 74.2266 44.0086 67.4709C44.2112 62.3092 45.1201 56.6188 37.9681 56.5767C38.4177 59.4645 38.0104 69.6144 34.0262 63.8975C34.8587 58.0068 34.4995 53.5293 29.0473 50.5351C29.5915 55.0211 26.4917 60.4989 30.2142 63.7108C39.1343 71.5816 51.7612 72.3234 63.0426 73.7989C69.9389 74.3732 76.8988 74.0566 83.8039 73.7444Z" fill="var(--color-svg-secondary)" />
+            </svg>
+          </div>
+          <h1>Anura Research</h1>
+          <p>Understanding Mind, Brain, and Behavior</p>
+        </div>
+      );
+    };
+    
+    // ─── TypewriterText Component ─────────────────────────────────────
+    // Reveals text letter by letter.
+    const TypewriterText = ({ text, delay = 0, speed = 20, style = {} }) => {
+      const [displayedText, setDisplayedText] = useState("");
+      useEffect(() => {
+        const delayTimeout = setTimeout(() => {
+          let currentIndex = 0;
+          const interval = setInterval(() => {
+            currentIndex++;
+            setDisplayedText(text.slice(0, currentIndex));
+            if (currentIndex === text.length) clearInterval(interval);
+          }, speed);
+        }, delay);
+        return () => clearTimeout(delayTimeout);
+      }, [text, delay, speed]);
+      return <span style={style} className="typewriter">{displayedText}</span>;
+    };
+    
+    // ─── AnimatedCard Component ─────────────────────────────────────────
+    // Wraps its content and fades it in after a delay.
+    const AnimatedCard = ({ children, delay = 0 }) => {
+      const [visible, setVisible] = useState(false);
+      useEffect(() => {
+        const timer = setTimeout(() => setVisible(true), delay);
+        return () => clearTimeout(timer);
+      }, [delay]);
+      return <div className={`card ${visible ? "visible" : ""}`}>{children}</div>;
+    };
+    
+    /* ─── Content Data: Each key corresponds to a section on the original page ─ */
+    const contentData = {
+      // Lab Description (one full-width block)
+      labDescription: {
+        leftColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Led by Dr. Meghna Rao, Anura Research investigates the intricate relationships between genes, molecules, cognition, and consciousness. Our integrative approach spans from genomics to behavior, combining molecular neuroscience, cognitive psychology, and consciousness studies to understand the human experience across multiple levels of analysis."
+              }
+            },
+            backgroundColor: "transparent"
+          }
+        ],
+        rightColumn: [] // No right column for lab description
+      },
+      // Research Focus – five topics split between two columns
+      researchFocus: {
+        leftColumn: [
+          {
+            type: "text",
+            icon: "fa-brain",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Cognitive Neuroscience: Investigating neural mechanisms underlying attention, memory, and decision-making processes."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            icon: "fa-vials",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Molecular Neuroscience: Exploring cellular and molecular mechanisms underlying neural function and behavior."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            icon: "fa-dna",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Neurogenomics & Epigenetics: Studying genetic variations and their impact on brain function and cognitive traits."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: [
+          {
+            type: "text",
+            icon: "fa-network-wired",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Behavioral Analysis: Studying human behavior patterns and their relationship with cognitive processes."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            icon: "fa-award",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Consciousness Studies: Exploring the nature of conscious experience and its neural correlates."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ]
+      },
+      // Current Projects – mix of text and image cards (images from Pexels)
+      currentProjects: {
+        leftColumn: [
+          {
+            type: "image",
+            uri: "https://images.pexels.com/photos/837140/pexels-photo-837140.jpeg?auto=compress&cs=tinysrgb&w=600",
+            overlayColor: "rgba(0,0,0,0.4)",
+            text: {
+              title: "Neural Correlates of Mindfulness",
+              content: "Investigating how mindfulness practices affect brain activity and cognitive performance."
+            }
+          },
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Temporal Perception Study: Understanding how the brain processes and integrates temporal information."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Gene-Environment Interactions: Examining how genetic variants interact with environmental factors to influence behavior."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Molecular Basis of Consciousness: Investigating genetic and molecular pathways involved in conscious experience."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Epigenetics of Learning: Studying epigenetic modifications during learning and memory formation."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "image",
+            uri: "https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=600",
+            overlayColor: "rgba(0,0,0,0.4)",
+            text: {
+              title: "Multi-omics Integration",
+              content: "Combining genomics, transcriptomics, and proteomics data to understand neural circuit function."
+            }
+          },
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Attention Networks: Mapping the neural networks involved in different forms of attention."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ]
+      },
+      // Workshops – upcoming on left, past on right
+      workshops: {
+        leftColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Upcoming Workshop: Mindfulness & Neural Correlates\nJune 15-16, 2024\nOpen for Registration\nA public workshop exploring the science of mindfulness and its effects on brain function. Combines theory with practical meditation sessions."
+              }
+            },
+            backgroundColor: "hsla(198, 60%, 70%, 0.1)"
+          },
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Upcoming Workshop: Advanced Genomics Methods\nJuly 20-22, 2024\nBy Invitation\nHands-on training in the latest genomic analysis techniques for neuroscience research."
+              }
+            },
+            backgroundColor: "hsla(198, 60%, 70%, 0.1)"
+          }
+        ],
+        rightColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Past Workshop: Single-Cell Sequencing in Neural Tissue\nMarch 2024\nTechnical workshop on single-cell RNA sequencing methods."
+              }
+            },
+            backgroundColor: "hsla(198, 0%, 75%, 0.1)"
+          },
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Past Workshop: Mind-Body Integration\nJanuary 2024\nPublic workshop on yoga and mindfulness practices backed by neuroscience."
+              }
+            },
+            backgroundColor: "hsla(198, 0%, 75%, 0.1)"
+          }
+        ]
+      },
+      // Conferences – one block
+      conferences: {
+        leftColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Conference: Consciousness & Cognition 2024\nSeptember 15-17, 2024\nInternational conference bringing together researchers in consciousness studies, cognitive neuroscience, and molecular biology.\n[Conference Details]"
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: []
+      },
+      // Publications – two blocks split between left and right
+      publications: {
+        leftColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "2024: Neural Correlates of Conscious Experience\nPublished in Nature Neuroscience."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "2023: Genetic Variants Associated with Meditation Response\nPublished in Science Advances."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ]
+      },
+      // Science Communication – one block with icon
+      scienceCommunication: {
+        leftColumn: [
+          {
+            type: "text",
+            icon: "fa-video",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "The Brain Sci Girl\nEngaging video content exploring neuroscience, genetics, and consciousness."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: []
+      },
+      // Lab Team – two columns
+      labTeam: {
+        leftColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Dr. Meghna Rao\nLab Director\nSpecializing in molecular neuroscience, cognitive psychology, and consciousness studies. Leading interdisciplinary research from genes to behavior."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: [
+          {
+            type: "text",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Join Our Team\nWe're looking for passionate researchers interested in cognitive neuroscience and behavior studies."
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ]
+      },
+      // Connect – left column for email; right column for social links
+      connect: {
+        leftColumn: [
+          {
+            type: "text",
+            icon: "fa-envelope",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Email: drmeghnacrao@gmail.com"
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ],
+        rightColumn: [
+          {
+            type: "text",
+            icon: "fab fa-twitter",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "Twitter"
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            icon: "fab fa-github",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "GitHub"
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          },
+          {
+            type: "text",
+            icon: "fab fa-linkedin",
+            contentBlocks: {
+              block1: {
+                type: "text",
+                content: "LinkedIn"
+              }
+            },
+            backgroundColor: "var(--color-surface-container)"
+          }
+        ]
+      }
+    };
+    
+    // ─── Licenses Component ─────────────────────────────────────────────
+    // Renders each section (block) in a two–column layout.
+    const Licenses = () => {
+      let cardCounter = 0;
+      return (
+        <div className="licenses-container">
+          {Object.keys(contentData).map(blockKey => (
+            <div key={blockKey} className="license-block">
+              {Object.keys(contentData[blockKey]).map(columnKey => (
+                <div key={columnKey} className="license-column" style={{ marginRight: columnKey === "leftColumn" ? "calc(var(--spacing-base) * 3)" : "0" }}>
+                  {contentData[blockKey][columnKey].map((item, index) => {
+                    const delay = cardCounter * 150;
+                    cardCounter++;
+                    if (item.type === "text") {
+                      return (
+                        <AnimatedCard key={index} delay={delay}>
+                          <div style={{ backgroundColor: item.backgroundColor || "transparent", padding: "calc(var(--spacing-base) * 3)", borderRadius: "20px" }}>
+                            {item.icon && <i className={`fas ${item.icon}`}></i>}
+                            {Object.keys(item.contentBlocks).map((cbKey, idx) => (
+                              <p key={idx} style={{ margin: "8px 0" }}>
+                                <TypewriterText text={item.contentBlocks[cbKey].content} delay={idx * 200} speed={20} />
+                              </p>
+                            ))}
+                          </div>
+                        </AnimatedCard>
+                      );
+                    } else if (item.type === "image") {
+                      return (
+                        <AnimatedCard key={index} delay={delay}>
+                          <div className="card-image" style={{ borderRadius: "20px", overflow: "hidden" }}>
+                            <img src={item.uri} alt={item.text && item.text.title ? item.text.title : "Image"} />
+                            {item.text && (
+                              <div className="overlay" style={{ backgroundColor: item.overlayColor, padding: "calc(var(--spacing-base) * 3)" }}>
+                                <h2 style={{ color: "white", marginBottom: "calc(var(--spacing-base) * 1)" }}>{item.text.title}</h2>
+                                <p style={{ color: "white" }}>{item.text.content}</p>
+                              </div>
+                            )}
+                          </div>
+                        </AnimatedCard>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      );
+    };
+    
+    // ─── LicensesPage: Combines Hero and Licenses ─────────────────────────
+    const LicensesPage = () => {
+      return (
+        <div>
+          <Hero />
+          <div className="container">
+            <Licenses />
+          </div>
+        </div>
+      );
+    };
+    
+    // ─── Main App Component (with Dark Mode toggle) ──────────────────────
+    const App = () => {
+      const [darkMode, setDarkMode] = useState(false);
+      
+      useEffect(() => {
+        randomizeHues();
+        const darkModePreference = localStorage.getItem("darkMode");
+        if (darkModePreference === "enabled") {
+          setDarkMode(true);
+          document.body.classList.add("dark-mode");
+        }
+      }, []);
+      
+      const toggleDarkMode = () => {
+        setDarkMode(prevMode => {
+          const newMode = !prevMode;
+          if (newMode) {
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("darkMode", "enabled");
+          } else {
+            document.body.classList.remove("dark-mode");
+            localStorage.setItem("darkMode", "disabled");
+          }
+          return newMode;
+        });
+      };
+      
+      return (
+        <>
+          <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          <LicensesPage />
+        </>
+      );
+    };
+    
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visual Half-Field Insight Test</title>
+    <style>
+      /* Glassmorphic style refinements */
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(145deg, #e0eafc, #cfdef3);
+        color: #333;
+        overflow-y: auto;
+      }
+
+      #root {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* The experiment area is at the top, full-height if possible. */
+      .experiment-area {
+        flex: 1;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        padding: 2rem;
+        text-align: center;
+        min-height: 100vh;
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 1rem;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        margin: 0 auto 2rem;
+        max-width: 800px;
+        padding: 1rem;
+      }
+
+      .instructions {
+        margin-bottom: 2rem;
+      }
+
+      .fixation {
+        font-size: 2rem;
+        margin: 3rem 0;
+      }
+
+      .rat-question {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      .timer {
+        font-size: 1rem;
+        margin: 1rem 0;
+        font-weight: bold;
+      }
+
+      input[type='text'] {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ccc;
+        width: 300px;
+        margin-top: 1rem;
+      }
+
+      .word {
+        font-size: 2rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 200px;
+      }
+
+      .left {
+        left: 10%;
+        text-align: right;
+      }
+
+      .right {
+        right: 10%;
+        text-align: left;
+      }
+
+      .button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 1rem;
+        border: none;
+        background: #4facfe;
+        color: white;
+        cursor: pointer;
+        margin: 0.5rem;
+      }
+
+      table {
+        width: 100%;
+        max-width: 800px;
+        margin: 2rem auto;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(8px);
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+
+      th, td {
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+
+      th {
+        background-color: #eef;
+      }
+
+      .center-block {
+        margin: 2rem auto;
+        text-align: center;
+      }
+
+      .analysis-area {
+        margin: 2rem;
+      }
+
+    </style>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <!-- React renders here -->
+    </div>
+
+    <script type="text/babel">
+      /*****************************************************
+       * Provided we have Babel, we can use JSX safely.
+       *****************************************************/
+
+      const { useState, useEffect, useRef } = React;
+
+      // 150 Proper RAT Items from conversation, with arbitrary distractor "milk"
+      const RAT_ITEMS = [
+        { words: ["cottage","swiss","cake"], solution: "cheese", distractor: "milk" },
+        { words: ["river","money","account"], solution: "bank", distractor: "milk" },
+        { words: ["cream","skate","water"], solution: "ice", distractor: "milk" },
+        { words: ["pine","crab","sauce"], solution: "apple", distractor: "milk" },
+        { words: ["pie","luck","belly"], solution: "pot", distractor: "milk" },
+        { words: ["show","life","row"], solution: "boat", distractor: "milk" },
+        { words: ["child","scan","wash"], solution: "brain", distractor: "milk" },
+        { words: ["piece","mind","dating"], solution: "game", distractor: "milk" },
+        { words: ["office","mail","hat"], solution: "box", distractor: "milk" },
+        { words: ["surprise","line","birthday"], solution: "party", distractor: "milk" },
+        { words: ["worm","shelf","end"], solution: "book", distractor: "milk" },
+        { words: ["sandwich","house","golf"], solution: "club", distractor: "milk" },
+        { words: ["land","hand","house"], solution: "farm", distractor: "milk" },
+        { words: ["break","bean","cake"], solution: "coffee", distractor: "milk" },
+        { words: ["duck","fold","dollar"], solution: "bill", distractor: "milk" },
+        { words: ["night","wrist","stop"], solution: "watch", distractor: "milk" },
+        { words: ["aid","rubber","wagon"], solution: "band", distractor: "milk" },
+        { words: ["hair","stretch","time"], solution: "long", distractor: "milk" },
+        { words: ["army","water","dust"], solution: "tank", distractor: "milk" },
+        { words: ["back","step","screen"], solution: "door", distractor: "milk" },
+        { words: ["flower","friend","scout"], solution: "girl", distractor: "milk" },
+        { words: ["shine","beam","struck"], solution: "moon", distractor: "milk" },
+        { words: ["storm","needle","haystack"], solution: "eye", distractor: "milk" },
+        { words: ["room","blood","salts"], solution: "bath", distractor: "milk" },
+        { words: ["chamber","staff","box"], solution: "music", distractor: "milk" },
+        { words: ["strike","same","tennis"], solution: "match", distractor: "milk" },
+        { words: ["fish","mine","rush"], solution: "gold", distractor: "milk" },
+        { words: ["high","book","sour"], solution: "note", distractor: "milk" },
+        { words: ["blue","knife","cottage"], solution: "cheese", distractor: "milk" },
+        { words: ["opera","hand","dish"], solution: "soap", distractor: "milk" },
+        { words: ["poke","go","molasses"], solution: "slow", distractor: "milk" },
+        { words: ["man","hot","sure"], solution: "dog", distractor: "milk" },
+        { words: ["playing","credit","report"], solution: "card", distractor: "milk" },
+        { words: ["salt","deep","foam"], solution: "sea", distractor: "milk" },
+        { words: ["soap","shoe","tissue"], solution: "box", distractor: "milk" },
+        { words: ["tooth","potato","heart"], solution: "sweet", distractor: "milk" },
+        { words: ["way","ground","weather"], solution: "fair", distractor: "milk" },
+        { words: ["man","glue","star"], solution: "super", distractor: "milk" },
+        { words: ["key","wall","precious"], solution: "stone", distractor: "milk" },
+        { words: ["pumpkin","coffee","ice"], solution: "pie", distractor: "milk" },
+        { words: ["light","hot","shade"], solution: "lamp", distractor: "milk" },
+        { words: ["food","forward","break"], solution: "fast", distractor: "milk" },
+        { words: ["key","board","beer"], solution: "bar", distractor: "milk" },
+        { words: ["dress","dial","flower"], solution: "sun", distractor: "milk" },
+        { words: ["paint","doll","cat"], solution: "house", distractor: "milk" },
+        { words: ["master","toss","finger"], solution: "ring", distractor: "milk" },
+        { words: ["cloth","sad","out"], solution: "sack", distractor: "milk" },
+        { words: ["sleeping","bean","trash"], solution: "bag", distractor: "milk" },
+        { words: ["jack","shoulder","steak"], solution: "blade", distractor: "milk" },
+        { words: ["horse","human","drag"], solution: "race", distractor: "milk" },
+        { words: ["falling","actor","dust"], solution: "star", distractor: "milk" },
+        { words: ["garden","family","apple"], solution: "tree", distractor: "milk" },
+        { words: ["lightning","credit","wild"], solution: "card", distractor: "milk" },
+        { words: ["nose","bear","floor"], solution: "rug", distractor: "milk" },
+        { words: ["fire","jail","steel"], solution: "bar", distractor: "milk" },
+        { words: ["field","carpet","red"], solution: "magic", distractor: "milk" },
+        { words: ["age","mile","sand"], solution: "stone", distractor: "milk" },
+        { words: ["safety","cushion","point"], solution: "pin", distractor: "milk" },
+        { words: ["playing","watch","witness"], solution: "stand", distractor: "milk" },
+        { words: ["pea","shell","chest"], solution: "nut", distractor: "milk" },
+        { words: ["cracker","fly","fighter"], solution: "fire", distractor: "milk" },
+        { words: ["hammer","gear","hunter"], solution: "head", distractor: "milk" },
+        { words: ["iron","shovel","engine"], solution: "steam", distractor: "milk" },
+        { words: ["grass","king","meat"], solution: "crab", distractor: "milk" },
+        { words: ["bass","complex","sleep"], solution: "deep", distractor: "milk" },
+        { words: ["ground","salt","war"], solution: "table", distractor: "milk" },
+        { words: ["shot","fool","school"], solution: "proof", distractor: "milk" },
+        { words: ["mill","tooth","dust"], solution: "saw", distractor: "milk" },
+        { words: ["rail","house","safe"], solution: "guard", distractor: "milk" },
+        { words: ["barn","wind","blade"], solution: "mill", distractor: "milk" },
+        { words: ["main","sweat","hardy"], solution: "street", distractor: "milk" },
+        { words: ["mouse","bear","sand"], solution: "trap", distractor: "milk" },
+        { words: ["piece","chain","mail"], solution: "link", distractor: "milk" },
+        { words: ["news","fish","shock"], solution: "net", distractor: "milk" },
+        { words: ["roof","top","roller"], solution: "rock", distractor: "milk" },
+        { words: ["wine","bean","door"], solution: "cellar", distractor: "milk" },
+        { words: ["palm","shoe","house"], solution: "tree", distractor: "milk" },
+        { words: ["stick","light","birthday"], solution: "candle", distractor: "milk" },
+        { words: ["cover","arm","wear"], solution: "coat", distractor: "milk" },
+        { words: ["house","thumb","pepper"], solution: "green", distractor: "milk" },
+        { words: ["square","cardboard","open"], solution: "box", distractor: "milk" },
+        { words: ["rag","milk","chain"], solution: "doll", distractor: "milk" },
+        { words: ["secret","piece","suit"], solution: "puzzle", distractor: "milk" },
+        { words: ["floor","shade","desert"], solution: "sand", distractor: "milk" },
+        { words: ["onion","rings","chain"], solution: "ring", distractor: "milk" },
+        { words: ["heart","apple","dough"], solution: "pie", distractor: "milk" },
+        { words: ["sound","light","sun"], solution: "wave", distractor: "milk" },
+        { words: ["pressure","shot","jump"], solution: "high", distractor: "milk" },
+        { words: ["bull","black","red"], solution: "eye", distractor: "milk" },
+        { words: ["carbon","coal","black"], solution: "charcoal", distractor: "milk" },
+        { words: ["mood","raw","trick"], solution: "mean", distractor: "milk" },
+        { words: ["seed","pollen","bud"], solution: "flower", distractor: "milk" },
+        { words: ["basket","eight","snow"], solution: "ball", distractor: "milk" },
+        { words: ["note","chain","master"], solution: "key", distractor: "milk" },
+        { words: ["bug","paint","ear"], solution: "brush", distractor: "milk" },
+        { words: ["water","tobacco","stove"], solution: "pipe", distractor: "milk" },
+        { words: ["fish","money","candle"], solution: "stick", distractor: "milk" },
+        { words: ["bus","out","book"], solution: "pass", distractor: "milk" },
+        { words: ["monkey","glass","cake"], solution: "banana", distractor: "milk" },
+        { words: ["berry","house","rain"], solution: "green", distractor: "milk" },
+        { words: ["carpet","alert","ink"], solution: "red", distractor: "milk" },
+        { words: ["shock","shave","taste"], solution: "after", distractor: "milk" },
+        { words: ["roof","mountain","map"], solution: "top", distractor: "milk" },
+        { words: ["peace","mind","game"], solution: "piece", distractor: "milk" },
+        { words: ["foot","collection","out"], solution: "stamp", distractor: "milk" },
+        { words: ["button","junk","market"], solution: "mail", distractor: "milk" },
+        { words: ["space","ship","film"], solution: "star", distractor: "milk" },
+        { words: ["foul","ground","mate"], solution: "play", distractor: "milk" },
+        { words: ["quick","spoon","shine"], solution: "silver", distractor: "milk" },
+        { words: ["show","life","row"], solution: "boat", distractor: "milk" },
+        { words: ["lounge","hour","napkin"], solution: "cocktail", distractor: "milk" },
+        { words: ["cream","skate","water"], solution: "ice", distractor: "milk" },
+        { words: ["sand","age","mile"], solution: "stone", distractor: "milk" },
+        { words: ["health","taker","less"], solution: "care", distractor: "milk" },
+        { words: ["end","burning","blue"], solution: "book", distractor: "milk" },
+        { words: ["bath","up","burst"], solution: "bubble", distractor: "milk" },
+        { words: ["motion","poke","down"], solution: "slow", distractor: "milk" },
+        { words: ["main","sweeper","light"], solution: "street", distractor: "milk" },
+        { words: ["hair","metal","plastic"], solution: "clip", distractor: "milk" },
+        { words: ["test","runner","map"], solution: "road", distractor: "milk" },
+        { words: ["home","sea","bed"], solution: "sick", distractor: "milk" },
+        { words: ["dragon","friendly","lava"], solution: "fire", distractor: "milk" },
+        { words: ["up","around","rear"], solution: "turn", distractor: "milk" },
+        { words: ["bald","screech","emblem"], solution: "eagle", distractor: "milk" },
+        { words: ["cat","number","phone"], solution: "call", distractor: "milk" },
+        { words: ["gold","stool","tender"], solution: "bar", distractor: "milk" },
+        { words: ["cast","jump","side"], solution: "line", distractor: "milk" },
+        { words: ["true","hot","worth"], solution: "value", distractor: "milk" },
+      ];
+
+      function App() {
+        // Main state variables
+        const [stage, setStage] = useState("instructions");
+        const [currentTrial, setCurrentTrial] = useState(null);
+        const [timer, setTimer] = useState(30); // 30-second countdown
+        const [reactionTime, setReactionTime] = useState(null);
+        const [startTime, setStartTime] = useState(null);
+        const [userAnswer, setUserAnswer] = useState("");
+        const [log, setLog] = useState([]);
+        const [pressedSpace, setPressedSpace] = useState(false);
+
+        //==================================================
+        // (1) Start/Next Trial
+        //==================================================
+        const nextTrial = () => {
+          // pick random triad
+          const trial = RAT_ITEMS[Math.floor(Math.random() * RAT_ITEMS.length)];
+          // random hemisphere
+          const hemisphere = Math.random() < 0.5 ? "left" : "right";
+          // random word type (solution/distractor)
+          const showSolution = Math.random() < 0.5;
+          const word = showSolution ? trial.solution : trial.distractor;
+
+          setCurrentTrial({
+            ...trial,
+            hemisphere,
+            word,
+            type: showSolution ? "solution" : "distractor",
+          });
+
+          setStage("triad");
+          setTimer(30);
+          setUserAnswer("");
+          setPressedSpace(false);
+          setReactionTime(null);
+          setStartTime(null);
+        };
+
+        //==================================================
+        // (2) Immediately discard if user typed correct
+        // during triad (while there's still time left).
+        //==================================================
+        useEffect(() => {
+          if (stage === "triad" && currentTrial) {
+            if (
+              userAnswer.trim().toLowerCase() ===
+              currentTrial.solution.toLowerCase()
+            ) {
+              discardTrial();
+            }
+          }
+        }, [userAnswer, stage, currentTrial]);
+
+        function discardTrial() {
+          // discard this trial
+          setLog((prev) => [
+            ...prev,
+            {
+              ...currentTrial,
+              discarded: true,
+              rt: null,
+              feltKnown: null,
+            },
+          ]);
+          setStage("discarded");
+        }
+
+        //==================================================
+        // (3) Triad countdown logic
+        //==================================================
+        useEffect(() => {
+          if (stage === "triad") {
+            // countdown
+            const intervalId = setInterval(() => {
+              setTimer((prev) => {
+                if (prev <= 1) {
+                  clearInterval(intervalId);
+                  transitionToFixation();
+                  return 0;
+                }
+                return prev - 1;
+              });
+            }, 1000);
+            return () => clearInterval(intervalId);
+          }
+        }, [stage]);
+
+        function transitionToFixation() {
+          // If not discarded, go to fixation
+          setStage("fixation");
+        }
+
+        //==================================================
+        // (4) Automatic flow: fixation -> flash -> wait -> feedback
+        //==================================================
+        useEffect(() => {
+          let tid;
+          if (stage === "fixation") {
+            // Show fixation for 500 ms, then flash
+            tid = setTimeout(() => {
+              setStage("flash");
+              setStartTime(performance.now());
+            }, 500);
+          } else if (stage === "flash") {
+            // show the word for 2 seconds, then go to wait stage
+            tid = setTimeout(() => {
+              setStage("wait");
+            }, 2000);
+          } else if (stage === "wait") {
+            // if no response after 1 second, move on to feedback
+            tid = setTimeout(() => {
+              if (!pressedSpace) {
+                setStage("feedback");
+              }
+            }, 1000);
+          }
+
+          return () => {
+            if (tid) clearTimeout(tid);
+          };
+        }, [stage, pressedSpace]);
+
+        //==================================================
+        // (5) Key press logic (Spacebar => measure RT)
+        //==================================================
+        useEffect(() => {
+          const handleKeyDown = (e) => {
+            if (e.code === "Space") {
+              // Only record if in 'wait' or 'flash'
+              if ((stage === "wait" || stage === "flash") && startTime) {
+                setPressedSpace(true);
+                const rt = performance.now() - startTime;
+                setReactionTime(rt);
+                setStage("feedback");
+              }
+            }
+          };
+          window.addEventListener("keydown", handleKeyDown);
+          return () => window.removeEventListener("keydown", handleKeyDown);
+        }, [stage, startTime]);
+
+        //==================================================
+        // (6) Log final feedback
+        //==================================================
+        const recordTrial = (didFlashHelp) => {
+          // didFlashHelp = true => user realized the answer upon seeing flash
+          // didFlashHelp = false => user did not realize only from flash
+
+          setLog((prev) => [
+            ...prev,
+            {
+              ...currentTrial,
+              rt: reactionTime ? Math.round(reactionTime) : null,
+              // store their response about if the flash triggered realization:
+              realizedAfterFlash: didFlashHelp,
+              discarded: false,
+            },
+          ]);
+          setStage("done");
+        };
+
+        //==================================================
+        // (7) Minimal stats: compare solution vs distractor RT
+        //==================================================
+        // We'll do a naive t-test: solution vs distractor
+
+        function computeStats() {
+          const stable = log.filter((t) => !t.discarded && t.rt != null);
+          if (stable.length < 4) {
+            return null; // not enough data
+          }
+
+          const sol = stable.filter((t) => t.type === "solution").map((t) => t.rt);
+          const dist = stable.filter((t) => t.type === "distractor").map((t) => t.rt);
+          if (sol.length < 2 || dist.length < 2) {
+            return null; // no enough data in each group
+          }
+
+          // welch's t test
+          const result = welchTest(sol, dist);
+          return result;
+        }
+
+        function mean(arr) {
+          return arr.reduce((a, b) => a + b, 0) / arr.length;
+        }
+
+        function variance(arr, m) {
+          if (arr.length < 2) return 0;
+          return (
+            arr.reduce((sum, x) => sum + Math.pow(x - m, 2), 0) /
+            (arr.length - 1)
+          );
+        }
+
+        function welchTest(arr1, arr2) {
+          const m1 = mean(arr1);
+          const m2 = mean(arr2);
+          const v1 = variance(arr1, m1);
+          const v2 = variance(arr2, m2);
+          const n1 = arr1.length;
+          const n2 = arr2.length;
+
+          // t statistic
+          const tNum = m1 - m2;
+          const tDen = Math.sqrt(v1 / n1 + v2 / n2);
+          const tVal = tNum / tDen;
+
+          // welch-satterthwaite df
+          const num = Math.pow(v1 / n1 + v2 / n2, 2);
+          const den =
+            Math.pow(v1 / n1, 2) / (n1 - 1) + Math.pow(v2 / n2, 2) / (n2 - 1);
+          const df = num / den;
+
+          // approximate p-value using normal approx if df > 30
+          const p = approximatePValue(tVal, df);
+
+          return { tVal, df, p };
+        }
+
+        // naive p-value approximation (two-sided) using normal cdf if df>30, else just an approximation
+        function approximatePValue(t, df) {
+          const absT = Math.abs(t);
+          if (df > 30) {
+            // normal approx
+            const z = absT; // approximate t as z
+            const tail = 1 - normalCDF(z);
+            return 2 * tail; // two-sided
+          } else {
+            // for smaller df, this is not super accurate!
+            // We'll do a fallback that is just the normal for now.
+            const z = absT;
+            const tail = 1 - normalCDF(z);
+            return 2 * tail;
+          }
+        }
+
+        // normal cdf approximation (error function)
+        function normalCDF(z) {
+          // approximation of the standard normal CDF
+          // For better accuracy, can use math.js or something.
+          return 0.5 * (1 + erf(z / Math.sqrt(2)));
+        }
+
+        function erf(x) {
+          // save the sign of x
+          const sign = x >= 0 ? 1 : -1;
+          x = Math.abs(x);
+
+          // constants
+          const a1 = 0.254829592;
+          const a2 = -0.284496736;
+          const a3 = 1.421413741;
+          const a4 = -1.453152027;
+          const a5 = 1.061405429;
+          const p = 0.3275911;
+
+          // A&S formula 7.1.26
+          const t = 1 / (1 + p * x);
+          const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+          return sign * y;
+        }
+
+        const stats = computeStats();
+
+        //==================================================
+        // Render the experiment area + log + stats
+        //==================================================
+        return (
+          <>
+            <div className="experiment-area">
+              {/* Instructions */}
+              {stage === "instructions" && (
+                <div className="glass-card instructions">
+                  <h2>Instructions</h2>
+                  <p>
+                    You will see three words. Think of a fourth word that connects
+                    them.
+                  </p>
+                  <p>
+                    You have 30 seconds to guess. If you know it, type it before
+                    time runs out (the trial will be discarded).
+                  </p>
+                  <p>
+                    After 30s, a word will briefly flash on the left or right.
+                    Press spacebar as soon as you see it!
+                  </p>
+                  <p>
+                    Then you'll answer if seeing the flash gave you the realization.
+                  </p>
+
+                  <button className="button" onClick={nextTrial}>
+                    Start Experiment
+                  </button>
+                </div>
+              )}
+
+              {/* Triad presentation */}
+              {stage === "triad" && currentTrial && (
+                <div className="glass-card">
+                  <div className="rat-question">
+                    What word connects: {currentTrial.words.join(" – ")}
+                  </div>
+                  <div className="timer">Time remaining: {timer}s</div>
+                  <input
+                    type="text"
+                    placeholder="Enter solution if you know it..."
+                    value={userAnswer}
+                    onChange={(e) => setUserAnswer(e.target.value)}
+                  />
+                </div>
+              )}
+
+              {/* Fixation */}
+              {stage === "fixation" && (
+                <div className="glass-card fixation">+</div>
+              )}
+
+              {/* Flash the word */}
+              {stage === "flash" && currentTrial && (
+                <div
+                  className={`word ${currentTrial.hemisphere}`}
+                  style={{ pointerEvents: "none" }}
+                >
+                  {currentTrial.word}
+                </div>
+              )}
+
+              {/* Wait stage (plus sign again) */}
+              {stage === "wait" && <div className="fixation">+</div>}
+
+              {/* Discarded trial (user typed correct in triad) */}
+              {stage === "discarded" && (
+                <div className="glass-card center-block">
+                  <p>You solved the triad ahead of time. Trial discarded.</p>
+                  <button className="button" onClick={nextTrial}>
+                    Next Trial
+                  </button>
+                </div>
+              )}
+
+              {/* Feedback stage */}
+              {stage === "feedback" && currentTrial && (
+                <div className="glass-card center-block">
+                  <p>
+                    Reaction time: {reactionTime ? reactionTime.toFixed(0) : "(missed)"} ms
+                  </p>
+                  <p>The solution for the question : {currentTrial.words.join(" – ")} --->  
+                    was: {currentTrial.solution}</p>
+                  <p>Did you realize the answer WHEN you saw the flashed word? (No, if you knew it earlier or realize it now)</p>
+                  <button className="button" onClick={() => recordTrial(true)}>
+                    Yes
+                  </button>
+                  <button className="button" onClick={() => recordTrial(false)}>
+                    No
+                  </button>
+                </div>
+              )}
+
+              {/* Done stage: go to next trial */}
+              {stage === "done" && (
+                <div className="glass-card center-block">
+                  <button className="button" onClick={nextTrial}>
+                    Next Trial
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Reports and analysis area below */}
+            {log.length > 0 && (
+              <div className="analysis-area">
+                <div className="glass-card">
+                  <h3>Trial Log</h3>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Words</th>
+                        <th>Type</th>
+                        <th>Hemisphere</th>
+                        <th>Flashed Word</th>
+                        <th>RT (ms)</th>
+                        <th>Realized After Flash?</th>
+                        <th>Discarded?</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {log.map((t, i) => (
+                        <tr key={i}>
+                          <td>{t.words.join("/")}</td>
+                          <td>{t.type}</td>
+                          <td>{t.hemisphere}</td>
+                          <td>{t.word}</td>
+                          <td>{t.rt ?? "-"}</td>
+                          <td>
+                            {t.realizedAfterFlash == null
+                              ? "-"
+                              : t.realizedAfterFlash
+                              ? "Yes"
+                              : "No"}
+                          </td>
+                          <td>{t.discarded ? "Yes" : "No"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="glass-card">
+                  <h3>Statistical Tests</h3>
+                  {(() => {
+                    const stats = computeStats();
+                    if (!stats) {
+                      return <p>Not enough data to compute stats yet.</p>;
+                    } else {
+                      const { tVal, df, p } = stats;
+                      return (
+                        <div>
+                          <p>Welch t-test: Solution vs. Distractor RT</p>
+                          <p>
+                            t = {tVal.toFixed(3)}, df = {df.toFixed(3)}, p = {p.toFixed(4)}
+                          </p>
+                        </div>
+                      );
+                    }
+                  })()}
+                </div>
+              </div>
+            )}
+          </>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
