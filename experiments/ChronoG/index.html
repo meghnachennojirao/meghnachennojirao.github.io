@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChronoG! — Circadian Clock Game</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              nunito: ["Nunito", "sans-serif"],
+              raleway: ["Raleway", "sans-serif"],
+            },
+            colors: {
+              primary: "#1A237E",
+              card: "#fff",
+              coin: "#FFECB3",
+              score: "#FF9800",
+              mir: "#EF4444",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body { font-family: "Raleway", Arial, sans-serif; }
+      .toast-enter { animation: toast-in 0.25s; }
+      .toast-leave { animation: toast-out 0.2s; }
+      @keyframes toast-in { from { opacity: 0; transform: translateY(-18px);} to { opacity:1; transform: translateY(0);} }
+      @keyframes toast-out { from { opacity:1; transform: translateY(0);} to { opacity:0; transform: translateY(-18px);} }
+    </style>
+  </head>
+  <body class="bg-[hsl(220,40%,98%)] text-[hsl(230,25%,20%)] min-h-screen antialiased">
+    <div id="root" class="flex items-center justify-center min-h-screen"></div>
+    <!-- React + Babel -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      // Utility functions and constants will go here (next block)
+      // ========== CONSTANTS and HELPERS ==========
+      const AVATAR_W = 50, AVATAR_H = 70;
+      const COIN_SIZE = 28, MIR277_SIZE = 22;
+      const AVATAR_SPEED = 25;
+      const INITIAL_COIN_FALL_SPEED = 9, MIR277_FALL_SPEED = 7;
+      const INITIAL_TARGET_COINS = 80;
+      const BASE_COIN_GENERATION_INTERVAL = 100;
+      const BASE_PHASE_DURATIONS = { Morning: 20, Evening: 15, Night: 4 };
+      const TARGET_COIN_SCALING_FACTOR = 1.35;
+      const GLOBAL_TARGET_MULTIPLIER = 2;
+      const MONSTER_INITIAL_WIDTH = 120, MONSTER_INITIAL_HEIGHT = 80;
+      const MONSTER_Y_POSITION = 15;
+      const MONSTER_BASE_SPEED = 2;
+      const LEVEL_TO_START_MIR277S = 3;
+      const BASE_MIR277_GENERATION_INTERVAL = 2000;
+      const MIR277_INCREASE_FACTOR_PER_LEVEL = 1.2;
+      const GAME_TICK_INTERVAL = 30;
+
+      // Clamp helper
+      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+      // Collision detection
+      const collide = (a, b) => !(
+        b.x > a.x + a.w ||
+        b.x + b.w < a.x ||
+        b.y > a.y + a.h ||
+        b.y + b.h < a.y
+      );
+
+      // =========== SVG COMPONENTS ===========
+      const AvatarSVG = ({ width = AVATAR_W, height = AVATAR_H }) => (
+        <svg width={width} height={height} viewBox="0 0 50 70" fill="none">
+          <rect width="50" height="70" rx="12" fill="#334155" />
+          <circle cx="17" cy="28" r="6" fill="#FFF" />
+          <circle cx="33" cy="28" r="6" fill="#FFF" />
+        </svg>
+      );
+      const MonsterSVG = ({ isSleeping = false, width = MONSTER_INITIAL_WIDTH, height = MONSTER_INITIAL_HEIGHT }) => (
+        <svg width={width} height={height} viewBox="0 0 120 80" fill="none">
+          <rect width="120" height="80" rx="16" fill={isSleeping ? "#7C3AED" : "#1A237E"} />
+          {!isSleeping && (
+            <>
+              <circle cx="35" cy="40" r="10" fill="#FFF" />
+              <circle cx="85" cy="40" r="10" fill="#FFF" />
+            </>
+          )}
+        </svg>
+      );
+      const CoinSVG = ({ size = COIN_SIZE }) => (
+        <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="12" fill="#FFECB3" stroke="#FDE68A" strokeWidth="2"/>
+          <text x="14" y="20" textAnchor="middle" fontWeight="700" fontSize="15" fill="#1A237E">1</text>
+        </svg>
+      );
+    //   const MiR277SVG = ({ size = MIR277_SIZE }) => (
+    //     <svg width={size} height={size} viewBox="0 0 30 30" fill="none">
+    //       <path d="M5 15 Q10 5, 15 15 T25 15" stroke="#EF4444" strokeWidth="4" strokeLinecap="round" />
+    //       <circle cx="6" cy="13.5" r="1.2" fill="#fff"/>
+    //       <circle cx="4" cy="15.5" r="1.2" fill="#fff"/>
+    //     </svg>
+    //   );
+
+      // ========== TOAST SYSTEM ==========
+      function useToasts() {
+        const [toasts, set] = React.useState([]);
+        const add = (msg, variant = "default", ms = 2400) => {
+          const id = Date.now() + Math.random();
+          set(t => [...t, { id, msg, variant }]);
+          setTimeout(() => set(t => t.filter(x => x.id !== id)), ms);
+        };
+        return { toasts, add };
+      }
+      const ToastContainer = ({ toasts }) => (
+        <div className="fixed top-4 right-4 flex flex-col gap-2 z-50 pointer-events-none">
+          {toasts.map(t => (
+            <div key={t.id} className={`toast-enter shadow-lg px-4 py-3 rounded-md font-nunito font-semibold text-sm text-white ${t.variant === "error" ? "bg-red-500" : t.variant === "success" ? "bg-emerald-600" : "bg-slate-800"}`}>
+              {t.msg}
+            </div>
+          ))}
+        </div>
+      );
+
+
+      // ================= MAIN GAME COMPONENT ===================
+      function ChronoG() {
+        // --- Game state ---
+        const [dims, setDims] = React.useState({ w: 800, h: 600 });
+        const [gameState, setGameState] = React.useState("start"); // start | playing | nightcheck | levelwon_animation | levelwon | gameover
+        const [avatar, setAvatar] = React.useState({ x: 400 - AVATAR_W / 2, y: 600 - AVATAR_H - 10 });
+        const [monster, setMonster] = React.useState({ x: 340, dir: 1, width: MONSTER_INITIAL_WIDTH, height: MONSTER_INITIAL_HEIGHT });
+        const [isMonsterSleeping, setIsMonsterSleeping] = React.useState(false);
+        const [coins, setCoins] = React.useState([]);
+        const [miR277s, setMiR277s] = React.useState([]);
+        const [rewardCoins, setRewardCoins] = React.useState([]);
+        const [score, setScore] = React.useState(0);
+        const [totalScore, setTotalScore] = React.useState(0);
+        const [currentPhase, setCurrentPhase] = React.useState("Morning");
+        const [timeLeftInPhase, setTimeLeftInPhase] = React.useState(BASE_PHASE_DURATIONS.Morning);
+        const [targetCoins, setTargetCoins] = React.useState(INITIAL_TARGET_COINS * GLOBAL_TARGET_MULTIPLIER);
+        const [currentLevel, setCurrentLevel] = React.useState(1);
+        const [miR277Hits, setMiR277Hits] = React.useState(0);
+        const [hasShownMiR277Intro, setHasShownMiR277Intro] = React.useState(false);
+        const [activeMove, setActiveMove] = React.useState(null);
+
+        // --- Refs for timers and up-to-date values ---
+        const keys = React.useRef({});
+        const tick = React.useRef();
+        const coinTimer = React.useRef();
+        const mirTimer = React.useRef();
+        const areaRef = React.useRef();
+        const phaseDur = React.useRef(BASE_PHASE_DURATIONS);
+        const toasts = useToasts();
+
+        // --- Responsive resize observer ---
+        React.useEffect(() => {
+          const node = areaRef.current;
+          if (!node) return;
+          const resize = () => {
+            let w = node.offsetWidth;
+            w = Math.max(w, 320);
+            let h = w * 0.75;
+            setDims({ w, h });
+          };
+          resize();
+          const ro = new ResizeObserver(resize);
+          ro.observe(node);
+          return () => ro.disconnect();
+        }, []);
+
+        // --- Keyboard events ---
+        React.useEffect(() => {
+          const down = (e) => (keys.current[e.key] = true);
+          const up = (e) => (keys.current[e.key] = false);
+          window.addEventListener("keydown", down);
+          window.addEventListener("keyup", up);
+          return () => {
+            window.removeEventListener("keydown", down);
+            window.removeEventListener("keyup", up);
+          };
+        }, []);
+
+        // --- Helper: scaling phase durations with level ---
+        const scalePhase = React.useCallback((base, level) =>
+          GLOBAL_TARGET_MULTIPLIER * Math.sqrt(Math.pow(TARGET_COIN_SCALING_FACTOR, Math.max(0, level - 1))) * base, []);
+
+        // --- Helper: next level's target ---
+        const nextLevelTarget = (lvl) =>
+          Math.floor(INITIAL_TARGET_COINS * GLOBAL_TARGET_MULTIPLIER * Math.pow(TARGET_COIN_SCALING_FACTOR, Math.max(0, lvl - 1)));
+
+        // --- Start game or reset level ---
+        const prepareLevel = React.useCallback((level) => {
+          setAvatar({ x: dims.w / 2 - AVATAR_W / 2, y: dims.h - AVATAR_H - 10 });
+          setMonster({ x: dims.w / 2 - MONSTER_INITIAL_WIDTH / 2, dir: 1, width: MONSTER_INITIAL_WIDTH, height: MONSTER_INITIAL_HEIGHT });
+          setCoins([]);
+          setMiR277s([]);
+          setRewardCoins([]);
+          setScore(0);
+          setMiR277Hits(0);
+          setCurrentPhase("Morning");
+          setTimeLeftInPhase(scalePhase(BASE_PHASE_DURATIONS.Morning, level));
+          setIsMonsterSleeping(false);
+          setActiveMove(null);
+        }, [dims, scalePhase]);
+
+        // --- Main Game Loop ---
+        React.useEffect(() => {
+          if (gameState !== "playing") return;
+          tick.current = setInterval(() => {
+            // Movement (keyboard or on-screen)
+            setAvatar((pos) => {
+              let x = pos.x;
+              if (activeMove === "left" || keys.current["ArrowLeft"] || keys.current["a"]) x -= AVATAR_SPEED;
+              if (activeMove === "right" || keys.current["ArrowRight"] || keys.current["d"]) x += AVATAR_SPEED;
+              return { ...pos, x: clamp(x, 0, dims.w - AVATAR_W) };
+            });
+            // Monster move
+            setMonster((m) => {
+              let x = m.x + m.dir * MONSTER_BASE_SPEED;
+              let dir = m.dir;
+              if (x <= 0 || x >= dims.w - m.width) dir *= -1;
+              x = clamp(x, 0, dims.w - m.width);
+              return { ...m, x, dir };
+            });
+            // Coins & miR277s down
+            setCoins((prev) => prev.map((c) => ({ ...c, y: c.y + INITIAL_COIN_FALL_SPEED }))
+              .filter((c) => c.y < dims.h));
+            setMiR277s((prev) => prev.map((m) => ({ ...m, y: m.y + MIR277_FALL_SPEED }))
+              .filter((m) => m.y < dims.h));
+            // Collisions: Coins
+            setCoins((prev) => {
+              let catched = 0;
+              const avRect = { x: avatar.x, y: avatar.y, w: AVATAR_W, h: AVATAR_H };
+              const rem = prev.filter((c) => {
+                const hit = collide(avRect, { x: c.x, y: c.y, w: COIN_SIZE, h: COIN_SIZE });
+                if (hit) catched++;
+                return !hit;
+              });
+              if (catched) setScore((s) => s + catched);
+              return rem;
+            });
+            // Collisions: miR277s
+            setMiR277s((prev) => {
+              const avRect = { x: avatar.x, y: avatar.y, w: AVATAR_W, h: AVATAR_H };
+              let hits = 0;
+              const rem = prev.filter((m) => {
+                const hit = collide(avRect, { x: m.x, y: m.y, w: MIR277_SIZE, h: MIR277_SIZE });
+                if (hit) hits++;
+                return !hit;
+              });
+              if (hits) {
+                setScore((s) => Math.max(0, s - 3 * hits));
+                setMiR277Hits((h) => h + hits);
+                toasts.add("miR‑277 hit! Lost 3 units.", "error", 1500);
+              }
+              return rem;
+            });
+            // Phase timing
+            setTimeLeftInPhase((t) => {
+              if (t <= GAME_TICK_INTERVAL / 1000) {
+                if (currentPhase === "Morning") {
+                  setCurrentPhase("Evening");
+                  toasts.add("Evening: Clock monster getting tired…", "default");
+                  return scalePhase(BASE_PHASE_DURATIONS.Evening, currentLevel);
+                }
+                if (currentPhase === "Evening") {
+                  setCurrentPhase("Night");
+                  setGameState("nightcheck");
+                  return BASE_PHASE_DURATIONS.Night;
+                }
+                if (currentPhase === "Night") {
+                  // Shouldn't reach here; handled by nightcheck effect
+                  return 0;
+                }
+              }
+              return t - GAME_TICK_INTERVAL / 1000;
+            });
+          }, GAME_TICK_INTERVAL);
+          return () => clearInterval(tick.current);
+        }, [gameState, dims, avatar, currentPhase, currentLevel, activeMove, scalePhase, toasts]);
+
+        // --- Coin Generation ---
+        React.useEffect(() => {
+          if (gameState !== "playing") return;
+          const interval = Math.max(50, BASE_COIN_GENERATION_INTERVAL / (currentPhase === "Evening" ? 0.9 : 1));
+          coinTimer.current = setInterval(() => {
+            setCoins((prev) => [
+              ...prev,
+              {
+                id: Date.now() + Math.random(),
+                x: monster.x + monster.width / 2 - COIN_SIZE / 2 + (Math.random() - 0.5) * monster.width * 0.6,
+                y: MONSTER_Y_POSITION + monster.height * 0.8,
+              },
+            ]);
+          }, interval);
+          return () => clearInterval(coinTimer.current);
+        }, [gameState, currentPhase, monster]);
+
+        // --- miR277 Generation ---
+        React.useEffect(() => {
+          if (gameState !== "playing" || currentLevel < LEVEL_TO_START_MIR277S) return;
+          const interval = Math.max(300, BASE_MIR277_GENERATION_INTERVAL / Math.pow(MIR277_INCREASE_FACTOR_PER_LEVEL, Math.max(0, currentLevel - LEVEL_TO_START_MIR277S)));
+          mirTimer.current = setInterval(() => {
+            setMiR277s((prev) => [
+              ...prev,
+              {
+                id: Date.now() + Math.random(),
+                x: Math.random() * (dims.w - MIR277_SIZE),
+                y: -MIR277_SIZE,
+              },
+            ]);
+          }, interval);
+          return () => clearInterval(mirTimer.current);
+        }, [gameState, currentLevel, dims]);
+
+        // --- miR277 Intro Toast ---
+        React.useEffect(() => {
+          if (gameState === "playing" && currentLevel === LEVEL_TO_START_MIR277S && !hasShownMiR277Intro) {
+            toasts.add("miR‑277s now appear! Dodge or lose 3 units!", "error", 4200);
+            setHasShownMiR277Intro(true);
+          }
+        }, [gameState, currentLevel, hasShownMiR277Intro, toasts]);
+
+        // --- Night check: did player win the level? ---
+        React.useEffect(() => {
+          if (gameState !== "nightcheck") return;
+          toasts.add("Night phase: Calculating yield…", "default", 1800);
+          setTimeout(() => {
+            if (score >= targetCoins) {
+              setGameState("levelwon_animation");
+              setIsMonsterSleeping(true);
+              setTotalScore((t) => t + score);
+              // Animate reward coins
+              setRewardCoins(
+                Array.from({ length: 15 }).map((_, i) => ({
+                  id: `reward-${Date.now()}-${i}`,
+                  x: Math.random() * dims.w,
+                  y: Math.random() * (dims.h / 2),
+                  targetX: monster.x + monster.width / 2 - COIN_SIZE / 2,
+                  targetY: monster.y + monster.height / 2 - COIN_SIZE / 2,
+                  alpha: 1,
+                }))
+              );
+              setTimeout(() => {
+                setGameState("levelwon");
+              }, 2200);
+            } else {
+              setGameState("gameover");
+            }
+          }, BASE_PHASE_DURATIONS.Night * 1000);
+        }, [gameState, score, targetCoins, monster, dims]);
+
+        // --- Reward coin animation for win ---
+        React.useEffect(() => {
+          if (gameState !== "levelwon_animation") return;
+          const interval = setInterval(() => {
+            setRewardCoins((prev) =>
+              prev
+                .map((coin) => {
+                  const dx = coin.targetX - coin.x;
+                  const dy = coin.targetY - coin.y;
+                  const dist = Math.sqrt(dx * dx + dy * dy);
+                  const moveSpeed = 15;
+                  if (dist < moveSpeed) {
+                    return { ...coin, x: coin.targetX, y: coin.targetY, alpha: Math.max(0, coin.alpha - 0.1) };
+                  }
+                  return {
+                    ...coin,
+                    x: coin.x + (dx / dist) * moveSpeed,
+                    y: coin.y + (dy / dist) * moveSpeed,
+                    alpha: coin.alpha > 0.1 ? coin.alpha - 0.02 : 0,
+                  };
+                })
+                .filter((coin) => coin.alpha > 0)
+            );
+          }, GAME_TICK_INTERVAL);
+          return () => clearInterval(interval);
+        }, [gameState]);
+
+        // --- Overlay logic for game states ---
+        function Overlay() {
+          const coinText = "PER-CRY Units";
+          if (gameState === "start")
+            return (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 text-center p-6 rounded-lg z-20">
+                <h1 className="text-4xl sm:text-5xl font-bold text-primary mb-3 font-nunito">ChronoG!</h1>
+                <p className="max-w-md text-[hsl(230,25%,25%)] mb-6">
+                  The Clock monster is experiencing severe circadian disruption! Collect <span className="font-bold">PER‑CRY units</span> while dodging mischievous <span className="font-bold">miR‑277s</span>. Put the beast to sleep before cellular chaos ensues.
+                </p>
+                <div className="flex justify-center items-center space-x-4 my-5">
+                  <AvatarSVG width={80} height={112} />
+                  <CoinSVG size={40} />
+                  <MonsterSVG width={100} height={66} isSleeping={false} />
+                </div>
+                <button onClick={() => {
+                  setCurrentLevel(1);
+                  setTargetCoins(nextLevelTarget(1));
+                  setTotalScore(0);
+                  prepareLevel(1);
+                  setGameState("playing");
+                  setHasShownMiR277Intro(false);
+                  toasts.add("Experiment starts – Level 1", "success");
+                }} className="px-6 py-3 bg-primary text-white rounded-md font-bold flex items-center gap-2 text-lg font-nunito">
+                  ▶ Start Experiment
+                </button>
+                <p className="text-xs text-muted-foreground pt-4 mt-4">Designed by Meghna C Rao</p>
+              </div>
+            );
+          if (gameState === "gameover")
+            return (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 text-center p-6 rounded-lg z-20">
+                <h2 className="text-3xl sm:text-4xl font-bold text-red-600 mb-2 font-nunito">Experiment Failed!</h2>
+                <p className="mb-3 text-base">Collected <b>{score}</b> / {targetCoins} {coinText}.</p>
+                <p className="text-md mb-3">Total yield before failure: <b>{totalScore}</b> {coinText}.</p>
+                <p className="text-xs text-muted-foreground mb-5">The Clock monster’s feedback loop broke! Try recalibrating.</p>
+                <button
+                  onClick={() => {
+                    prepareLevel(currentLevel);
+                    setGameState("playing");
+                  }}
+                  className="px-5 py-2 bg-primary text-white rounded-md font-bold"
+                >
+                  Retry Level {currentLevel}
+                </button>
+              </div>
+            );
+          if (gameState === "levelwon")
+            return (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 text-center p-6 rounded-lg z-20">
+                <h2 className="text-3xl sm:text-4xl font-bold text-emerald-600 mb-2 font-nunito">RHYTHM RESTORED!</h2>
+                <p className="mb-2 text-base">Collected <b>{score}</b> / {targetCoins} {coinText}. Monster sleeps… for now.</p>
+                <p className="mb-2 text-base">Total yield: <b>{totalScore}</b> {coinText}.</p>
+                <button onClick={() => {
+                  const nextLvl = currentLevel + 1;
+                  setCurrentLevel(nextLvl);
+                  setTargetCoins(nextLevelTarget(nextLvl));
+                  prepareLevel(nextLvl);
+                  setGameState("playing");
+                  setHasShownMiR277Intro(false);
+                  toasts.add(`Level ${nextLvl} begins!`, "success");
+                }} className="px-5 py-2 bg-primary text-white rounded-md font-bold">
+                  Next Cycle (Level {currentLevel + 1})
+                </button>
+              </div>
+            );
+          if (gameState === "nightcheck")
+            return (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 text-center p-6 rounded-lg z-10">
+                <h2 className="text-2xl font-bold mb-2 font-nunito">Night Phase: Analysis</h2>
+                <p className="text-md mb-3 text-muted-foreground">Analyzing PER‑CRY yield…</p>
+                <ProgressBar value={score} max={targetCoins} className="w-2/3 h-3 my-2" barColor="bg-primary"/>
+                <p className="text-xs text-muted-foreground mt-2">{" "}{score >= targetCoins ? "SUCCESS: Monster will sleep!" : "FAIL: Insufficient units!"}</p>
+              </div>
+            );
+          if (gameState === "levelwon_animation") {
+            return (
+              <div className="absolute inset-0 bg-white/20 flex flex-col items-center justify-center z-10 pointer-events-none"></div>
+            );
+          }
+          return null;
+        }
+
+        // --- Touch controls (for mobile) ---
+        function TouchButtons() {
+          return (
+            <div className="flex gap-4 justify-center mt-3">
+              <button
+                className="px-4 py-2 bg-primary/90 text-white font-bold rounded-lg"
+                onMouseDown={() => setActiveMove("left")}
+                onMouseUp={() => setActiveMove(null)}
+                onMouseLeave={() => setActiveMove(null)}
+                onTouchStart={e => { e.preventDefault(); setActiveMove("left"); }}
+                onTouchEnd={e => { e.preventDefault(); setActiveMove(null); }}
+                aria-label="Move Left"
+              >◀</button>
+              <button
+                className="px-4 py-2 bg-primary/90 text-white font-bold rounded-lg"
+                onMouseDown={() => setActiveMove("right")}
+                onMouseUp={() => setActiveMove(null)}
+                onMouseLeave={() => setActiveMove(null)}
+                onTouchStart={e => { e.preventDefault(); setActiveMove("right"); }}
+                onTouchEnd={e => { e.preventDefault(); setActiveMove(null); }}
+                aria-label="Move Right"
+              >▶</button>
+            </div>
+          );
+        }
+
+        // ============ Render UI ============
+        return (
+          <div className="w-full flex flex-col md:flex-row gap-6 items-stretch">
+            {/* Game Area */}
+            <div ref={areaRef} className="relative flex-1 aspect-[4/3] rounded-xl bg-white shadow-inner overflow-hidden min-w-[320px] max-w-[820px] mx-auto">
+              <Overlay />
+              {/* Monster */}
+              <div
+                style={{ left: monster.x, top: MONSTER_Y_POSITION, width: monster.width, height: monster.height, position: "absolute" }}
+                className="select-none"
+              >
+                <MonsterSVG isSleeping={isMonsterSleeping} width={monster.width} height={monster.height}/>
+              </div>
+              {/* Avatar */}
+              <div
+                style={{ left: avatar.x, top: avatar.y, width: AVATAR_W, height: AVATAR_H, position: "absolute" }}
+                className="select-none"
+              >
+                <AvatarSVG width={AVATAR_W} height={AVATAR_H}/>
+              </div>
+              {/* Coins */}
+              {coins.map((coin) => (
+                <div
+                  key={coin.id}
+                  style={{ left: coin.x, top: coin.y, width: COIN_SIZE, height: COIN_SIZE, position: "absolute" }}
+                  className="select-none"
+                >
+                  <CoinSVG size={COIN_SIZE}/>
+                </div>
+              ))}
+              {/* miR-277s */}
+              {miR277s.map((m) => (
+                <div
+                  key={m.id}
+                  style={{ left: m.x, top: m.y, width: MIR277_SIZE, height: MIR277_SIZE, position: "absolute" }}
+                  className="select-none"
+                >
+                  <MiR277SVG size={MIR277_SIZE}/>
+                </div>
+              ))}
+              {/* Reward Coins (win animation) */}
+              {gameState === "levelwon_animation" && rewardCoins.map((coin) => (
+                <div
+                  key={coin.id}
+                  style={{
+                    left: coin.x,
+                    top: coin.y,
+                    width: COIN_SIZE,
+                    height: COIN_SIZE,
+                    position: "absolute",
+                    opacity: coin.alpha,
+                    transition: "opacity 0.1s linear",
+                  }}
+                  className="select-none"
+                >
+                  <CoinSVG size={COIN_SIZE}/>
+                </div>
+              ))}
+              {/* HUD */}
+              {["playing", "nightcheck", "levelwon_animation"].includes(gameState) && (
+                <div className="absolute top-2 left-2 right-2 flex justify-between items-center text-xs md:text-sm font-semibold font-nunito z-10">
+                  <span className="flex items-center gap-1 text-coin">
+                    <CoinSVG size={16}/> {score} / {targetCoins}
+                  </span>
+                  <span>
+                    {currentPhase} – {Math.ceil(timeLeftInPhase)}s
+                  </span>
+                  <span>
+                    Level <b>{currentLevel}</b>
+                  </span>
+                </div>
+              )}
+              {/* Touch Buttons */}
+              {["playing", "nightcheck", "levelwon_animation"].includes(gameState) && (
+                <div className="absolute left-0 right-0 bottom-1 md:hidden">
+                  <TouchButtons/>
+                </div>
+              )}
+            </div>
+            {/* Sidebar */}
+            <div className="md:w-72 mt-4 md:mt-0 flex-shrink-0 space-y-4">
+              <div className="bg-white rounded-xl shadow p-4 text-sm font-nunito">
+                <h3 className="font-bold text-primary mb-2">How to Play</h3>
+                <p className="mb-1"><b>Move:</b> Arrow keys, A/D, or tap/click left/right.</p>
+                <p className="mb-1"><b>Goal:</b> Collect coins (PER‑CRY units).</p>
+                <p className="mb-1"><b>Avoid:</b> <span className="inline-block align-middle"><MiR277SVG size={14}/></span> miR‑277s — they reduce your score!</p>
+                <p className="text-xs text-muted-foreground mt-3">
+                  Stabilize the clock monster before total cellular chaos.
+                </p>
+              </div>
+              <div className="bg-white rounded-xl shadow p-4 text-xs text-slate-500 text-center font-nunito">
+                Designed by Meghna C Rao<br/>Rebuilt as single-file React by ChatGPT
+              </div>
+            </div>
+            {/* Toasts */}
+            <ToastContainer toasts={toasts.toasts}/>
+          </div>
+        );
+      }
+      // ======= Progress Bar (simple, for nightcheck) =======
+      function ProgressBar({ value, max, className, barColor="bg-primary" }) {
+        return (
+          <div className={className + " bg-slate-200 rounded-full overflow-hidden"}>
+            <div
+              className={barColor + " h-full transition-all"}
+              style={{ width: `${Math.min(100, (value / Math.max(1, max)) * 100)}%` }}
+            />
+          </div>
+        );
+      }
+
+      // ========== SVGs for miR277 (used inline above) ===========
+      function MiR277SVG({ size = MIR277_SIZE }) {
+        return (
+          <svg width={size} height={size} viewBox="0 0 30 30" fill="none">
+            <defs>
+              <filter id="mir277-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <path
+              d="M5 15 Q10 5, 15 15 T25 15"
+              stroke="#EF4444"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+              filter="url(#mir277-glow)"
+            />
+            <circle cx="6" cy="13.5" r="1.2" fill="#fff" />
+            <circle cx="4" cy="15.5" r="1.2" fill="#fff" />
+          </svg>
+        );
+      }
+
+      // =========== RENDER THE GAME =====================
+      ReactDOM.render(<ChronoG />, document.getElementById("root"));
+
+    </script>
+    </body>
+</html>

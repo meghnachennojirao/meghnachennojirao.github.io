@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Clock Rush</title>
+  <style>
+    html, body { margin: 0; overflow: hidden; height: 100%; background: #10131a; }
+    canvas { display: block; }
+    #overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 12px 22px;
+      background: rgba(20,30,40,0.92);
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 22px;
+      color: #fff;
+      z-index: 2;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px #000b;
+      letter-spacing: 1px;
+      border: 1.5px solid #23263a;
+      text-shadow: 0 1px 8px #000a;
+    }
+    #message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 34px 48px;
+      background: rgba(10,20,30,0.98);
+      color: #fff;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 2rem;
+      text-align: center;
+      z-index: 3;
+      display: none;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px #000c;
+      border: 1.5px solid #23263a;
+      text-shadow: 0 1px 8px #000a;
+    }
+    #message button, #startBtn {
+      margin-top: 24px;
+      padding: 14px 36px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      border: none;
+      background: #1a2a44;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px #0006;
+    }
+    #message button:hover, #startBtn:hover {
+      background: #223366;
+      box-shadow: 0 4px 16px #000a;
+    }
+    #startScreen {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(10,20,30,0.98);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 8px #000a;
+    }
+    #startBtn { margin-top: 40px; }
+    /* Vignette effect for dark theme */
+    body::after {
+      content: '';
+      pointer-events: none;
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      z-index: 1;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="overlay">CLOCK Proteins: <span id="count">5</span></div>
+  <div id="message">
+    <span id="message-text">Game Over!</span><br>
+    <button onclick="resetGame()">Play Again</button>
+  </div>
+  <div id="startScreen">
+    <div>Clock Rush</div>
+    <div style="font-size:1.1rem;margin-top:18px;max-width:400px;text-align:center;">Guide your CLOCK protein spheres to the Wake-Up Wall!<br>Use ←/→ or tap/click sides to steer.<br>Avoid the rotating beam and keep enough proteins alive!</div>
+    <button id="startBtn">Start</button>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // --- AUDIO ---
+    let audioCtx;
+    function unlockAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // Unlock on first gesture
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      }
+    }
+    function playBeep(freq, duration, type='sine', gain=0.1) {
+      if (!audioCtx) return;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.value = gain;
+      o.connect(g).connect(audioCtx.destination);
+      o.start();
+      o.stop(audioCtx.currentTime + duration/1000);
+      o.onended = () => g.disconnect();
+    }
+    function playGateSound(positive) {
+      playBeep(positive ? 660 : 220, 120, 'triangle', 0.15);
+    }
+    function playBeamSound() {
+      playBeep(80, 200, 'sawtooth', 0.18);
+    }
+    function playFallSound() {
+      playBeep(120, 80, 'square', 0.12);
+      setTimeout(()=>playBeep(80, 80, 'square', 0.08), 80);
+    }
+    function playWinSound() {
+      playBeep(880, 100, 'triangle', 0.18);
+      setTimeout(()=>playBeep(1320, 100, 'triangle', 0.18), 120);
+    }
+    function playLoseSound() {
+      playBeep(120, 200, 'sawtooth', 0.18);
+    }
+
+    // --- GAME CONSTANTS ---
+    let scene, camera, renderer;
+    let spheres = [];
+    let target = { x: 0, y: 0.25, z: 0 };
+    let pathWidth = 5;
+    let targetX = 0;
+    const POINT_MARGIN = 0.05; // 5% margin
+    const POINT_LIMIT = pathWidth * (0.5 - POINT_MARGIN); // 90% of path
+    let level = 1;
+    let levelConfig = {};
+    let groupZ = 0;
+    let groupSpeed = 0.045;
+    let objects = [];
+    let gameActive = false;
+    let clockProteins = 5;
+    const initialClockProteins = 10;
+    const maxProteins = 20;
+    const minProteins = 1;
+    let minToWin = 7;
+    let overlayCount = null;
+    let animationFrameId;
+    let spinnerHitCooldown = 0;
+    let jumpPhase = 0;
+    let wakeUpWallZ = 120;
+    let gameStarted = false;
+    let camZ = 0;
+
+    // --- INIT ---
+    document.getElementById('startBtn').onclick = () => {
+      document.getElementById('startScreen').style.display = 'none';
+      unlockAudio();
+      startGame();
+    };
+
+    function startGame() {
+      gameActive = true;
+      gameStarted = true;
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a1a24);
+      scene.fog = new THREE.Fog(0x0a1a24, 8, 40);
+
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+      camZ = 0;
+      camera.position.set(0, 3.5, camZ - 6);
+      camera.lookAt(0, 0.5, camZ + 2);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      document.body.appendChild(renderer.domElement);
+
+      // Lighting
+      scene.add(new THREE.AmbientLight(0x99ccff, 0.5));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      dirLight.position.set(6, 12, 8);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 2048;
+      dirLight.shadow.mapSize.height = 2048;
+      scene.add(dirLight);
+      const pointLight1 = new THREE.PointLight(0x00bfff, 0.5, 10);
+      pointLight1.position.set(-5, 2, 0);
+      scene.add(pointLight1);
+      const pointLight2 = new THREE.PointLight(0xff00ff, 0.4, 10);
+      pointLight2.position.set(5, 2, 0);
+      scene.add(pointLight2);
+
+      // Ground
+      const groundGeo = new THREE.PlaneGeometry(pathWidth, 200);
+      const groundMat = new THREE.MeshPhysicalMaterial({ color: 0x1a2a33, roughness: 0.85, metalness: 0.15, transparent: true, opacity: 0.55 });
+      const ground = new THREE.Mesh(groundGeo, groundMat);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = 0;
+      ground.position.z = 100;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      // Wake up wall
+      const wakeWallMat = new THREE.MeshPhysicalMaterial({ color: 0xffff99, transparent: true, opacity: 0.7, metalness: 0.3, roughness: 0.08, emissive: 0xffffcc, emissiveIntensity: 0.18, clearcoat: 1.0, clearcoatRoughness: 0.08 });
+      const wakeWallGeo = new THREE.PlaneGeometry(pathWidth, 2);
+      const wakeWall = new THREE.Mesh(wakeWallGeo, wakeWallMat);
+      wakeWall.position.set(0, 1, wakeUpWallZ);
+      wakeWall.userData = { type: 'goal' };
+      scene.add(wakeWall);
+      objects = [wakeWall];
+
+      // Spheres (proteins)
+      spheres = [];
+      for (let i = 0; i < clockProteins; i++) {
+        spheres.push(createProteinSphere(i));
+      }
+      updateOverlay();
+      groupZ = 0;
+      target = { x: 0, y: 0.25, z: 0 };
+      targetX = 0;
+      jumpPhase = 0;
+      spinnerHitCooldown = 0;
+
+      // Input
+      window.addEventListener('keydown', onKey);
+      renderer.domElement.addEventListener('click', onClick);
+      let touchStartX = 0;
+      renderer.domElement.addEventListener('touchstart', e => { if (gameActive) touchStartX = e.touches[0].clientX; });
+      renderer.domElement.addEventListener('touchend', e => {
+        if (!gameActive) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (dx > 50) moveTargetRight();
+        else if (dx < -50) moveTargetLeft();
+      });
+
+      setupLevel(level);
+
+      window.addEventListener('resize', onResize);
+      animate();
+    }
+
+    function setupLevel(lvl) {
+      let beams = 5 + Math.floor(lvl * 1.2);
+      let gates = beams;
+      let pathLen = 80 + lvl * 18;
+      let gateSpacing = pathLen / gates;
+      let beamSpacing = pathLen / beams;
+      let zStart = 30;
+      wakeUpWallZ = zStart + pathLen + 10;
+      minToWin = Math.max(5, 7 + Math.floor(lvl * 0.7));
+      if (window.gateLabels) { window.gateLabels.forEach(({el}) => el.remove()); window.gateLabels = []; }
+      for (let i = 0; i < beams; i++) {
+        spawnBeam(zStart + i * beamSpacing + 6);
+      }
+      for (let i = 0; i < gates; i++) {
+        spawnGate(zStart + i * gateSpacing);
+      }
+    }
+
+    function createProteinSphere(idx) {
+      const mat = new THREE.MeshPhysicalMaterial({ 
+        color: 0x2ad1ff,
+        metalness: 0.7,
+        roughness: 0.08,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.05,
+        emissive: 0x2ad1ff,
+        emissiveIntensity: 0.22,
+        transparent: true,
+        opacity: 0.7
+      });
+      const geo = new THREE.SphereGeometry(0.18, 40, 40);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.position.set(0, 0.18, 0);
+      mesh.userData = { vx: 0, vy: 0, vz: 0 };
+      scene.add(mesh);
+      return mesh;
+    }
+
+    function updateOverlay() {
+      document.getElementById('count').textContent = spheres.length;
+    }
+
+    // --- INPUT ---
+    function onKey(e) {
+      if (!gameActive) return;
+      if (e.code === 'ArrowLeft') moveTargetLeft();
+      if (e.code === 'ArrowRight') moveTargetRight();
+    }
+    function onClick(e) {
+      if (!gameActive) return;
+      if (e.clientX < window.innerWidth / 2) moveTargetLeft();
+      else moveTargetRight();
+    }
+    function moveTargetLeft() {
+      targetX = Math.min(targetX + 0.22, POINT_LIMIT); // left arrow increases x (moves left visually)
+    }
+    function moveTargetRight() {
+      targetX = Math.max(targetX - 0.22, -POINT_LIMIT); // right arrow decreases x (moves right visually)
+    }
+
+    // --- OBJECTS ---
+    function spawnBeam(z) {
+      const group = new THREE.Group();
+      const rodLen = pathWidth * 1.15;
+      const rodGeo = new THREE.BoxGeometry(rodLen, 0.22, 0.28);
+      const rodMat = new THREE.MeshPhysicalMaterial({ color: 0x8888ff, metalness: 0.92, roughness: 0.06, clearcoat: 1.0, opacity: 0.92, transparent: true, emissive: 0x8888ff, emissiveIntensity: 0.22 });
+      const rod = new THREE.Mesh(rodGeo, rodMat);
+      rod.position.y = 0.38;
+      rod.castShadow = true;
+      group.add(rod);
+      const side = Math.random() < 0.5 ? -1 : 1;
+      group.position.set(side * (pathWidth/2 - 0.1), 0, z);
+      group.userData = { type: 'beam', rot: Math.random() * Math.PI * 2, side, rodLen };
+      scene.add(group);
+      objects.push(group);
+    }
+    function spawnGate(z) {
+      const gateZ = z + 0.2;
+      const gateHeight = 1.7;
+      const gateWidth = pathWidth * 0.48;
+      const leftIsMore = Math.random() < 0.5;
+      const labelStyle = 'position:absolute;color:#fff;font-family:Nunito,Arial,sans-serif;font-size:0.95rem;font-weight:400;opacity:0.7;text-align:center;pointer-events:none;z-index:5;letter-spacing:0.5px;';
+      // More protein gate
+      const matMore = new THREE.MeshBasicMaterial({
+        color: 0x1aff99,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      const geo = new THREE.PlaneGeometry(gateWidth, gateHeight);
+      const meshMore = new THREE.Mesh(geo, matMore);
+      meshMore.position.set(leftIsMore ? -pathWidth/4 : pathWidth/4, 1.01, gateZ); // y=1.01 above ground
+      meshMore.renderOrder = 9999;
+      meshMore.userData = { type: 'gate', value: 2, positive: true };
+      scene.add(meshMore);
+      objects.push(meshMore);
+      // Less protein gate
+      const matLess = new THREE.MeshBasicMaterial({
+        color: 0xff4444,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      const meshLess = new THREE.Mesh(geo, matLess);
+      meshLess.position.set(leftIsMore ? pathWidth/4 : -pathWidth/4, 1.01, gateZ);
+      meshLess.renderOrder = 9999;
+      meshLess.userData = { type: 'gate', value: -1, positive: false };
+      scene.add(meshLess);
+      objects.push(meshLess);
+      if (!window.gateLabels) window.gateLabels = [];
+      const labelMore = document.createElement('div');
+      labelMore.textContent = '+protein';
+      labelMore.setAttribute('style', labelStyle);
+      document.body.appendChild(labelMore);
+      window.gateLabels.push({el: labelMore, mesh: meshMore, z: z});
+      const labelLess = document.createElement('div');
+      labelLess.textContent = '-protein';
+      labelLess.setAttribute('style', labelStyle);
+      document.body.appendChild(labelLess);
+      window.gateLabels.push({el: labelLess, mesh: meshLess, z: z});
+    }
+
+    // --- ANIMATION ---
+    function animate() {
+      if (!gameActive) return;
+      animationFrameId = requestAnimationFrame(animate);
+      camZ += groupSpeed;
+      camera.position.z = camZ - 6;
+      camera.lookAt(target.x, 0.5, camZ + 2);
+      // Limit targetX to 90% of path
+      targetX = Math.max(-POINT_LIMIT, Math.min(POINT_LIMIT, targetX));
+      target.x += (targetX - target.x) * 0.22;
+      target.z = camZ + 1.5;
+      jumpPhase += 0.07;
+      let fallen = [];
+      // --- Spheres move toward point, with acceleration physics ---
+      let desiredPositions = [];
+      for (let i = 0; i < spheres.length; i++) {
+        let angle = (i / spheres.length) * Math.PI * 2;
+        let radius = 0.22 + 0.09 * (spheres.length > 1 ? 1 : 0);
+        let tx = target.x + Math.cos(angle) * radius;
+        let tz = target.z + Math.sin(angle) * radius * 0.5;
+        desiredPositions.push({x: tx, z: tz});
+      }
+      // Simple collision avoidance: push apart if too close
+      for (let i = 0; i < spheres.length; i++) {
+        let pos = {...desiredPositions[i]};
+        for (let j = 0; j < spheres.length; j++) {
+          if (i === j) continue;
+          let dx = pos.x - desiredPositions[j].x;
+          let dz = pos.z - desiredPositions[j].z;
+          let dist = Math.sqrt(dx*dx + dz*dz);
+          if (dist < 0.19) {
+            let push = (0.19 - dist) * 0.5;
+            if (dist > 0.001) {
+              pos.x += (dx/dist) * push;
+              pos.z += (dz/dist) * push;
+            } else {
+              pos.x += 0.01 * (Math.random()-0.5);
+              pos.z += 0.01 * (Math.random()-0.5);
+            }
+          }
+        }
+        // --- Physics-based movement ---
+        let s = spheres[i];
+        let ux = pos.x - s.position.x;
+        let uz = pos.z - s.position.z;
+        // Spring force toward target
+        let ax = ux * 0.32;
+        let az = uz * 0.32;
+        // Damping
+        s.userData.vx = (s.userData.vx || 0) * 0.72 + ax;
+        s.userData.vz = (s.userData.vz || 0) * 0.72 + az;
+        // Immediate, responsive movement
+        s.position.x += s.userData.vx;
+        s.position.z += s.userData.vz;
+        // Y (jump motion, immediate)
+        let baseY = 0.13 + 0.07 * Math.sin(jumpPhase + i * 1.7);
+        s.position.y += (baseY - s.position.y) * 0.32;
+        if (s.position.x < -pathWidth/2 || s.position.x > pathWidth/2) {
+          fallen.push(i);
+        }
+      }
+      if (fallen.length > 0) {
+        for (let j = fallen.length-1; j >= 0; j--) {
+          let idx = fallen[j];
+          scene.remove(spheres[idx]);
+          spheres.splice(idx, 1);
+          playFallSound();
+        }
+        updateOverlay();
+        if (spheres.length === 0) {
+          endGame('All proteins lost!');
+          playLoseSound();
+          return;
+        }
+      }
+      for (let i = objects.length - 1; i >= 0; i--) {
+        let o = objects[i];
+        o.position.z -= groupSpeed;
+        if (o.userData.type === 'beam') {
+          o.userData.rot += 0.022;
+          o.rotation.y = o.userData.rot;
+          let tipX = o.position.x + Math.cos(o.userData.rot) * (o.userData.rodLen/2);
+          let tipZ = o.position.z + Math.sin(o.userData.rot) * (o.userData.rodLen/2);
+          for (let s of spheres.slice()) {
+            let dx = s.position.x - tipX;
+            let dz = s.position.z - tipZ;
+            if (Math.abs(dz) < 0.18 && Math.abs(dx) < 0.18) {
+              scene.remove(s);
+              spheres.splice(spheres.indexOf(s), 1);
+              updateOverlay();
+              playBeamSound();
+              if (spheres.length === 0) {
+                endGame('All proteins degraded!');
+                playLoseSound();
+                return;
+              }
+            }
+          }
+        } else if (o.userData.type === 'gate') {
+          for (let s of spheres) {
+            let dx = s.position.x - o.position.x;
+            let dz = s.position.z - o.position.z;
+            if (Math.abs(dz) < 0.5 && Math.abs(dx) < pathWidth*0.4) {
+              if (o.userData.value > 0 && spheres.length < maxProteins) {
+                for (let k = 0; k < o.userData.value; k++) {
+                  if (spheres.length < maxProteins) {
+                    let newS = createProteinSphere(spheres.length);
+                    spheres.push(newS);
+                  }
+                }
+                playGateSound(true);
+              } else if (o.userData.value < 0 && spheres.length > minProteins) {
+                for (let k = 0; k < Math.abs(o.userData.value); k++) {
+                  if (spheres.length > minProteins) {
+                    scene.remove(spheres[spheres.length-1]);
+                    spheres.pop();
+                  }
+                }
+                playGateSound(false);
+              }
+              updateOverlay();
+              scene.remove(o);
+              objects.splice(i, 1);
+              break;
+            }
+          }
+        } else if (o.userData.type === 'goal') {
+          let reached = 0;
+          for (let s of spheres) {
+            let dz = s.position.z - o.position.z;
+            if (dz > -0.5 && dz < 0.5) reached++;
+          }
+          if (reached > 0) {
+            if (spheres.length >= minToWin) {
+              endGame('You Win! Wake-up threshold reached!');
+              playWinSound();
+            } else {
+              endGame('Not enough CLOCK proteins reached the wall.');
+              playLoseSound();
+            }
+            return;
+          }
+        }
+        if (o.position.z < camZ - 8) {
+          scene.remove(o);
+          objects.splice(i, 1);
+        }
+      }
+      let maxZ = Math.max(...objects.map(o=>o.position.z), camZ);
+      while (maxZ < camZ + 80 && maxZ < wakeUpWallZ - 2) {
+        spawnBeam(maxZ + 18);
+        spawnGate(maxZ + 10);
+        maxZ += 18;
+      }
+      if (spinnerHitCooldown > 0) spinnerHitCooldown--;
+      if (window.gateLabels) {
+        for (const {el, mesh, z} of window.gateLabels) {
+          if (Math.abs(mesh.position.z - camZ) < 8) {
+            const vector = mesh.position.clone();
+            vector.project(camera);
+            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+            el.style.left = (x - 32) + 'px';
+            el.style.top = (y - 18) + 'px';
+            el.style.display = 'block';
+          } else {
+            el.style.display = 'none';
+          }
+        }
+      }
+      for (let o of objects) {
+        if (o.userData && o.userData.type === 'goal') {
+          if (!o.userData.label) {
+            const label = document.createElement('div');
+            label.textContent = 'WAKE UP WALL';
+            label.style = 'position:absolute;color:#fff;font-family:Nunito,Arial,sans-serif;font-size:1.1rem;font-weight:700;opacity:0.8;text-align:center;pointer-events:none;z-index:5;letter-spacing:1px;text-shadow:0 0 8px #000,0 0 4px #fff;';
+            document.body.appendChild(label);
+            o.userData.label = label;
+          }
+          const vector = o.position.clone();
+          vector.y += 1.2;
+          vector.project(camera);
+          const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+          const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+          o.userData.label.style.left = (x - 60) + 'px';
+          o.userData.label.style.top = (y - 22) + 'px';
+          o.userData.label.style.display = (Math.abs(o.position.z - camZ) < 12) ? 'block' : 'none';
+        }
+      }
+      renderer.render(scene, camera);
+    }
+
+    function endGame(msg) {
+      gameActive = false;
+      document.getElementById('message-text').textContent = msg + (msg.includes('Win') ? `\nLevel ${level} complete!` : '');
+      document.getElementById('message').style.display = 'block';
+      if (window.gateLabels) window.gateLabels.forEach(({el}) => el.remove());
+      for (let o of objects) if (o.userData && o.userData.label) o.userData.label.remove();
+      if (msg.includes('Win')) {
+        setTimeout(() => {
+          level++;
+          resetGame(true);
+        }, 2000);
+      }
+    }
+    function resetGame(nextLevel) {
+      if (renderer) renderer.domElement.remove();
+      spheres = [];
+      objects = [];
+      clockProteins = initialClockProteins;
+      document.getElementById('message').style.display = 'none';
+      if (!nextLevel) {
+        document.getElementById('startScreen').style.display = 'flex';
+        gameStarted = false;
+        level = 1;
+      } else {
+        document.getElementById('startScreen').style.display = 'none';
+        gameStarted = true;
+        startGame();
+      }
+    }
+    function onResize() {
+      if (!renderer || !camera) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+  </script>
+</body>
+</html>
+``` 

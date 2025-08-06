@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioWordle - Biology Word Puzzle Game</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --primary-light: #6ba3f0;
+            --primary-dark: #357abd;
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --shadow-light: #ffffff;
+            --shadow-dark: #d1d9e6;
+            --correct: #6aaa64;
+            --present: #c9b458;
+            --absent: #787c7e;
+            --border-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            outline: none;
+        }
+
+        /* Prevent focus outline on game elements */
+        .letter-tile, .key, .game-board {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Ensure the page always stays focused on the game */
+        body:focus {
+            outline: none;
+        }
+
+        /* Neumorphic styling */
+        .neu-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            border: none;
+        }
+
+        .neu-button {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+
+        .neu-button:hover {
+            box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+        }
+
+        .neu-button:active {
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .neu-input {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 12px;
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+
+        /* Header */
+        .header {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--shadow-dark);
+            background: var(--card-bg);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        /* Game Board */
+        .game-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            gap: 8px;
+            margin: 2rem 0;
+            padding: 1.5rem;
+        }
+
+        .word-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .letter-tile {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 8px;
+            background: var(--card-bg);
+            box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .letter-tile.filled {
+            border-color: var(--primary-color);
+        }
+
+        .letter-tile.correct {
+            background: var(--correct) !important;
+            color: white !important;
+            box-shadow: none !important;
+            border-color: var(--correct) !important;
+        }
+
+        .letter-tile.present {
+            background: var(--present) !important;
+            color: white !important;
+            box-shadow: none !important;
+            border-color: var(--present) !important;
+        }
+
+        .letter-tile.absent {
+            background: var(--absent) !important;
+            color: white !important;
+            box-shadow: none !important;
+            border-color: var(--absent) !important;
+        }
+
+        /* Keyboard */
+        .keyboard {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .key {
+            min-width: 40px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .key.wide {
+            min-width: 80px;
+            font-size: 0.8rem;
+        }
+
+        .key.correct {
+            background: var(--correct) !important;
+            color: white !important;
+            box-shadow: none !important;
+        }
+
+        .key.present {
+            background: var(--present) !important;
+            color: white !important;
+            box-shadow: none !important;
+        }
+
+        .key.absent {
+            background: var(--absent) !important;
+            color: white !important;
+            box-shadow: none !important;
+        }
+
+        /* Stats and Timer */
+        .stats-timer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+        }
+
+        .timer {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Modals */
+        .modal-content {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--shadow-dark);
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1060;
+        }
+
+        .toast {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .keyboard {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--card-bg);
+                border-top: 1px solid var(--shadow-dark);
+                z-index: 1000;
+                padding: 1rem;
+                box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .game-container {
+                padding-bottom: 200px;
+            }
+
+            .key {
+                min-width: 32px;
+                height: 44px;
+                font-size: 0.9rem;
+            }
+
+            .key.wide {
+                min-width: 70px;
+            }
+
+            .letter-tile {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .keyboard {
+                position: relative;
+                background: transparent;
+                border-top: none;
+                z-index: auto;
+                box-shadow: none;
+                margin-top: 2rem;
+            }
+
+            .game-container {
+                padding-bottom: 0;
+            }
+
+            .key {
+                min-width: 45px;
+                height: 52px;
+                font-size: 1rem;
+            }
+
+            .key.wide {
+                min-width: 90px;
+            }
+        }
+
+        /* Animations */
+        @keyframes flip {
+            0% { transform: rotateY(0); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .flip {
+            animation: flip 0.6s ease-in-out;
+        }
+
+        .bounce {
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        /* Help content styling */
+        .help-example {
+            display: flex;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+
+        .help-tile {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border-radius: 4px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="logo">
+                        <i class="fas fa-dna me-2"></i>BioWordle
+                    </h1>
+                </div>
+                <div class="col-auto">
+                    <button class="neu-button btn me-2" data-bs-toggle="modal" data-bs-target="#helpModal">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    <button class="neu-button btn me-2" data-bs-toggle="modal" data-bs-target="#statsModal">
+                        <i class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="neu-button btn" id="hintBtn">
+                        <i class="fas fa-lightbulb"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <!-- Stats and Timer -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="stats-timer neu-card">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="gamesPlayed">0</div>
+                            <div class="stat-label">Played</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="winPercentage">0</div>
+                            <div class="stat-label">Win %</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="currentStreak">0</div>
+                            <div class="stat-label">Streak</div>
+                        </div>
+                    </div>
+                    <div class="timer">
+                        <i class="fas fa-clock me-1"></i>
+                        <span id="nextPuzzleTimer">24:00:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Board -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="game-container">
+                    <div class="game-board neu-card" id="gameBoard">
+                        <!-- Game rows will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual Keyboard (Mobile) -->
+        <div class="keyboard" id="virtualKeyboard">
+            <div class="keyboard-row">
+                <div class="key neu-button" data-key="Q">Q</div>
+                <div class="key neu-button" data-key="W">W</div>
+                <div class="key neu-button" data-key="E">E</div>
+                <div class="key neu-button" data-key="R">R</div>
+                <div class="key neu-button" data-key="T">T</div>
+                <div class="key neu-button" data-key="Y">Y</div>
+                <div class="key neu-button" data-key="U">U</div>
+                <div class="key neu-button" data-key="I">I</div>
+                <div class="key neu-button" data-key="O">O</div>
+                <div class="key neu-button" data-key="P">P</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key neu-button" data-key="A">A</div>
+                <div class="key neu-button" data-key="S">S</div>
+                <div class="key neu-button" data-key="D">D</div>
+                <div class="key neu-button" data-key="F">F</div>
+                <div class="key neu-button" data-key="G">G</div>
+                <div class="key neu-button" data-key="H">H</div>
+                <div class="key neu-button" data-key="J">J</div>
+                <div class="key neu-button" data-key="K">K</div>
+                <div class="key neu-button" data-key="L">L</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key neu-button wide" data-key="Enter">ENTER</div>
+                <div class="key neu-button" data-key="Z">Z</div>
+                <div class="key neu-button" data-key="X">X</div>
+                <div class="key neu-button" data-key="C">C</div>
+                <div class="key neu-button" data-key="V">V</div>
+                <div class="key neu-button" data-key="B">B</div>
+                <div class="key neu-button" data-key="N">N</div>
+                <div class="key neu-button" data-key="M">M</div>
+                <div class="key neu-button wide" data-key="Backspace">
+                    <i class="fas fa-backspace"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-question-circle me-2"></i>How to Play BioWordle
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Guess the biology word in 6 tries!</strong></p>
+                    
+                    <ul class="list-unstyled">
+                        <li class="mb-2">• Each guess must be a valid 5-letter biology term</li>
+                        <li class="mb-2">• Hit the enter button to submit your guess</li>
+                        <li class="mb-2">• After each guess, the color of the tiles will change to show how close your guess was</li>
+                    </ul>
+
+                    <h6 class="mt-4 mb-3">Examples:</h6>
+                    
+                    <div class="help-example">
+                        <div class="help-tile" style="background: var(--correct)">D</div>
+                        <div class="help-tile" style="background: var(--absent)">N</div>
+                        <div class="help-tile" style="background: var(--absent)">A</div>
+                        <div class="help-tile" style="background: var(--absent)">S</div>
+                        <div class="help-tile" style="background: var(--absent)">E</div>
+                    </div>
+                    <p class="small text-muted">The letter <strong>D</strong> is in the word and in the correct spot.</p>
+
+                    <div class="help-example">
+                        <div class="help-tile" style="background: var(--absent)">C</div>
+                        <div class="help-tile" style="background: var(--present)">E</div>
+                        <div class="help-tile" style="background: var(--absent)">L</div>
+                        <div class="help-tile" style="background: var(--absent)">L</div>
+                        <div class="help-tile" style="background: var(--absent)">S</div>
+                    </div>
+                    <p class="small text-muted">The letter <strong>E</strong> is in the word but in the wrong spot.</p>
+
+                    <div class="help-example">
+                        <div class="help-tile" style="background: var(--absent)">V</div>
+                        <div class="help-tile" style="background: var(--absent)">I</div>
+                        <div class="help-tile" style="background: var(--absent)">R</div>
+                        <div class="help-tile" style="background: var(--absent)">U</div>
+                        <div class="help-tile" style="background: var(--absent)">S</div>
+                    </div>
+                    <p class="small text-muted">The letter <strong>S</strong> is not in the word in any spot.</p>
+
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6><i class="fas fa-lightbulb text-warning me-2"></i>Hint Available</h6>
+                        <p class="mb-0 small">Click the hint button for a definition of today's word (can only be used once per day).</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div class="modal fade" id="statsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-chart-bar me-2"></i>Statistics
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row text-center">
+                        <div class="col-3">
+                            <div class="stat-number" id="modalGamesPlayed">0</div>
+                            <div class="stat-label">Played</div>
+                        </div>
+                        <div class="col-3">
+                            <div class="stat-number" id="modalWinPercentage">0</div>
+                            <div class="stat-label">Win %</div>
+                        </div>
+                        <div class="col-3">
+                            <div class="stat-number" id="modalCurrentStreak">0</div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                        <div class="col-3">
+                            <div class="stat-number" id="modalMaxStreak">0</div>
+                            <div class="stat-label">Max Streak</div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="mt-4 mb-3">Guess Distribution</h6>
+                    <div id="guessDistribution">
+                        <!-- Distribution bars will be generated by JavaScript -->
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <h6>Next BioWordle</h6>
+                        <div class="timer">
+                            <i class="fas fa-clock me-1"></i>
+                            <span id="modalNextPuzzleTimer">24:00:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Congratulations Modal -->
+    <div class="modal fade" id="congratulationsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-trophy me-2"></i>Congratulations!
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-trophy fa-3x text-warning"></i>
+                    </div>
+                    <h4 id="congratsMessage">Well done!</h4>
+                    <p id="congratsDetails">You solved today's WordWiz!</p>
+                    
+                    <div class="mt-4">
+                        <h6>Word Definition:</h6>
+                        <p id="wordDefinition" class="text-muted"></p>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6>Next BioWordle in:</h6>
+                        <div class="timer">
+                            <i class="fas fa-clock me-1"></i>
+                            <span id="congratsTimer">24:00:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statsModal" data-bs-dismiss="modal">
+                        <i class="fas fa-chart-bar me-2"></i>View Stats
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <div id="gameToast" class="toast" role="alert">
+            <div class="toast-body">
+                <span id="toastMessage"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables for word data
+        let BIO_WORDS = {};
+        let ENGLISH_WORDS = {};
+        let FIVE_LETTER_BIO_WORDS = [];
+        let FIVE_LETTER_ENGLISH_WORDS = [];
+        let ALL_VALID_WORDS = [];
+        let WORD_MEANINGS = {};
+
+        // Game state
+        let gameState = {
+            currentWord: '',
+            currentDefinition: '',
+            currentRow: 0,
+            currentCol: 0,
+            gameOver: false,
+            won: false,
+            guesses: [],
+            letterStates: {},
+            hintUsed: false
+        };
+
+        // Statistics
+        let stats = {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            guessDistribution: [0, 0, 0, 0, 0, 0]
+        };
+
+        // Load biology words from JSON file
+        async function loadWordsData() {
+            try {
+                // Load bio dictionary first
+                const bioResponse = await fetch('./bio_dictionary.json');
+                BIO_WORDS = await bioResponse.json();
+                
+                // Load 5-letter English words list
+                const englishResponse = await fetch('./5-letter-words.json');
+                const englishWordsList = await englishResponse.json();
+                
+                // Filter 5-letter bio words and create word meanings mapping
+                FIVE_LETTER_BIO_WORDS = [];
+                WORD_MEANINGS = {};
+                
+                for (const [word, definition] of Object.entries(BIO_WORDS)) {
+                    if (word.length === 5) {
+                        const upperWord = word.toUpperCase();
+                        
+                        // Filter out definitions that are just references or too short
+                        const cleanDef = definition.toLowerCase().trim();
+                        const isReferenceOnly = cleanDef.match(/^see\s+[a-z]/i) ||                    // "See word"
+                                               cleanDef.match(/^compare\s+[a-z]/i) ||                // "Compare word" 
+                                               cleanDef.match(/^[a-z\s]+\s+see\s+[a-z]/i) ||        // "RNA See RNA"
+                                               cleanDef.match(/^see\s+[a-z\s;,]+\.?$/i) ||          // "See word1; word2."
+                                               cleanDef.match(/^also\s+called/i) ||                 // "Also called..."
+                                               cleanDef.match(/^from\s+[a-z]/i) ||                  // "From [language]"
+                                               cleanDef.match(/^cf\.\s/i);                          // "cf. word"
+                        
+                        const isValidDefinition = !isReferenceOnly && 
+                                                 definition.trim().length > 20; // Ensure substantial definition
+                        
+                        if (isValidDefinition) {
+                            FIVE_LETTER_BIO_WORDS.push(upperWord);
+                            // Clean up definition by removing markdown-style references
+                            const cleanDefinition = definition
+                                .replace(/\*([^*]+)\*/g, '$1')  // Remove *word* formatting
+                                .replace(/\s+/g, ' ')           // Normalize whitespace
+                                .trim();
+                            WORD_MEANINGS[upperWord] = cleanDefinition;
+                        }
+                    }
+                }
+                
+                // Convert English words list to uppercase for validation
+                FIVE_LETTER_ENGLISH_WORDS = englishWordsList.map(word => word.toUpperCase());
+                
+                // Combine all valid words for guessing
+                ALL_VALID_WORDS = [...new Set([...FIVE_LETTER_BIO_WORDS, ...FIVE_LETTER_ENGLISH_WORDS])];
+                
+                console.log(`Loaded ${FIVE_LETTER_BIO_WORDS.length} biology words`);
+                console.log(`Loaded ${FIVE_LETTER_ENGLISH_WORDS.length} English words`);
+                console.log(`Total valid guesses: ${ALL_VALID_WORDS.length}`);
+                return true;
+            } catch (error) {
+                console.error('Error loading words data:', error);
+                // Fallback to basic biology words if JSON fails to load
+                FIVE_LETTER_BIO_WORDS = ['GENES', 'CELLS', 'VIRUS', 'PLANT', 'BRAIN'];
+                ALL_VALID_WORDS = ['GENES', 'CELLS', 'VIRUS', 'PLANT', 'BRAIN', 'WORDS', 'HELLO', 'WORLD', 'RIVER', 'DRIVE'];
+                WORD_MEANINGS = {
+                    'GENES': 'Units of heredity that are transferred from a parent to offspring',
+                    'CELLS': 'The basic structural and functional units of living organisms',
+                    'VIRUS': 'A microscopic infectious agent that replicates inside living cells',
+                    'PLANT': 'A living organism that typically grows in soil and has leaves',
+                    'BRAIN': 'The organ inside the head that controls thought and feeling',
+                    'WORDS': 'Units of language consisting of one or more morphemes',
+                    'HELLO': 'A greeting or salutation',
+                    'WORLD': 'The earth and all its inhabitants',
+                    'RIVER': 'A large natural stream of water flowing in a channel',
+                    'DRIVE': 'To operate a vehicle or to compel forward'
+                };
+                return false;
+            }
+        }
+
+        // Generate scheduled words for the next 30 days using loaded words
+        function generateScheduledWords() {
+            const scheduledWords = [];
+            const today = new Date();
+            
+            // Select interesting biology words for scheduling (shuffle first 30 bio words)
+            const selectedWords = FIVE_LETTER_BIO_WORDS.slice(0, Math.min(100, FIVE_LETTER_BIO_WORDS.length))
+                                    .sort(() => Math.random() - 0.5)
+                                    .slice(0, 30);
+            
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const dateString = date.toISOString().split('T')[0];
+                
+                const word = selectedWords[i] || FIVE_LETTER_BIO_WORDS[i % FIVE_LETTER_BIO_WORDS.length];
+                scheduledWords.push({
+                    word: word,
+                    definition: WORD_MEANINGS[word] || 'A biology-related term',
+                    date: dateString
+                });
+            }
+            
+            return scheduledWords;
+        }
+
+        // Initialize game
+        async function initGame() {
+            // Show loading state
+            const gameBoard = document.getElementById('gameBoard');
+            gameBoard.innerHTML = '<div class="text-center p-4">Loading words...</div>';
+            
+            // Debug: Check for any URL parameters that might force a reset
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('reset') === 'true') {
+                console.log('🔄 FORCE RESET REQUESTED');
+                const today = new Date().toISOString().split('T')[0];
+                localStorage.removeItem(`biowordle-${today}`);
+                localStorage.removeItem('biowordle-stats');
+            }
+            
+            // Load words data first
+            const wordsLoaded = await loadWordsData();
+            
+            if (wordsLoaded) {
+                loadStats();
+                await setTodaysWord();
+                createGameBoard();
+                updateStatsDisplay();
+                startTimer();
+                loadGameState();
+                
+                // Debug: Log final game state
+                console.log('🎮 FINAL GAME STATE:');
+                console.log('Current word:', gameState.currentWord);
+                console.log('Word definition:', gameState.currentDefinition);
+                console.log('Game state:', gameState);
+            } else {
+                // Show error state
+                gameBoard.innerHTML = '<div class="text-center p-4 text-danger">Error loading words. Using fallback words.</div>';
+                setTimeout(async () => {
+                    loadStats();
+                    await setTodaysWord();
+                    createGameBoard();
+                    updateStatsDisplay();
+                    startTimer();
+                    loadGameState();
+                    
+                    // Debug: Log final game state
+                    console.log('🎮 FINAL GAME STATE (FALLBACK):');
+                    console.log('Current word:', gameState.currentWord);
+                    console.log('Word definition:', gameState.currentDefinition);
+                    console.log('Game state:', gameState);
+                }, 2000);
+            }
+        }
+
+        // Set today's word based on date
+        async function setTodaysWord() {
+            const today = new Date().toISOString().split('T')[0];
+            console.log('=== WORD SELECTION DEBUG ===');
+            console.log('Today\'s date:', today);
+            console.log('Local date:', new Date().toString());
+            console.log('UTC date:', new Date().toUTCString());
+            
+            try {
+                // Try to load today's word from today.json
+                const response = await fetch('today.json?t=' + Date.now()); // Cache busting
+                const scheduledWords = await response.json();
+                console.log('Loaded scheduled words:', scheduledWords);
+                console.log('Word for today (' + today + '):', scheduledWords[today]);
+                
+                if (scheduledWords[today]) {
+                    const word = scheduledWords[today].toUpperCase();
+                    gameState.currentWord = word;
+                    gameState.currentDefinition = WORD_MEANINGS[word] || 'A biology-related term';
+                    console.log('✅ TODAY\'S SCHEDULED WORD:', word);
+                    console.log('✅ WORD DEFINITION:', gameState.currentDefinition);
+                    return;
+                } else {
+                    console.log('❌ No word found for today in scheduled words');
+                }
+            } catch (error) {
+                console.log('❌ Could not load today.json, using fallback:', error);
+            }
+            
+            // Fallback to a random biology word if no scheduled word for today
+            if (FIVE_LETTER_BIO_WORDS.length > 0) {
+                const randomIndex = Math.floor(Math.random() * FIVE_LETTER_BIO_WORDS.length);
+                gameState.currentWord = FIVE_LETTER_BIO_WORDS[randomIndex];
+                gameState.currentDefinition = WORD_MEANINGS[gameState.currentWord] || 'A biology-related term';
+                console.log('⚠️ USING FALLBACK WORD:', gameState.currentWord);
+            } else {
+                // Ultimate fallback
+                gameState.currentWord = 'GENES';
+                gameState.currentDefinition = 'Units of heredity that are transferred from a parent to offspring';
+                console.log('⚠️ USING ULTIMATE FALLBACK: GENES');
+            }
+            console.log('=== END WORD SELECTION DEBUG ===');
+        }
+
+        // Create game board
+        function createGameBoard() {
+            const gameBoard = document.getElementById('gameBoard');
+            gameBoard.innerHTML = '';
+            
+            for (let row = 0; row < 6; row++) {
+                const wordRow = document.createElement('div');
+                wordRow.className = 'word-row';
+                
+                for (let col = 0; col < 5; col++) {
+                    const letterTile = document.createElement('div');
+                    letterTile.className = 'letter-tile';
+                    letterTile.id = `tile-${row}-${col}`;
+                    wordRow.appendChild(letterTile);
+                }
+                
+                gameBoard.appendChild(wordRow);
+            }
+        }
+
+        // Handle keyboard input
+        function handleKeyPress(key) {
+            if (gameState.gameOver) return;
+
+            if (key === 'Enter') {
+                submitGuess();
+            } else if (key === 'Backspace') {
+                deleteLetter();
+            } else if (key.match(/[A-Z]/i) && key.length === 1) {
+                addLetter(key.toUpperCase());
+            }
+        }
+
+        // Add letter to current position
+        function addLetter(letter) {
+            if (gameState.currentCol < 5) {
+                const tile = document.getElementById(`tile-${gameState.currentRow}-${gameState.currentCol}`);
+                tile.textContent = letter;
+                tile.classList.add('filled');
+                tile.classList.add('bounce');
+                setTimeout(() => tile.classList.remove('bounce'), 500);
+                gameState.currentCol++;
+            }
+        }
+
+        // Delete last letter
+        function deleteLetter() {
+            if (gameState.currentCol > 0) {
+                gameState.currentCol--;
+                const tile = document.getElementById(`tile-${gameState.currentRow}-${gameState.currentCol}`);
+                tile.textContent = '';
+                tile.classList.remove('filled');
+            }
+        }
+
+        // Submit current guess
+        function submitGuess() {
+            if (gameState.currentCol !== 5) {
+                showToast('Not enough letters');
+                return;
+            }
+
+            const guess = getCurrentGuess();
+            
+            if (!isValidWord(guess)) {
+                showToast('Not in the word list');
+                return;
+            }
+
+            gameState.guesses.push(guess);
+            evaluateGuess(guess);
+            
+            if (guess === gameState.currentWord) {
+                gameState.won = true;
+                gameState.gameOver = true;
+                updateStats(true);
+                setTimeout(() => showCongratulations(), 1500);
+            } else if (gameState.currentRow === 5) {
+                gameState.gameOver = true;
+                updateStats(false);
+                setTimeout(() => showGameOver(), 1500);
+            } else {
+                gameState.currentRow++;
+                gameState.currentCol = 0;
+            }
+            
+            saveGameState();
+        }
+
+        // Get current guess
+        function getCurrentGuess() {
+            let guess = '';
+            for (let col = 0; col < 5; col++) {
+                const tile = document.getElementById(`tile-${gameState.currentRow}-${col}`);
+                guess += tile.textContent;
+            }
+            return guess;
+        }
+
+        // Check if word is valid
+        function isValidWord(word) {
+            return ALL_VALID_WORDS.includes(word);
+        }
+
+        // Evaluate guess and update tiles
+        function evaluateGuess(guess, rowIndex = null) {
+            const wordArray = gameState.currentWord.split('');
+            const guessArray = guess.split('');
+            const result = ['absent', 'absent', 'absent', 'absent', 'absent'];
+            const targetRow = rowIndex !== null ? rowIndex : gameState.currentRow;
+            
+            // Make working copies for tracking used letters
+            const wordCopy = [...wordArray];
+            const guessCopy = [...guessArray];
+            
+            // First pass: Mark all correct letters (green)
+            for (let i = 0; i < 5; i++) {
+                if (guessCopy[i] === wordCopy[i]) {
+                    result[i] = 'correct';
+                    wordCopy[i] = null; // Mark as used
+                    guessCopy[i] = null; // Mark as processed
+                }
+            }
+            
+            // Second pass: Mark present letters (yellow)
+            for (let i = 0; i < 5; i++) {
+                if (guessCopy[i] !== null) { // Only check unprocessed letters
+                    const foundIndex = wordCopy.indexOf(guessCopy[i]);
+                    if (foundIndex !== -1) {
+                        result[i] = 'present';
+                        wordCopy[foundIndex] = null; // Mark as used
+                    }
+                }
+            }
+            
+            // Update tiles with animation (only if this is the current guess, not restoring)
+            for (let i = 0; i < 5; i++) {
+                const tile = document.getElementById(`tile-${targetRow}-${i}`);
+                const letter = guess[i];
+                
+                if (rowIndex === null) {
+                    // Current guess - animate
+                    setTimeout(() => {
+                        tile.classList.add('flip');
+                        setTimeout(() => {
+                            tile.classList.add(result[i]);
+                            updateKeyboardKey(letter, result[i]);
+                        }, 300);
+                    }, i * 100);
+                } else {
+                    // Restoring saved game - no animation
+                    tile.classList.add(result[i]);
+                    updateKeyboardKey(letter, result[i]);
+                }
+                
+                // Update letter states with proper priority (correct > present > absent)
+                const currentState = gameState.letterStates[letter];
+                if (!currentState || 
+                    (currentState === 'absent' && result[i] !== 'absent') ||
+                    (currentState === 'present' && result[i] === 'correct')) {
+                    gameState.letterStates[letter] = result[i];
+                }
+            }
+        }
+
+        // Update keyboard key color with priority system
+        function updateKeyboardKey(letter, state) {
+            const key = document.querySelector(`[data-key="${letter}"]`);
+            if (key) {
+                // Only update if the new state has higher priority
+                const currentClasses = key.classList;
+                const hasCorrect = currentClasses.contains('correct');
+                const hasPresent = currentClasses.contains('present');
+                
+                // Priority: correct > present > absent
+                if (state === 'correct' || 
+                    (state === 'present' && !hasCorrect) || 
+                    (state === 'absent' && !hasCorrect && !hasPresent)) {
+                    key.classList.remove('correct', 'present', 'absent');
+                    key.classList.add(state);
+                }
+            }
+        }
+
+        // Show congratulations modal
+        function showCongratulations() {
+            const guessCount = gameState.currentRow + 1;
+            const messages = [
+                'Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'
+            ];
+            
+            document.getElementById('congratsMessage').textContent = messages[gameState.currentRow];
+            document.getElementById('congratsDetails').textContent = `You solved today's BioWordle in ${guessCount} ${guessCount === 1 ? 'try' : 'tries'}!`;
+            document.getElementById('wordDefinition').textContent = gameState.currentDefinition;
+            
+            const modal = new bootstrap.Modal(document.getElementById('congratulationsModal'));
+            modal.show();
+        }
+
+        // Show game over message
+        function showGameOver() {
+            showToast(`The word was ${gameState.currentWord}`, 5000);
+            
+            // Show definition after a short delay
+            setTimeout(() => {
+                showToast(`Definition: ${gameState.currentDefinition}`, 7000);
+            }, 3000);
+        }
+
+        // Update statistics
+        function updateStats(won) {
+            stats.gamesPlayed++;
+            
+            if (won) {
+                stats.gamesWon++;
+                stats.currentStreak++;
+                stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
+                stats.guessDistribution[gameState.currentRow]++;
+            } else {
+                stats.currentStreak = 0;
+            }
+            
+            saveStats();
+            updateStatsDisplay();
+        }
+
+        // Update stats display
+        function updateStatsDisplay() {
+            const winPercentage = stats.gamesPlayed > 0 ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) : 0;
+            
+            document.getElementById('gamesPlayed').textContent = stats.gamesPlayed;
+            document.getElementById('winPercentage').textContent = winPercentage;
+            document.getElementById('currentStreak').textContent = stats.currentStreak;
+            
+            document.getElementById('modalGamesPlayed').textContent = stats.gamesPlayed;
+            document.getElementById('modalWinPercentage').textContent = winPercentage;
+            document.getElementById('modalCurrentStreak').textContent = stats.currentStreak;
+            document.getElementById('modalMaxStreak').textContent = stats.maxStreak;
+            
+            updateGuessDistribution();
+        }
+
+        // Update guess distribution chart
+        function updateGuessDistribution() {
+            const container = document.getElementById('guessDistribution');
+            container.innerHTML = '';
+            
+            const maxGuesses = Math.max(...stats.guessDistribution, 1);
+            const todayGuesses = gameState.won ? gameState.currentRow + 1 : 0;
+            
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('div');
+                row.className = 'd-flex align-items-center mb-1';
+                
+                const label = document.createElement('div');
+                label.className = 'me-2';
+                label.style.minWidth = '20px';
+                label.textContent = i + 1;
+                
+                const bar = document.createElement('div');
+                bar.className = 'flex-grow-1 rounded d-flex align-items-center justify-content-end';
+                bar.style.height = '20px';
+                bar.style.minWidth = '20px';
+                
+                // Highlight today's result if the game was won
+                if (gameState.won && todayGuesses === i + 1) {
+                    bar.style.background = 'var(--correct)';
+                    bar.style.color = 'white';
+                    bar.style.fontWeight = 'bold';
+                } else {
+                    bar.style.background = 'var(--primary-color)';
+                    bar.style.color = 'white';
+                }
+                
+                const percentage = stats.guessDistribution[i] > 0 ? 
+                    Math.max((stats.guessDistribution[i] / maxGuesses) * 100, 8) : 8;
+                bar.style.width = `${percentage}%`;
+                
+                const count = document.createElement('span');
+                count.className = 'px-2';
+                count.style.fontSize = '0.85rem';
+                count.textContent = stats.guessDistribution[i];
+                bar.appendChild(count);
+                
+                row.appendChild(label);
+                row.appendChild(bar);
+                container.appendChild(row);
+            }
+        }
+
+        // Timer functionality
+        function startTimer() {
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('nextPuzzleTimer').textContent = timeString;
+            document.getElementById('modalNextPuzzleTimer').textContent = timeString;
+            document.getElementById('congratsTimer').textContent = timeString;
+        }
+
+        // Show hint
+        function showHint() {
+            if (gameState.hintUsed) {
+                showToast('You\'ve already used your hint for today');
+                return;
+            }
+            
+            gameState.hintUsed = true;
+            showToast(`Hint: ${gameState.currentDefinition}`, 5000);
+            saveGameState();
+        }
+
+        // Show toast notification
+        function showToast(message, duration = 2000) {
+            document.getElementById('toastMessage').textContent = message;
+            const toast = new bootstrap.Toast(document.getElementById('gameToast'));
+            toast.show();
+            
+            setTimeout(() => toast.hide(), duration);
+        }
+
+        // Save game state
+        function saveGameState() {
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem(`biowordle-${today}`, JSON.stringify(gameState));
+        }
+
+        // Load game state
+        function loadGameState() {
+            const today = new Date().toISOString().split('T')[0];
+            const saved = localStorage.getItem(`biowordle-${today}`);
+            
+            console.log('=== GAME STATE DEBUG ===');
+            console.log('Looking for saved game for date:', today);
+            console.log('Saved game data exists:', !!saved);
+            
+            if (saved) {
+                try {
+                    const savedState = JSON.parse(saved);
+                    console.log('Parsed saved state:', savedState);
+                    console.log('Saved word:', savedState.currentWord);
+                    console.log('Current word:', gameState.currentWord);
+                    console.log('Saved guesses:', savedState.guesses);
+                    console.log('Game over:', savedState.gameOver, 'Won:', savedState.won);
+                    
+                    if (savedState.currentWord === gameState.currentWord) {
+                        console.log('✅ Word matches - restoring saved game state');
+                        
+                        // Restore all game state properties
+                        gameState.currentRow = savedState.currentRow || 0;
+                        gameState.currentCol = savedState.currentCol || 0;
+                        gameState.gameOver = savedState.gameOver || false;
+                        gameState.won = savedState.won || false;
+                        gameState.guesses = savedState.guesses || [];
+                        gameState.letterStates = savedState.letterStates || {};
+                        gameState.hintUsed = savedState.hintUsed || false;
+                        
+                        console.log('State restored - Row:', gameState.currentRow, 'Col:', gameState.currentCol);
+                        restoreGameBoard();
+                    } else {
+                        console.log('❌ Word mismatch - clearing old save');
+                        console.log('Expected:', gameState.currentWord, 'Found:', savedState.currentWord);
+                        localStorage.removeItem(`biowordle-${today}`);
+                    }
+                } catch (error) {
+                    console.log('❌ Error parsing saved state:', error);
+                    localStorage.removeItem(`biowordle-${today}`);
+                }
+            } else {
+                console.log('ℹ️ No saved game found for today - starting fresh');
+            }
+            console.log('=== END GAME STATE DEBUG ===');
+        }
+
+        // Restore game board from saved state
+        function restoreGameBoard() {
+            console.log('🔄 Restoring game board...');
+            console.log('Guesses to restore:', gameState.guesses);
+            console.log('Current row/col:', gameState.currentRow, gameState.currentCol);
+            console.log('Game over:', gameState.gameOver, 'Won:', gameState.won);
+            
+            // Clear keyboard states first
+            document.querySelectorAll('.key').forEach(key => {
+                key.classList.remove('correct', 'present', 'absent');
+            });
+            
+            // Restore each guess
+            for (let row = 0; row < gameState.guesses.length; row++) {
+                const guess = gameState.guesses[row];
+                console.log(`Restoring row ${row}: ${guess}`);
+                
+                for (let col = 0; col < 5; col++) {
+                    const tile = document.getElementById(`tile-${row}-${col}`);
+                    tile.textContent = guess[col];
+                    tile.classList.add('filled');
+                }
+                
+                // Evaluate this guess to restore colors (without animation)
+                evaluateGuess(guess, row);
+            }
+            
+            // If game is over, show appropriate message
+            if (gameState.gameOver) {
+                if (gameState.won) {
+                    console.log('Game was won - restoring victory state');
+                    setTimeout(() => {
+                        showToast(`You already solved today's puzzle!`, 3000);
+                    }, 1000);
+                } else {
+                    console.log('Game was lost - restoring failure state');
+                    setTimeout(() => {
+                        showToast(`Today's word was ${gameState.currentWord}`, 3000);
+                    }, 1000);
+                }
+            }
+            
+            console.log('✅ Game board restored');
+        }
+
+        // Save statistics
+        function saveStats() {
+            localStorage.setItem('biowordle-stats', JSON.stringify(stats));
+        }
+
+        // Load statistics
+        function loadStats() {
+            const saved = localStorage.getItem('biowordle-stats');
+            if (saved) {
+                stats = { ...stats, ...JSON.parse(saved) };
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('keydown', (e) => {
+            // Prevent default behavior for game keys to ensure they always work
+            if (e.key.match(/^[a-zA-Z]$/) || e.key === 'Enter' || e.key === 'Backspace') {
+                e.preventDefault();
+            }
+            handleKeyPress(e.key);
+        });
+
+        // Ensure no element can steal focus from the game
+        document.addEventListener('focusin', (e) => {
+            // Allow focus on modal elements and buttons
+            if (!e.target.closest('.modal') && !e.target.closest('button')) {
+                e.target.blur();
+            }
+        });
+
+        document.getElementById('virtualKeyboard').addEventListener('click', (e) => {
+            if (e.target.classList.contains('key')) {
+                const key = e.target.dataset.key;
+                handleKeyPress(key);
+            }
+        });
+
+        document.getElementById('hintBtn').addEventListener('click', showHint);
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

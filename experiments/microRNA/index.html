@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3JS Game Canvas</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+  <script>
+    // Set up scene, camera, renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add a static path (long rectangular plane)
+    const pathWidth = 2;
+    const pathLength = 50;
+    const geometry = new THREE.PlaneGeometry(pathWidth, pathLength);
+    const material = new THREE.MeshPhongMaterial({ color: 0x444444 });
+    const path = new THREE.Mesh(geometry, material);
+    path.rotation.x = -Math.PI / 2; // Make it horizontal
+    scene.add(path);
+
+    // Add a row of spheres ("spears") at the start of the path, close to the camera
+    const spearCount = 5;
+    const spearSpacing = pathWidth / (spearCount + 1);
+    for (let i = 0; i < spearCount; i++) {
+      const spearGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+      const spearMaterial = new THREE.MeshPhongMaterial({ color: 0xff3333 });
+      const spear = new THREE.Mesh(spearGeometry, spearMaterial);
+      spear.position.x = -pathWidth / 2 + spearSpacing * (i + 1);
+      spear.position.y = 0.15;
+      spear.position.z = -pathLength / 2 + 0.5; // Start of the path, close to camera
+      scene.add(spear);
+    }
+
+    // Add the player sphere further down the path
+    const playerGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+    const playerMaterial = new THREE.MeshPhongMaterial({ color: 0x3399ff });
+    const player = new THREE.Mesh(playerGeometry, playerMaterial);
+    player.position.x = 0;
+    player.position.y = 0.15;
+    player.position.z = -pathLength / 2 + 10; // Further along the path
+    scene.add(player);
+
+    // Add some light so the path is visible
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0, 10, 10);
+    scene.add(light);
+
+    // Move camera further back and higher, and look at the player
+    camera.position.set(0, 4, -pathLength / 2 + 10);
+    camera.lookAt(0, 0.15, -pathLength / 2 + 0.5);
+
+    // Animation loop (static scene)
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Responsive resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
