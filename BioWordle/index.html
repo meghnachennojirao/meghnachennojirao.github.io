@@ -1180,6 +1180,22 @@
             document.getElementById('modalTimerContainer').style.display = 'none';
         }
 
+        // Check if today's puzzle is actually completed
+        function isTodaysPuzzleCompleted() {
+            const today = new Date().toISOString().split('T')[0];
+            const saved = localStorage.getItem(`biowordle-${today}`);
+            
+            if (saved) {
+                try {
+                    const savedState = JSON.parse(saved);
+                    return savedState.gameOver && savedState.currentWord === gameState.currentWord;
+                } catch (error) {
+                    return false;
+                }
+            }
+            return false;
+        }
+
         // Timer functionality
         function startTimer() {
             updateTimer();
@@ -1199,7 +1215,8 @@
             
             const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
-            // Only update timer elements if they're visible (game completed)
+            // Only update timer elements if today's puzzle is actually completed
+            const todayCompleted = isTodaysPuzzleCompleted();
             const nextPuzzleTimer = document.getElementById('nextPuzzleTimer');
             const modalNextPuzzleTimer = document.getElementById('modalNextPuzzleTimer');
             const congratsTimer = document.getElementById('congratsTimer');
@@ -1207,6 +1224,13 @@
             if (nextPuzzleTimer) nextPuzzleTimer.textContent = timeString;
             if (modalNextPuzzleTimer) modalNextPuzzleTimer.textContent = timeString;
             if (congratsTimer) congratsTimer.textContent = timeString;
+            
+            // Show/hide timer containers based on whether today's puzzle is completed
+            if (todayCompleted) {
+                showTimerContainers();
+            } else {
+                hideTimerContainers();
+            }
         }
 
         // Show hint
@@ -1314,22 +1338,17 @@
             if (gameState.gameOver) {
                 if (gameState.won) {
                     console.log('Game was won - restoring victory state');
-                    // Show timer containers since the game was already won
-                    showTimerContainers();
+                    // Timer containers will be handled by updateTimer() function
                     setTimeout(() => {
                         showToast(`You already solved today's puzzle!`, 3000);
                     }, 1000);
                 } else {
                     console.log('Game was lost - restoring failure state');
-                    // Hide timer containers since the game was lost
-                    hideTimerContainers();
+                    // Timer containers will be handled by updateTimer() function
                     setTimeout(() => {
                         showToast(`Today's word was ${gameState.currentWord}`, 3000);
                     }, 1000);
                 }
-            } else {
-                // Game in progress - hide timer containers
-                hideTimerContainers();
             }
             
             console.log('✅ Game board restored');
