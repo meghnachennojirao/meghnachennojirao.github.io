@@ -364,7 +364,49 @@
       box-shadow: 0 8px 16px hsla(var(--base-hue), 62%, 40%, 0.2);
     }
 
-    .mark-track{
+    .h-scroll-wrap{
+      position: relative;
+      display:flex;
+      align-items:center;
+      gap:.35rem;
+    }
+
+    .h-scroll-inner{
+      flex:1 1 auto;
+    }
+
+    .h-scroll-btn{
+      border:none;
+      background: hsla(var(--base-hue), 68%, 96%, 0.45);
+      color: var(--accent);
+      width:2rem;
+      height:2rem;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: background-color .2s ease, color .2s ease;
+      flex:0 0 auto;
+    }
+
+    .h-scroll-btn:hover{
+      background: hsla(var(--base-hue), 82%, 62%, 0.5);
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+    }
+
+    [data-theme="dark"] .h-scroll-btn{
+      background: hsla(var(--base-hue), 32%, 24%, 0.7);
+      color: hsla(var(--base-hue), 78%, 62%, 1);
+    }
+
+    [data-theme="dark"] .h-scroll-btn:hover{
+      background: hsla(var(--base-hue), 78%, 52%, 0.45);
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+    }
+
+    .mark-track,
+    .keyword-track{
       display:flex;
       gap:.75rem;
       overflow-x:auto;
@@ -373,47 +415,39 @@
       scrollbar-width: none;
     }
 
-    .mark-track::-webkit-scrollbar{ display:none; }
+    .mark-track::-webkit-scrollbar,
+    .keyword-track::-webkit-scrollbar{ display:none; }
 
-    .mark-pill{
+    .chip-pill{
       border:none;
-      background: hsla(var(--base-hue), 68%, 94%, 0.6);
       border-radius: 999px;
-      padding: 10px 30px;
+      padding:.65rem 1.1rem;
       display:flex;
       flex-direction:column;
       align-items:flex-start;
       gap:.15rem;
       min-width: 6.5rem;
       color: var(--text);
-      /* box-shadow: 0 8px 18px hsla(var(--base-hue), 36%, 62%, 0.12); */
       transition: background-color .2s ease, transform .12s ease;
+      background: hsla(var(--base-hue), 68%, 94%, 0.6);
     }
 
-    .mark-pill:hover{
-      transform: translateY(-1px);
-    }
+    .chip-pill:hover{ transform: translateY(-1px); }
 
-    .mark-pill.active{
-      background: hsla(var(--base-hue), 82%, 64%, 0.26);
-      color: var(--accent);
-      /* box-shadow: 0 12px 24px hsla(var(--base-hue), 58%, 48%, 0.18); */
-    }
+    .chip-pill-value{ font-weight: 700; }
+    .chip-pill-meta{ font-size:.82rem; color: var(--text-muted); }
 
-    .mark-pill-value{ font-weight: 700; }
-    .mark-pill-meta{ font-size:.82rem; color: var(--text-muted); }
+    
+    .mark-pill{ background: hsla(var(--base-hue), 68%, 94%, 0.6); padding: 15px 35px; }
+    .mark-pill.active{ background: hsla(var(--base-hue), 82%, 64%, 0.26); color: var(--accent); }
 
-    [data-theme="dark"] .mark-pill{
-      background: hsla(var(--base-hue), 30%, 26%, 0.8);
-      color: var(--text);
-      box-shadow: 0 10px 22px hsla(var(--base-hue), 28%, 16%, 0.32);
-    }
+    .keyword-pill{ height: 100%; background: hsla(var(--base-hue), 60%, 96%, 0.55); min-width: 200px; padding: 15px 35px; text-align: left; border-radius: 20px; }
+    .keyword-pill.active{ background: hsla(var(--base-hue), 80%, 58%, 0.24); color: var(--accent); }
 
-    [data-theme="dark"] .mark-pill.active{
-      background: hsla(var(--base-hue), 78%, 52%, 0.32);
-      color: hsla(var(--base-hue), 90%, 82%, 1);
-      box-shadow: 0 14px 26px hsla(var(--base-hue), 60%, 32%, 0.34);
-    }
+    [data-theme="dark"] .chip-pill{ background: hsla(var(--base-hue), 30%, 26%, 0.8); color: var(--text); }
+    [data-theme="dark"] .mark-pill.active{ background: hsla(var(--base-hue), 78%, 52%, 0.32); color: hsla(var(--base-hue), 90%, 82%, 1); }
+    [data-theme="dark"] .keyword-pill{ background: hsla(var(--base-hue), 26%, 24%, 0.78); }
+    [data-theme="dark"] .keyword-pill.active{ background: hsla(var(--base-hue), 70%, 48%, 0.32); color: hsla(var(--base-hue), 92%, 84%, 1); }
 
     .mark-group{
       margin-top: 1.5rem;
@@ -493,6 +527,9 @@
       .small-muted{ font-size:.88rem; }
       .action-track{ margin-right:-0.35rem; padding-right:0.35rem; }
       .date-chip{ display:block; margin-bottom:.35rem; }
+      .h-scroll-btn{ display:none; }
+      .mark-pill {padding: 15px 35px; min-width: 160px; text-align: left;}
+      .keyword-pill {padding: 15px 35px; min-width: 160px; text-align: left;}
     }
   </style>
 
@@ -519,7 +556,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script type="text/babel">
-  const {useEffect,useMemo,useState} = React;
+  const {useEffect,useMemo,useState,useRef} = React;
 
   // ---------- helpers ----------
   const STORAGE_KEY = "meghna-faq-checks-v1";
@@ -615,6 +652,75 @@
     return m;
   };
 
+  const HorizontalScroller = ({children, outerClassName = "", innerClassName = ""}) => {
+    const wrapRef = useRef(null);
+    const innerRef = useRef(null);
+    const [scrollState, setScrollState] = useState({left:false, right:false});
+
+    const updateScrollState = () => {
+      const el = innerRef.current;
+      if(!el){
+        return;
+      }
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      const left = el.scrollLeft > 0;
+      const right = el.scrollLeft < maxScroll - 1;
+      setScrollState(function(prev){
+        if(prev.left === left && prev.right === right){
+          return prev;
+        }
+        return {left:left, right:right};
+      });
+    };
+
+    useEffect(()=>{
+      updateScrollState();
+      const el = innerRef.current;
+      if(!el){
+        return;
+      }
+      const handleScroll = function(){ updateScrollState(); };
+      el.addEventListener("scroll", handleScroll, {passive:true});
+      const handleResize = function(){ updateScrollState(); };
+      window.addEventListener("resize", handleResize);
+      return () => {
+        el.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
+    useEffect(()=>{ updateScrollState(); });
+
+    const scrollByAmount = (direction) => {
+      const el = innerRef.current;
+      if(!el){ return; }
+      const amount = el.clientWidth * 0.6 * direction;
+      if(typeof el.scrollBy === "function"){
+        el.scrollBy({left: amount, behavior: "smooth"});
+      }else{
+        el.scrollLeft += amount;
+      }
+    };
+
+    return (
+      <div className={("h-scroll-wrap " + outerClassName).trim()} ref={wrapRef}>
+        {scrollState.left ? (
+          <button className="h-scroll-btn" onClick={()=>scrollByAmount(-1)} aria-label="Scroll left">
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+        ) : null}
+        <div className={("h-scroll-inner " + innerClassName).trim()} ref={innerRef}>
+          {children}
+        </div>
+        {scrollState.right ? (
+          <button className="h-scroll-btn" onClick={()=>scrollByAmount(1)} aria-label="Scroll right">
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+        ) : null}
+      </div>
+    );
+  };
+
   // ---------- UI bits ----------
   const Header = ({subjects, subject, setSubject, counts, clearChecks, theme, toggleTheme}) => {
     return (
@@ -642,7 +748,7 @@
               </div>
             </div>
           </div>
-          <div className="action-track mt-2">
+          <HorizontalScroller outerClassName="action-track-wrap mt-2" innerClassName="action-track">
             <button
               className="icon-btn"
               onClick={toggleTheme}
@@ -655,7 +761,7 @@
               <i className="fa-solid fa-broom"></i>
               <span>Clear ticks</span>
             </button>
-          </div>
+          </HorizontalScroller>
         </div>
       </div>
     );
@@ -670,22 +776,20 @@
       {key:"picks",   label:"My Picks",         icon:"fa-star"}
     ];
     return (
-      <div className="tab-shell mb-3">
-        <div className="tab-track">
-          <ul className="nav nav-pills gap-1">
-            {items.map(it=>(
-              <li className="nav-item" key={it.key}>
-                <button
-                  className={"tab-btn nav-link px-3 py-2 " + (active===it.key ? "active" : "")}
-                  onClick={()=>setActive(it.key)}
-                >
-                  <i className={`fa-solid ${it.icon} me-2`}></i>{it.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <HorizontalScroller outerClassName="tab-shell mb-3" innerClassName="tab-track">
+        <ul className="nav nav-pills gap-1">
+          {items.map(it=>(
+            <li className="nav-item" key={it.key}>
+              <button
+                className={"tab-btn nav-link px-3 py-2 " + (active===it.key ? "active" : "")}
+                onClick={()=>setActive(it.key)}
+              >
+                <i className={`fa-solid ${it.icon} me-2`}></i>{it.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </HorizontalScroller>
     );
   };
 
@@ -768,7 +872,7 @@
 
     return (
       <div>
-        <div className="mark-track mb-3">
+        <HorizontalScroller outerClassName="mark-track-wrap mb-3" innerClassName="mark-track">
           {markKeys.map(m=> {
             const list = getOrderedList(m);
             const isActive = active === m;
@@ -776,15 +880,15 @@
               <button
                 type="button"
                 key={m}
-                className={"mark-pill" + (isActive ? " active" : "")}
+                className={"chip-pill mark-pill" + (isActive ? " active" : "")}
                 onClick={()=>setActive(m)}
               >
-                <span className="mark-pill-value">{m} marks</span>
-                <span className="mark-pill-meta">{list.length} questions</span>
+                <span className="chip-pill-value">{m} marks</span>
+                <span className="chip-pill-meta">{list.length} questions</span>
               </button>
             );
           })}
-        </div>
+        </HorizontalScroller>
         <div className="mark-group">
           <div className="mark-group-header d-flex align-items-center justify-content-between">
             <h5 className="mb-0">{active !== null ? `${active} mark${active === 1 ? '' : 's'}` : 'Questions'}</h5>
@@ -885,7 +989,29 @@
       .map(([keyword, obj]) => ({keyword, ...obj}))
       .sort((a,b)=> b.items.length - a.items.length || b.totalMarks - a.totalMarks || a.keyword.localeCompare(b.keyword));
 
-    const [open, setOpen] = useState({});
+    const keywordKeys = orderedKeywords.map(k=>k.keyword);
+    const [active, setActive] = useState(keywordKeys.length ? keywordKeys[0] : "__ALL__");
+
+    useEffect(()=>{
+      if(!keywordKeys.length){
+        setActive("__ALL__");
+        return;
+      }
+      if(active !== "__ALL__" && keywordKeys.indexOf(active) === -1){
+        setActive(keywordKeys[0]);
+      }
+    }, [keywordKeys.join(','), active]);
+
+    const getOrderedItems = (key) => {
+      if(key === "__ALL__"){
+        return questions.slice().sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
+      }
+      const entry = orderedKeywords.find(k=>k.keyword === key);
+      const items = entry ? entry.items : [];
+      return items.slice().sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
+    };
+
+    const activeList = getOrderedItems(active);
 
     if(!orderedKeywords.length){
       return (
@@ -896,43 +1022,51 @@
     }
 
     return (
-      <div className="accordion" id="keywords">
-        {orderedKeywords.map((k, idx)=> {
-          const items = k.items.slice().sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
-          const isOpen = !!open[idx];
-          return (
-            <div className="mb-3" key={idx}>
-              <div className="neo p-3 rounded-4 topic-header d-flex align-items-center justify-content-between"
-                   onClick={()=>setOpen(o=>({...o, [idx]:!o[idx]}))}>
-                <div className="d-flex align-items-center gap-3">
-                  <i className={"fa-solid " + (isOpen? "fa-chevron-down":"fa-chevron-right")}></i>
-                  <div>
-                    <div className="fw-semibold">{k.keyword}</div>
-                    <div className="small-muted">
-                      <span className="me-3"><i className="fa-solid fa-layer-group me-1"></i>{items.length} questions</span>
-                      <span><i className="fa-solid fa-sack-dollar me-1"></i>Aggregate marks: {k.totalMarks}</span>
-                    </div>
-                  </div>
-                </div>
-                <span className="badge badge-ghost rounded-pill">Tap to {isOpen?"collapse":"expand"}</span>
-              </div>
-              {isOpen && (
-                <div className="mt-2">
-                  {items.map(q=>(
-                    <QuestionRow
-                      key={q.id}
-                      q={q}
-                      checked={checks[q.id]}
-                      onCheckToggle={onCheckToggle}
-                      bookmarked={!!bookmarks[q.id]}
-                      onBookmarkToggle={onBookmarkToggle}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <div>
+        <HorizontalScroller outerClassName="mark-track-wrap mb-3" innerClassName="mark-track">
+          <button
+            type="button"
+            className={"chip-pill keyword-pill" + (active === "__ALL__" ? " active" : "")}
+            onClick={()=>setActive("__ALL__")}
+          >
+            <span className="chip-pill-value">All keywords</span>
+            <span className="chip-pill-meta">{questions.length} questions</span>
+          </button>
+          {orderedKeywords.map(k=>{
+            const isActive = active === k.keyword;
+            return (
+              <button
+                type="button"
+                key={k.keyword}
+                className={"chip-pill keyword-pill" + (isActive ? " active" : "")}
+                onClick={()=>setActive(k.keyword)}
+              >
+                <span className="chip-pill-value">{k.keyword}</span>
+                <span className="chip-pill-meta">{k.items.length} questions • {k.totalMarks} marks</span>
+              </button>
+            );
+          })}
+        </HorizontalScroller>
+        <div className="mark-group">
+          <div className="mark-group-header d-flex align-items-center justify-content-between">
+            <h5 className="mb-0">{active === "__ALL__" ? "All keywords" : active}</h5>
+            <span className="small-muted">{activeList.length} question{activeList.length === 1 ? '' : 's'}</span>
+          </div>
+          {activeList.length ? (
+            activeList.map(q=>(
+              <QuestionRow
+                key={q.id}
+                q={q}
+                checked={checks[q.id]}
+                onCheckToggle={onCheckToggle}
+                bookmarked={!!bookmarks[q.id]}
+                onBookmarkToggle={onBookmarkToggle}
+              />
+            ))
+          ) : (
+            <div className="neo p-4 rounded-4 small-muted">No questions for this keyword.</div>
+          )}
+        </div>
       </div>
     );
   };
