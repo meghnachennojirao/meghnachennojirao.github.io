@@ -558,12 +558,16 @@
                 }
 
 
+                let levelInstruction = "Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b>. To move them, click/tap and drag the place fields."
                 if (configData.hasOwnProperty('levelInfo')) {
-                    document.getElementById('info-box').innerHTML = configData.levelInfo.instruction
+                    levelInstruction = configData.levelInfo.instruction
                 }
-                else {
-                    document.getElementById('info-box').innerHTML = "Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b>. To move them, click/tap and drag the place fields."
+
+                if (gameGraphBasic.placeFieldsOnlyInBeginning) {
+                    levelInstruction = levelInstruction + "<br/><br/><b style='color: orange;'>Press Start Run when ready.</b> Once the run begins, the place fields lock in place."
                 }
+
+                document.getElementById('info-box').innerHTML = levelInstruction
 
 
                 gameGraphBasic.placeCells = {}
@@ -677,7 +681,7 @@
 
                 if (gameGraphBasic.placeFieldsOnlyInBeginning) {
                     gameGraphBasic.playing = false
-                    document.getElementById("main-play-pause").innerText = "Play"
+                    document.getElementById("main-play-pause").innerText = "Start Run"
                 }
                 else {
                     gameGraphBasic.playing = true
@@ -1428,6 +1432,495 @@
                     timer: {
                         timeRemaining: 35
                     }
+                },
+                8 : {
+                    neurons : [198, 310, 40],
+                    behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest']
+                    },
+                    mouse: {
+                        location: [0.08, 0.88],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.92, 0.1],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.16, 0.88],
+                            [0.22, 0.18],
+                        ],
+                        310: [
+                            [0.88, 0.82],
+                            [0.12, 0.58],
+                        ],
+                        40: [
+                            [0.84, 0.64],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0, 0.78], [0.84, 0.78]],
+                        'wall-2': [[0.16, 0.52], [1, 0.52]],
+                        'wall-3': [[0, 0.26], [0.84, 0.26]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    }
+                },
+                9 : {
+                    neurons : [198, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.12],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.72, 0.72],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.46, 0.66],
+                        ],
+                        30: [
+                            [0.42, 0.34],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.35, 0.25], [0.35, 0.85]],
+                        'wall-2': [[0.35, 0.85], [0.82, 0.85]],
+                        'wall-3': [[0.82, 0.85], [0.82, 0.25]],
+                        'wall-4': [[0.58, 0.25], [0.58, 0.58]]
+                    },
+                    timer: {
+                        timeRemaining: 30
+                    }
+                },
+                10 : {
+                    neurons : [198, 310, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.72],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.88, 0.14],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.48, 0.82],
+                            [0.76, 0.18],
+                        ],
+                        310: [
+                            [0.5, 0.42],
+                        ],
+                        30: [
+                            [0.22, 0.84],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.33, 0], [0.33, 0.7]],
+                        'wall-2': [[0.66, 0.3], [0.66, 1]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    }
+                },
+                11 : {
+                    neurons : [198, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.12],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.14, 0.88],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.22, 0.12],
+                        ],
+                        40: [
+                            [0.84, 0.84],
+                        ],
+                        30: [
+                            [0.88, 0.22],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.5, 0.2], [0.5, 0.8]],
+                        'wall-2': [[0.2, 0.5], [0.8, 0.5]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    }
+                },
+                12 : {
+                    neurons : [198, 310, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.1, 0.1],
+                        velocity: [0, 0.2]
+                    },
+                    reward: {
+                        location: [0.92, 0.86],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.84],
+                            [0.44, 0.12],
+                            [0.7, 0.84],
+                        ],
+                        310: [
+                            [0.34, 0.62],
+                        ],
+                        30: [
+                            [0.58, 0.18],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.25, 0], [0.25, 0.72]],
+                        'wall-2': [[0.5, 0.28], [0.5, 1]],
+                        'wall-3': [[0.75, 0], [0.75, 0.72]]
+                    },
+                    timer: {
+                        timeRemaining: 45
+                    }
+                },
+                13 : {
+                    neurons : [198, 310, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.12, 0.84],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.24, 0.84],
+                        ],
+                        310: [
+                            [0.76, 0.76],
+                        ],
+                        40: [
+                            [0.76, 0.24],
+                        ],
+                        30: [
+                            [0.24, 0.24],
+                        ]
+                    },
+                    walls: {},
+                    timer: {
+                        timeRemaining: 30
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                14 : {
+                    neurons : [198, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.12, 0.12],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.12],
+                        ],
+                        40: [
+                            [0.82, 0.5],
+                        ],
+                        30: [
+                            [0.82, 0.24],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.3, 0.7], [0.7, 0.7]],
+                        'wall-2': [[0.7, 0.7], [0.7, 0.55]],
+                        'wall-3': [[0.7, 0.43], [0.7, 0.3]],
+                        'wall-4': [[0.3, 0.3], [0.7, 0.3]],
+                        'wall-5': [[0.3, 0.3], [0.3, 0.7]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                15 : {
+                    neurons : [198, 310, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.88, 0.12],
+                        velocity: [-0.15, 0.15]
+                    },
+                    reward: {
+                        location: [0.5, 0.52],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.44, 0.78],
+                        ],
+                        310: [
+                            [0.72, 0.72],
+                        ],
+                        40: [
+                            [0.72, 0.22],
+                        ],
+                        30: [
+                            [0.28, 0.18],
+                        ]
+                    },
+                    walls: {
+                        'spiral-wall-1': [[0.4, 0.4], [0.4, 0.65], [0.68, 0.65], [0.68, 0.25], [0.25, 0.25], [0.25, 0.85], [0.85, 0.85], [0.85, 0.1]],
+                        'wall-1': [[0.55, 0.65], [0.55, 0.42]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    }
+                },
+                16 : {
+                    neurons : [198, 310, 40],
+                    behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest']
+                    },
+                    mouse: {
+                        location: [0.08, 0.9],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.08, 0.08],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.14, 0.9],
+                            [0.2, 0.52],
+                        ],
+                        310: [
+                            [0.88, 0.84],
+                            [0.12, 0.64],
+                            [0.88, 0.44],
+                            [0.12, 0.24],
+                        ],
+                        40: [
+                            [0.82, 0.72],
+                            [0.82, 0.32],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0, 0.8], [0.86, 0.8]],
+                        'wall-2': [[0.14, 0.6], [1, 0.6]],
+                        'wall-3': [[0, 0.4], [0.86, 0.4]],
+                        'wall-4': [[0.14, 0.2], [1, 0.2]]
+                    },
+                    timer: {
+                        timeRemaining: 50
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                17 : {
+                    neurons : [198, 310, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.5],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.8, 0.52],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.5],
+                            [0.64, 0.74],
+                        ],
+                        310: [
+                            [0.82, 0.72],
+                        ],
+                        30: [
+                            [0.48, 0.64],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.2, 0.82], [0.9, 0.82]],
+                        'wall-2': [[0.9, 0.82], [0.9, 0.18]],
+                        'wall-3': [[0.2, 0.18], [0.9, 0.18]],
+                        'wall-4': [[0.55, 0.18], [0.55, 0.68]],
+                        'wall-5': [[0.55, 0.68], [0.78, 0.68]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                18 : {
+                    neurons : [198, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.1, 0.1],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.1],
+                            [0.66, 0.22],
+                        ],
+                        40: [
+                            [0.68, 0.5],
+                        ],
+                        30: [
+                            [0.54, 0.22],
+                            [0.72, 0.52],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.18, 0.18], [0.18, 0.82]],
+                        'wall-2': [[0.18, 0.82], [0.82, 0.82]],
+                        'wall-3': [[0.82, 0.82], [0.82, 0.18]],
+                        'wall-4': [[0.18, 0.18], [0.46, 0.18]],
+                        'wall-5': [[0.62, 0.18], [0.82, 0.18]],
+                        'wall-6': [[0.36, 0.36], [0.36, 0.64]],
+                        'wall-7': [[0.36, 0.64], [0.64, 0.64]],
+                        'wall-8': [[0.36, 0.36], [0.64, 0.36]],
+                        'wall-9': [[0.64, 0.64], [0.64, 0.56]],
+                        'wall-10': [[0.64, 0.44], [0.64, 0.36]]
+                    },
+                    timer: {
+                        timeRemaining: 45
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                19 : {
+                    neurons : [198, 310, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.9],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.72, 0.24],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.16, 0.9],
+                            [0.22, 0.22],
+                            [0.52, 0.26],
+                        ],
+                        310: [
+                            [0.88, 0.84],
+                            [0.14, 0.58],
+                        ],
+                        40: [
+                            [0.84, 0.66],
+                        ],
+                        30: [
+                            [0.32, 0.16],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0, 0.78], [0.82, 0.78]],
+                        'wall-2': [[0.18, 0.52], [1, 0.52]],
+                        'wall-3': [[0.42, 0.34], [0.86, 0.34]],
+                        'wall-4': [[0.86, 0.34], [0.86, 0.08]],
+                        'wall-5': [[0.42, 0.08], [0.86, 0.08]],
+                        'wall-6': [[0.42, 0.08], [0.42, 0.18]]
+                    },
+                    timer: {
+                        timeRemaining: 55
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
                 },
             }
 
