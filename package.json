@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "meghnachennojirao-github-io",
   "version": "1.0.0",
   "private": true,
@@ -6,5 +7,13 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
+=======
+  "name": "meghnacrao-github-io",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs"
+>>>>>>> 26035d1c9f20702d5e0d41e7ce3ecaa460dbe55a
   }
 }

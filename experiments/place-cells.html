@@ -23,8 +23,8 @@
         <meta name="twitter:description" content="A game about Place Cells">
         <meta name="twitter:image" content="https://meghnachennojirao.github.io/assets/images/Icon.png">
 
-		<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
 		<!-- Some times used library for icons -->
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -61,11 +61,13 @@
         <style>
             #main-title-name {
                 color: hsla(220, 100%, 80%, 1);
+                font-family: Raleway, Nunito, sans-serif;
             }
 
-        
+
             body {
                 background: hsla(0, 0%, 0%, 1);
+                font-family: Nunito, sans-serif;
             }
 
             #main-explanation-text {
@@ -74,6 +76,13 @@
 
             #time-data {
                 color: lightgray;
+            }
+
+            #main-play-pause,
+            #main-reset,
+            #prev-level-button,
+            #next-level-button {
+                border-color: rgba(180, 180, 180, 0.3) !important;
             }
 
             @media (prefers-color-scheme: light) {
@@ -93,6 +102,13 @@
                     color: black
                 }
 
+                #main-play-pause,
+                #main-reset,
+                #prev-level-button,
+                #next-level-button {
+                    border-color: rgba(120, 120, 120, 0.3) !important;
+                }
+
 
             }
         </style>
@@ -102,7 +118,7 @@
 		<div id="containAll" class="p-sm-3 p-1" style=" overflow: hidden; ">
             <div style="border: 1px solid hsla(0,0%,0%, 0); border-radius: 10px; background: var(--generalBackground); ">
                 
-                <header id="upc-header" class="pr-2 pr-sm-3" style="position: fixed;font-family: Raleway; overflow: hidden; width: calc(100%); top: 0; z-index: 3; opacity: 0; pointer-events: none;" onclick="placeCellsGame.headerClick()">
+                <header id="upc-header" class="pr-2 pr-sm-3" style="position: fixed;font-family: Nunito; overflow: hidden; width: calc(100%); top: 0; z-index: 3; opacity: 0; pointer-events: none;" onclick="placeCellsGame.headerClick()">
                     <div style="background-image: linear-gradient(to bottom, var(--generalBackground),var(--generalBackground), transparent);color: hsl(0,0%,20%);font-size: small;min-height: 131px;" class="text-ignus p-4 pl-5 pr-5 p-md-3 pl-md-4 pr-md-4 text-md-left text-center">
                         <span style="cursor: pointer;"> 
                             <span style="font-size:x-small;">Neuro Navigator</span>
@@ -114,7 +130,7 @@
 
                 <main>
                     <div class="p-4 pl-5 text-ignus text-center text-md-left">
-                        <b style="font-family: Raleway; font-size: xx-large;" id="main-title-name">Neuro Navigator</b><br/>
+                        <b style="font-size: xx-large;" id="main-title-name">Neuro Navigator</b><br/>
                         <span class="text-ignus" style="color: grey;">A game inspired by a video from <a href="https://www.youtube.com/watch?v=iV-EMA5g288" style="color: royalblue;" target="_blank">Artem Kirsanov</a></span>
                     </div>
                     <div class="pt-0 pl-2 pr-2 pb-5 pt-lg-0 pl-lg-4 pr-lg-5 pb-lg-5">
@@ -163,7 +179,7 @@
                                     <div>
                                         <div class="ml-2 pt-2 text-ignus text-grey-ignus" id="time-data">Time Remaining : NA</div>
                                     </div>
-                                    <div class="ml-2 text-ignus text-small-ignus mt-3" id="info-box">
+                                    <div class="ml-2 text-ignus text-small-ignus mt-1 mb-5" id="info-box">
                                         Move the <b style="color: hsla(198,100%,80%, 1)">place fields</b>. To move them, click/tap and drag the place fields.
                                     </div>
                                     <div id="gameSpace" style="min-height: 500px;">
@@ -397,20 +413,142 @@
             gameGraphBasic.setMouseLocation = function(x, y) {
                 gameGraphBasic.mouse.location = [x, y]
                 viewX.updatePointXY("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouse", gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1]);
-                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04});
+                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, fontFamily: "Nunito"});
                 
             }
 
 
+            gameGraphBasic.getTimeSpaceLayout = function(configData) {
+                if (configData.hasOwnProperty('timeSpace') == false) {
+                    return null
+                }
+
+                timeSpaceConfig = configData.timeSpace
+                mainHeightFraction = timeSpaceConfig.mainHeightFraction != null ? timeSpaceConfig.mainHeightFraction : 0.75
+                gapFraction = timeSpaceConfig.gapFraction != null ? timeSpaceConfig.gapFraction : 0.05
+                timeHeightFraction = timeSpaceConfig.timeHeightFraction != null ? timeSpaceConfig.timeHeightFraction : 0.20
+
+                scaleFactor = 1/mainHeightFraction
+                gapHeight = gapFraction*scaleFactor
+                timeHeight = timeHeightFraction*scaleFactor
+
+                return {
+                    yMax: -gapHeight,
+                    yMin: -(gapHeight + timeHeight),
+                    height: timeHeight,
+                    centerY: -(gapHeight + timeHeight/2),
+                    xMin: 0.08,
+                    xMax: 0.92
+                }
+            }
+
+
+            gameGraphBasic.getPlaceCellLabelPosition = function(placeCellData) {
+                if (placeCellData.zone == 'time') {
+                    return {
+                        x: placeCellData.location[0],
+                        y: placeCellData.location[1] + placeCellData.radius + 0.04
+                    }
+                }
+
+                return {
+                    x: placeCellData.location[0],
+                    y: placeCellData.location[1] - gameGraphBasic.reward.radius - 0.07
+                }
+            }
+
+
+            gameGraphBasic.getTimeSpaceXForSeconds = function(secondsFromStart) {
+                if (gameGraphBasic.timeSpaceLayout == null || gameGraphBasic.totalTime == null) {
+                    return secondsFromStart
+                }
+
+                elapsedFraction = Math.max(0, Math.min(1, secondsFromStart/gameGraphBasic.totalTime))
+                return gameGraphBasic.timeSpaceLayout.xMin + (gameGraphBasic.timeSpaceLayout.xMax - gameGraphBasic.timeSpaceLayout.xMin)*elapsedFraction
+            }
+
+
+            gameGraphBasic.clampPlaceCellLocation = function(placeCellData, attemptedLocation) {
+                x = attemptedLocation[0]
+                y = attemptedLocation[1]
+
+                if (placeCellData.zone == 'time') {
+                    return [
+                        Math.max(gameGraphBasic.timeSpaceLayout.xMin, Math.min(gameGraphBasic.timeSpaceLayout.xMax, x)),
+                        gameGraphBasic.timeSpaceLayout.centerY
+                    ]
+                }
+
+                if (gameGraphBasic.timeSpaceLayout != null) {
+                    return [
+                        Math.max(0.02, Math.min(0.98, x)),
+                        Math.max(0.02, Math.min(0.98, y))
+                    ]
+                }
+
+                return attemptedLocation
+            }
+
+
+            gameGraphBasic.updatePlaceCellVisuals = function(placeCellColorKey) {
+                placeCellData = gameGraphBasic.placeCells[placeCellColorKey]
+                labelPosition = gameGraphBasic.getPlaceCellLabelPosition(placeCellData)
+
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + placeCellData.id, {x: placeCellData.location[0], y: placeCellData.location[1]});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellData.id, {x: placeCellData.location[0], y: placeCellData.location[1]});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellData.id, {x: placeCellData.location[0], y: placeCellData.location[1]});
+                viewX.updatePointXY("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-moveKnob-" + placeCellData.id, placeCellData.location[0], placeCellData.location[1]);
+                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + placeCellData.id, {x: labelPosition.x, y: labelPosition.y, fontFamily: "Nunito"});
+            }
+
+
+            gameGraphBasic.updateTimeSpacePoint = function() {
+                if (gameGraphBasic.timeSpaceLayout == null || gameGraphBasic.totalTime == null) {
+                    return
+                }
+
+                elapsedFraction = Math.max(0, Math.min(1, (gameGraphBasic.totalTime - gameGraphBasic.time)/gameGraphBasic.totalTime))
+                timePointX = gameGraphBasic.timeSpaceLayout.xMin + (gameGraphBasic.timeSpaceLayout.xMax - gameGraphBasic.timeSpaceLayout.xMin)*elapsedFraction
+                gameGraphBasic.timeSpacePoint = [timePointX, gameGraphBasic.timeSpaceLayout.centerY]
+
+                viewX.updatePointXY("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-timePoint", gameGraphBasic.timeSpacePoint[0], gameGraphBasic.timeSpacePoint[1]);
+                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-timePointText", {x: gameGraphBasic.timeSpacePoint[0] - 0.08, y: gameGraphBasic.timeSpacePoint[1] + 0.07, text: "Mouse Time", textAlign: 'left', fontFamily: "Nunito"});
+            }
+
+
             
-            gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation) {
+            gameGraphBasic.addPlaceCell = function(placeCellColor, cellLocation, zone='space') {
 
                 placeCellColorKey = getUiD()
+                placeCellConfig = (typeof cellLocation === 'object' && cellLocation !== null && !Array.isArray(cellLocation)) ? cellLocation : {position: cellLocation}
+                rawCellLocation = placeCellConfig.position
+                timeCellValue = rawCellLocation
+                if (zone == 'time' && gameGraphBasic.timeSpaceConfig != null && gameGraphBasic.timeSpaceConfig.timeCellPositionsAreSeconds) {
+                    timeCellValue = gameGraphBasic.getTimeSpaceXForSeconds(rawCellLocation)
+                }
+                initialLocation = zone == 'time' ? [timeCellValue, gameGraphBasic.timeSpaceLayout.centerY] : rawCellLocation
+                isFixedCell = false
+                if (gameGraphBasic.timeSpaceConfig != null) {
+                    if (zone == 'time') {
+                        isFixedCell = gameGraphBasic.timeSpaceConfig.fixedTimeCells === true
+                    }
+                    else {
+                        isFixedCell = gameGraphBasic.timeSpaceConfig.fixedSpaceCells === true
+                    }
+                }
+                if (placeCellConfig.hasOwnProperty('fixed')) {
+                    isFixedCell = placeCellConfig.fixed
+                }
                 gameGraphBasic.placeCells[placeCellColorKey] = {}
                 gameGraphBasic.placeCells[placeCellColorKey].id = placeCellColorKey
-                gameGraphBasic.placeCells[placeCellColorKey].location = cellLocation
-                gameGraphBasic.placeCells[placeCellColorKey].radius = 0.1
+                gameGraphBasic.placeCells[placeCellColorKey].location = initialLocation
+                gameGraphBasic.placeCells[placeCellColorKey].radius = zone == 'time' ? 0.08 : 0.1
                 gameGraphBasic.placeCells[placeCellColorKey].placeCellColor = placeCellColor
+                gameGraphBasic.placeCells[placeCellColorKey].zone = zone
+                gameGraphBasic.placeCells[placeCellColorKey].defaultLabel = zone == 'time' ? "Time Field" : "Place Field"
+                gameGraphBasic.placeCells[placeCellColorKey].isFixed = isFixedCell
+
+                labelPosition = gameGraphBasic.getPlaceCellLabelPosition(gameGraphBasic.placeCells[placeCellColorKey])
 
                 viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius, circlecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")", stroke: "transparent"});
                 
@@ -419,10 +557,10 @@
 
                 viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], radius: gameGraphBasic.placeCells[placeCellColorKey].radius*0.2, circlecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.2: 0.3) + ")", stroke: "transparent"});
 
-                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 20) +  "%, 1)", text: "Place Field", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
+                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: labelPosition.x, y: labelPosition.y, textAlign: 'center', textcolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 50 : 20) +  "%, 1)", text: gameGraphBasic.placeCells[placeCellColorKey].defaultLabel, fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
 
 
-                viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-moveKnob-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], pointsize: 9, pointcolor: "transparent", stroke: "transparent",  draggability: "yes", runFunctionDuringDrag: "gameGraphBasic.movePlace(" + gameGraphBasic.placeCells[placeCellColorKey].id + ")"});
+                viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-moveKnob-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], pointsize: 9, pointcolor: "transparent", stroke: "transparent",  draggability: isFixedCell ? "no" : "yes", runFunctionDuringDrag: "gameGraphBasic.movePlace(" + gameGraphBasic.placeCells[placeCellColorKey].id + ")"});
 
 
 
@@ -434,38 +572,15 @@
 
             gameGraphBasic.movePlace = function(movingPlaceID) {
 
-                if (gameGraphBasic.placeFieldsOnlyInBeginning) {
-                    if (gameGraphBasic.playing == false) {
-                        placeCellColorKey = movingPlaceID
-                        movingPlaceCellData = viewX.graphData['mainGameCanvas-' + gameGraphBasic.graphNameIndex].pointData["mainGame-placeCell-moveKnob-"  + placeCellColorKey][1]
-
-                        gameGraphBasic.placeCells[placeCellColorKey].location = [movingPlaceCellData.x, movingPlaceCellData.y]
-
-                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
-                            
-                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
-
-                        viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
-
-                        viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07});
-                    }
+                if (gameGraphBasic.placeFieldsOnlyInBeginning && gameGraphBasic.playing) {
+                    return
                 }
-                else {
-                    placeCellColorKey = movingPlaceID
-                    movingPlaceCellData = viewX.graphData['mainGameCanvas-' + gameGraphBasic.graphNameIndex].pointData["mainGame-placeCell-moveKnob-"  + placeCellColorKey][1]
 
-                    gameGraphBasic.placeCells[placeCellColorKey].location = [movingPlaceCellData.x, movingPlaceCellData.y]
+                placeCellColorKey = movingPlaceID
+                movingPlaceCellData = viewX.graphData['mainGameCanvas-' + gameGraphBasic.graphNameIndex].pointData["mainGame-placeCell-moveKnob-"  + placeCellColorKey][1]
 
-                    viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
-                        
-                    viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
-
-                    viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1]});
-
-                    viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-"  + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1] - gameGraphBasic.reward.radius - 0.07});
-                }
-                
-                
+                gameGraphBasic.placeCells[placeCellColorKey].location = gameGraphBasic.clampPlaceCellLocation(gameGraphBasic.placeCells[placeCellColorKey], [movingPlaceCellData.x, movingPlaceCellData.y])
+                gameGraphBasic.updatePlaceCellVisuals(placeCellColorKey)
 
             }
 
@@ -477,7 +592,7 @@
                 viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 30) +  "%, 0.5)"});
                 viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 30) +  "%, 0.5)"});
 
-                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-" + placeCellColorKey, {text: "Firing"});
+                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-" + placeCellColorKey, {text: "Firing", fontFamily: "Nunito"});
 
                 (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
                     timeOutInfo = setTimeout(function() {
@@ -490,7 +605,7 @@
 
                 (function(placeCellColorKeySnapshot, placeCellColorFiringSnapshot) {
                     timeOutInfo = setTimeout(function() {
-                        viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-" + placeCellColorKeySnapshot, {text: "Place Field"});
+                        viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-" + placeCellColorKeySnapshot, {text: gameGraphBasic.placeCells[placeCellColorKeySnapshot].defaultLabel, fontFamily: "Nunito"});
                     }, 700);
                     gameGraphBasic.timeouts.push(timeOutInfo)
                 })(placeCellColorKey, placeCellColorFiring);
@@ -558,12 +673,16 @@
                 }
 
 
+                let levelInstruction = "Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b>. To move them, click/tap and drag the place fields."
                 if (configData.hasOwnProperty('levelInfo')) {
-                    document.getElementById('info-box').innerHTML = configData.levelInfo.instruction
+                    levelInstruction = configData.levelInfo.instruction
                 }
-                else {
-                    document.getElementById('info-box').innerHTML = "Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b>. To move them, click/tap and drag the place fields."
+
+                if (gameGraphBasic.placeFieldsOnlyInBeginning) {
+                    levelInstruction = levelInstruction + "<br/><br/><b style='color: orange;'>Press Start Run when ready.</b> Once the run begins, the place fields lock in place."
                 }
+
+                document.getElementById('info-box').innerHTML = levelInstruction
 
 
                 gameGraphBasic.placeCells = {}
@@ -574,9 +693,12 @@
 
                 
                 gameGraphBasic.colliders = {}
+                gameGraphBasic.timeSpaceConfig = configData.hasOwnProperty('timeSpace') ? configData.timeSpace : null
+                gameGraphBasic.timeSpaceLayout = gameGraphBasic.getTimeSpaceLayout(configData)
 
                 gameGraphBasic.time = configData.timer ? configData.timer.timeRemaining : null
                 gameGraphBasic.timeRemaining = configData.timer ? configData.timer.timeRemaining : null
+                gameGraphBasic.totalTime = configData.timer ? configData.timer.timeRemaining : null
                 gameGraphBasic.behaviorCellConnections = configData.brain
 
                 document.getElementById("time-data").innerText = "Time Remaining : " + gameGraphBasic.timeRemaining
@@ -586,7 +708,7 @@
 
                 defaultGraphOptions['xmin'] = -0.1
                 defaultGraphOptions['xmax'] = 1.1
-                defaultGraphOptions['ymin'] = -0.03
+                defaultGraphOptions['ymin'] = gameGraphBasic.timeSpaceLayout != null ? gameGraphBasic.timeSpaceLayout.yMin - 0.06 : -0.03
                 defaultGraphOptions['ymax'] = 1.03
                 gameGraphBasic.graph = document.getElementById('gameSpace')
                 viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas-" + gameGraphBasic.graphNameIndex, defaultGraphOptions)
@@ -596,6 +718,19 @@
                 gameGraphBasic.boundaryRect = viewX.addRectangle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-boundary", rectOptions)[0];
                 
                 gameGraphBasic.boundaryRect.setAttribute('rx','1.1');
+
+                if (gameGraphBasic.timeSpaceLayout != null) {
+                    timeSpaceRect = viewX.addRectangle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-time-boundary", {x: 0, y: gameGraphBasic.timeSpaceLayout.yMax, w: 1, h: gameGraphBasic.timeSpaceLayout.height, stroke: "hsla(0, 0%, " + (darkmode ? 30: 50) + "%, 0.5)", strokewidth: 1, rectcolor: "hsla(46, 100%, " + (darkmode ? 40 : 80) +  "%, 0.05)"})[0];
+                    timeSpaceRect.setAttribute('rx','1.1');
+
+                    viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-time-box-label", {x: 0.5, y: gameGraphBasic.timeSpaceLayout.yMin - 0.04, textcolor: "hsla(46, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "Time Space", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
+                    viewX.addLine("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-time-line", {x1: gameGraphBasic.timeSpaceLayout.xMin, y1: gameGraphBasic.timeSpaceLayout.centerY, x2: gameGraphBasic.timeSpaceLayout.xMax, y2: gameGraphBasic.timeSpaceLayout.centerY, strokewidth: 2, linecolor: "hsla(46, 100%, " + (darkmode ? 70: 35) + "%, 0.8)"});
+                    viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-time-start", {x: gameGraphBasic.timeSpaceLayout.xMin, y: gameGraphBasic.timeSpaceLayout.centerY - 0.08, textcolor: "hsla(46, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "0s", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
+                    viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-time-end", {x: gameGraphBasic.timeSpaceLayout.xMax, y: gameGraphBasic.timeSpaceLayout.centerY - 0.08, textcolor: "hsla(46, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: gameGraphBasic.totalTime.toFixed(0) + "s", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
+                    timePointSize = gameGraphBasic.timeSpaceConfig != null && gameGraphBasic.timeSpaceConfig.timePointSize != null ? gameGraphBasic.timeSpaceConfig.timePointSize : 3
+                    viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-timePoint", {x: gameGraphBasic.timeSpaceLayout.xMin, y: gameGraphBasic.timeSpaceLayout.centerY, pointsize: timePointSize, pointcolor: "hsla(46, 100%, " + (darkmode ? 80: 20) + "%, 1)"});
+                    viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-timePointText", {x: gameGraphBasic.timeSpaceLayout.xMin - 0.08, y: gameGraphBasic.timeSpaceLayout.centerY + 0.07, textcolor: "hsla(46, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "Mouse Time", fontFamily: "Nunito", fontSize: mouseGraph['font-size']*0.75, textAlign: 'left'});
+                }
 
                 gameGraphBasic.mouse = {}
                 gameGraphBasic.mouse.location = configData.mouse.location
@@ -657,9 +792,14 @@
                 // viewX.addText("neuronCanvas", "neuronCanvas-behavioursDescription", {x: 0, y: 0.95, textcolor: "hsla(289, 0%, 50%, 1)", text: "Set of actions the mouse will take", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
 
 
-                cellPositions = configData.cellInitialPositions;
+                cellPositions = configData.cellInitialPositions || {};
 
                 gameGraphBasic.placeInitCells(cellPositions);
+                if (configData.hasOwnProperty('timeCellInitialPositions')) {
+                    gameGraphBasic.placeInitCells(configData.timeCellInitialPositions, 'time');
+                }
+
+                gameGraphBasic.updateTimeSpacePoint()
 
                 gameGraphBasic.addWall('boundary-right', [[1, 0], [1, 1]], visible=false)
                 gameGraphBasic.addWall('boundary-left', [[0, 0], [0, 1]], visible=false)
@@ -677,7 +817,7 @@
 
                 if (gameGraphBasic.placeFieldsOnlyInBeginning) {
                     gameGraphBasic.playing = false
-                    document.getElementById("main-play-pause").innerText = "Play"
+                    document.getElementById("main-play-pause").innerText = "Start Run"
                 }
                 else {
                     gameGraphBasic.playing = true
@@ -728,6 +868,7 @@
                             gameGraphBasic.reset();
                         }
                         document.getElementById("time-data").innerText = "Time Remaining : " + gameGraphBasic.time.toFixed(2)
+                        gameGraphBasic.updateTimeSpacePoint()
                     }
 
                     stepsize = 0.02
@@ -751,10 +892,25 @@
 
                     for (var key in gameGraphBasic.placeCells) {
                         if (gameGraphBasic.placeCells.hasOwnProperty(key)) {
+                            if (gameGraphBasic.placeCells[key].zone == 'time') {
+                                continue
+                            }
                             distanceFromPlaceCell = viewX.distF(newlocation, gameGraphBasic.placeCells[key].location)
                             if (distanceFromPlaceCell < gameGraphBasic.placeCells[key].radius) {
 
                                 gameGraphBasic.triggerNeuron(gameGraphBasic.placeCells[key].id, distanceFromPlaceCell)
+                            }
+                        }
+                    }
+
+                    if (gameGraphBasic.timeSpaceLayout != null) {
+                        for (var timePlaceCellKey in gameGraphBasic.placeCells) {
+                            if (gameGraphBasic.placeCells.hasOwnProperty(timePlaceCellKey) && gameGraphBasic.placeCells[timePlaceCellKey].zone == 'time') {
+                                timeDistanceFromPlaceCell = Math.abs(gameGraphBasic.timeSpacePoint[0] - gameGraphBasic.placeCells[timePlaceCellKey].location[0])
+
+                                if (timeDistanceFromPlaceCell < gameGraphBasic.placeCells[timePlaceCellKey].radius) {
+                                    gameGraphBasic.triggerNeuron(gameGraphBasic.placeCells[timePlaceCellKey].id, timeDistanceFromPlaceCell)
+                                }
                             }
                         }
                     }
@@ -799,14 +955,15 @@
                 gameGraphBasic.firingGraphElements[idForSpike] = {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08}
             }
 
-            gameGraphBasic.triggerNeuron = function(placeCellColorFullKey, placeCellDistance) {
+            gameGraphBasic.triggerNeuron = function(placeCellColorFullKey, placeCellDistance, triggerOptions={}) {
 
                 playSound('activation-sound')
-                placeCellColor = gameGraphBasic.placeCells[placeCellColorFullKey].placeCellColor
+                placeCellData = gameGraphBasic.placeCells[placeCellColorFullKey]
+                placeCellColor = placeCellData.placeCellColor
                 
-                fireWithinRadius = (1 - Math.random())*gameGraphBasic.placeCells[placeCellColorKey].radius
+                fireWithinRadius = triggerOptions.alwaysTrigger ? placeCellData.radius : (1 - Math.random())*placeCellData.radius
 
-                if (placeCellDistance < fireWithinRadius) {
+                if (triggerOptions.alwaysTrigger || placeCellDistance < fireWithinRadius) {
 
                     gameGraphBasic.firePlaceCell(placeCellColorFullKey)
                     gameGraphBasic.fireNeuronSpike(placeCellColor)
@@ -892,7 +1049,7 @@
                         
                         
                         
-                        viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: (darkmode ? "white": "grey")});
+                        viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behavior, {textcolor: (darkmode ? "white": "grey"), fontFamily: "Nunito"});
 
                         viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColor + "-" + behavior, {linecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 70: 50) + "%, 1)"});
 
@@ -900,7 +1057,7 @@
 
                         (function(behaviorSnapshot, placeCellColorSnapshot) {
                             timeOutInfo = setTimeout(function() {
-                                viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behaviorSnapshot, {textcolor: "hsla(289, 0%, " + (darkmode ? 50: 0) + "%, 1)"});
+                                viewX.updateText("neuronCanvas", "neuronCanvas-behaviour-" + behaviorSnapshot, {textcolor: "hsla(289, 0%, " + (darkmode ? 50: 0) + "%, 1)", fontFamily: "Nunito"});
                                 viewX.updateLine("neuronCanvas", "neuronCanvas-connecting-Line-" + placeCellColorSnapshot + "-" + behaviorSnapshot, {linecolor: "hsla(" + placeCellColorSnapshot + ", 100%, " + (darkmode ? 70: 50) + "%, 0.7)"});
                                 viewX.updateRectangle("neuronCanvas", "neuronCanvas-neuron-" + placeCellColorSnapshot, {rectcolor: "hsla(" + placeCellColorSnapshot + ", 100%, " + (darkmode ? 70: 50) + "%, 0.7)"});
                             }, 100);
@@ -916,10 +1073,10 @@
                         behaviorsExecutedString = "Mouse"
                     }
                     
-                    viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {text: behaviorsExecutedString});
+                    viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {text: behaviorsExecutedString, fontFamily: "Nunito"});
 
                     timeOutInfo = setTimeout(function() {
-                        viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {text: "Mouse"});  
+                        viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {text: "Mouse", fontFamily: "Nunito"});  
                     }, 700);
 
                     gameGraphBasic.timeouts.push(timeOutInfo)
@@ -930,11 +1087,14 @@
             }
 
 
-            gameGraphBasic.placeInitCells = function(cellConfig) {
+            gameGraphBasic.placeInitCells = function(cellConfig, zone='space') {
+                if (cellConfig == null) {
+                    return
+                }
                 for (var placeCellColorData in cellConfig) {
                     positions = cellConfig[placeCellColorData]
                     for (pindex = 0; pindex < positions.length; pindex++) {
-                        gameGraphBasic.addPlaceCell(placeCellColorData, positions[pindex])
+                        gameGraphBasic.addPlaceCell(placeCellColorData, positions[pindex], zone)
                     }
                 }
                 
@@ -1428,6 +1588,521 @@
                     timer: {
                         timeRemaining: 35
                     }
+                },
+                8 : {
+                    neurons : [198, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.12, 0.22],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.72, 0.62],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        30: [
+                            [0.57, 0.2],
+                        ]
+                    },
+                    timeCellInitialPositions : {
+                        198: [
+                            5
+                        ]
+                    },
+                    timeSpace: {
+                        mainHeightFraction: 0.75,
+                        gapFraction: 0.05,
+                        timeHeightFraction: 0.20,
+                        timeCellPositionsAreSeconds: true,
+                        fixedSpaceCells: true,
+                        fixedTimeCells: false,
+                        timePointSize: 1.5
+                    },
+                    walls: {},
+                    timer: {
+                        timeRemaining: 20
+                    },
+                    levelInfo : {
+                        instruction: "Level 9 introduces a <b style='color: hsla(46,100%,70%,1)'>time space</b>. The top box is the normal arena, and the lower strip is one-dimensional time. The spatial <b style='color: hsla(30,100%,70%,1)'>place field</b> is fixed, but you can drag the <b style='color: hsla(198,100%,70%,1)'>time field</b> horizontally in the lower strip. It starts at <b style='color: orange;'>5 seconds</b> after the run begins."
+                    }
+                },
+                9 : {
+                    neurons : [198, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnLeft', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnLeft'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.12, 0.18],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.76, 0.72],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {},
+                    timeCellInitialPositions : {
+                        30: [
+                            {position: 4, fixed: true}
+                        ],
+                        198: [
+                            {position: 10, fixed: false}
+                        ]
+                    },
+                    timeSpace: {
+                        mainHeightFraction: 0.75,
+                        gapFraction: 0.05,
+                        timeHeightFraction: 0.20,
+                        timeCellPositionsAreSeconds: true,
+                        fixedSpaceCells: true,
+                        fixedTimeCells: false,
+                        timePointSize: 1.5
+                    },
+                    walls: {},
+                    timer: {
+                        timeRemaining: 18
+                    },
+                    levelInfo : {
+                        instruction: ""
+                    }
+                },
+                10 : {
+                    neurons : [198, 310, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.72],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.88, 0.14],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.48, 0.82],
+                            [0.76, 0.18],
+                        ],
+                        310: [
+                            [0.5, 0.42],
+                        ],
+                        30: [
+                            [0.22, 0.84],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.33, 0], [0.33, 0.7]],
+                        'wall-2': [[0.66, 0.3], [0.66, 1]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    }
+                },
+                11 : {
+                    neurons : [198, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.12],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.14, 0.88],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.22, 0.12],
+                        ],
+                        40: [
+                            [0.84, 0.84],
+                        ],
+                        30: [
+                            [0.88, 0.22],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.5, 0.2], [0.5, 0.8]],
+                        'wall-2': [[0.2, 0.5], [0.8, 0.5]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    }
+                },
+                12 : {
+                    neurons : [198, 310, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.1, 0.1],
+                        velocity: [0, 0.2]
+                    },
+                    reward: {
+                        location: [0.92, 0.86],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.44, 0.12],
+                        ]
+                    },
+                    timeCellInitialPositions : {
+                        198: [
+                            5
+                        ],
+                        310: [
+                            15
+                        ],
+                        30: [
+                            25
+                        ]
+                    },
+                    timeSpace: {
+                        mainHeightFraction: 0.75,
+                        gapFraction: 0.05,
+                        timeHeightFraction: 0.20,
+                        timeCellPositionsAreSeconds: true,
+                        fixedTimeCells: true,
+                        timePointSize: 1.5
+                    },
+                    walls: {
+                        'wall-1': [[0.25, 0], [0.25, 0.72]],
+                        'wall-2': [[0.5, 0.28], [0.5, 1]],
+                        'wall-3': [[0.75, 0], [0.75, 0.72]]
+                    },
+                    timer: {
+                        timeRemaining: 45
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play, and use the three fixed <b style='color: hsla(46,100%,70%,1)'>time fields</b> as extra timing anchors."
+                    }
+                },
+                13 : {
+                    neurons : [198, 310, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.12, 0.84],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.24, 0.84],
+                        ],
+                        310: [
+                            [0.76, 0.76],
+                        ],
+                        40: [
+                            [0.76, 0.24],
+                        ],
+                        30: [
+                            [0.24, 0.24],
+                        ]
+                    },
+                    walls: {},
+                    timer: {
+                        timeRemaining: 30
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                14 : {
+                    neurons : [198, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.12, 0.12],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.12],
+                        ],
+                        40: [
+                            [0.82, 0.5],
+                        ],
+                        30: [
+                            [0.82, 0.24],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.3, 0.7], [0.7, 0.7]],
+                        'wall-2': [[0.7, 0.7], [0.7, 0.55]],
+                        'wall-3': [[0.7, 0.43], [0.7, 0.3]],
+                        'wall-4': [[0.3, 0.3], [0.7, 0.3]],
+                        'wall-5': [[0.3, 0.3], [0.3, 0.7]]
+                    },
+                    timer: {
+                        timeRemaining: 35
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                15 : {
+                    neurons : [198, 310, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.88, 0.12],
+                        velocity: [-0.15, 0.15]
+                    },
+                    reward: {
+                        location: [0.5, 0.52],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.44, 0.78],
+                        ],
+                        310: [
+                            [0.72, 0.72],
+                        ],
+                        40: [
+                            [0.72, 0.22],
+                        ],
+                        30: [
+                            [0.28, 0.18],
+                        ]
+                    },
+                    walls: {
+                        'spiral-wall-1': [[0.4, 0.4], [0.4, 0.65], [0.68, 0.65], [0.68, 0.25], [0.25, 0.25], [0.25, 0.85], [0.85, 0.85], [0.85, 0.1]],
+                        'wall-1': [[0.55, 0.65], [0.55, 0.42]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    }
+                },
+                16 : {
+                    neurons : [198, 310, 40],
+                    behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest']
+                    },
+                    mouse: {
+                        location: [0.08, 0.9],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.08, 0.08],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.14, 0.9],
+                            [0.2, 0.52],
+                        ],
+                        310: [
+                            [0.88, 0.84],
+                            [0.12, 0.64],
+                            [0.88, 0.44],
+                            [0.12, 0.24],
+                        ],
+                        40: [
+                            [0.82, 0.72],
+                            [0.82, 0.32],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0, 0.8], [0.86, 0.8]],
+                        'wall-2': [[0.14, 0.6], [1, 0.6]],
+                        'wall-3': [[0, 0.4], [0.86, 0.4]],
+                        'wall-4': [[0.14, 0.2], [1, 0.2]]
+                    },
+                    timer: {
+                        timeRemaining: 50
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                17 : {
+                    neurons : [198, 310, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.5],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.8, 0.52],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.5],
+                            [0.64, 0.74],
+                        ],
+                        310: [
+                            [0.82, 0.72],
+                        ],
+                        30: [
+                            [0.48, 0.64],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.2, 0.82], [0.9, 0.82]],
+                        'wall-2': [[0.9, 0.82], [0.9, 0.18]],
+                        'wall-3': [[0.2, 0.18], [0.9, 0.18]],
+                        'wall-4': [[0.55, 0.18], [0.55, 0.68]],
+                        'wall-5': [[0.55, 0.68], [0.78, 0.68]]
+                    },
+                    timer: {
+                        timeRemaining: 40
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                18 : {
+                    neurons : [198, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.1, 0.1],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.5, 0.5],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.18, 0.1],
+                            [0.66, 0.22],
+                        ],
+                        40: [
+                            [0.68, 0.5],
+                        ],
+                        30: [
+                            [0.54, 0.22],
+                            [0.72, 0.52],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0.18, 0.18], [0.18, 0.82]],
+                        'wall-2': [[0.18, 0.82], [0.82, 0.82]],
+                        'wall-3': [[0.82, 0.82], [0.82, 0.18]],
+                        'wall-4': [[0.18, 0.18], [0.46, 0.18]],
+                        'wall-5': [[0.62, 0.18], [0.82, 0.18]],
+                        'wall-6': [[0.36, 0.36], [0.36, 0.64]],
+                        'wall-7': [[0.36, 0.64], [0.64, 0.64]],
+                        'wall-8': [[0.36, 0.36], [0.64, 0.36]],
+                        'wall-9': [[0.64, 0.64], [0.64, 0.56]],
+                        'wall-10': [[0.64, 0.44], [0.64, 0.36]]
+                    },
+                    timer: {
+                        timeRemaining: 45
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
+                },
+                19 : {
+                    neurons : [198, 310, 40, 30],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
+                    brain: {
+                        198 : ['turnEast'],
+                        310: ['turnSouth'],
+                        40 : ['turnWest'],
+                        30: ['turnNorth']
+                    },
+                    mouse: {
+                        location: [0.08, 0.9],
+                        velocity: [0.2, 0]
+                    },
+                    reward: {
+                        location: [0.72, 0.24],
+                        radius: 0.03
+                    },
+                    cellInitialPositions : {
+                        198: [
+                            [0.16, 0.9],
+                            [0.22, 0.22],
+                            [0.52, 0.26],
+                        ],
+                        310: [
+                            [0.88, 0.84],
+                            [0.14, 0.58],
+                        ],
+                        40: [
+                            [0.84, 0.66],
+                        ],
+                        30: [
+                            [0.32, 0.16],
+                        ]
+                    },
+                    walls: {
+                        'wall-1': [[0, 0.78], [0.82, 0.78]],
+                        'wall-2': [[0.18, 0.52], [1, 0.52]],
+                        'wall-3': [[0.42, 0.34], [0.86, 0.34]],
+                        'wall-4': [[0.86, 0.34], [0.86, 0.08]],
+                        'wall-5': [[0.42, 0.08], [0.86, 0.08]],
+                        'wall-6': [[0.42, 0.08], [0.42, 0.18]]
+                    },
+                    timer: {
+                        timeRemaining: 55
+                    },
+                    levelInfo : {
+                        instruction: "This is a <b style='color: orange;'>planning level</b>. Move the <b style='color: hsla(198,100%,80%, 1)'>place fields</b> before you press play."
+                    },
+                    placeFieldsOnlyInBeginning: true
                 },
             }
 

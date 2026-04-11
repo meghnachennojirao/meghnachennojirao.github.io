@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3JS Game Canvas</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+  <script>
+    // Set up scene, camera, renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add a static path (long rectangular plane)
+    const pathWidth = 2;
+    const pathLength = 50;
+    const geometry = new THREE.PlaneGeometry(pathWidth, pathLength);
+    const material = new THREE.MeshPhongMaterial({ color: 0x444444 });
+    const path = new THREE.Mesh(geometry, material);
+    path.rotation.x = -Math.PI / 2; // Make it horizontal
+    scene.add(path);
+
+    // Add some light so the path is visible
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0, 10, 10);
+    scene.add(light);
+
+    camera.position.set(0, 2, 5);
+    camera.lookAt(0, 0, 0);
+
+    // Animation loop (static scene)
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Responsive resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

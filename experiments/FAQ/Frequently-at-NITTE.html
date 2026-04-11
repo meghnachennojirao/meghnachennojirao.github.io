@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Frequently Asked Questions by Meghna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome (icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --base-hue: 212;
+      --bg: hsla(var(--base-hue), 42%, 96%, 1);
+      --bg-alt: hsla(var(--base-hue), 48%, 92%, 1);
+      --surface: hsla(var(--base-hue), 52%, 98%, 1);
+      --surface-subtle: hsla(var(--base-hue), 46%, 94%, 0.55);
+      --surface-strong: hsla(var(--base-hue), 44%, 90%, 0.65);
+      --border: hsla(var(--base-hue), 28%, 68%, 0.35);
+      --border-strong: hsla(var(--base-hue), 32%, 52%, 0.55);
+      --text: hsla(var(--base-hue), 32%, 20%, 1);
+      --text-muted: hsla(var(--base-hue), 24%, 40%, 0.78);
+      --divider: hsla(var(--base-hue), 28%, 70%, 0.4);
+      --accent: hsla(var(--base-hue), 90%, 42%, 1);
+      --accent-light: hsla(var(--base-hue), 82%, 76%, 1);
+      --accent-soft: hsla(var(--base-hue), 86%, 70%, 0.18);
+      --badge-bg: hsla(var(--base-hue), 70%, 91%, 0.8);
+      --badge-text: hsla(var(--base-hue), 38%, 32%, 1);
+      --pill-gradient: linear-gradient(135deg, hsla(var(--base-hue), 65%, 95%, 1), hsla(var(--base-hue), 54%, 88%, 0.95));
+      --header-gradient: linear-gradient(135deg, hsla(var(--base-hue), 88%, 72%, 0.95), hsla(calc(var(--base-hue) - 12), 78%, 74%, 0.9));
+    }
+
+    [data-theme="dark"]{
+      --bg: hsla(var(--base-hue), 24%, 12%, 1);
+      --bg-alt: hsla(var(--base-hue), 28%, 18%, 1);
+      --surface: hsla(var(--base-hue), 26%, 20%, 1);
+      --surface-subtle: hsla(var(--base-hue), 32%, 24%, 0.55);
+      --surface-strong: hsla(var(--base-hue), 30%, 22%, 0.65);
+      --border: hsla(var(--base-hue), 30%, 30%, 0.5);
+      --border-strong: hsla(var(--base-hue), 34%, 46%, 0.75);
+      --text: hsla(var(--base-hue), 28%, 92%, 1);
+      --text-muted: hsla(var(--base-hue), 18%, 72%, 0.8);
+      --divider: hsla(var(--base-hue), 30%, 32%, 0.55);
+      --accent: hsla(var(--base-hue), 86%, 62%, 1);
+      --accent-light: hsla(var(--base-hue), 86%, 68%, 0.3);
+      --accent-soft: hsla(var(--base-hue), 70%, 40%, 0.35);
+      --badge-bg: hsla(var(--base-hue), 40%, 26%, 0.8);
+      --badge-text: hsla(var(--base-hue), 80%, 88%, 1);
+      --pill-gradient: linear-gradient(135deg, hsla(var(--base-hue), 32%, 26%, 0.9), hsla(var(--base-hue), 26%, 18%, 0.9));
+      --header-gradient: linear-gradient(135deg, hsla(var(--base-hue), 68%, 40%, 0.95), hsla(calc(var(--base-hue) - 12), 58%, 34%, 0.95));
+    }
+
+    html, body{
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: background-color .3s ease, color .3s ease;
+    }
+
+    body{ min-height: 100vh; }
+    .neo-wrap { max-width: 1200px; }
+
+    .neo{
+      background: var(--surface);
+      border-radius: 26px;
+      /* border: 1px solid var(--border); */
+      /* box-shadow: 0 12px 30px hsla(var(--base-hue), 40%, 60%, 0.08); */
+      /* backdrop-filter: blur(2px); */
+    }
+
+    .neo-inset{
+      background: var(--surface);
+      /* border: 1px solid var(--border); */
+      border-radius: 28px;
+      /* box-shadow: inset 0 1px 0 hsla(var(--base-hue), 70%, 100%, 0.25); */
+    }
+
+    .neo-pill{
+      border-radius: 999px;
+      background-image: var(--pill-gradient);
+      border: 1px solid var(--border);
+      padding-inline: 1.3rem;
+    }
+
+    .app-title{
+      letter-spacing:.2px;
+      font-weight:800;
+      color: var(--text);
+    }
+
+    .subtle{
+      color: var(--text-muted);
+    }
+
+    .q-card{
+      transition: transform .08s ease, border-color .2s ease, box-shadow .2s ease;
+      border: 1px solid var(--border);
+      background: hsla(var(--base-hue), 70%, 98%, 0.75);
+      border-radius: 24px;
+      padding: 1.35rem;
+      /* box-shadow: 0 10px 22px hsla(var(--base-hue), 40%, 54%, 0.08); */
+    }
+
+    [data-theme="dark"] .q-card{
+      background: hsla(var(--base-hue), 26%, 20%, 0.92);
+      /* box-shadow: 0 14px 26px hsla(var(--base-hue), 32%, 22%, 0.32); */
+    }
+
+    .q-card:hover{
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+      /* box-shadow: 0 18px 34px hsla(var(--base-hue), 42%, 52%, 0.16); */
+    }
+
+    .topic-header{
+      cursor:pointer;
+      user-select:none;
+      border-radius: 20px;
+    }
+
+    .badge-ghost{
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border: none;
+      border-radius: 999px;
+      padding:.35rem .75rem;
+      font-weight: 500;
+    }
+
+    .tiny{ font-size:.85rem; color: var(--text-muted); }
+
+    .sticky-topbar{
+      position: sticky; top: 0; z-index: 1030;
+      background: transparent;
+      border-bottom: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding-top: .25rem;
+    }
+
+    .sticky-topbar .neo-inset{
+      background-image: var(--header-gradient);
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .sticky-topbar .neo-inset{
+      background-image: var(--header-gradient);
+    }
+
+    .tab-btn{
+      border:none;
+      background: transparent;
+      color: inherit;
+      border-radius: 20px;
+      padding: 0;
+      display: inline-flex;
+      align-items:center;
+      gap:.5rem;
+    }
+
+    .tab-track{
+      overflow-x: auto;
+      margin: 1rem 0rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tab-track::-webkit-scrollbar{ display:none; }
+
+    .nav-pills{ gap:.35rem; }
+    .nav-pills .nav-link{
+      border-radius: 20px;
+      margin: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      padding:.6rem 1.2rem;
+      transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+      display: inline-flex;
+      align-items:center;
+      gap:.5rem;
+    }
+
+    .nav-pills .nav-link.active,
+    .nav-pills .show > .nav-link{
+      background: linear-gradient(135deg, hsla(var(--base-hue), 78%, 60%, 0.28), hsla(var(--base-hue), 60%, 55%, 0.22)) !important;
+      color: var(--accent) !important;
+      /* box-shadow: 0 8px 20px hsla(var(--base-hue), 70%, 36%, 0.28); */
+      font-weight:700;
+    }
+
+    [data-theme="dark"] .nav-pills .nav-link.active,
+    [data-theme="dark"] .nav-pills .show > .nav-link{
+      background: linear-gradient(135deg, hsla(var(--base-hue), 68%, 48%, 0.35), hsla(var(--base-hue), 64%, 38%, 0.32)) !important;
+      color: hsla(var(--base-hue), 84%, 82%, 1) !important;
+      /* box-shadow: 0 10px 24px hsla(var(--base-hue), 70%, 26%, 0.5); */
+    }
+
+    .nav-pills .nav-link:not(.active):hover{
+      background: hsla(var(--base-hue), 62%, 62%, 0.14);
+      color: var(--text);
+    }
+
+    .search-input::placeholder{ color: var(--text-muted); }
+
+    .checkmark{
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      outline: none;
+      background: var(--surface);
+      display: inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+      font-size: .85rem;
+      color: transparent;
+    }
+
+    .checkmark::after{
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: hsla(var(--base-hue), 100%, 100%, 1);
+      transform: scale(0.2);
+      transition: transform .18s ease;
+    }
+
+    .checkmark:checked{
+      background: var(--accent);
+      border-color: var(--accent);
+      color: hsla(var(--base-hue), 100%, 100%, 1);
+      box-shadow: 0 8px 18px hsla(var(--base-hue), 64%, 40%, 0.28);
+    }
+
+    .checkmark:checked::after{
+      transform: scale(1);
+    }
+
+    .checkmark:focus{
+      outline: none;
+      box-shadow: 0 0 0 2px hsla(var(--base-hue), 86%, 68%, 0.35);
+    }
+
+    .small-muted{ color: var(--text-muted); font-size:.92rem; }
+
+    .divider{ height:1px; background:linear-gradient(90deg, transparent, var(--divider), transparent); }
+
+    .soft-btn{
+      border:none;
+      padding:.65rem 1.4rem;
+      border-radius: 24px;
+      background: var(--accent);
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+      font-weight:600;
+      transition: transform .1s ease, box-shadow .2s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      box-shadow: 0 12px 24px hsla(var(--base-hue), 64%, 40%, 0.22);
+    }
+
+    .soft-btn:hover{ transform: translateY(-1px); }
+    .soft-btn:active{ transform: translateY(0); box-shadow: 0 8px 18px hsla(var(--base-hue), 64%, 42%, 0.26); }
+
+    .ghost-btn{
+      border:1px solid var(--border);
+      border-radius:22px;
+      background: hsla(var(--base-hue), 70%, 98%, 0.6);
+      color: var(--text);
+      padding:.6rem 1.2rem;
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      font-weight:600;
+      transition: border-color .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+
+    .ghost-btn:hover{
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 6px 16px hsla(var(--base-hue), 62%, 40%, 0.2);
+    }
+
+    .icon-btn{
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: hsla(var(--base-hue), 70%, 98%, 0.8);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color: var(--accent);
+      transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+      box-shadow: 0 6px 14px hsla(var(--base-hue), 50%, 48%, 0.18);
+    }
+
+    .icon-btn:hover{
+      background: var(--accent);
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+      border-color: var(--accent);
+      box-shadow: 0 10px 20px hsla(var(--base-hue), 62%, 40%, 0.26);
+    }
+
+    [data-theme="dark"] .icon-btn{
+      background: hsla(var(--base-hue), 30%, 24%, 0.9);
+      color: var(--accent);
+    }
+
+    [data-theme="dark"] .icon-btn:hover{
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+    }
+
+    .clear-btn{
+      border:none;
+      padding:.55rem 1.05rem;
+      border-radius: 18px;
+      background: hsla(var(--base-hue), 86%, 66%, 0.25);
+      color: var(--accent);
+      font-weight:600;
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+      box-shadow: none;
+    }
+
+    .clear-btn:hover{
+      background: hsla(var(--base-hue), 88%, 62%, 0.35);
+      box-shadow: 0 6px 16px hsla(var(--base-hue), 66%, 48%, 0.18);
+    }
+
+    .clear-btn:active{
+      background: hsla(var(--base-hue), 88%, 52%, 0.42);
+    }
+
+    .bookmark-btn{
+      border:1px solid var(--border);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-muted);
+      padding:.45rem .95rem;
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      font-weight:600;
+      font-size:.88rem;
+      transition: border-color .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+
+    .bookmark-btn:hover{
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 6px 14px hsla(var(--base-hue), 62%, 42%, 0.16);
+    }
+
+    .bookmark-btn.active{
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 8px 16px hsla(var(--base-hue), 62%, 40%, 0.2);
+    }
+
+    .h-scroll-wrap{
+      position: relative;
+      display:flex;
+      align-items:center;
+      gap:.35rem;
+    }
+
+    .h-scroll-inner{
+      flex:1 1 auto;
+    }
+
+    .h-scroll-btn{
+      border:none;
+      background: hsla(var(--base-hue), 68%, 96%, 0.45);
+      color: var(--accent);
+      width:2rem;
+      height:2rem;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: background-color .2s ease, color .2s ease;
+      flex:0 0 auto;
+    }
+
+    .h-scroll-btn:hover{
+      background: hsla(var(--base-hue), 82%, 62%, 0.5);
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+    }
+
+    [data-theme="dark"] .h-scroll-btn{
+      background: hsla(var(--base-hue), 32%, 24%, 0.7);
+      color: hsla(var(--base-hue), 78%, 62%, 1);
+    }
+
+    [data-theme="dark"] .h-scroll-btn:hover{
+      background: hsla(var(--base-hue), 78%, 52%, 0.45);
+      color: hsla(var(--base-hue), 100%, 98%, 1);
+    }
+
+    .mark-track,
+    .keyword-track{
+      display:flex;
+      gap:.75rem;
+      overflow-x:auto;
+      padding-bottom:.35rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .mark-track::-webkit-scrollbar,
+    .keyword-track::-webkit-scrollbar{ display:none; }
+
+    .chip-pill{
+      border:none;
+      border-radius: 999px;
+      padding:.65rem 1.1rem;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:.15rem;
+      min-width: 6.5rem;
+      color: var(--text);
+      transition: background-color .2s ease, transform .12s ease;
+      background: hsla(var(--base-hue), 68%, 94%, 0.6);
+    }
+
+    .chip-pill:hover{ transform: translateY(-1px); }
+
+    .chip-pill-value{ font-weight: 700; }
+    .chip-pill-meta{ font-size:.82rem; color: var(--text-muted); }
+
+    
+    .mark-pill{ background: hsla(var(--base-hue), 68%, 94%, 0.6); padding: 15px 35px; }
+    .mark-pill.active{ background: hsla(var(--base-hue), 82%, 64%, 0.26); color: var(--accent); }
+
+    .keyword-pill{ height: 100%; background: hsla(var(--base-hue), 60%, 96%, 0.55); min-width: 200px; padding: 15px 35px; text-align: left; border-radius: 20px; }
+    .keyword-pill.active{ background: hsla(var(--base-hue), 80%, 58%, 0.24); color: var(--accent); }
+
+    [data-theme="dark"] .chip-pill{ background: hsla(var(--base-hue), 30%, 26%, 0.8); color: var(--text); }
+    [data-theme="dark"] .mark-pill.active{ background: hsla(var(--base-hue), 78%, 52%, 0.32); color: hsla(var(--base-hue), 90%, 82%, 1); }
+    [data-theme="dark"] .keyword-pill{ background: hsla(var(--base-hue), 26%, 24%, 0.78); }
+    [data-theme="dark"] .keyword-pill.active{ background: hsla(var(--base-hue), 70%, 48%, 0.32); color: hsla(var(--base-hue), 92%, 84%, 1); }
+
+    .mark-group{
+      margin-top: 1.5rem;
+    }
+
+    .mark-group-header{
+      margin-bottom: 1.15rem;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .question-layout{
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .question-layout > .form-check-input{
+      flex: 0 0 auto;
+    }
+
+    .question-layout > .flex-grow-1{
+      min-width: 0;
+    }
+
+    .question-title{
+      flex: 1 1 auto;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    .date-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:.35rem;
+      white-space: normal;
+    }
+
+    .action-track{
+      display:flex;
+      justify-content:flex-end;
+      gap:.65rem;
+      overflow-x:auto;
+      padding-top:.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .action-track::-webkit-scrollbar{ display:none; }
+
+    .tab-shell{
+      /* background: hsla(var(--base-hue), 68%, 96%, 0.6); */
+      border-radius: 16px;
+      padding:.35rem .55rem;
+      /* box-shadow: 0 8px 24px hsla(var(--base-hue), 36%, 58%, 0.12); */
+      overflow:hidden;
+    }
+
+    a, .link-like{ color: var(--accent); text-decoration: none; }
+    .link-like:hover{ text-decoration: underline; }
+
+    footer{ color: var(--text-muted); }
+
+    /* Mobile tweaks */
+    @media (max-width: 576px){
+      .app-title{ font-size:1.35rem; }
+      .neo { border-radius:18px; }
+      .neo-inset{ border-radius:22px; }
+      .tab-track{ margin: 0 -0.35rem; padding: 0 0.35rem; }
+      .tab-track .nav-pills{ flex-wrap: nowrap; gap:.5rem; }
+      .tab-track .nav-item{ flex: 0 0 auto; }
+      .bookmark-btn{ padding:.4rem .7rem; }
+      .bookmark-btn span{ display:none; }
+      .clear-btn{ padding:.55rem .7rem; }
+      .clear-btn span{ display:none; }
+      .question-layout{ gap: 0.85rem; }
+      .question-title{ font-size: 1rem; }
+      .small-muted{ font-size:.88rem; }
+      .action-track{ margin-right:-0.35rem; padding-right:0.35rem; }
+      .date-chip{ display:block; margin-bottom:.35rem; }
+      .h-scroll-btn{ display:none; }
+      .mark-pill {padding: 15px 35px; min-width: 160px; text-align: left;}
+      .keyword-pill {padding: 15px 35px; min-width: 160px; text-align: left;}
+    }
+  </style>
+
+  <script>
+    // randomly pick --base-hue on first load
+
+    // choose from 40, 200, 212, 280, 320
+    const hues = [40, 200, 212, 280, 320];
+    const randomHue = hues[Math.floor(Math.random() * hues.length)];
+    document.documentElement.style.setProperty("--base-hue", randomHue);
+
+  </script>
+</head>
+<body>
+  <div id="root" class="container-fluid px-3 px-md-4 px-xl-5 py-3 py-md-4">
+    <!-- React mounts here -->
+  </div>
+
+  <!-- React + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script type="text/babel">
+  const {useEffect,useMemo,useState,useRef} = React;
+
+  // ---------- helpers ----------
+  const STORAGE_KEY = "meghna-faq-checks-v1";
+  const BOOKMARK_KEY = "meghna-faq-bookmarks-v1";
+  const THEME_KEY = "meghna-faq-theme";
+
+  const getPreferredTheme = () => {
+    if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+    }
+    return "light";
+  };
+
+  const loadTheme = () => {
+    if (typeof window === "undefined") return "light";
+    try {
+      const stored = localStorage.getItem(THEME_KEY);
+      if (stored === "light" || stored === "dark") return stored;
+    } catch (e) { /* ignore */ }
+    return "light";
+  };
+
+  const applyTheme = (mode) => {
+    if (typeof document !== "undefined") {
+      document.documentElement.setAttribute("data-theme", mode);
+    }
+  };
+
+  const saveTheme = (mode) => {
+    if (typeof window !== "undefined") {
+      try { localStorage.setItem(THEME_KEY, mode); } catch (e) { /* ignore */ }
+    }
+  };
+
+  const loadChecks = () => {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+    catch(e){ return {}; }
+  };
+  const saveChecks = (obj) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj||{}));
+  };
+
+  const loadBookmarks = () => {
+    try { return JSON.parse(localStorage.getItem(BOOKMARK_KEY) || "{}"); }
+    catch(e){ return {}; }
+  };
+  const saveBookmarks = (obj) => {
+    localStorage.setItem(BOOKMARK_KEY, JSON.stringify(obj||{}));
+  };
+
+  const normalizeData = (raw) => {
+    // Convert object of questions to array with computed fields
+    return Object.entries(raw).map(([id, q]) => {
+      const appearances = q.appeared_in_exam || [];
+      const times = appearances.length;
+      const totalMarks = appearances.reduce((s,a)=>s + (+a.marks||0), 0);
+      const markSet = [...new Set(appearances.map(a=>a.marks))].sort((a,b)=>a-b);
+      const topicKey = (q.normalized_topic || q.main_question_topic || "Misc").trim();
+      const topicLabel = (q.main_question_topic || q.normalized_topic || topicKey).trim();
+      const mostCommonMark = (() => {
+        const counts = {};
+        appearances.forEach(a => {
+          const mark = a.marks;
+          counts[mark] = (counts[mark] || 0) + 1;
+        });
+        const sorted = Object.entries(counts).sort((x, y) => y[1] - x[1] || y[0] - x[0]);
+        const topEntry = sorted.length ? sorted[0][0] : 0;
+        return Number(topEntry || 0);
+      })();
+      return {
+        id,
+        ...q,
+        times,
+        totalMarks,
+        marksPerAppearance: appearances.map(a=>a.marks),
+        uniqueMarks: markSet,
+        mostCommonMark,
+        topicKey,
+        topicLabel,
+      };
+    });
+  };
+
+  const groupBy = (arr, getKey) => {
+    const m = new Map();
+    arr.forEach(item=>{
+      const key = getKey(item);
+      if(!m.has(key)) m.set(key, []);
+      m.get(key).push(item);
+    });
+    return m;
+  };
+
+  const HorizontalScroller = ({children, outerClassName = "", innerClassName = ""}) => {
+    const wrapRef = useRef(null);
+    const innerRef = useRef(null);
+    const [scrollState, setScrollState] = useState({left:false, right:false});
+
+    const updateScrollState = () => {
+      const el = innerRef.current;
+      if(!el){
+        return;
+      }
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      const left = el.scrollLeft > 0;
+      const right = el.scrollLeft < maxScroll - 1;
+      setScrollState(function(prev){
+        if(prev.left === left && prev.right === right){
+          return prev;
+        }
+        return {left:left, right:right};
+      });
+    };
+
+    useEffect(()=>{
+      updateScrollState();
+      const el = innerRef.current;
+      if(!el){
+        return;
+      }
+      const handleScroll = function(){ updateScrollState(); };
+      el.addEventListener("scroll", handleScroll, {passive:true});
+      const handleResize = function(){ updateScrollState(); };
+      window.addEventListener("resize", handleResize);
+      return () => {
+        el.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
+    useEffect(()=>{ updateScrollState(); });
+
+    const scrollByAmount = (direction) => {
+      const el = innerRef.current;
+      if(!el){ return; }
+      const amount = el.clientWidth * 0.6 * direction;
+      if(typeof el.scrollBy === "function"){
+        el.scrollBy({left: amount, behavior: "smooth"});
+      }else{
+        el.scrollLeft += amount;
+      }
+    };
+
+    return (
+      <div className={("h-scroll-wrap " + outerClassName).trim()} ref={wrapRef}>
+        {scrollState.left ? (
+          <button className="h-scroll-btn" onClick={()=>scrollByAmount(-1)} aria-label="Scroll left">
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+        ) : null}
+        <div className={("h-scroll-inner " + innerClassName).trim()} ref={innerRef}>
+          {children}
+        </div>
+        {scrollState.right ? (
+          <button className="h-scroll-btn" onClick={()=>scrollByAmount(1)} aria-label="Scroll right">
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+        ) : null}
+      </div>
+    );
+  };
+
+  // ---------- UI bits ----------
+  const Header = ({subjects, subject, setSubject, counts, clearChecks, theme, toggleTheme}) => {
+    return (
+      <div className="sticky-topbar mb-3">
+        <div className="neo neo-inset p-3 p-md-4 rounded-4">
+          <div className="d-flex flex-column flex-md-row align-items-md-center gap-3">
+            <div className="flex-grow-1">
+              <h1 className="app-title mb-1">Frequently Asked Questions <span className="subtle">at NITTE</span></h1>
+              <div className="small-muted">
+                <i className="fa-regular fa-circle-question me-1"></i>
+                {counts.filtered} questions • {counts.subjects} subjects • {counts.totalAppearances} appearances
+              </div>
+            </div>
+            <div className="ms-md-auto">
+              <div className="neo-pill px-3 py-2">
+                <div className="d-flex align-items-center gap-2">
+                  <i className="fa-solid fa-book-open subtle"></i>
+                  <select className="form-select form-select-sm border-0 bg-transparent"
+                          value={subject}
+                          onChange={e=>setSubject(e.target.value)}>
+                    <option value="__ALL__">All subjects</option>
+                    {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <HorizontalScroller outerClassName="action-track-wrap mt-2" innerClassName="action-track">
+            <button
+              className="icon-btn"
+              onClick={toggleTheme}
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <i className={`fa-solid ${theme === "dark" ? "fa-sun" : "fa-moon"}`}></i>
+            </button>
+            <button className="clear-btn" onClick={clearChecks} title="Clear all selections">
+              <i className="fa-solid fa-broom"></i>
+              <span>Clear ticks</span>
+            </button>
+          </HorizontalScroller>
+        </div>
+      </div>
+    );
+  };
+
+  const Tabs = ({active, setActive}) => {
+    const items = [
+      {key:"popular", label:"Popular Questions", icon:"fa-fire"},
+      {key:"topics",  label:"Popular Topics",   icon:"fa-sitemap"},
+      {key:"keywords", label:"Popular Keywords", icon:"fa-tags"},
+      {key:"all",     label:"All Questions",    icon:"fa-table-list"},
+      {key:"picks",   label:"My Picks",         icon:"fa-star"}
+    ];
+    return (
+      <HorizontalScroller outerClassName="tab-shell mb-3" innerClassName="tab-track">
+        <ul className="nav nav-pills gap-1">
+          {items.map(it=>(
+            <li className="nav-item" key={it.key}>
+              <button
+                className={"tab-btn nav-link px-3 py-2 " + (active===it.key ? "active" : "")}
+                onClick={()=>setActive(it.key)}
+              >
+                <i className={`fa-solid ${it.icon} me-2`}></i>{it.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </HorizontalScroller>
+    );
+  };
+
+  const QuestionRow = ({q, checked, onCheckToggle, bookmarked, onBookmarkToggle}) => {
+    return (
+      <div className="q-card neo mb-2">
+        <div className="question-layout d-flex align-items-start gap-3">
+          <input type="checkbox" className="form-check-input mt-1 checkmark"
+            checked={!!checked} onChange={()=>onCheckToggle(q.id)} />
+          <div className="flex-grow-1">
+            <div className="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+              <div className="fw-semibold me-auto question-title">{q.question_text}</div>
+              <button
+                type="button"
+                className={"bookmark-btn" + (bookmarked ? " active" : "")}
+                onClick={()=>onBookmarkToggle(q.id)}
+                aria-pressed={!!bookmarked}
+              >
+                <i className={`fa-${bookmarked ? "solid" : "regular"} fa-bookmark`}></i>
+                <span>{bookmarked ? "Bookmarked" : "Bookmark"}</span>
+              </button>
+            </div>
+            <div className="small-muted mt-1 d-flex flex-wrap gap-2">
+              <span className="badge badge-ghost rounded-pill">Type: {q.type_of_question}</span>
+              <span className="badge badge-ghost rounded-pill">Topic: {q.topicLabel || q.normalized_topic || q.main_question_topic || q.topicKey}</span>
+              <span className="badge badge-ghost rounded-pill">Subject: {q.exam_subject}</span>
+              <span className="badge badge-ghost rounded-pill">Times: {q.times}</span>
+              <span className="badge badge-ghost rounded-pill">Marks: {q.uniqueMarks.join(", ")||"—"}</span>
+              <span className="badge badge-ghost rounded-pill">Total marks asked: {q.totalMarks}</span>
+            </div>
+            <div className="tiny mt-2">
+            {(q.appeared_in_exam || []).map((a, i) => (
+              <span key={i} className="me-2 date-chip">
+                <i className="fa-regular fa-calendar me-1"></i>
+                {a.exam_month} {a.exam_year} • {a.marks} marks
+              </span>
+            ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const PopularByMarks = ({questions, checks, bookmarks, onCheckToggle, onBookmarkToggle}) => {
+    // group by each mark value; if a question has multiple marks, include it in each group
+    const buckets = {};
+    questions.forEach(q=>{
+      (q.uniqueMarks.length ? q.uniqueMarks : [0]).forEach(m=>{
+        if(!buckets[m]) buckets[m] = [];
+        buckets[m].push(q);
+      });
+    });
+
+    const markKeys = Object.keys(buckets).map(Number).sort((a,b)=>b-a);
+    const [active, setActive] = useState(markKeys.length ? markKeys[0] : null);
+
+    useEffect(()=>{
+      if(!markKeys.length){
+        if(active !== null) setActive(null);
+        return;
+      }
+      if(!markKeys.includes(active)){
+        setActive(markKeys[0]);
+      }
+    }, [markKeys.join(','), active]);
+
+    const getOrderedList = (mark) =>
+      (buckets[mark] || [])
+        .slice()
+        .sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
+
+    const activeList = active !== null ? getOrderedList(active) : [];
+
+    if(!markKeys.length){
+      return (
+        <div className="neo p-4 rounded-4 small-muted">No mark data available.</div>
+      );
+    }
+
+    return (
+      <div>
+        <HorizontalScroller outerClassName="mark-track-wrap mb-3" innerClassName="mark-track">
+          {markKeys.map(m=> {
+            const list = getOrderedList(m);
+            const isActive = active === m;
+            return (
+              <button
+                type="button"
+                key={m}
+                className={"chip-pill mark-pill" + (isActive ? " active" : "")}
+                onClick={()=>setActive(m)}
+              >
+                <span className="chip-pill-value">{m} marks</span>
+                <span className="chip-pill-meta">{list.length} questions</span>
+              </button>
+            );
+          })}
+        </HorizontalScroller>
+        <div className="mark-group">
+          <div className="mark-group-header d-flex align-items-center justify-content-between">
+            <h5 className="mb-0">{active !== null ? `${active} mark${active === 1 ? '' : 's'}` : 'Questions'}</h5>
+            <span className="small-muted">{activeList.length} question{activeList.length === 1 ? '' : 's'}</span>
+          </div>
+          {activeList.length ? (
+            activeList.map(q=>(
+              <QuestionRow
+                key={q.id}
+                q={q}
+                checked={checks[q.id]}
+                onCheckToggle={onCheckToggle}
+                bookmarked={!!bookmarks[q.id]}
+                onBookmarkToggle={onBookmarkToggle}
+              />
+            ))
+          ) : (
+            <div className="neo p-4 rounded-4 small-muted">No questions for this mark value.</div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const PopularTopics = ({questions, checks, bookmarks, onCheckToggle, onBookmarkToggle}) => {
+    // topic -> {totalMarks, items[]}
+    const topicMap = {};
+    questions.forEach(q=>{
+      const topicKey = q.topicKey && q.topicKey.trim() ? q.topicKey.trim() : "Misc";
+      const display = q.topicLabel && q.topicLabel.trim() ? q.topicLabel.trim() : topicKey;
+      if(!topicMap[topicKey]) topicMap[topicKey] = {totalMarks:0, items:[], display};
+      topicMap[topicKey].totalMarks += q.totalMarks;
+      topicMap[topicKey].items.push(q);
+    });
+    const orderedTopics = Object.entries(topicMap)
+      .map(([topic, obj]) => ({topic, ...obj}))
+      .sort((a,b)=> b.totalMarks - a.totalMarks || a.display.localeCompare(b.display));
+
+    const [open, setOpen] = useState({});
+
+    return (
+      <div className="accordion" id="topics">
+        {orderedTopics.map((t, idx)=> {
+          const items = t.items.slice().sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
+          const isOpen = !!open[idx];
+          return (
+            <div className="mb-3" key={idx}>
+              <div className="neo p-3 rounded-4 topic-header d-flex align-items-center justify-content-between"
+                   onClick={()=>setOpen(o=>({...o, [idx]:!o[idx]}))}>
+                <div className="d-flex align-items-center gap-3">
+                  <i className={"fa-solid " + (isOpen? "fa-chevron-down":"fa-chevron-right")}></i>
+                  <div>
+                    <div className="fw-semibold">{t.display}</div>
+                    <div className="small-muted">
+                      <span className="me-3"><i className="fa-solid fa-layer-group me-1"></i>{items.length} questions</span>
+                      <span><i className="fa-solid fa-sack-dollar me-1"></i>Aggregate marks: {t.totalMarks}</span>
+                    </div>
+                  </div>
+                </div>
+                <span className="badge badge-ghost rounded-pill">Tap to {isOpen?"collapse":"expand"}</span>
+              </div>
+              {isOpen && (
+                <div className="mt-2">
+                  {items.map(q=>(
+                    <QuestionRow
+                      key={q.id}
+                      q={q}
+                      checked={checks[q.id]}
+                      onCheckToggle={onCheckToggle}
+                      bookmarked={!!bookmarks[q.id]}
+                      onBookmarkToggle={onBookmarkToggle}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const PopularKeywords = ({questions, checks, bookmarks, onCheckToggle, onBookmarkToggle}) => {
+    const keywordMap = {};
+    questions.forEach(q => {
+      const tags = Array.isArray(q.keywords) && q.keywords.length ? q.keywords : ["General"];
+      tags.forEach(kw => {
+        const keyword = kw && kw.trim() ? kw.trim() : "General";
+        if(!keywordMap[keyword]) keywordMap[keyword] = {totalMarks:0, items:[]};
+        keywordMap[keyword].totalMarks += q.totalMarks;
+        if(keywordMap[keyword].items.indexOf(q) === -1){
+          keywordMap[keyword].items.push(q);
+        }
+      });
+    });
+
+    const orderedKeywords = Object.entries(keywordMap)
+      .map(([keyword, obj]) => ({keyword, ...obj}))
+      .sort((a,b)=> b.items.length - a.items.length || b.totalMarks - a.totalMarks || a.keyword.localeCompare(b.keyword));
+
+    const keywordKeys = orderedKeywords.map(k=>k.keyword);
+    const [active, setActive] = useState(keywordKeys.length ? keywordKeys[0] : "__ALL__");
+
+    useEffect(()=>{
+      if(!keywordKeys.length){
+        setActive("__ALL__");
+        return;
+      }
+      if(active !== "__ALL__" && keywordKeys.indexOf(active) === -1){
+        setActive(keywordKeys[0]);
+      }
+    }, [keywordKeys.join(','), active]);
+
+    const getOrderedItems = (key) => {
+      if(key === "__ALL__"){
+        return questions.slice().sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
+      }
+      const entry = orderedKeywords.find(k=>k.keyword === key);
+      const items = entry ? entry.items : [];
+      return items.slice().sort((a,b)=> b.times - a.times || b.totalMarks - a.totalMarks);
+    };
+
+    const activeList = getOrderedItems(active);
+
+    if(!orderedKeywords.length){
+      return (
+        <div className="neo p-4 rounded-4 mt-3 text-center small-muted">
+          No keyword data found.
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <HorizontalScroller outerClassName="mark-track-wrap mb-3" innerClassName="mark-track">
+          <button
+            type="button"
+            className={"chip-pill keyword-pill" + (active === "__ALL__" ? " active" : "")}
+            onClick={()=>setActive("__ALL__")}
+          >
+            <span className="chip-pill-value">All keywords</span>
+            <span className="chip-pill-meta">{questions.length} questions</span>
+          </button>
+          {orderedKeywords.map(k=>{
+            const isActive = active === k.keyword;
+            return (
+              <button
+                type="button"
+                key={k.keyword}
+                className={"chip-pill keyword-pill" + (isActive ? " active" : "")}
+                onClick={()=>setActive(k.keyword)}
+              >
+                <span className="chip-pill-value">{k.keyword}</span>
+                <span className="chip-pill-meta">{k.items.length} questions • {k.totalMarks} marks</span>
+              </button>
+            );
+          })}
+        </HorizontalScroller>
+        <div className="mark-group">
+          <div className="mark-group-header d-flex align-items-center justify-content-between">
+            <h5 className="mb-0">{active === "__ALL__" ? "All keywords" : active}</h5>
+            <span className="small-muted">{activeList.length} question{activeList.length === 1 ? '' : 's'}</span>
+          </div>
+          {activeList.length ? (
+            activeList.map(q=>(
+              <QuestionRow
+                key={q.id}
+                q={q}
+                checked={checks[q.id]}
+                onCheckToggle={onCheckToggle}
+                bookmarked={!!bookmarks[q.id]}
+                onBookmarkToggle={onBookmarkToggle}
+              />
+            ))
+          ) : (
+            <div className="neo p-4 rounded-4 small-muted">No questions for this keyword.</div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const AllQuestions = ({questions, checks, bookmarks, onCheckToggle, onBookmarkToggle}) => {
+    const ordered = questions.slice()
+      .sort((a,b)=> (b.mostCommonMark - a.mostCommonMark) || (b.totalMarks - a.totalMarks) || (b.times - a.times));
+    return (
+      <div>
+        {ordered.map(q => (
+          <QuestionRow
+            key={q.id}
+            q={q}
+            checked={checks[q.id]}
+            onCheckToggle={onCheckToggle}
+            bookmarked={!!bookmarks[q.id]}
+            onBookmarkToggle={onBookmarkToggle}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const Picks = ({questions, checks, bookmarks, onCheckToggle, onBookmarkToggle}) => {
+    const picked = questions.filter(q=> !!bookmarks[q.id]);
+    if(!picked.length){
+      return (
+        <div className="neo p-4 rounded-4 text-center">
+          <div className="display-6 mb-2">✨</div>
+          <div className="fw-semibold">No picks yet</div>
+          <div className="small-muted">Use the bookmark button on a question to collect it here. Bookmarks stay saved on this device.</div>
+        </div>
+      );
+    }
+    return (
+      <div>
+        {picked.map(q=>(
+          <QuestionRow
+            key={q.id}
+            q={q}
+            checked={checks[q.id]}
+            onCheckToggle={onCheckToggle}
+            bookmarked={!!bookmarks[q.id]}
+            onBookmarkToggle={onBookmarkToggle}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // ---------- Main App ----------
+  const App = () => {
+    const [data, setData] = useState(null);
+    const [subject, setSubject] = useState("__ALL__");
+    const [active, setActive] = useState("popular");
+    const [checks, setChecks] = useState(loadChecks());
+    const [bookmarks, setBookmarks] = useState(loadBookmarks());
+    const [theme, setTheme] = useState(() => {
+      const mode = loadTheme();
+      applyTheme(mode);
+      return mode;
+    });
+    const [error, setError] = useState("");
+
+    useEffect(()=>{
+      (async ()=>{
+        try{
+          const res = await fetch("./dataset4.json", {cache:"no-store"});
+          if(!res.ok) throw new Error("Could not load dataset4.json");
+          const json = await res.json();
+          setData(normalizeData(json));
+        }catch(e){
+          setError(e.message || "Failed to load dataset");
+        }
+      })();
+    },[]);
+
+    useEffect(()=>{ saveChecks(checks); }, [checks]);
+
+    useEffect(()=>{ saveBookmarks(bookmarks); }, [bookmarks]);
+
+    useEffect(()=>{
+      applyTheme(theme);
+      saveTheme(theme);
+    }, [theme]);
+
+    const subjects = useMemo(()=>{
+      if(!data) return [];
+      return [...new Set(data.map(d=>d.exam_subject))].sort();
+    },[data]);
+
+    const filtered = useMemo(()=>{
+      if(!data) return [];
+      return data.filter(d => subject==="__ALL__" ? true : d.exam_subject===subject);
+    },[data, subject]);
+
+    const counts = useMemo(()=>{
+      const totalAppearances = filtered.reduce((s,q)=> s + q.times, 0);
+      return {filtered: filtered.length, subjects: subjects.length, totalAppearances};
+    },[filtered, subjects]);
+
+    const toggleCheck = (id) => setChecks(prev => ({...prev, [id]: !prev[id]}));
+    const toggleBookmark = (id) => setBookmarks(prev => {
+      const next = {...prev};
+      if(next[id]){ delete next[id]; }
+      else { next[id] = true; }
+      return next;
+    });
+    const clearChecks = () => { setChecks({}); localStorage.removeItem(STORAGE_KEY); };
+    const toggleTheme = () => setTheme(prev => prev === "dark" ? "light" : "dark");
+
+    if(error){
+      return (
+        <div className="neo-wrap mx-auto">
+          <div className="neo p-4 rounded-4 mt-3">
+            <h2 className="app-title mb-2">Frequently Asked Questions <span className="subtle">by Meghna</span></h2>
+            <div className="alert alert-danger"><i className="fa-solid fa-triangle-exclamation me-2"></i>{error}</div>
+            <p className="small-muted">Place <code>dataset4.json</code> in the same folder as this HTML file and reload.</p>
+          </div>
+        </div>
+      );
+    }
+
+    if(!data){
+      return (
+        <div className="neo-wrap mx-auto">
+          <div className="neo p-4 rounded-4 mt-3 text-center">
+            <div className="spinner-border me-2" role="status"></div>
+            Loading questions…
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="neo-wrap mx-auto">
+        <Header
+          subjects={subjects}
+          subject={subject}
+          setSubject={setSubject}
+          counts={counts}
+          clearChecks={clearChecks}
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
+        <Tabs active={active} setActive={setActive}/>
+        <div className="mb-5">
+          {active==="popular" && (
+            <PopularByMarks
+              questions={filtered}
+              checks={checks}
+              bookmarks={bookmarks}
+              onCheckToggle={toggleCheck}
+              onBookmarkToggle={toggleBookmark}
+            />
+          )}
+          {active==="topics" && (
+            <PopularTopics
+              questions={filtered}
+              checks={checks}
+              bookmarks={bookmarks}
+              onCheckToggle={toggleCheck}
+              onBookmarkToggle={toggleBookmark}
+            />
+          )}
+          {active==="keywords" && (
+            <PopularKeywords
+              questions={filtered}
+              checks={checks}
+              bookmarks={bookmarks}
+              onCheckToggle={toggleCheck}
+              onBookmarkToggle={toggleBookmark}
+            />
+          )}
+          {active==="all" && (
+            <AllQuestions
+              questions={filtered}
+              checks={checks}
+              bookmarks={bookmarks}
+              onCheckToggle={toggleCheck}
+              onBookmarkToggle={toggleBookmark}
+            />
+          )}
+          {active==="picks" && (
+            <Picks
+              questions={filtered}
+              checks={checks}
+              bookmarks={bookmarks}
+              onCheckToggle={toggleCheck}
+              onBookmarkToggle={toggleBookmark}
+            />
+          )}
+        </div>
+        <footer className="text-center small-muted mt-4 mb-3">
+          <div className="divider mb-3"></div>
+          <span className="me-2">Built with love at NITTE</span>
+          <span className="d-inline-block ms-2">© {new Date().getFullYear()} Meghna</span>
+          <a className="d-inline-block ms-2" href="https://github.com/meghnachennojirao" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </footer>
+      </div>
+    );
+  };
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>
