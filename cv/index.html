@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV | Dr Meghna C Rao</title>
+    <meta
+      name="description"
+      content="Curriculum vitae of Dr Meghna C Rao, covering education, research, projects, experience, skills, and academic interests."
+    >
+    <link rel="icon" href="../assets/images/Icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    <style>
+      :root {
+        --bg: #071822;
+        --panel: rgba(8, 32, 45, 0.78);
+        --panel-strong: rgba(11, 42, 59, 0.9);
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f4fbff;
+        --muted: #b7d3e1;
+        --accent: #8be0ff;
+        --accent-strong: #38bdf8;
+        --chip: rgba(139, 224, 255, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: "Raleway", Arial, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(72, 187, 255, 0.2), transparent 28%),
+          radial-gradient(circle at top right, rgba(143, 255, 203, 0.12), transparent 22%),
+          linear-gradient(180deg, #0a2230 0%, #071822 45%, #030d13 100%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      a:hover {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 56px;
+      }
+
+      .hero,
+      .section-card {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+        animation: fadeUp 700ms ease both;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 28px;
+        padding: 32px;
+        animation-delay: 80ms;
+      }
+
+      .hero-top {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin: 0 0 10px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--chip);
+        color: var(--accent);
+        font: 700 12px/1 "Nunito", Arial, sans-serif;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        font-size: clamp(2.2rem, 5vw, 4.2rem);
+        line-height: 0.98;
+      }
+
+      .subtitle {
+        max-width: 760px;
+        margin-bottom: 18px;
+        color: var(--muted);
+        font: 600 1.05rem/1.7 "Nunito", Arial, sans-serif;
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 14px;
+        text-decoration: none;
+        font: 700 0.95rem/1 "Nunito", Arial, sans-serif;
+        transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .button-primary {
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--accent-strong), #22d3ee);
+        color: #062334;
+      }
+
+      .button-secondary {
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .meta-grid,
+      .content-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .meta-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        margin-top: 28px;
+      }
+
+      .meta-card {
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .meta-label {
+        margin-bottom: 8px;
+        color: var(--accent);
+        font: 700 0.78rem/1 "Nunito", Arial, sans-serif;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .meta-value {
+        color: var(--text);
+        font: 600 1rem/1.55 "Nunito", Arial, sans-serif;
+      }
+
+      .meta-value a {
+        color: var(--text);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(139, 224, 255, 0.45);
+      }
+
+      .meta-value a:hover {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      .content-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        margin-top: 22px;
+      }
+
+      .section-card {
+        border-radius: 24px;
+        padding: 28px;
+      }
+
+      .content-grid .section-card:nth-child(1) { animation-delay: 120ms; }
+      .content-grid .section-card:nth-child(2) { animation-delay: 180ms; }
+      .content-grid .section-card:nth-child(3) { animation-delay: 240ms; }
+      .content-grid .section-card:nth-child(4) { animation-delay: 300ms; }
+      .content-grid .section-card:nth-child(5) { animation-delay: 360ms; }
+
+      .section-title {
+        margin-bottom: 18px;
+        color: var(--accent);
+        font-size: 1.15rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .timeline-item,
+      .project-item,
+      .bullet-block {
+        padding: 18px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .timeline-item:first-of-type,
+      .project-item:first-of-type,
+      .bullet-block:first-of-type {
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .item-head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px 16px;
+        margin-bottom: 8px;
+      }
+
+      .item-title {
+        font-size: 1.08rem;
+        font-weight: 700;
+      }
+
+      .item-subtitle,
+      .item-date,
+      .body-copy,
+      li {
+        color: var(--muted);
+        font: 600 0.98rem/1.7 "Nunito", Arial, sans-serif;
+      }
+
+      ul {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .chip {
+        display: inline-flex;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        font: 700 0.9rem/1 "Nunito", Arial, sans-serif;
+      }
+
+      .project-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .project-link {
+        color: var(--accent);
+        font: 700 0.92rem/1 "Nunito", Arial, sans-serif;
+        text-decoration: none;
+      }
+
+      .project-link:hover {
+        text-decoration: underline;
+      }
+
+      .inline-link {
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(139, 224, 255, 0.4);
+      }
+
+      .inline-link:hover {
+        border-bottom-color: var(--accent);
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        text-align: center;
+        color: var(--muted);
+        font: 600 0.92rem/1.6 "Nunito", Arial, sans-serif;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 860px) {
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .page {
+          width: min(100% - 20px, 1120px);
+          padding-top: 10px;
+        }
+
+        .hero,
+        .section-card {
+          padding: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-top">
+          <div>
+            <p class="eyebrow">Curriculum Vitae</p>
+            <h1>Dr Meghna C Rao</h1>
+            <p class="subtitle">
+              Final-year M.Sc. Biomedical Sciences student with hands-on experience in CRISPR-Cas9 gene
+              knockout, neuronal gene expression analysis, zebrafish research, and over a decade of clinical
+              medicine exposure focused on neuroscience research.
+            </p>
+          </div>
+          <div class="button-row">
+            <a class="button button-primary" href="./Meghna-C-Rao-CV.pdf" target="_blank" rel="noopener noreferrer">Download PDF</a>
+            <a class="button button-secondary" href="../index.html">Back to Home</a>
+          </div>
+        </div>
+
+        <div class="meta-grid">
+          <article class="meta-card">
+            <div class="meta-label">Location</div>
+            <div class="meta-value">India</div>
+          </article>
+          <article class="meta-card">
+            <div class="meta-label">Email</div>
+            <div class="meta-value"><a href="mailto:meghnacrao@gmail.com">meghnacrao@gmail.com</a></div>
+          </article>
+          <article class="meta-card">
+            <div class="meta-label">Phone</div>
+            <div class="meta-value">+91 9108770627</div>
+          </article>
+          <article class="meta-card">
+            <div class="meta-label">Website</div>
+            <div class="meta-value"><a href="https://meghnachennojirao.github.io" target="_blank" rel="noopener noreferrer">meghnachennojirao.github.io</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div>
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Research Profile</h2>
+            <div class="bullet-block">
+              <p class="body-copy">
+                Clinical training shapes how Meghna approaches neuroscience, allowing her to study the brain not in
+                isolation but as part of a broader, interacting system underlying mind and behavior.
+              </p>
+            </div>
+            <div class="bullet-block">
+              <p class="body-copy">
+                Long-term goal: to spend the next few years working in molecular neuroscience, epigenetics, and
+                behavioral neuroscience, with the aim of eventually leading an independent research lab.
+              </p>
+            </div>
+            <div class="bullet-block">
+              <div class="chips">
+                <span class="chip">Memory</span>
+                <span class="chip">Behaviour</span>
+                <span class="chip">Epigenetics</span>
+                <span class="chip">Salience Network</span>
+                <span class="chip">Molecular Neuroscience</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Education</h2>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Master of Science in Biomedical Science</div>
+                  <div class="item-subtitle">Nitte University Centre for Science Education & Research, Deralakatte</div>
+                </div>
+                <div class="item-date">2024 - 2026</div>
+              </div>
+              <p class="body-copy">Current CGPA: 8.88</p>
+            </div>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Bachelor of Homoeopathic Medicine and Surgery</div>
+                  <div class="item-subtitle">Fr Muller Homoeopathic Medical College & Hospital, Mangalore</div>
+                </div>
+                <div class="item-date">2013 - 2019</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Pre-University, Science</div>
+                  <div class="item-subtitle">St. Aloysius PU, Mangalore</div>
+                </div>
+                <div class="item-date">2011 - 2013</div>
+              </div>
+              <p class="body-copy">Physics, Chemistry, Mathematics, Biology.</p>
+            </div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Research</h2>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Master's Thesis</div>
+                  <div class="item-subtitle">Effects of tprkb deficiency on the expression of neuronal transcription factors in zebrafish</div>
+                </div>
+                <div class="item-date">Ongoing</div>
+              </div>
+              <p class="body-copy">Under the guidance of Dr. Gunimala Chakraborty, HOD & Associate Professor, Dept. of Molecular Genetics & Cancer.</p>
+              <ul>
+                <li>Working toward stable tprkb mutants using CRISPR-Cas9 with validation through HRMA and HD assays.</li>
+                <li>Assessing developmental phenotypes and neuronal transcription factor expression through WISH and RNA-based analysis.</li>
+                <li>Techniques used include CRISPR-Cas9, HRMA, HD assay, developmental screening, WISH, and cDNA synthesis.</li>
+              </ul>
+            </div>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Bachelor's Dissertation</div>
+                  <div class="item-subtitle">Assessment of treatment outcome in eczema with homoeopathic constitutional medicine using SCORAD</div>
+                </div>
+                <div class="item-date">May 2019</div>
+              </div>
+              <p class="body-copy">Under the guidance of Dr. Vilma D'souza, BHMS, MD(Hom), MS (Counselling & Psychotherapy).</p>
+              <ul>
+                <li>Conducted a 25-patient case series evaluating pre- and post-treatment SCORAD scores.</li>
+                <li>Observed statistically significant reduction in SCORAD scores (p = 0.006), while noting design limitations including no control group and small sample size.</li>
+              </ul>
+            </div>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Research Internship</div>
+                  <div class="item-subtitle">Department of Public Health Genomics, Manipal School of Life Sciences</div>
+                </div>
+                <div class="item-date">June 2025 - July 2025</div>
+              </div>
+              <p class="body-copy">Research intern working in a life sciences environment aligned with translational and public health genomics questions.</p>
+            </div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Selected Projects</h2>
+            <div class="project-item">
+              <div class="item-title">Neuro Navigator</div>
+              <p class="body-copy">Designed an interactive game exploring the functions of hippocampal place cells and their role in cognition and spatial navigation.</p>
+              <div class="project-links">
+                <a class="project-link" href="../experiments/place-cells.html" target="_blank" rel="noopener noreferrer">Open project</a>
+              </div>
+            </div>
+            <div class="project-item">
+              <div class="item-title">Temporal Binding Game</div>
+              <p class="body-copy">Developed an interactive experience that helps players reason about temporal connections and causally related events.</p>
+              <div class="project-links">
+                <a class="project-link" href="../experiments/temporal-binding-game.html" target="_blank" rel="noopener noreferrer">Open project</a>
+              </div>
+            </div>
+            <div class="project-item">
+              <div class="item-title">Flash Lag Illusion</div>
+              <p class="body-copy">Built a visual perception demo inspired by David Eagleman to study motion processing and the constraints of the visual system.</p>
+              <div class="project-links">
+                <a class="project-link" href="../experiments/flash-lag-illusion.html" target="_blank" rel="noopener noreferrer">Open project</a>
+              </div>
+            </div>
+            <div class="project-item">
+              <div class="item-title">Motion After Effect</div>
+              <p class="body-copy">Created an interactive demonstration showing how motion adaptation can produce perceived movement in static objects.</p>
+              <div class="project-links">
+                <a class="project-link" href="../experiments/motion-aftereffect.html" target="_blank" rel="noopener noreferrer">Open project</a>
+              </div>
+            </div>
+            <div class="project-item">
+              <div class="item-title">Psychometry</div>
+              <p class="body-copy">A minimal online quiz platform designed to assess personality traits through self-reported answers. You can explore the related app in the <a class="inline-link" href="../experiments/Reaction-Time-Test/app/" target="_blank" rel="noopener noreferrer">website source section</a>.</p>
+            </div>
+            <div class="project-item">
+              <div class="item-title">Measure Chronotype</div>
+              <p class="body-copy">Consulted on chronotype categorization, health risks, research inputs, and user experience for a questionnaire-based chronotype app.</p>
+            </div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Work Experience</h2>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Physiology Lecturer (Visiting Faculty)</div>
+                  <div class="item-subtitle">Niramaya College of Nursing & Allied Health Sciences, Udupi</div>
+                </div>
+                <div class="item-date">Dec 2023 - Jun 2024</div>
+              </div>
+              <p class="body-copy">Instructed first-year bachelor's students in physiology and used varied teaching methods to improve comprehension.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Chief Physician (Self-Employed)</div>
+                  <div class="item-subtitle">Dr Rao's Homeopathic Clinic, Katapadi - Udupi</div>
+                </div>
+                <div class="item-date">Feb 2020 - Nov 2023</div>
+              </div>
+              <p class="body-copy">Provided medical care along with lifestyle counselling in dietetics, nutrition, exercise, counselling, and psychology to support holistic wellness.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="item-head">
+                <div>
+                  <div class="item-title">Assistant Physician</div>
+                  <div class="item-subtitle">BR Shetty Mother & Child Hospital, Udupi</div>
+                </div>
+                <div class="item-date">Nov 2019 - Jan 2020</div>
+              </div>
+              <p class="body-copy">Contributed to comprehensive care during pregnancy, childbirth, postpartum health, women's hygiene education, and menopause awareness.</p>
+            </div>
+          </article>
+        </div>
+
+        <div>
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Skills</h2>
+            <div class="chips">
+              <span class="chip">qPCR & Genotyping</span>
+              <span class="chip">Western Blot</span>
+              <span class="chip">Spectrophotometry</span>
+              <span class="chip">Nucleic Acid Extraction</span>
+              <span class="chip">cDNA Synthesis</span>
+              <span class="chip">WISH</span>
+              <span class="chip">Microinjection in Zebrafish Embryos</span>
+              <span class="chip">Zebrafish Handling</span>
+              <span class="chip">CRISPR-Cas9 Gene KO</span>
+              <span class="chip">Phenotypic Screening</span>
+              <span class="chip">Plasmid Cloning</span>
+              <span class="chip">Primer & sgRNA Design</span>
+              <span class="chip">Clinical Interpretation</span>
+              <span class="chip">Latex</span>
+              <span class="chip">Overleaf</span>
+              <span class="chip">JAMOVI</span>
+              <span class="chip">Python</span>
+              <span class="chip">HTML</span>
+              <span class="chip">Scientific Diagrams</span>
+            </div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Certifications</h2>
+            <div class="bullet-block"><p class="body-copy">Brief Introduction to Psychology, IIT Kanpur</p></div>
+            <div class="bullet-block"><p class="body-copy">Neuroscience of Human Movements, IIT Madras</p></div>
+            <div class="bullet-block"><p class="body-copy">Introduction to Basic Cognitive Processes, IIT Kanpur</p></div>
+            <div class="bullet-block"><p class="body-copy">Neurobiology, IIT Kanpur</p></div>
+            <div class="bullet-block"><p class="body-copy">Molecular Biology, IIT Guwahati</p></div>
+            <div class="bullet-block"><p class="body-copy">Genetic Engineering: Theory & Application, IIT Guwahati</p></div>
+            <div class="bullet-block"><p class="body-copy">Demystifying the Brain, IIT Madras</p></div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Conferences & Workshops</h2>
+            <div class="bullet-block"><p class="body-copy">National Conference on Biochemistry Connect, St Aloysius School of Life Sciences, 9 March 2026.</p></div>
+            <div class="bullet-block"><p class="body-copy">Understanding the Dynamic Interplay of Genes, Pathogens & Host Response in Diseases: A Systems Biology Approach, NUCSER India-Netherlands Collaborative Program, 19 November 2025.</p></div>
+            <div class="bullet-block"><p class="body-copy">Immune Biology & Precision Medicine: Deciphering Cross-Talks Through Multi-Omics, Nitte at NUCSER, 19-20 March 2025.</p></div>
+            <div class="bullet-block"><p class="body-copy">Cancer Epigenetics: From Laboratory Studies to Precision Medicine, Manipal School of Life Science, 22-23 January 2025.</p></div>
+            <div class="bullet-block"><p class="body-copy">Utilizing Microbiome & Genomic Resources for Understanding & Mitigating Antimicrobial Resistance in One Health Context, FAO Reference Centre, November 2024.</p></div>
+            <div class="bullet-block"><p class="body-copy">Multi-Omics Approaches in Understanding Environmental & Lifestyle Influences on Health, Nitte at NUCSER, October 2024.</p></div>
+            <div class="bullet-block"><p class="body-copy">Cell Therapy Conclave, Manipal Centre for Biotherapeutics Research & Consultancy, October 2024.</p></div>
+            <div class="bullet-block"><p class="body-copy">Computational Techniques for Drug Discovery & Drug Delivery, NGSMIPS, January 2026.</p></div>
+            <div class="bullet-block"><p class="body-copy">NASA's Open Science 101 Curriculum, Neuromatch x NASA, November 2024.</p></div>
+            <div class="bullet-block"><p class="body-copy">AI for Neuro: How Modern AI Technologies Enable Advances in Neuroscience, Chen Institute for Neuroscience at Caltech, December 2024.</p></div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Languages</h2>
+            <div class="bullet-block"><p class="body-copy">English: Fluent (C1, IELTS)</p></div>
+            <div class="bullet-block"><p class="body-copy">Kannada: Mother tongue</p></div>
+            <div class="bullet-block"><p class="body-copy">Hindi: Native</p></div>
+            <div class="bullet-block"><p class="body-copy">Tulu: Native</p></div>
+            <div class="bullet-block"><p class="body-copy">Urdu: Native</p></div>
+            <div class="bullet-block"><p class="body-copy">Malayalam: Conversational</p></div>
+            <div class="bullet-block"><p class="body-copy">French: Basic</p></div>
+          </article>
+
+          <article class="section-card" style="margin-top: 22px;">
+            <h2 class="section-title">Interests</h2>
+            <div class="chips">
+              <span class="chip">Botany</span>
+              <span class="chip">Physics</span>
+              <span class="chip">Writing</span>
+              <span class="chip">Singing</span>
+              <span class="chip">Electronic Keyboard</span>
+              <span class="chip">Gardening & Foraging</span>
+              <span class="chip">Fashion Designing</span>
+              <span class="chip">Research</span>
+              <span class="chip">Philosophy</span>
+              <span class="chip">Psychology</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <p class="footer-note">This page was adapted from the provided CV PDF and formatted for the website.</p>
+    </main>
+  </body>
+</html>

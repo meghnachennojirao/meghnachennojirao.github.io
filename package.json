@@ -1,0 +1,10 @@
+{
+  "name": "meghnachennojirao-github-io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local static server for meghnachennojirao.github.io",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
