@@ -1,0 +1,267 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T21:12:58.826240+00:00",
+  "source": {
+    "title": "A comparative machine learning study of schizophrenia biomarkers derived from functional connectivity",
+    "authors": "Shevchenko et al.",
+    "year": 2025,
+    "doi": "10.1038/s41598-024-84152-2",
+    "description": "Top 500, 1,000, and 5,000 connectivity masks used here as a static framing layer."
+  },
+  "focus_networks": [
+    {
+      "id": "sn",
+      "label": "Salience"
+    },
+    {
+      "id": "fpn",
+      "label": "Frontoparietal"
+    },
+    {
+      "id": "dmn",
+      "label": "Default Mode"
+    }
+  ],
+  "masks": [
+    {
+      "selected_edges": 500,
+      "selected_parcels": 370,
+      "triple_edges": 150,
+      "triple_share": 0.3,
+      "nodes": {
+        "sn": 7,
+        "fpn": 32,
+        "dmn": 98
+      },
+      "bridges": {
+        "sn_fpn": 1,
+        "sn_dmn": 0,
+        "fpn_dmn": 12
+      },
+      "top_pairs": [
+        {
+          "source": "Visual",
+          "target": "Visual",
+          "count": 214
+        },
+        {
+          "source": "Default Mode",
+          "target": "Default Mode",
+          "count": 98
+        },
+        {
+          "source": "Somatomotor",
+          "target": "Somatomotor",
+          "count": 68
+        },
+        {
+          "source": "Frontoparietal",
+          "target": "Frontoparietal",
+          "count": 32
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Dorsal Attention",
+          "count": 30
+        },
+        {
+          "source": "Default Mode",
+          "target": "Frontoparietal",
+          "count": 12
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Frontoparietal",
+          "count": 11
+        },
+        {
+          "source": "Default Mode",
+          "target": "Visual",
+          "count": 9
+        },
+        {
+          "source": "Salience",
+          "target": "Salience",
+          "count": 7
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Somatomotor",
+          "count": 5
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Visual",
+          "count": 4
+        },
+        {
+          "source": "Salience",
+          "target": "Somatomotor",
+          "count": 3
+        }
+      ],
+      "id": "mask-500",
+      "label": "500 edges"
+    },
+    {
+      "selected_edges": 1000,
+      "selected_parcels": 546,
+      "triple_edges": 307,
+      "triple_share": 0.307,
+      "nodes": {
+        "sn": 30,
+        "fpn": 61,
+        "dmn": 184
+      },
+      "bridges": {
+        "sn_fpn": 4,
+        "sn_dmn": 4,
+        "fpn_dmn": 24
+      },
+      "top_pairs": [
+        {
+          "source": "Visual",
+          "target": "Visual",
+          "count": 389
+        },
+        {
+          "source": "Default Mode",
+          "target": "Default Mode",
+          "count": 184
+        },
+        {
+          "source": "Somatomotor",
+          "target": "Somatomotor",
+          "count": 151
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Dorsal Attention",
+          "count": 82
+        },
+        {
+          "source": "Frontoparietal",
+          "target": "Frontoparietal",
+          "count": 61
+        },
+        {
+          "source": "Salience",
+          "target": "Salience",
+          "count": 30
+        },
+        {
+          "source": "Default Mode",
+          "target": "Frontoparietal",
+          "count": 24
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Frontoparietal",
+          "count": 18
+        },
+        {
+          "source": "Default Mode",
+          "target": "Visual",
+          "count": 14
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Visual",
+          "count": 11
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Somatomotor",
+          "count": 7
+        },
+        {
+          "source": "Salience",
+          "target": "Somatomotor",
+          "count": 7
+        }
+      ],
+      "id": "mask-1000",
+      "label": "1,000 edges"
+    },
+    {
+      "selected_edges": 5000,
+      "selected_parcels": 917,
+      "triple_edges": 1486,
+      "triple_share": 0.2972,
+      "nodes": {
+        "sn": 251,
+        "fpn": 250,
+        "dmn": 780
+      },
+      "bridges": {
+        "sn_fpn": 37,
+        "sn_dmn": 28,
+        "fpn_dmn": 140
+      },
+      "top_pairs": [
+        {
+          "source": "Visual",
+          "target": "Visual",
+          "count": 1672
+        },
+        {
+          "source": "Somatomotor",
+          "target": "Somatomotor",
+          "count": 910
+        },
+        {
+          "source": "Default Mode",
+          "target": "Default Mode",
+          "count": 780
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Dorsal Attention",
+          "count": 360
+        },
+        {
+          "source": "Salience",
+          "target": "Salience",
+          "count": 251
+        },
+        {
+          "source": "Frontoparietal",
+          "target": "Frontoparietal",
+          "count": 250
+        },
+        {
+          "source": "Default Mode",
+          "target": "Frontoparietal",
+          "count": 140
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Frontoparietal",
+          "count": 102
+        },
+        {
+          "source": "Salience",
+          "target": "Somatomotor",
+          "count": 99
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Visual",
+          "count": 97
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Somatomotor",
+          "count": 87
+        },
+        {
+          "source": "Default Mode",
+          "target": "Visual",
+          "count": 58
+        }
+      ],
+      "id": "mask-5000",
+      "label": "5,000 edges"
+    }
+  ]
+}

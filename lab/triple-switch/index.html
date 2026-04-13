@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple Switch</title>
+    <meta
+      name="description"
+      content="A stepwise, beginner-friendly visualization of how salience, frontoparietal, and default-mode interactions change across real resting-state fMRI windows."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="viz">
+      <header class="topline" aria-label="Study context">
+        <p class="stepline"><span id="step-index">01</span> / <span id="step-total">07</span></p>
+        <p class="source" id="source-line">Loading source…</p>
+      </header>
+
+      <section class="copy" aria-live="polite">
+        <p class="eyebrow" id="eyebrow">Loading…</p>
+        <h1 id="headline">Loading…</h1>
+        <p class="body" id="body">Loading the real data pack.</p>
+        <p class="what" id="what-line">Now: loading the stage.</p>
+      </section>
+
+      <section class="scene">
+        <div class="mode mode-focus" id="mode-focus">
+          <div class="focus-main">
+            <div class="network-triangle" id="focus-triangle" aria-label="Three-network map">
+              <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <line data-edge="sn_fpn" x1="22" y1="72" x2="71" y2="25"></line>
+                <line data-edge="sn_dmn" x1="22" y1="72" x2="77" y2="77"></line>
+                <line data-edge="fpn_dmn" x1="71" y1="25" x2="77" y2="77"></line>
+              </svg>
+
+              <article class="node node-sn" data-node="sn">
+                <p class="node-short">SN</p>
+                <strong class="node-label">Salience</strong>
+                <p class="node-role">Switch</p>
+              </article>
+
+              <article class="node node-fpn" data-node="fpn">
+                <p class="node-short">FPN</p>
+                <strong class="node-label">Frontoparietal</strong>
+                <p class="node-role">Task focus</p>
+              </article>
+
+              <article class="node node-dmn" data-node="dmn">
+                <p class="node-short">DMN</p>
+                <strong class="node-label">Default Mode</strong>
+                <p class="node-role">Internal thought</p>
+              </article>
+
+              <p class="triangle-note" id="triangle-note">Loading note…</p>
+            </div>
+
+            <div class="focus-side">
+              <p class="mini-kicker" id="panel-kicker">Loading panel…</p>
+              <div class="panel" id="focus-panel"></div>
+              <div class="state-legend" id="state-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mode mode-compare" id="mode-compare" hidden>
+          <section class="compare-lane" aria-label="Control comparison">
+            <div class="lane-head">
+              <p class="lane-label">Control</p>
+              <p class="lane-subject" id="control-subject-label">Loading…</p>
+            </div>
+
+            <div class="network-triangle compact" id="compare-control-triangle" aria-hidden="true">
+              <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line data-edge="sn_fpn" x1="22" y1="72" x2="71" y2="25"></line>
+                <line data-edge="sn_dmn" x1="22" y1="72" x2="77" y2="77"></line>
+                <line data-edge="fpn_dmn" x1="71" y1="25" x2="77" y2="77"></line>
+              </svg>
+
+              <article class="node node-sn" data-node="sn">
+                <p class="node-short">SN</p>
+              </article>
+
+              <article class="node node-fpn" data-node="fpn">
+                <p class="node-short">FPN</p>
+              </article>
+
+              <article class="node node-dmn" data-node="dmn">
+                <p class="node-short">DMN</p>
+              </article>
+            </div>
+
+            <div class="mini-strip" id="control-strip"></div>
+          </section>
+
+          <section class="compare-lane" aria-label="Schizophrenia comparison">
+            <div class="lane-head">
+              <p class="lane-label">Schizophrenia</p>
+              <p class="lane-subject" id="patient-subject-label">Loading…</p>
+            </div>
+
+            <div class="network-triangle compact" id="compare-patient-triangle" aria-hidden="true">
+              <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line data-edge="sn_fpn" x1="22" y1="72" x2="71" y2="25"></line>
+                <line data-edge="sn_dmn" x1="22" y1="72" x2="77" y2="77"></line>
+                <line data-edge="fpn_dmn" x1="71" y1="25" x2="77" y2="77"></line>
+              </svg>
+
+              <article class="node node-sn" data-node="sn">
+                <p class="node-short">SN</p>
+              </article>
+
+              <article class="node node-fpn" data-node="fpn">
+                <p class="node-short">FPN</p>
+              </article>
+
+              <article class="node node-dmn" data-node="dmn">
+                <p class="node-short">DMN</p>
+              </article>
+            </div>
+
+            <div class="mini-strip" id="patient-strip"></div>
+          </section>
+        </div>
+
+        <div class="mode mode-summary" id="mode-summary" hidden>
+          <p class="mini-kicker" id="summary-kicker">Loading summary…</p>
+          <div class="panel summary-panel" id="summary-panel"></div>
+        </div>
+      </section>
+
+      <section class="playbar" id="playbar" hidden aria-label="Playback controls">
+        <button class="ghost playback" id="play-toggle" type="button">Play</button>
+        <input id="scrubber" type="range" min="0" max="0" step="1" value="0">
+        <p class="time-readout" id="time-readout">0:00</p>
+      </section>
+
+      <nav class="controls" aria-label="Step controls">
+        <button class="ghost" id="prev-step" type="button">Back</button>
+        <div class="dots" id="step-dots" aria-hidden="true"></div>
+        <button class="primary" id="next-step" type="button">Next</button>
+      </nav>
+    </main>
+
+    <script src="./data/inline-data.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,828 @@
+{
+  "version": 2,
+  "generated_at": "2026-04-13T21:12:58.826240+00:00",
+  "study": {
+    "id": "ds000030",
+    "title": "UCLA Consortium for Neuropsychiatric Phenomics LA5c Study",
+    "source_url": "https://openneuro.org/datasets/ds000030",
+    "modality": "resting-state fMRI",
+    "subset_note": "Curated sample of 10 participants with public fMRIPrep derivatives: 5 controls and 5 schizophrenia subjects.",
+    "tr_seconds": 2.0,
+    "window": {
+      "size_tr": 20,
+      "size_seconds": 40.0,
+      "step_tr": 1,
+      "step_seconds": 2.0
+    },
+    "state_model": {
+      "kind": "k-means",
+      "k": 3,
+      "features": [
+        "sn_fpn",
+        "sn_dmn",
+        "fpn_dmn"
+      ],
+      "description": "Each state is a recurring pattern of coupling across the three network pairs."
+    }
+  },
+  "sources": {
+    "dynamic_data": {
+      "title": "Public fMRIPrep derivatives for ds000030",
+      "url": "https://s3.amazonaws.com/openneuro/ds000030/ds000030_R1.0.5/uncompressed/derivatives/fmriprep/"
+    },
+    "static_masks": {
+      "title": "A comparative machine learning study of schizophrenia biomarkers derived from functional connectivity",
+      "authors": "Shevchenko et al.",
+      "year": 2025,
+      "doi": "10.1038/s41598-024-84152-2",
+      "description": "Top 500, 1,000, and 5,000 connectivity masks used here as a static framing layer."
+    }
+  },
+  "networks": [
+    {
+      "id": "sn",
+      "short": "SN",
+      "label": "Salience",
+      "atlas_index": 3,
+      "atlas_label": "Ventral Attention",
+      "meaning": "Helps redirect attention when something matters."
+    },
+    {
+      "id": "fpn",
+      "short": "FPN",
+      "label": "Frontoparietal",
+      "atlas_index": 5,
+      "atlas_label": "Frontoparietal",
+      "meaning": "Supports goal-directed, task-focused control."
+    },
+    {
+      "id": "dmn",
+      "short": "DMN",
+      "label": "Default Mode",
+      "atlas_index": 6,
+      "atlas_label": "Default Mode",
+      "meaning": "Often rises during internal thought and self-reference."
+    }
+  ],
+  "lexicon": {
+    "node": "A circle is one large brain network, not a single brain region.",
+    "edge": "A line is the correlation between two network-average signals inside one 40-second window.",
+    "state": "A state is a recurring window pattern discovered by grouping similar windows together.",
+    "nii": "NII is salience-to-frontoparietal coupling minus salience-to-default coupling."
+  },
+  "static_masks": [
+    {
+      "selected_edges": 500,
+      "selected_parcels": 370,
+      "triple_edges": 150,
+      "triple_share": 0.3,
+      "nodes": {
+        "sn": 7,
+        "fpn": 32,
+        "dmn": 98
+      },
+      "bridges": {
+        "sn_fpn": 1,
+        "sn_dmn": 0,
+        "fpn_dmn": 12
+      },
+      "top_pairs": [
+        {
+          "source": "Visual",
+          "target": "Visual",
+          "count": 214
+        },
+        {
+          "source": "Default Mode",
+          "target": "Default Mode",
+          "count": 98
+        },
+        {
+          "source": "Somatomotor",
+          "target": "Somatomotor",
+          "count": 68
+        },
+        {
+          "source": "Frontoparietal",
+          "target": "Frontoparietal",
+          "count": 32
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Dorsal Attention",
+          "count": 30
+        },
+        {
+          "source": "Default Mode",
+          "target": "Frontoparietal",
+          "count": 12
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Frontoparietal",
+          "count": 11
+        },
+        {
+          "source": "Default Mode",
+          "target": "Visual",
+          "count": 9
+        },
+        {
+          "source": "Salience",
+          "target": "Salience",
+          "count": 7
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Somatomotor",
+          "count": 5
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Visual",
+          "count": 4
+        },
+        {
+          "source": "Salience",
+          "target": "Somatomotor",
+          "count": 3
+        }
+      ],
+      "id": "mask-500",
+      "label": "500 edges"
+    },
+    {
+      "selected_edges": 1000,
+      "selected_parcels": 546,
+      "triple_edges": 307,
+      "triple_share": 0.307,
+      "nodes": {
+        "sn": 30,
+        "fpn": 61,
+        "dmn": 184
+      },
+      "bridges": {
+        "sn_fpn": 4,
+        "sn_dmn": 4,
+        "fpn_dmn": 24
+      },
+      "top_pairs": [
+        {
+          "source": "Visual",
+          "target": "Visual",
+          "count": 389
+        },
+        {
+          "source": "Default Mode",
+          "target": "Default Mode",
+          "count": 184
+        },
+        {
+          "source": "Somatomotor",
+          "target": "Somatomotor",
+          "count": 151
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Dorsal Attention",
+          "count": 82
+        },
+        {
+          "source": "Frontoparietal",
+          "target": "Frontoparietal",
+          "count": 61
+        },
+        {
+          "source": "Salience",
+          "target": "Salience",
+          "count": 30
+        },
+        {
+          "source": "Default Mode",
+          "target": "Frontoparietal",
+          "count": 24
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Frontoparietal",
+          "count": 18
+        },
+        {
+          "source": "Default Mode",
+          "target": "Visual",
+          "count": 14
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Visual",
+          "count": 11
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Somatomotor",
+          "count": 7
+        },
+        {
+          "source": "Salience",
+          "target": "Somatomotor",
+          "count": 7
+        }
+      ],
+      "id": "mask-1000",
+      "label": "1,000 edges"
+    },
+    {
+      "selected_edges": 5000,
+      "selected_parcels": 917,
+      "triple_edges": 1486,
+      "triple_share": 0.2972,
+      "nodes": {
+        "sn": 251,
+        "fpn": 250,
+        "dmn": 780
+      },
+      "bridges": {
+        "sn_fpn": 37,
+        "sn_dmn": 28,
+        "fpn_dmn": 140
+      },
+      "top_pairs": [
+        {
+          "source": "Visual",
+          "target": "Visual",
+          "count": 1672
+        },
+        {
+          "source": "Somatomotor",
+          "target": "Somatomotor",
+          "count": 910
+        },
+        {
+          "source": "Default Mode",
+          "target": "Default Mode",
+          "count": 780
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Dorsal Attention",
+          "count": 360
+        },
+        {
+          "source": "Salience",
+          "target": "Salience",
+          "count": 251
+        },
+        {
+          "source": "Frontoparietal",
+          "target": "Frontoparietal",
+          "count": 250
+        },
+        {
+          "source": "Default Mode",
+          "target": "Frontoparietal",
+          "count": 140
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Frontoparietal",
+          "count": 102
+        },
+        {
+          "source": "Salience",
+          "target": "Somatomotor",
+          "count": 99
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Visual",
+          "count": 97
+        },
+        {
+          "source": "Dorsal Attention",
+          "target": "Somatomotor",
+          "count": 87
+        },
+        {
+          "source": "Default Mode",
+          "target": "Visual",
+          "count": 58
+        }
+      ],
+      "id": "mask-5000",
+      "label": "5,000 edges"
+    }
+  ],
+  "states": [
+    {
+      "id": "state-0",
+      "index": 0,
+      "label": "DMN-side",
+      "description": "This recurring pattern sits closest to the default-mode side of the map.",
+      "centroid": {
+        "sn_fpn": 0.405,
+        "sn_dmn": 0.3951,
+        "fpn_dmn": 1.1232,
+        "nii": 0.0099
+      }
+    },
+    {
+      "id": "state-1",
+      "index": 1,
+      "label": "Middle",
+      "description": "This recurring pattern sits between the two outer states.",
+      "centroid": {
+        "sn_fpn": -0.3699,
+        "sn_dmn": -0.5561,
+        "fpn_dmn": 0.8425,
+        "nii": 0.1862
+      }
+    },
+    {
+      "id": "state-2",
+      "index": 2,
+      "label": "FPN-side",
+      "description": "This recurring pattern sits closest to the frontoparietal side of the map.",
+      "centroid": {
+        "sn_fpn": 0.1859,
+        "sn_dmn": -0.1488,
+        "fpn_dmn": 0.2059,
+        "nii": 0.3346
+      }
+    }
+  ],
+  "subjects": [
+    {
+      "id": "sub-10388",
+      "group": "control",
+      "age": 50,
+      "sex": "F",
+      "positive_symptoms": null,
+      "hallucinations": null,
+      "avolition": null,
+      "metrics": {
+        "switches_per_minute": 0.677,
+        "mean_nii": 0.4707,
+        "nii_std": 0.4848,
+        "state_occupancy": [
+          0.0301,
+          0.7143,
+          0.2556
+        ],
+        "dwell_seconds": [
+          8.0,
+          95.0,
+          68.0
+        ],
+        "transition_matrix": [
+          [
+            0.75,
+            0.25,
+            0.0
+          ],
+          [
+            0.0,
+            0.9894,
+            0.0106
+          ],
+          [
+            0.0294,
+            0.0,
+            0.9706
+          ]
+        ],
+        "dominant_state": 1
+      },
+      "file": "./data/subjects/sub-10388.json"
+    },
+    {
+      "id": "sub-10478",
+      "group": "control",
+      "age": 21,
+      "sex": "F",
+      "positive_symptoms": null,
+      "hallucinations": null,
+      "avolition": null,
+      "metrics": {
+        "switches_per_minute": 4.511,
+        "mean_nii": 0.2991,
+        "nii_std": 0.2531,
+        "state_occupancy": [
+          0.3158,
+          0.2632,
+          0.4211
+        ],
+        "dwell_seconds": [
+          21.0,
+          10.0,
+          11.2
+        ],
+        "transition_matrix": [
+          [
+            0.9268,
+            0.0,
+            0.0732
+          ],
+          [
+            0.0286,
+            0.8,
+            0.1714
+          ],
+          [
+            0.0536,
+            0.125,
+            0.8214
+          ]
+        ],
+        "dominant_state": 2
+      },
+      "file": "./data/subjects/sub-10478.json"
+    },
+    {
+      "id": "sub-10527",
+      "group": "control",
+      "age": 24,
+      "sex": "M",
+      "positive_symptoms": null,
+      "hallucinations": null,
+      "avolition": null,
+      "metrics": {
+        "switches_per_minute": 2.03,
+        "mean_nii": 0.293,
+        "nii_std": 0.4031,
+        "state_occupancy": [
+          0.188,
+          0.0977,
+          0.7143
+        ],
+        "dwell_seconds": [
+          16.67,
+          8.67,
+          47.5
+        ],
+        "transition_matrix": [
+          [
+            0.88,
+            0.04,
+            0.08
+          ],
+          [
+            0.0769,
+            0.7692,
+            0.1538
+          ],
+          [
+            0.0106,
+            0.0213,
+            0.9681
+          ]
+        ],
+        "dominant_state": 2
+      },
+      "file": "./data/subjects/sub-10527.json"
+    },
+    {
+      "id": "sub-11098",
+      "group": "control",
+      "age": 39,
+      "sex": "M",
+      "positive_symptoms": null,
+      "hallucinations": null,
+      "avolition": null,
+      "metrics": {
+        "switches_per_minute": 1.579,
+        "mean_nii": 0.2276,
+        "nii_std": 0.4483,
+        "state_occupancy": [
+          0.218,
+          0.3308,
+          0.4511
+        ],
+        "dwell_seconds": [
+          19.33,
+          29.33,
+          60.0
+        ],
+        "transition_matrix": [
+          [
+            0.8966,
+            0.069,
+            0.0345
+          ],
+          [
+            0.0233,
+            0.9535,
+            0.0233
+          ],
+          [
+            0.0167,
+            0.0167,
+            0.9667
+          ]
+        ],
+        "dominant_state": 2
+      },
+      "file": "./data/subjects/sub-11098.json"
+    },
+    {
+      "id": "sub-11143",
+      "group": "control",
+      "age": 28,
+      "sex": "M",
+      "positive_symptoms": null,
+      "hallucinations": null,
+      "avolition": null,
+      "metrics": {
+        "switches_per_minute": 2.256,
+        "mean_nii": 0.5125,
+        "nii_std": 0.3653,
+        "state_occupancy": [
+          0.015,
+          0.188,
+          0.797
+        ],
+        "dwell_seconds": [
+          2.0,
+          16.67,
+          35.33
+        ],
+        "transition_matrix": [
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.88,
+            0.12
+          ],
+          [
+            0.019,
+            0.0286,
+            0.9524
+          ]
+        ],
+        "dominant_state": 2
+      },
+      "file": "./data/subjects/sub-11143.json"
+    },
+    {
+      "id": "sub-50008",
+      "group": "schizophrenia",
+      "age": 48,
+      "sex": "M",
+      "positive_symptoms": 1.0,
+      "hallucinations": 0.0,
+      "avolition": 1.0,
+      "metrics": {
+        "switches_per_minute": 1.579,
+        "mean_nii": 0.1407,
+        "nii_std": 0.2275,
+        "state_occupancy": [
+          0.7444,
+          0.203,
+          0.0526
+        ],
+        "dwell_seconds": [
+          49.5,
+          27.0,
+          7.0
+        ],
+        "transition_matrix": [
+          [
+            0.9694,
+            0.0204,
+            0.0102
+          ],
+          [
+            0.037,
+            0.9259,
+            0.037
+          ],
+          [
+            0.2857,
+            0.0,
+            0.7143
+          ]
+        ],
+        "dominant_state": 0
+      },
+      "file": "./data/subjects/sub-50008.json"
+    },
+    {
+      "id": "sub-50010",
+      "group": "schizophrenia",
+      "age": 41,
+      "sex": "M",
+      "positive_symptoms": 2.8,
+      "hallucinations": 0.0,
+      "avolition": 1.75,
+      "metrics": {
+        "switches_per_minute": 2.256,
+        "mean_nii": -0.2414,
+        "nii_std": 0.2584,
+        "state_occupancy": [
+          0.7444,
+          0.1654,
+          0.0902
+        ],
+        "dwell_seconds": [
+          39.6,
+          14.67,
+          8.0
+        ],
+        "transition_matrix": [
+          [
+            0.9592,
+            0.0204,
+            0.0204
+          ],
+          [
+            0.0909,
+            0.8636,
+            0.0455
+          ],
+          [
+            0.25,
+            0.0,
+            0.75
+          ]
+        ],
+        "dominant_state": 0
+      },
+      "file": "./data/subjects/sub-50010.json"
+    },
+    {
+      "id": "sub-50036",
+      "group": "schizophrenia",
+      "age": 32,
+      "sex": "M",
+      "positive_symptoms": 3.6,
+      "hallucinations": 0.0,
+      "avolition": 3.5,
+      "metrics": {
+        "switches_per_minute": 2.03,
+        "mean_nii": 0.1834,
+        "nii_std": 0.4908,
+        "state_occupancy": [
+          0.0,
+          0.2556,
+          0.7444
+        ],
+        "dwell_seconds": [
+          0.0,
+          13.6,
+          39.6
+        ],
+        "transition_matrix": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.8529,
+            0.1471
+          ],
+          [
+            0.0,
+            0.0408,
+            0.9592
+          ]
+        ],
+        "dominant_state": 2
+      },
+      "file": "./data/subjects/sub-50036.json"
+    },
+    {
+      "id": "sub-50054",
+      "group": "schizophrenia",
+      "age": 23,
+      "sex": "M",
+      "positive_symptoms": 1.8,
+      "hallucinations": 0.333,
+      "avolition": 0.0,
+      "metrics": {
+        "switches_per_minute": 0.902,
+        "mean_nii": 0.1544,
+        "nii_std": 0.3003,
+        "state_occupancy": [
+          0.0,
+          0.4586,
+          0.5414
+        ],
+        "dwell_seconds": [
+          0.0,
+          61.0,
+          48.0
+        ],
+        "transition_matrix": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.9672,
+            0.0328
+          ],
+          [
+            0.0,
+            0.0282,
+            0.9718
+          ]
+        ],
+        "dominant_state": 2
+      },
+      "file": "./data/subjects/sub-50054.json"
+    },
+    {
+      "id": "sub-50069",
+      "group": "schizophrenia",
+      "age": 23,
+      "sex": "M",
+      "positive_symptoms": 5.4,
+      "hallucinations": 4.167,
+      "avolition": 2.75,
+      "metrics": {
+        "switches_per_minute": 3.158,
+        "mean_nii": -0.0408,
+        "nii_std": 0.3098,
+        "state_occupancy": [
+          0.6316,
+          0.0827,
+          0.2857
+        ],
+        "dwell_seconds": [
+          28.0,
+          7.33,
+          12.67
+        ],
+        "transition_matrix": [
+          [
+            0.9398,
+            0.012,
+            0.0482
+          ],
+          [
+            0.0909,
+            0.7273,
+            0.1818
+          ],
+          [
+            0.1053,
+            0.0526,
+            0.8421
+          ]
+        ],
+        "dominant_state": 0
+      },
+      "file": "./data/subjects/sub-50069.json"
+    }
+  ],
+  "group_summary": {
+    "control": {
+      "n": 5,
+      "mean_switches_per_minute": 2.2106,
+      "mean_nii": 0.3606,
+      "mean_nii_std": 0.3909,
+      "mean_state_occupancy": [
+        0.1534,
+        0.3188,
+        0.5278
+      ]
+    },
+    "schizophrenia": {
+      "n": 5,
+      "mean_switches_per_minute": 1.985,
+      "mean_nii": 0.0393,
+      "mean_nii_std": 0.3174,
+      "mean_state_occupancy": [
+        0.4241,
+        0.2331,
+        0.3429
+      ]
+    },
+    "delta": {
+      "switches_per_minute": -0.2256,
+      "nii_std": -0.0735
+    }
+  },
+  "symptom_associations": {
+    "positive_vs_switches_per_minute": {
+      "r": 0.8626,
+      "p": 0.0599
+    },
+    "positive_vs_nii_std": {
+      "r": 0.4275,
+      "p": 0.4728
+    }
+  },
+  "featured": {
+    "guide_subject_id": "sub-50036",
+    "comparison_control_id": "sub-10527",
+    "comparison_patient_id": "sub-50036"
+  }
+}
