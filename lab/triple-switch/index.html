@@ -19,7 +19,7 @@
   <body>
     <main class="viz">
       <header class="topline" aria-label="Study context">
-        <p class="stepline"><span id="step-index">01</span> / <span id="step-total">07</span></p>
+        <p class="stepline"><span id="step-index">01</span> / <span id="step-total">08</span></p>
         <p class="source" id="source-line">Loading source…</p>
       </header>
 
@@ -35,9 +35,9 @@
           <div class="focus-main">
             <div class="network-triangle" id="focus-triangle" aria-label="Three-network map">
               <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <line data-edge="sn_fpn" x1="22" y1="72" x2="71" y2="25"></line>
-                <line data-edge="sn_dmn" x1="22" y1="72" x2="77" y2="77"></line>
-                <line data-edge="fpn_dmn" x1="71" y1="25" x2="77" y2="77"></line>
+                <line data-edge="sn_fpn" x1="25" y1="75" x2="50" y2="22"></line>
+                <line data-edge="sn_dmn" x1="25" y1="75" x2="75" y2="75"></line>
+                <line data-edge="fpn_dmn" x1="50" y1="22" x2="75" y2="75"></line>
               </svg>
 
               <article class="node node-sn" data-node="sn">
@@ -70,68 +70,55 @@
         </div>
 
         <div class="mode mode-compare" id="mode-compare" hidden>
-          <section class="compare-lane" aria-label="Control comparison">
-            <div class="lane-head">
-              <p class="lane-label">Control</p>
-              <p class="lane-subject" id="control-subject-label">Loading…</p>
-            </div>
-
-            <div class="network-triangle compact" id="compare-control-triangle" aria-hidden="true">
-              <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line data-edge="sn_fpn" x1="22" y1="72" x2="71" y2="25"></line>
-                <line data-edge="sn_dmn" x1="22" y1="72" x2="77" y2="77"></line>
-                <line data-edge="fpn_dmn" x1="71" y1="25" x2="77" y2="77"></line>
-              </svg>
-
-              <article class="node node-sn" data-node="sn">
-                <p class="node-short">SN</p>
-              </article>
-
-              <article class="node node-fpn" data-node="fpn">
-                <p class="node-short">FPN</p>
-              </article>
-
-              <article class="node node-dmn" data-node="dmn">
-                <p class="node-short">DMN</p>
-              </article>
-            </div>
-
-            <div class="mini-strip" id="control-strip"></div>
-          </section>
-
-          <section class="compare-lane" aria-label="Schizophrenia comparison">
-            <div class="lane-head">
-              <p class="lane-label">Schizophrenia</p>
-              <p class="lane-subject" id="patient-subject-label">Loading…</p>
-            </div>
-
-            <div class="network-triangle compact" id="compare-patient-triangle" aria-hidden="true">
-              <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line data-edge="sn_fpn" x1="22" y1="72" x2="71" y2="25"></line>
-                <line data-edge="sn_dmn" x1="22" y1="72" x2="77" y2="77"></line>
-                <line data-edge="fpn_dmn" x1="71" y1="25" x2="77" y2="77"></line>
-              </svg>
-
-              <article class="node node-sn" data-node="sn">
-                <p class="node-short">SN</p>
-              </article>
-
-              <article class="node node-fpn" data-node="fpn">
-                <p class="node-short">FPN</p>
-              </article>
-
-              <article class="node node-dmn" data-node="dmn">
-                <p class="node-short">DMN</p>
-              </article>
-            </div>
-
-            <div class="mini-strip" id="patient-strip"></div>
-          </section>
+          <div class="compare-stage" id="compare-stage"></div>
         </div>
 
         <div class="mode mode-summary" id="mode-summary" hidden>
           <p class="mini-kicker" id="summary-kicker">Loading summary…</p>
           <div class="panel summary-panel" id="summary-panel"></div>
+        </div>
+
+        <div class="mode mode-explore" id="mode-explore" hidden>
+          <div class="explore-main">
+            <div class="explore-side">
+              <div class="subject-picker" id="explore-subjects" aria-label="Choose a subject"></div>
+              <p class="explore-note" id="explore-note">Pick any subject, then scrub the line.</p>
+            </div>
+
+            <div class="explore-stage">
+              <div class="network-triangle" id="explore-triangle" aria-label="Interactive three-network map">
+                <svg class="triangle-edges" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <line data-edge="sn_fpn" x1="25" y1="75" x2="50" y2="22"></line>
+                  <line data-edge="sn_dmn" x1="25" y1="75" x2="75" y2="75"></line>
+                  <line data-edge="fpn_dmn" x1="50" y1="22" x2="75" y2="75"></line>
+                </svg>
+
+                <article class="node node-sn" data-node="sn">
+                  <p class="node-short">SN</p>
+                  <strong class="node-label">Salience</strong>
+                  <p class="node-role">Switch</p>
+                </article>
+
+                <article class="node node-fpn" data-node="fpn">
+                  <p class="node-short">FPN</p>
+                  <strong class="node-label">Frontoparietal</strong>
+                  <p class="node-role">Task focus</p>
+                </article>
+
+                <article class="node node-dmn" data-node="dmn">
+                  <p class="node-short">DMN</p>
+                  <strong class="node-label">Default Mode</strong>
+                  <p class="node-role">Internal thought</p>
+                </article>
+              </div>
+
+              <div class="focus-side explore-panel-wrap">
+                <p class="mini-kicker" id="explore-kicker">Loading subject…</p>
+                <div class="panel" id="explore-panel"></div>
+                <div class="state-legend" id="explore-legend"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -146,6 +133,8 @@
         <div class="dots" id="step-dots" aria-hidden="true"></div>
         <button class="primary" id="next-step" type="button">Next</button>
       </nav>
+
+      <div class="viz-tooltip" id="viz-tooltip" hidden></div>
     </main>
 
     <script src="./data/inline-data.js"></script>
