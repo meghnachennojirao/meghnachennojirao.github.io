@@ -90,28 +90,28 @@
             <svg id="hero-vector" class="hero-vector" viewBox="0 0 640 588" role="presentation" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
               <defs>
                 <radialGradient id="hero-vector-wave-a" gradientUnits="userSpaceOnUse" cx="320" cy="294" r="0">
-                  <stop offset="0" stop-color="hsla(50, 32%, 84%, 0)"></stop>
-                  <stop offset="0.28" stop-color="hsla(50, 32%, 84%, 0)"></stop>
-                  <stop offset="0.43" stop-color="hsla(48, 46%, 78%, 0.36)"></stop>
-                  <stop offset="0.54" stop-color="hsla(142, 18%, 54%, 0.2)"></stop>
-                  <stop offset="0.68" stop-color="hsla(196, 18%, 58%, 0.1)"></stop>
-                  <stop offset="1" stop-color="hsla(196, 18%, 58%, 0)"></stop>
+                  <stop offset="0" stop-color="hsla(162, 34%, 72%, 0)"></stop>
+                  <stop offset="0.28" stop-color="hsla(162, 34%, 72%, 0)"></stop>
+                  <stop offset="0.43" stop-color="hsla(154, 36%, 58%, 0.34)"></stop>
+                  <stop offset="0.54" stop-color="hsla(178, 34%, 56%, 0.22)"></stop>
+                  <stop offset="0.68" stop-color="hsla(204, 32%, 60%, 0.12)"></stop>
+                  <stop offset="1" stop-color="hsla(204, 32%, 60%, 0)"></stop>
                 </radialGradient>
                 <radialGradient id="hero-vector-wave-b" gradientUnits="userSpaceOnUse" cx="320" cy="294" r="0">
-                  <stop offset="0" stop-color="hsla(50, 32%, 84%, 0)"></stop>
-                  <stop offset="0.34" stop-color="hsla(50, 32%, 84%, 0)"></stop>
-                  <stop offset="0.5" stop-color="hsla(48, 42%, 78%, 0.24)"></stop>
-                  <stop offset="0.64" stop-color="hsla(142, 17%, 52%, 0.14)"></stop>
-                  <stop offset="0.78" stop-color="hsla(196, 16%, 58%, 0.07)"></stop>
-                  <stop offset="1" stop-color="hsla(196, 16%, 58%, 0)"></stop>
+                  <stop offset="0" stop-color="hsla(164, 30%, 72%, 0)"></stop>
+                  <stop offset="0.34" stop-color="hsla(164, 30%, 72%, 0)"></stop>
+                  <stop offset="0.5" stop-color="hsla(154, 32%, 58%, 0.24)"></stop>
+                  <stop offset="0.64" stop-color="hsla(180, 30%, 56%, 0.15)"></stop>
+                  <stop offset="0.78" stop-color="hsla(205, 28%, 60%, 0.08)"></stop>
+                  <stop offset="1" stop-color="hsla(205, 28%, 60%, 0)"></stop>
                 </radialGradient>
                 <radialGradient id="hero-vector-wave-c" gradientUnits="userSpaceOnUse" cx="320" cy="294" r="0">
-                  <stop offset="0" stop-color="hsla(50, 32%, 84%, 0)"></stop>
-                  <stop offset="0.42" stop-color="hsla(50, 32%, 84%, 0)"></stop>
-                  <stop offset="0.58" stop-color="hsla(48, 38%, 78%, 0.16)"></stop>
-                  <stop offset="0.74" stop-color="hsla(142, 16%, 52%, 0.09)"></stop>
-                  <stop offset="0.88" stop-color="hsla(196, 14%, 58%, 0.04)"></stop>
-                  <stop offset="1" stop-color="hsla(196, 14%, 58%, 0)"></stop>
+                  <stop offset="0" stop-color="hsla(166, 26%, 72%, 0)"></stop>
+                  <stop offset="0.42" stop-color="hsla(166, 26%, 72%, 0)"></stop>
+                  <stop offset="0.58" stop-color="hsla(156, 28%, 58%, 0.16)"></stop>
+                  <stop offset="0.74" stop-color="hsla(182, 26%, 56%, 0.1)"></stop>
+                  <stop offset="0.88" stop-color="hsla(206, 24%, 60%, 0.05)"></stop>
+                  <stop offset="1" stop-color="hsla(206, 24%, 60%, 0)"></stop>
                 </radialGradient>
                 <filter id="hero-vector-glow-filter" x="-30%" y="-30%" width="160%" height="160%">
                   <feGaussianBlur stdDeviation="2.5" result="softGlow"></feGaussianBlur>
@@ -455,6 +455,7 @@
         ];
         var waveFrame = 0;
         var waveId = 0;
+        var waveActive = false;
         var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (!heroGrid || !heroMedia || !heroVector || waveGradients.some(function (gradient) { return !gradient; })) {
@@ -514,6 +515,7 @@
           cancelAnimationFrame(waveFrame);
 
           var activeWave = ++waveId;
+          waveActive = true;
           var startTime = performance.now();
           var duration = 1750;
           var fadeDuration = 620;
@@ -558,10 +560,17 @@
             } else {
               heroMedia.classList.remove('is-flowing');
               clearWaves();
+              waveActive = false;
             }
           }
 
           waveFrame = requestAnimationFrame(tick);
+        }
+
+        function startWaveIfIdle(origin) {
+          if (!waveActive) {
+            startWave(origin);
+          }
         }
 
         function startFlow(event) {
@@ -577,6 +586,18 @@
           }
         }
 
+        function startHoverFlow(event) {
+          if (event.relatedTarget && heroGrid.contains(event.relatedTarget)) {
+            return;
+          }
+
+          if (!isInsideHero(event.clientX, event.clientY)) {
+            return;
+          }
+
+          startWaveIfIdle(getVectorPoint(event.clientX, event.clientY));
+        }
+
         function stopFlow(event) {
           if (event && heroGrid.releasePointerCapture) {
             try {
@@ -587,7 +608,12 @@
           }
         }
 
+        window.setInterval(function () {
+          startWaveIfIdle({ x: 320, y: 294 });
+        }, 10000);
+
         heroGrid.addEventListener('pointerdown', startFlow);
+        heroGrid.addEventListener('mouseover', startHoverFlow);
         window.addEventListener('pointerup', stopFlow);
         window.addEventListener('pointercancel', stopFlow);
       }());
