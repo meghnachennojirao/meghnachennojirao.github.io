@@ -10,7 +10,7 @@
     <meta property="og:title" content="Dr Meghna C Rao">
     <meta property="og:description" content="Neuroscience and psychology experiments, writing, and academic work.">
     <meta property="og:image" content="https://meghnachennojirao.github.io/assets/images/Icon.png">
-    <meta property="og:url" content="https://meghnachennojirao.github.io/index2.html">
+    <meta property="og:url" content="https://meghnachennojirao.github.io/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dr Meghna C Rao">
@@ -40,7 +40,7 @@
     <header class="site-nav" aria-label="Site header">
       <div class="site-wrap">
         <div class="nav-inner">
-          <a class="brand-link" href="index2.html" aria-label="Dr Meghna C Rao home">
+          <a class="brand-link" href="index.html" aria-label="Dr Meghna C Rao home">
             <img class="brand-mark" src="assets/images/Icon.png" alt="">
             <span class="brand-text">Dr Meghna C Rao</span>
           </a>
@@ -85,6 +85,10 @@
           </div>
 
           <div class="hero-media" aria-label="Profile">
+            <div class="hero-flow" aria-hidden="true">
+              <div id="hero-flow-blob" class="hero-flow-blob"></div>
+              <div id="hero-flow-pulses" class="hero-flow-pulses"></div>
+            </div>
             <figure class="portrait-shell">
               <img class="portrait" src="https://avatars.githubusercontent.com/u/134132692?v=4" alt="Portrait of Dr Meghna C Rao">
               <figcaption class="portrait-caption">
@@ -379,5 +383,108 @@
         </div>
       </div>
     </footer>
+
+    <script>
+      (function () {
+        var heroMedia = document.querySelector('.hero-media');
+        var heroFlow = document.querySelector('.hero-flow');
+        var flowBlob = document.getElementById('hero-flow-blob');
+        var flowPulses = document.getElementById('hero-flow-pulses');
+        var isFlowing = false;
+        var lastX = 0;
+        var lastY = 0;
+        var lastPulseAt = 0;
+        var holdPulseTimer = 0;
+
+        if (!heroMedia || !heroFlow || !flowBlob || !flowPulses) {
+          return;
+        }
+
+        function isInsideMedia(clientX, clientY) {
+          var rect = heroMedia.getBoundingClientRect();
+          return clientX >= rect.left &&
+            clientX <= rect.right &&
+            clientY >= rect.top &&
+            clientY <= rect.bottom;
+        }
+
+        function setFlowPosition(clientX, clientY) {
+          var rect = heroMedia.getBoundingClientRect();
+          lastX = clientX - rect.left;
+          lastY = clientY - rect.top;
+          heroFlow.style.setProperty('--flow-x', lastX + "px");
+          heroFlow.style.setProperty('--flow-y', lastY + "px");
+        }
+
+        function emitRipple() {
+          var ripple = document.createElement('span');
+          ripple.className = 'hero-flow-ripple';
+          ripple.style.left = lastX + "px";
+          ripple.style.top = lastY + "px";
+          flowPulses.appendChild(ripple);
+          ripple.addEventListener('animationend', function () {
+            ripple.remove();
+          });
+        }
+
+        function emitRippleIfReady(force) {
+          var now = performance.now();
+          if (!force && now - lastPulseAt < 85) {
+            return;
+          }
+          lastPulseAt = now;
+          emitRipple();
+        }
+
+        function startFlow(event) {
+          if (!isInsideMedia(event.clientX, event.clientY)) {
+            return;
+          }
+
+          isFlowing = true;
+          heroMedia.classList.add('is-flowing');
+          flowBlob.classList.add('is-active');
+          setFlowPosition(event.clientX, event.clientY);
+          emitRippleIfReady(true);
+
+          if (heroMedia.setPointerCapture) {
+            heroMedia.setPointerCapture(event.pointerId);
+          }
+
+          clearInterval(holdPulseTimer);
+          holdPulseTimer = setInterval(function () {
+            if (isFlowing) {
+              emitRippleIfReady(true);
+            }
+          }, 180);
+        }
+
+        function moveFlow(event) {
+          if (!isFlowing) {
+            return;
+          }
+          if (isInsideMedia(event.clientX, event.clientY)) {
+            setFlowPosition(event.clientX, event.clientY);
+            emitRippleIfReady(false);
+          }
+        }
+
+        function stopFlow() {
+          if (!isFlowing) {
+            return;
+          }
+
+          isFlowing = false;
+          heroMedia.classList.remove('is-flowing');
+          flowBlob.classList.remove('is-active');
+          clearInterval(holdPulseTimer);
+        }
+
+        heroMedia.addEventListener('pointerdown', startFlow);
+        window.addEventListener('pointermove', moveFlow);
+        window.addEventListener('pointerup', stopFlow);
+        window.addEventListener('pointercancel', stopFlow);
+      }());
+    </script>
   </body>
 </html>

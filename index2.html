@@ -151,7 +151,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        pointer-events: none;
+        pointer-events: auto;
         z-index: 0; 
         overflow: hidden;
         border-radius: 20px;
@@ -167,6 +167,74 @@
 
       .container-inner {
         background-color: hsla(193,  69%, 57%, 1);
+      }
+
+      .backgroundFlowLayer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 8;
+      }
+
+      .backgroundGlowLayer {
+        --flow-x: 50%;
+        --flow-y: 50%;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 1200ms ease;
+        mix-blend-mode: screen;
+        background: radial-gradient(circle at var(--flow-x) var(--flow-y), hsla(178, 95%, 78%, 0.32) 0%, hsla(196, 92%, 64%, 0.16) 25%, hsla(196, 74%, 52%, 0.08) 42%, transparent 62%);
+      }
+
+      .backgroundPulseLayer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .backgroundFlowPulse {
+        --pulse-size: 120px;
+        position: absolute;
+        width: var(--pulse-size);
+        height: var(--pulse-size);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0.15);
+        transform-origin: center;
+        mix-blend-mode: screen;
+        background: radial-gradient(circle, hsla(177, 100%, 80%, 0.55) 0%, hsla(192, 100%, 75%, 0.35) 30%, hsla(192, 80%, 55%, 0.12) 52%, hsla(192, 80%, 52%, 0) 74%);
+        filter: blur(6px);
+        animation: neuronal-flow 1.45s ease-out forwards;
+      }
+
+      .backgroundFlowSurface {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: clamp(220px, 45vh, 460px);
+        pointer-events: auto;
+        touch-action: none;
+        z-index: 9;
+      }
+
+      @keyframes neuronal-flow {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.08);
+        }
+        10% {
+          opacity: 0.75;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(7);
+        }
       }
 
     </style>
@@ -283,10 +351,15 @@
         </div>
 
 
-        <div class="backgroundSvgHolder">
+        <div id="backgroundSvgHolder" class="backgroundSvgHolder">
           <div style="position: absolute; background-image: linear-gradient(180deg,hsla(193,  69%, 57%, 0.8), hsla(193,  69%, 57%, 0.8), hsla(193,  0%, 0%, 0.2) 40%, transparent); width: 100%; height: 100%; z-index: 1;"></div>
           <div class="w-100 d-lg-block d-none" style="height: 200px;" ></div>
           <div style="position: relative; height: 100%;">
+            <div class="backgroundFlowLayer">
+              <div id="backgroundGlowLayer" class="backgroundGlowLayer"></div>
+              <div id="backgroundPulseLayer" class="backgroundPulseLayer"></div>
+            </div>
+            <div id="backgroundFlowSurface" class="backgroundFlowSurface" aria-hidden="true"></div>
             
             <img id="background-part-6" class="backgroundSvgSlice" src="assets/images/main/background-6.svg" style="border-radius: 0px;" />
             <img id="background-part-7" class="backgroundSvgSlice" src="assets/images/main/background-7.svg" />
@@ -300,52 +373,144 @@
 
 
             <script>
-              window.addEventListener('scroll', function() {
-              // Get the scroll position in pixels
-              var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-              
-              // Calculate the scrollable height of the document
-              var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-              
-              // Calculate the scroll percentage
-              var scrollPercent = (scrollTop / scrollHeight) * 100;
+              (function () {
+                var backgroundHolder = document.getElementById('backgroundSvgHolder');
+                var backgroundFlowLayer = document.getElementById('backgroundGlowLayer');
+                var backgroundPulseLayer = document.getElementById('backgroundPulseLayer');
+                var backgroundFlowSurface = document.getElementById('backgroundFlowSurface');
+                var isInteracting = false;
+                var isTouching = false;
+                var lastPulseAt = 0;
+                var fadeTimeout;
+                var activePulseInterval = 0;
 
-              var backgroundParts = document.getElementsByClassName('backgroundSvgSlice');
-
-              for (var i = 0; i < backgroundParts.length; i++) {
-                partNumber = backgroundParts[i].id.split('background-part-')[1];
-                if (partNumber != 0) {
-                  backgroundParts[i].style.transform = 'translateY(' + ((scrollPercent* partNumber * 0.03 * 2400/window.innerWidth) + (-10*(3400/window.innerWidth))) + '%)';
+                function sizeBottomAnchor() {
+                  var anchor = document.getElementById('background-part-0');
+                  if (!anchor) { return; }
+                  if (window.innerWidth < 300) {
+                    anchor.style.height = '600px';
+                  } else if (window.innerWidth > 301 && window.innerWidth < 800) {
+                    anchor.style.height = '400px';
+                  } else if (window.innerWidth > 801 && window.innerWidth < 1200) {
+                    anchor.style.height = '200px';
+                  } else if (window.innerWidth > 1201) {
+                    anchor.style.height = '100px';
+                  }
                 }
-                
-              }
 
+                function setParallaxOffset(scrollTop) {
+                  var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                  var scrollPercent = scrollHeight ? (scrollTop / scrollHeight) * 100 : 0;
+                  var backgroundParts = document.getElementsByClassName('backgroundSvgSlice');
 
-            });
-
-            if (window.innerWidth < 300) {
-              document.getElementById('background-part-0').style.height = '600px';
-            }
-            else if (window.innerWidth > 301 &&  window.innerWidth < 800) {
-              document.getElementById('background-part-0').style.height = '400px';
-            }
-            else if (window.innerWidth > 801 &&  window.innerWidth < 1200) {
-              document.getElementById('background-part-0').style.height = '200px';
-            }
-            else if (window.innerWidth > 1201) {
-              document.getElementById('background-part-0').style.height = '100px';
-            }   
-
-
-            var backgroundParts = document.getElementsByClassName('backgroundSvgSlice');
-
-              for (var i = 0; i < backgroundParts.length; i++) {
-                partNumber = backgroundParts[i].id.split('background-part-')[1];
-                if (partNumber != 0) {
-                  backgroundParts[i].style.transform = 'translateY(' + ((0* partNumber * 0.04 * 2400/window.innerWidth) + (-10*(3400/window.innerWidth))) + '%)';
+                  for (var i = 0; i < backgroundParts.length; i++) {
+                    var partNumber = Number(backgroundParts[i].id.split('background-part-')[1]);
+                    if (partNumber !== 0) {
+                      backgroundParts[i].style.transform = 'translateY(' + ((scrollPercent * partNumber * 0.03 * 2400 / window.innerWidth) + (-10 * (3400 / window.innerWidth))) + '%)';
+                    }
+                  }
                 }
-                
-              }
+
+                function emitPulse(localX, localY) {
+                  var pulse = document.createElement('span');
+                  pulse.className = 'backgroundFlowPulse';
+                  pulse.style.left = localX + 'px';
+                  pulse.style.top = localY + 'px';
+
+                  backgroundPulseLayer.appendChild(pulse);
+                  pulse.addEventListener('animationend', function () {
+                    pulse.remove();
+                  });
+                }
+
+                function beginGlow(localX, localY) {
+                  backgroundFlowLayer.style.setProperty('--flow-x', localX + 'px');
+                  backgroundFlowLayer.style.setProperty('--flow-y', localY + 'px');
+                  backgroundFlowLayer.style.opacity = '1';
+                }
+
+                function updateGlowClient(ev) {
+                  if (!backgroundHolder || !backgroundFlowLayer) { return; }
+                  var holderRect = backgroundHolder.getBoundingClientRect();
+                  var localX = ev.clientX - holderRect.left;
+                  var localY = ev.clientY - holderRect.top;
+                  var now = performance.now();
+
+                  beginGlow(localX, localY);
+
+                  if (isTouching && now - lastPulseAt > 80) {
+                    emitPulse(localX, localY);
+                    lastPulseAt = now;
+                  }
+
+                  clearTimeout(fadeTimeout);
+                  fadeTimeout = setTimeout(function () {
+                    if (!isTouching) {
+                      backgroundFlowLayer.style.opacity = '0';
+                    }
+                  }, 90);
+                }
+
+                function startGlow(ev) {
+                  if (!isInteracting || !backgroundFlowSurface) { return; }
+                  isTouching = true;
+                  lastPulseAt = 0;
+                  updateGlowClient(ev);
+                  emitPulse(ev.clientX - backgroundHolder.getBoundingClientRect().left, ev.clientY - backgroundHolder.getBoundingClientRect().top);
+                }
+
+                function endGlow() {
+                  isTouching = false;
+                  if (fadeTimeout) {
+                    clearTimeout(fadeTimeout);
+                  }
+                  fadeTimeout = setTimeout(function () {
+                    if (!isTouching) {
+                      backgroundFlowLayer.style.opacity = '0';
+                    }
+                  }, 520);
+                }
+
+                function initFlowInteraction() {
+                  if (!backgroundFlowSurface) { return; }
+                  isInteracting = true;
+
+                  backgroundFlowSurface.addEventListener('pointerdown', startGlow, { passive: true });
+                  backgroundFlowSurface.addEventListener('pointermove', function (ev) {
+                    if (!isTouching) { return; }
+                    updateGlowClient(ev);
+                  }, { passive: true });
+                  backgroundFlowSurface.addEventListener('pointerup', endGlow, { passive: true });
+                  backgroundFlowSurface.addEventListener('pointerleave', endGlow, { passive: true });
+                  backgroundFlowSurface.addEventListener('pointerout', endGlow, { passive: true });
+                  document.addEventListener('pointerup', endGlow, { passive: true });
+                  document.addEventListener('pointercancel', endGlow, { passive: true });
+                }
+
+                function initialize() {
+                  if (window.innerWidth < 300) {
+                    backgroundFlowSurface.style.height = '300px';
+                  } else if (window.innerWidth > 1200) {
+                    backgroundFlowSurface.style.height = 'clamp(180px, 30vh, 360px)';
+                  }
+
+                  sizeBottomAnchor();
+                  setParallaxOffset(0);
+                  initFlowInteraction();
+                }
+
+                window.addEventListener('scroll', function () {
+                  var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                  setParallaxOffset(scrollTop);
+                });
+
+                window.addEventListener('resize', function () {
+                  sizeBottomAnchor();
+                  setParallaxOffset(window.pageYOffset || document.documentElement.scrollTop);
+                });
+
+                initialize();
+              })();
             </script>
             
             
