@@ -8,6 +8,7 @@
   var state = {
     screen: 'welcome',
     exerciseIdx: 0,
+    cardIdx: 0,
     interacted: false,
     currentMeta: null
   };
@@ -35,34 +36,34 @@
 
   var STAGE_META = {
     1: {
-      title: 'Foundations',
-      desc: 'Start with location.',
-      visual: { kind: 'head-diagram', config: { targets: ['Fp1', 'Fp2', 'O1', 'O2'] } }
+      title: 'Map Science',
+      desc: 'Build the cap before reading it.',
+      visual: { kind: 'head-diagram', config: { targets: ['Fp1', 'Fp2', 'Cz', 'O1', 'O2'] } }
     },
     2: {
-      title: 'Normal Variants',
-      desc: 'Benign can look sharp.',
-      visual: { kind: 'eeg-multi', preset: 'wicket', config: { channels: [6, 7, 8, 9], highlight: [6, 7] } }
+      title: 'Page Science',
+      desc: 'Learn what each line means.',
+      visual: { kind: 'cap-trace', preset: 'normal_awake', config: { targets: ['Fp1', 'Fp2', 'O1', 'O2'], highlight: [0, 1] } }
     },
     3: {
-      title: 'Artifacts',
-      desc: 'First decide what is not brain.',
-      visual: { kind: 'eeg-multi', preset: 'eye_blink', config: { channels: [0, 1, 8, 9], highlight: [0, 1] } }
+      title: 'Normal Signals',
+      desc: 'Know the baseline first.',
+      visual: { kind: 'frequency-scope', config: { highlightBand: 2 } }
     },
     4: {
-      title: 'Pathology',
-      desc: 'Strict criteria prevent over-read.',
-      visual: { kind: 'eeg-single', preset: 'focal_spike', config: { channel: 6, label: 'T3' } }
+      title: 'Look-alikes',
+      desc: 'Separate noise from brain.',
+      visual: { kind: 'eeg-multi', preset: 'eye_blink', config: { channels: [0, 1, 8, 9], highlight: [0, 1] } }
     },
     5: {
-      title: 'Seizures',
-      desc: 'Change over time is the clue.',
-      visual: { kind: 'eeg-single', preset: 'temporal_seizure', config: { channel: 6, label: 'T3' } }
+      title: 'Abnormal Patterns',
+      desc: 'Localize, then name.',
+      visual: { kind: 'eeg-single', preset: 'focal_spike', config: { channel: 6, label: 'T3' } }
     },
     6: {
-      title: 'Clinical Context',
-      desc: 'The waveform needs a patient.',
-      visual: { kind: 'compare-panel', preset: 'generalized_sw', presetB: 'diffuse_slowing', config: { labelA: 'Pattern', labelB: 'Context' } }
+      title: 'Full Cap Training',
+      desc: 'Read cap and traces together.',
+      visual: { kind: 'cap-trace', preset: 'generalized_sw', config: { targets: ['Fp1', 'Fp2', 'F3', 'F4'], highlight: [0, 1, 2, 3], measure: '1 second · count the waves' } }
     }
   };
 
@@ -88,6 +89,7 @@
   function resetProgress() {
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     state.exerciseIdx = 0;
+    state.cardIdx = 0;
     state.interacted = false;
   }
 
@@ -183,18 +185,32 @@
     stageLine.start();
   }
 
-  function renderPrimer(idx) {
+  function getCards(meta) {
+    if (meta.cards && meta.cards.length) return meta.cards;
+    return [{
+      title: (meta.explain && meta.explain.title) || meta.shortTitle || 'One clue',
+      copy: (meta.explain && meta.explain.copy) || meta.guide || 'Look at one clue before you answer.',
+      kind: meta.lookKind || 'spread',
+      terms: meta.terms || []
+    }];
+  }
+
+  function renderPrimer(idx, cardIdx) {
     var ex = EEG_EXERCISES[idx];
     var meta = getMeta(ex);
-    var explain = meta.explain || {};
-    $('#primer-count').textContent = 'Clue ' + String(ex.id).padStart(2, '0');
-    $('#primer-title').textContent = explain.title || meta.shortTitle || ex.title;
-    $('#primer-copy').textContent = explain.copy || meta.guide || ex.concept;
+    var cards = getCards(meta);
+    state.cardIdx = Math.max(0, Math.min(cardIdx || 0, cards.length - 1));
+    var card = cards[state.cardIdx] || {};
+    $('#primer-count').textContent = 'Clue ' + String(idx + 1).padStart(2, '0') + ' · ' + (state.cardIdx + 1) + '/' + cards.length;
+    $('#primer-title').textContent = card.title || meta.shortTitle || ex.title;
+    $('#primer-copy').textContent = card.copy || meta.guide || ex.concept;
+    $('#btn-primer-continue').textContent = state.cardIdx === cards.length - 1 ? 'Practice' : 'Continue';
     renderStepbar($('#primer-stepbar'), ex.stage, 6);
+    renderTermList($('#primer-terms'), card.terms || []);
 
     showScreen('primer');
 
-    renderPrimerGraphic(ex, meta);
+    renderPrimerGraphic(ex, meta, card);
   }
 
   function renderLook(idx) {
@@ -204,14 +220,19 @@
     $('#look-title').textContent = meta.lookTitle || 'Look for one thing.';
     $('#look-copy').textContent = meta.notice || 'Notice one clear clue before you answer.';
     renderStepbar($('#look-stepbar'), ex.stage, 6);
-    renderLookTerms(meta.terms || []);
+    renderTermList($('#look-terms'), meta.terms || []);
 
     showScreen('look');
     renderLookGraphic(ex, meta);
   }
 
-  function renderPrimerGraphic(ex, meta) {
+  function renderPrimerGraphic(ex, meta, card) {
     var el = $('#primer-graphic');
+    card = card || {};
+    if (card.kind) {
+      renderConceptGraphic(el, card.kind, card, ex, meta);
+      return;
+    }
     var visual = meta.visual || {};
     var type = 'field';
     if (visual.kind === 'head-diagram') type = 'address';
@@ -271,7 +292,75 @@
       else if (ex.stage >= 5) kind = 'story';
     }
 
-    if (kind === 'side') {
+    renderConceptGraphic(el, kind, { focusX: meta.focusX }, ex, meta);
+  }
+
+  function renderConceptGraphic(el, kind, card, ex, meta) {
+    card = card || {};
+
+    if (kind === 'landmarks') {
+      var mode = card.mode || 'frontback';
+      var labelA = mode === 'ears' ? 'left ear point' : 'nasion';
+      var labelB = mode === 'ears' ? 'right ear point' : 'inion';
+      el.innerHTML =
+        '<div class="concept-landmarks ' + (mode === 'ears' ? 'is-ears' : '') + '">' +
+          '<i class="concept-head"></i>' +
+          '<span class="concept-landmark-dot is-a"><b>' + labelA + '</b></span>' +
+          '<span class="concept-landmark-dot is-b"><b>' + labelB + '</b></span>' +
+          '<em></em>' +
+        '</div>';
+    } else if (kind === 'measure') {
+      var marks = card.marks || ['10%', '20%', '20%', '20%', '20%', '10%'];
+      el.innerHTML =
+        '<div class="concept-measure">' +
+          '<i></i>' +
+          marks.map(function (mark) { return '<span>' + mark + '</span>'; }).join('') +
+        '</div>';
+    } else if (kind === 'intersections') {
+      el.innerHTML =
+        '<div class="concept-intersections">' +
+          '<i></i><em></em><b></b>' +
+          '<span style="left:35%;top:33%"></span><span style="left:50%;top:50%"></span><span style="left:65%;top:33%"></span>' +
+          '<span style="left:35%;top:67%"></span><span style="left:65%;top:67%"></span>' +
+        '</div>';
+    } else if (kind === 'midline') {
+      el.innerHTML =
+        '<div class="concept-midline">' +
+          '<i></i><em></em>' +
+          '<span style="top:22%">Fz</span><span style="top:50%">Cz</span><span style="top:78%">Pz</span>' +
+        '</div>';
+    } else if (kind === 'line') {
+      el.innerHTML = '<div class="concept-line"><i></i></div>';
+    } else if (kind === 'sensor') {
+      el.innerHTML =
+        '<div class="concept-sensor">' +
+          '<i></i><span style="left:34%;top:34%"></span><span style="left:62%;top:34%"></span>' +
+          '<span style="left:25%;top:58%"></span><span class="is-on" style="left:64%;top:68%"></span>' +
+        '</div>';
+    } else if (kind === 'regions') {
+      var activeRegion = card.region || 'back';
+      el.innerHTML =
+        '<div class="concept-regions">' +
+          ['front','center','side','back'].map(function (name) {
+            return '<span class="' + (name === activeRegion ? 'is-on' : '') + '">' + name + '</span>';
+          }).join('') +
+        '</div>';
+    } else if (kind === 'code') {
+      var parts = card.parts || ['O', '2'];
+      var labels = card.labels || ['back', 'right'];
+      el.innerHTML =
+        '<div class="concept-code">' +
+          '<span><b>' + parts[0] + '</b><small>' + labels[0] + '</small></span>' +
+          '<span><b>' + parts[1] + '</b><small>' + labels[1] + '</small></span>' +
+        '</div>';
+    } else if (kind === 'compare') {
+      var compareLabels = card.labels || ['view one', 'view two'];
+      el.innerHTML =
+        '<div class="primer-compare">' +
+          '<div class="primer-compare-card"><span>' + compareLabels[0] + '</span><i class="primer-compare-line" style="--tilt:-3deg"></i></div>' +
+          '<div class="primer-compare-card"><span>' + compareLabels[1] + '</span><i class="primer-compare-line" style="--tilt:3deg"></i></div>' +
+        '</div>';
+    } else if (kind === 'side') {
       el.innerHTML =
         '<div class="look-side">' +
           '<span>left side</span>' +
@@ -296,7 +385,7 @@
     } else if (kind === 'story') {
       el.innerHTML = '<div class="look-story"><i></i><i></i><i></i></div>';
     } else {
-      var focus = meta.focusX || (ex.stage === 3 ? '34%' : (ex.stage === 4 ? '42%' : '60%'));
+      var focus = card.focusX || (meta && meta.focusX) || (ex.stage === 3 ? '34%' : (ex.stage === 4 ? '42%' : '60%'));
       el.innerHTML = '<div class="look-spread"><i style="--x:' + focus + '"></i></div>';
     }
   }
@@ -308,7 +397,7 @@
     state.currentMeta = meta;
     state.interacted = false;
 
-    $('#ex-count').textContent = 'Exercise ' + String(ex.id).padStart(2, '0');
+    $('#ex-count').textContent = 'Exercise ' + String(idx + 1).padStart(2, '0');
     $('#ex-title').textContent = meta.shortTitle || ex.title;
     $('#ex-concept').textContent = meta.guide || ex.concept || ix.prompt;
     renderStepbar($('#ex-stepbar'), ex.stage, 6);
@@ -332,8 +421,8 @@
     $('#btn-prev').disabled = idx === 0;
   }
 
-  function renderLookTerms(terms) {
-    var wrap = $('#look-terms');
+  function renderTermList(wrap, terms) {
+    if (!wrap) return;
     wrap.innerHTML = '';
     if (!terms.length) {
       wrap.classList.add('is-hidden');
@@ -372,8 +461,11 @@
 
     var h = 248;
     if (window.VizEngine) {
-      var probe = { 'head-diagram': 220, 'frequency-scope': 268, 'eeg-single': 220, 'compare-panel': 240, 'eeg-multi': 260 };
-      h = probe[visual.kind] || h;
+      var probe = { 'head-diagram': 220, 'frequency-scope': 268, 'eeg-single': 220, 'compare-panel': 240, 'eeg-multi': 260, 'cap-trace': 270 };
+      if (visual.kind === 'cap-trace' && window.innerHeight < 760) h = 210;
+      else if (visual.kind === 'eeg-multi' && window.innerHeight < 760) h = 220;
+      else if (visual.kind === 'compare-panel' && window.innerHeight < 760) h = 210;
+      else h = probe[visual.kind] || h;
     }
     sizeCanvas(canvas, h);
     exViz = createViz(canvas, visual);
@@ -540,18 +632,26 @@
     state.exerciseIdx = nextIdx;
     saveProgress();
     if (nextEx.stage !== currentEx.stage) renderStageIntro(nextEx.stage);
-    else renderPrimer(nextIdx);
+    else renderPrimer(nextIdx, 0);
   }
 
   function goPrev() {
     if (state.screen === 'exercise') {
-      renderLook(state.exerciseIdx);
+      var cards = getCards(getMeta(EEG_EXERCISES[state.exerciseIdx]));
+      renderPrimer(state.exerciseIdx, cards.length - 1);
       return;
     }
     if (state.exerciseIdx === 0) return;
     state.exerciseIdx--;
     saveProgress();
-    renderPrimer(state.exerciseIdx);
+    renderPrimer(state.exerciseIdx, 0);
+  }
+
+  function advancePrimer() {
+    var meta = getMeta(EEG_EXERCISES[state.exerciseIdx]);
+    var cards = getCards(meta);
+    if (state.cardIdx < cards.length - 1) renderPrimer(state.exerciseIdx, state.cardIdx + 1);
+    else renderExercise(state.exerciseIdx);
   }
 
   function setupThemeToggle() {
@@ -578,8 +678,8 @@
   function setupKeyboard() {
     document.addEventListener('keydown', function (e) {
       if (state.screen === 'answer' && (e.key === 'Enter' || e.key === 'ArrowRight')) goNext();
-      if (state.screen === 'stageIntro' && (e.key === 'Enter' || e.key === 'ArrowRight')) renderPrimer(state.exerciseIdx);
-      if (state.screen === 'primer' && (e.key === 'Enter' || e.key === 'ArrowRight')) renderLook(state.exerciseIdx);
+      if (state.screen === 'stageIntro' && (e.key === 'Enter' || e.key === 'ArrowRight')) renderPrimer(state.exerciseIdx, 0);
+      if (state.screen === 'primer' && (e.key === 'Enter' || e.key === 'ArrowRight')) advancePrimer();
       if (state.screen === 'look' && (e.key === 'Enter' || e.key === 'ArrowRight')) renderExercise(state.exerciseIdx);
       if (state.screen === 'exercise' && e.key === 'ArrowLeft') goPrev();
       if (state.screen === 'exercise') {
@@ -610,13 +710,13 @@
       renderStageIntro(1);
     });
     $('#btn-resume').addEventListener('click', function () {
-      renderPrimer(state.exerciseIdx);
+      renderPrimer(state.exerciseIdx, 0);
     });
     $('#btn-stage-continue').addEventListener('click', function () {
-      renderPrimer(state.exerciseIdx);
+      renderPrimer(state.exerciseIdx, 0);
     });
     $('#btn-primer-continue').addEventListener('click', function () {
-      renderLook(state.exerciseIdx);
+      advancePrimer();
     });
     $('#btn-look-continue').addEventListener('click', function () {
       renderExercise(state.exerciseIdx);

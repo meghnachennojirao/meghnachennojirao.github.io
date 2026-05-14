@@ -556,4 +556,615 @@ var EEG_EXERCISES = [
       mistake:"Diagnosing absence epilepsy in an adult based on the waveform alone, without considering age and clinical state.",
     }
   },
+  {
+    id:31, stage:6, stageTitle:"Full Cap Foundations",
+    title:"Nasion and Inion",
+    concept:"The 10-20 map starts from reliable landmarks.",
+    body:"The front-back head measurement starts at the nasion and ends at the inion.",
+    keyPoints:["Nasion = bridge of nose","Inion = bony back point","Measurements make placement reproducible"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"The front-to-back measurement starts at:",
+      options:["Temple to temple","Nose bridge to back bump"],
+      answer:1,
+      verdict:"Nose bridge to back bump",
+      subtitle:"Nasion to inion.",
+      why:"Those landmarks are easy to find on different patients.",
+      mistake:"Starting the map from a vague hairline or face shape.",
+    }
+  },
+  {
+    id:32, stage:6, stageTitle:"Full Cap Foundations",
+    title:"Preauricular Points",
+    concept:"The side-to-side measurement uses points near the ears.",
+    body:"The second main measurement runs from one preauricular point to the other.",
+    keyPoints:["Preauricular = just in front of each ear","This anchors left-right placement","The map needs front-back and side-side lines"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"The side-to-side measurement uses points near the:",
+      options:["Eyes","Ears"],
+      answer:1,
+      verdict:"Ears",
+      subtitle:"Preauricular points sit just before each ear.",
+      why:"These points anchor the left-right line across the head.",
+      mistake:"Using the eyes as the side-to-side anchor.",
+    }
+  },
+  {
+    id:33, stage:6, stageTitle:"Full Cap Foundations",
+    title:"10 and 20",
+    concept:"The numbers come from measurement increments.",
+    body:"The 10-20 system divides head distances into 10% and 20% steps.",
+    keyPoints:["Measure the head","Mark percentages","Place sensors at intersections"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"In 10-20, the 10 and 20 are:",
+      options:["Channel counts","Measurement percentages"],
+      answer:1,
+      verdict:"Measurement percentages",
+      subtitle:"The map is built from measured distances.",
+      why:"Marks are placed at 10% and 20% intervals.",
+      mistake:"Treating 10-20 as just a list of sensor names.",
+    }
+  },
+  {
+    id:34, stage:6, stageTitle:"Full Cap Foundations",
+    title:"Intersections",
+    concept:"Sensors go where measured lines cross.",
+    body:"Front-back, side-side, circumferential, and transverse marks create sensor positions.",
+    keyPoints:["Lines are measured","Crossings become sensor spots","This makes the cap reproducible"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"observe",
+      prompt:"Watch how measured lines create sensor positions.",
+      verdict:"Measured crossings",
+      subtitle:"The cap is a map, not a guess.",
+      why:"Electrodes are placed where measured head-map lines intersect.",
+      mistake:"Thinking sensors are placed by eye.",
+    }
+  },
+  {
+    id:35, stage:6, stageTitle:"Full Cap Foundations",
+    title:"Near the Middle",
+    concept:"Lower numbers tend to sit closer to the midline.",
+    body:"C4 is closer to the middle than T8 because the number is lower.",
+    keyPoints:["Numbers give side","Lower often means nearer middle","Far lateral names have higher numbers"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Which is closer to the middle?",
+      options:["T8","C4"],
+      answer:1,
+      verdict:"C4",
+      subtitle:"Lower numbers tend to sit nearer the midline.",
+      why:"T8 is farther out on the side of the head.",
+      mistake:"Using number only for left-right and missing distance from middle.",
+    }
+  },
+  {
+    id:36, stage:6, stageTitle:"Full Cap Foundations",
+    title:"The Z Line",
+    concept:"Z marks the center line.",
+    body:"Midline electrodes use z because they sit on neither left nor right.",
+    keyPoints:["z = zero/midline","Fz, Cz, Pz sit in the middle","Midline is a reference line"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Cz sits on the:",
+      options:["Right side","Middle line"],
+      answer:1,
+      verdict:"Middle line",
+      subtitle:"z means the midline.",
+      why:"Midline sensors are neither odd-left nor even-right.",
+      mistake:"Reading z as a side number.",
+    }
+  },
+  {
+    id:37, stage:6, stageTitle:"Display Basics",
+    title:"Channel",
+    concept:"A channel is one displayed comparison.",
+    body:"In EEG, a visible line often shows the difference between two inputs.",
+    keyPoints:["Two inputs go in","One line comes out","That line is a channel or derivation"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A channel is best thought of as:",
+      options:["The whole cap","One displayed comparison"],
+      answer:1,
+      verdict:"One displayed comparison",
+      subtitle:"Two inputs become one line.",
+      why:"The displayed line is the output of a comparison.",
+      mistake:"Thinking one channel always means one raw electrode.",
+    }
+  },
+  {
+    id:38, stage:6, stageTitle:"Display Basics",
+    title:"Chain",
+    concept:"A chain links several neighboring comparisons.",
+    body:"A temporal chain moves from front to side to back along one path.",
+    keyPoints:["Channels can be linked","A linked string is a chain","Chains organize the page"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A chain is:",
+      options:["One isolated sensor","A linked row of channels"],
+      answer:1,
+      verdict:"Linked row of channels",
+      subtitle:"The page is organized in chains.",
+      why:"A chain lets you follow activity across neighboring sensor pairs.",
+      mistake:"Reading each line without noticing its neighbors.",
+    }
+  },
+  {
+    id:39, stage:6, stageTitle:"Display Basics",
+    title:"Page Layout",
+    concept:"The bipolar page has an order.",
+    body:"A common display stacks left temporal, left parasagittal, midline, right parasagittal, and right temporal chains.",
+    keyPoints:["The page follows the head","Left chains appear together","Right chains appear together"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"observe",
+      prompt:"Watch the page as chains are stacked from left to right.",
+      verdict:"Organized page",
+      subtitle:"The display mirrors the head map.",
+      why:"The chain order helps you locate patterns across the cap.",
+      mistake:"Treating the page order as random.",
+    }
+  },
+  {
+    id:40, stage:6, stageTitle:"Display Basics",
+    title:"ECG Line",
+    concept:"A heart channel often appears at the bottom.",
+    body:"A separate ECG channel helps compare EEG marks with heartbeat timing.",
+    keyPoints:["ECG records heart timing","It helps identify heart artifact","It is not a brain channel"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"The bottom ECG channel helps check:",
+      options:["Hair thickness","Heartbeat timing"],
+      answer:1,
+      verdict:"Heartbeat timing",
+      subtitle:"It helps separate brain from heart artifact.",
+      why:"Regular EEG marks can be compared with the ECG rhythm.",
+      mistake:"Ignoring the ECG line when sharp marks repeat regularly.",
+    }
+  },
+  {
+    id:41, stage:6, stageTitle:"Display Basics",
+    title:"Average Reference",
+    concept:"Another view compares one sensor with the head average.",
+    body:"Average reference is different from neighbor-pair display.",
+    keyPoints:["Bipolar compares neighbors","Average reference compares to the head average","Both are views, not raw truth"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Average reference compares a sensor with:",
+      options:["Only the next sensor","The head average"],
+      answer:1,
+      verdict:"The head average",
+      subtitle:"It is another montage view.",
+      why:"Different views can reveal different parts of the same signal.",
+      mistake:"Assuming one display view is the only truth.",
+    }
+  },
+  {
+    id:42, stage:6, stageTitle:"Display Basics",
+    title:"Montage Choice",
+    concept:"No view is neutral.",
+    body:"Changing the montage can change what is easy or hard to see.",
+    keyPoints:["A montage is a display view","Views have strengths","Interpretation starts by knowing the view"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Before interpreting, first check:",
+      options:["The patient initials only","The display view"],
+      answer:1,
+      verdict:"The display view",
+      subtitle:"The montage shapes the picture.",
+      why:"The same signal can look different in different montages.",
+      mistake:"Interpreting a page without knowing how it is displayed.",
+    }
+  },
+  {
+    id:43, stage:6, stageTitle:"Eye Artifact",
+    title:"Eye Dipole",
+    concept:"The eye has a front-positive and back-negative side.",
+    body:"The cornea is positive and the retina is negative.",
+    keyPoints:["Cornea = front of eye","Retina = back of eye","This creates a dipole"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"The front of the eye is the:",
+      options:["Retina","Cornea"],
+      answer:1,
+      verdict:"Cornea",
+      subtitle:"The cornea is relatively positive.",
+      why:"Eye movement creates a signal because the eye has polarity.",
+      mistake:"Treating eye movement as just mechanical motion.",
+    }
+  },
+  {
+    id:44, stage:6, stageTitle:"Eye Artifact",
+    title:"Bell Phenomenon",
+    concept:"During a blink, the eyes roll upward.",
+    body:"That upward movement creates a large frontal signal.",
+    keyPoints:["Blink moves the eye upward","Front sensors see it strongly","Both frontal poles can deflect"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A blink is largest near:",
+      options:["Back sensors","Front sensors"],
+      answer:1,
+      verdict:"Front sensors",
+      subtitle:"The eyes sit in front.",
+      why:"The upward eye movement projects strongly to Fp1 and Fp2.",
+      mistake:"Calling a blink a frontal brain wave.",
+    }
+  },
+  {
+    id:45, stage:6, stageTitle:"Normal Rhythm",
+    title:"Eyes Closed Alpha",
+    concept:"Alpha is common during relaxed wakefulness.",
+    body:"Alpha is often around 10 per second and strongest posteriorly when eyes are closed.",
+    keyPoints:["Awake and relaxed","Eyes closed strengthens alpha","Posterior sensors often show it best"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Alpha is commonly strongest when eyes are:",
+      options:["Open and scanning","Closed and relaxed"],
+      answer:1,
+      verdict:"Closed and relaxed",
+      subtitle:"A relaxed eyes-closed state brings it out.",
+      why:"Alpha is a normal wakeful rhythm that is often posterior and around 10 Hz.",
+      mistake:"Calling normal alpha an abnormal rhythm.",
+    }
+  },
+  {
+    id:46, stage:6, stageTitle:"Abnormal Fields",
+    title:"Left Temporal Field",
+    concept:"A focal discharge has a maximal area.",
+    body:"A left temporal abnormality is strongest in the left temporal chain.",
+    keyPoints:["Focal means one main area","Temporal means side head","Maximal means strongest"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"channel-tap",
+      prompt:"Tap the left temporal maximum.",
+      target:["T3"],
+      verdict:"Left temporal maximum",
+      subtitle:"T3 sits in the left temporal region.",
+      why:"The strongest abnormality is in the left temporal chain.",
+      mistake:"Choosing a later spread instead of the maximum field.",
+    }
+  },
+  {
+    id:47, stage:6, stageTitle:"Abnormal Fields",
+    title:"Right Posterior Field",
+    concept:"A field can be strongest at the back-right head.",
+    body:"Posterior right activity may be maximal near O2.",
+    keyPoints:["Posterior means back","Right uses even numbers","O2 is back-right"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"channel-tap",
+      prompt:"Tap the right posterior maximum.",
+      target:["O2"],
+      verdict:"Right posterior maximum",
+      subtitle:"O2 is the back-right sensor.",
+      why:"The maximal field is posterior and right-sided.",
+      mistake:"Calling all posterior activity occipital without checking side.",
+    }
+  },
+  {
+    id:48, stage:6, stageTitle:"Abnormal Fields",
+    title:"Whole-Head Burst",
+    concept:"Some discharges involve the whole head at once.",
+    body:"Generalized spike-wave starts broadly rather than from one small region.",
+    keyPoints:["Generalized = widespread","Both sides start together","A long run can fill the page"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"observe",
+      prompt:"Watch the broad run across both sides.",
+      verdict:"Whole-head burst",
+      subtitle:"Both sides are involved together.",
+      why:"The activity appears broadly rather than starting from one focal center.",
+      mistake:"Forcing a focal source onto a truly broad pattern.",
+    }
+  },
+  {
+    id:49, stage:6, stageTitle:"Clinical Yield",
+    title:"First EEG Yield",
+    concept:"A routine EEG can be normal in epilepsy.",
+    body:"Within 24 hours of a first seizure, a routine EEG finds epileptiform activity only about half the time.",
+    keyPoints:["A normal EEG does not rule out epilepsy","Timing matters","Yield is about probability"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A normal routine EEG after a seizure means epilepsy is:",
+      options:["Impossible","Still possible"],
+      answer:1,
+      verdict:"Still possible",
+      subtitle:"Routine EEG can miss it.",
+      why:"A single routine EEG may find epileptiform activity only about half the time.",
+      mistake:"Using one normal EEG to rule out epilepsy.",
+    }
+  },
+  {
+    id:50, stage:6, stageTitle:"Clinical Yield",
+    title:"Longer Recording",
+    concept:"Longer EEG raises the chance of seeing events.",
+    body:"A 24-hour recording can detect epileptiform discharges in roughly 80-90% of patients with epilepsy.",
+    keyPoints:["Longer time improves yield","Still not perfect","Normal prolonged EEG can still happen"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A 24-hour EEG is more likely to catch discharges because it records:",
+      options:["More channels only","More time"],
+      answer:1,
+      verdict:"More time",
+      subtitle:"More time raises yield.",
+      why:"Epileptiform activity can be intermittent, so longer recordings catch more chances.",
+      mistake:"Assuming more time makes EEG perfect.",
+    }
+  },
+  {
+    id:51, stage:6, stageTitle:"Clinical Yield",
+    title:"Repeat Studies",
+    concept:"Several short EEGs can add information.",
+    body:"Multiple 30-60 minute EEGs can approach the yield of a longer recording.",
+    keyPoints:["Events are intermittent","Repeats add chances","Practicality matters"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Repeating routine EEGs can help because abnormalities are often:",
+      options:["Always present","Intermittent"],
+      answer:1,
+      verdict:"Intermittent",
+      subtitle:"They may appear only sometimes.",
+      why:"More recording opportunities can reveal activity missed before.",
+      mistake:"Treating EEG yield as all-or-nothing.",
+    }
+  },
+  {
+    id:52, stage:6, stageTitle:"Scalp Limits",
+    title:"Area Matters",
+    concept:"Scalp EEG needs enough cortex involved.",
+    body:"A very small cortical area may not create a detectable scalp signal.",
+    keyPoints:["Small source can be missed","Larger synchronized area is easier to see","Scalp sensors are distant"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A very small abnormal brain area is:",
+      options:["Always visible on scalp EEG","Sometimes missed"],
+      answer:1,
+      verdict:"Sometimes missed",
+      subtitle:"The scalp signal may be too small.",
+      why:"Enough synchronized cortex must be involved to reach scalp electrodes consistently.",
+      mistake:"Assuming scalp EEG sees every abnormal neuron group.",
+    }
+  },
+  {
+    id:53, stage:6, stageTitle:"Scalp Limits",
+    title:"Ten to Twenty cm²",
+    concept:"Scalp EEG usually needs a sizable source.",
+    body:"Roughly 10-20 square centimeters of cortex may be needed for consistent scalp detection.",
+    keyPoints:["Surface area matters","Small areas can hide","This is a limitation of scalp EEG"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Consistent scalp detection usually needs a:",
+      options:["Tiny point source","Sizable cortical area"],
+      answer:1,
+      verdict:"Sizable cortical area",
+      subtitle:"Area helps the signal reach the scalp.",
+      why:"A larger synchronized area creates a stronger scalp field.",
+      mistake:"Expecting scalp EEG to detect every tiny source.",
+    }
+  },
+  {
+    id:54, stage:6, stageTitle:"Scalp Limits",
+    title:"Depth Matters",
+    concept:"Deep sources can be harder to see.",
+    body:"Mesial temporal, insular, or singulate sources may be too deep for scalp electrodes.",
+    keyPoints:["Surface sources are easier","Deep sources can be missed","Distance weakens scalp signal"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Deep brain activity is often:",
+      options:["Easier to see","Harder to see"],
+      answer:1,
+      verdict:"Harder to see",
+      subtitle:"Distance weakens the scalp field.",
+      why:"Scalp electrodes sit far from deep structures.",
+      mistake:"Assuming a normal scalp EEG excludes deep seizure sources.",
+    }
+  },
+  {
+    id:55, stage:6, stageTitle:"Scalp Limits",
+    title:"Scalp EEG Limits",
+    concept:"A normal page can still be useful.",
+    body:"Normal EEG results must be interpreted with history, timing, area, and source depth.",
+    keyPoints:["Normal is not always no disease","Context matters","Limits should be reported"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A normal scalp EEG should be read with:",
+      options:["No clinical context","Clinical context"],
+      answer:1,
+      verdict:"Clinical context",
+      subtitle:"The test has limits.",
+      why:"Timing, source size, and source depth all affect what scalp EEG can show.",
+      mistake:"Overpromising what a normal EEG can rule out.",
+    }
+  },
+  {
+    id:56, stage:6, stageTitle:"Full Cap Training",
+    title:"Full Cap: Blink",
+    concept:"Use the whole page, not one line.",
+    body:"A full cap case asks you to combine field, timing, and anatomy.",
+    keyPoints:["Front maximum","Both frontal poles","Not brain"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Full cap case: biggest wave at Fp1/Fp2 during blink. Most likely:",
+      options:["Occipital seizure","Eye artifact"],
+      answer:1,
+      verdict:"Eye artifact",
+      subtitle:"Front field plus eye movement.",
+      why:"The field is maximal at the frontal polar sensors closest to the eyes.",
+      mistake:"Calling a frontal artifact a brain event.",
+    }
+  },
+  {
+    id:57, stage:6, stageTitle:"Full Cap Training",
+    title:"Full Cap: Montage",
+    concept:"Know the display before interpreting.",
+    body:"A full cap page must be read with its montage and chain order in mind.",
+    keyPoints:["Identify the view","Find the chain","Then localize"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Before localizing a full cap pattern, first check:",
+      options:["Only the largest line","The montage and chain"],
+      answer:1,
+      verdict:"Montage and chain",
+      subtitle:"The display determines what each line means.",
+      why:"A full cap page is organized by linked channel chains.",
+      mistake:"Localizing from one line without knowing the display.",
+    }
+  },
+  {
+    id:58, stage:6, stageTitle:"Full Cap Training",
+    title:"Full Cap: Focal Field",
+    concept:"Find the maximal field across the cap.",
+    body:"Full cap localization uses the strongest region and its surrounding spread.",
+    keyPoints:["Find maximum","Check neighboring spread","Name side and region"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"channel-tap",
+      prompt:"Full cap case: tap the focal maximum.",
+      target:["T3"],
+      verdict:"Left temporal maximum",
+      subtitle:"T3 is the center of the field.",
+      why:"The strongest activity sits in the left temporal region with surrounding spread.",
+      mistake:"Choosing a region that only shows later spread.",
+    }
+  },
+  {
+    id:59, stage:6, stageTitle:"Full Cap Training",
+    title:"Full Cap: Generalized",
+    concept:"Recognize when the whole head starts together.",
+    body:"A generalized run starts broadly and synchronously rather than from one side.",
+    keyPoints:["Both sides together","Broad field","Long run"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Count the waves inside the 1-second bracket. This run is:",
+      options:["Focal onset","Generalized pattern"],
+      answer:1,
+      verdict:"Generalized pattern",
+      subtitle:"Both sides begin together.",
+      why:"The run involves the whole head at onset rather than spreading from one point.",
+      mistake:"Forcing a focal source on a broad synchronous pattern.",
+    }
+  },
+  {
+    id:60, stage:6, stageTitle:"Full Cap Training",
+    title:"Full Cap: Final Report",
+    concept:"The final answer combines trace and patient.",
+    body:"A good full cap interpretation answers the clinical question.",
+    keyPoints:["Use the trace","Use the patient story","State the practical meaning"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Measure the run, then use the story. Best final meaning:",
+      options:["Normal awake rhythm","Emergency seizure state"],
+      answer:1,
+      verdict:"Emergency seizure state",
+      subtitle:"Trace plus patient story changes urgency.",
+      why:"Continuous seizure waves in an unresponsive or confused adult are urgent.",
+      mistake:"Naming only the waveform and ignoring the clinical question.",
+    }
+  },
 ];
+
+(function reorderForBeginnerPath() {
+  var groups = [
+    {
+      stage: 1,
+      title: 'Map Science',
+      ids: [31, 32, 33, 34, 35, 36, 1]
+    },
+    {
+      stage: 2,
+      title: 'Page Science',
+      ids: [37, 38, 39, 41, 42, 2, 40, 3, 43, 44, 45]
+    },
+    {
+      stage: 3,
+      title: 'Normal and Limits',
+      ids: [4, 5, 6, 7, 8, 49, 50, 51, 52, 53, 54, 55]
+    },
+    {
+      stage: 4,
+      title: 'Artifacts and Look-alikes',
+      ids: [14, 15, 16, 17, 18, 9, 10, 11, 12, 13, 29]
+    },
+    {
+      stage: 5,
+      title: 'Abnormal Patterns',
+      ids: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 46, 47, 48, 30]
+    },
+    {
+      stage: 6,
+      title: 'Full Cap Training',
+      ids: [56, 57, 58, 59, 60]
+    }
+  ];
+  var byId = {};
+  EEG_EXERCISES.forEach(function (exercise) {
+    byId[exercise.id] = exercise;
+  });
+
+  EEG_EXERCISES = [];
+  groups.forEach(function (group) {
+    group.ids.forEach(function (id) {
+      var exercise = byId[id];
+      if (!exercise) return;
+      exercise.stage = group.stage;
+      exercise.stageTitle = group.title;
+      EEG_EXERCISES.push(exercise);
+    });
+  });
+}());

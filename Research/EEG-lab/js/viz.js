@@ -6,6 +6,7 @@
  *   eeg-single      — one large channel, full-height canvas
  *   compare-panel   — two EEG strips side by side
  *   eeg-multi       — standard 10-channel scrolling EEG
+ *   cap-trace       — cap map and trace page in one training canvas
  */
 (function (global) {
   'use strict';
@@ -118,7 +119,7 @@
   /** preferredHeight — let app.js size the canvas correctly per type */
   VizEngine.prototype.preferredHeight = function () {
     var h = { 'eeg-multi':280, 'eeg-single':200, 'frequency-scope':268,
-               'head-diagram':300, 'compare-panel':240 };
+               'head-diagram':300, 'compare-panel':240, 'cap-trace':270 };
     return h[this.type] || 280;
   };
 
@@ -186,6 +187,7 @@
       case 'frequency-scope':  this._drawFreqScope(); break;
       case 'head-diagram':     this._drawHead();      break;
       case 'compare-panel':    this._drawCompare();   break;
+      case 'cap-trace':        this._drawCapTrace();  break;
     }
   };
 
@@ -756,6 +758,166 @@
         ctx.fillText(s2 + 's', LPAD + (s2 / WIN_S) * panW, H - BPAD + 3);
       }
     }
+  };
+
+  // ────────────────────────────────────────────────────────────────────────────
+  //  Renderer: cap-trace
+  // ────────────────────────────────────────────────────────────────────────────
+
+  VizEngine.prototype._drawCapTrace = function () {
+    var cv = this.cv, ctx = this.ctx;
+    var W = cv.width, H = cv.height;
+    var p = pal(this.dark);
+    var cfg = this.cfg;
+    var chs = cfg.channels || [0,1,2,3,4,5,6,7,8,9];
+    var highlights = cfg.highlight ? (Array.isArray(cfg.highlight) ? cfg.highlight : [cfg.highlight]) : [];
+    var targetNames = cfg.targets || highlights.map(function (idx) { return CH[idx]; });
+    ctx.fillStyle = p.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    var capW = W < 520 ? Math.max(116, W * 0.33) : Math.max(190, W * 0.36);
+    var gutter = W < 520 ? 8 : 12;
+    this._drawCapBlock(ctx, p, 0, 0, capW, H, targetNames);
+    this._drawTraceBlock(ctx, p, capW + gutter, 0, W - capW - gutter, H, chs, highlights, cfg);
+  };
+
+  VizEngine.prototype._drawCapBlock = function (ctx, p, x, y, w, h, targets) {
+    var cx = x + w * 0.5;
+    var cy = y + h * 0.48;
+    var rx = w * 0.36;
+    var ry = Math.min(h * 0.34, w * 0.43);
+    var r = Math.max(3, Math.min(7, w * 0.028));
+    var targetSet = {};
+    (targets || []).forEach(function (name) { targetSet[name] = true; });
+
+    ctx.strokeStyle = p.line;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = p.grid;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx, cy - ry); ctx.lineTo(cx, cy + ry); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx - rx, cy); ctx.lineTo(cx + rx, cy); ctx.stroke();
+
+    ctx.strokeStyle = p.line;
+    ctx.beginPath();
+    ctx.arc(cx, cy - ry, w * 0.035, Math.PI, 0);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx - rx, cy, w * 0.025, Math.PI * 0.5, Math.PI * 1.5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx + rx, cy, w * 0.025, -Math.PI * 0.5, Math.PI * 0.5);
+    ctx.stroke();
+
+    ALL_ELEC.forEach(function (name) {
+      var pos = ELEC_POS[name];
+      var ex = cx + (pos[0] - 0.5) * rx * 2;
+      var ey = cy + (pos[1] - 0.5) * ry * 2;
+      var on = !!targetSet[name];
+      if (on) {
+        ctx.beginPath();
+        ctx.arc(ex, ey, r * 2.35, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(61,189,114,0.16)';
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.arc(ex, ey, OUR_ELEC.has(name) ? r : r * 0.72, 0, Math.PI * 2);
+      ctx.fillStyle = on ? p.accent : (OUR_ELEC.has(name) ? p.lbl : (p.dark ? 'rgba(255,255,255,0.11)' : 'rgba(0,0,0,0.11)'));
+      ctx.fill();
+      if (on) {
+        ctx.fillStyle = p.accent;
+        ctx.font = 'bold 10px "Nunito Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(name, ex, ey - r - 4);
+      }
+    });
+
+    ctx.fillStyle = p.lbl;
+    ctx.font = 'bold 10px "Nunito Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('cap map', cx, y + h - 8);
+  };
+
+  VizEngine.prototype._drawTraceBlock = function (ctx, p, x, y, w, h, chs, highlights, cfg) {
+    var nCh = chs.length;
+    var LPAD = w < 290 ? 32 : 42;
+    var RPAD = 6, TPAD = 24, BPAD = 28;
+    var dataW = w - LPAD - RPAD;
+    var dataH = h - TPAD - BPAD;
+    var chH = dataH / nCh;
+    var gainPx = chH / (7 * 2 * 10);
+
+    ctx.strokeStyle = p.line;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, y + 8);
+    ctx.lineTo(x, y + h - 8);
+    ctx.stroke();
+
+    ctx.fillStyle = p.lbl;
+    ctx.font = 'bold 10px "Nunito Sans", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(cfg.header || 'trace page', x + LPAD, y + 6);
+
+    ctx.strokeStyle = p.grid;
+    for (var s = 0; s <= WIN_S; s++) {
+      var gx = x + LPAD + (s / WIN_S) * dataW;
+      ctx.beginPath(); ctx.moveTo(gx, y + TPAD); ctx.lineTo(gx, y + TPAD + dataH); ctx.stroke();
+    }
+    for (var i = 0; i < nCh; i++) {
+      var gy = y + TPAD + chH * i + chH / 2;
+      ctx.beginPath(); ctx.moveTo(x + LPAD, gy); ctx.lineTo(x + LPAD + dataW, gy); ctx.stroke();
+    }
+
+    for (var i2 = 0; i2 < nCh; i2++) {
+      var ci = chs[i2];
+      var by = y + TPAD + chH * i2 + chH / 2;
+      var data = this._bufA[ci];
+      var isHL = highlights.indexOf(ci) !== -1;
+      var step = dataW / WIN_N;
+      ctx.strokeStyle = isHL ? p.accent : p.trace;
+      ctx.lineWidth = isHL ? 1.5 : 1;
+      ctx.beginPath();
+      for (var k = 0; k < WIN_N; k++) {
+        var px = x + LPAD + k * step;
+        var py = by - data[k] * gainPx;
+        py = Math.max(y + TPAD + chH * i2 + 2, Math.min(y + TPAD + chH * (i2 + 1) - 2, py));
+        k === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = isHL ? p.accent : p.lbl;
+      ctx.font = 'bold 10px "Nunito Sans", sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(CH[ci], x + LPAD - 5, by);
+    }
+
+    var bx = x + LPAD + dataW * 0.58;
+    var by2 = y + h - 18;
+    var bw = dataW / WIN_S;
+    ctx.strokeStyle = p.accent;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(bx, by2);
+    ctx.lineTo(bx + bw, by2);
+    ctx.moveTo(bx, by2 - 5);
+    ctx.lineTo(bx, by2 + 5);
+    ctx.moveTo(bx + bw, by2 - 5);
+    ctx.lineTo(bx + bw, by2 + 5);
+    ctx.stroke();
+
+    ctx.fillStyle = p.accent;
+    ctx.font = 'bold 10px "Nunito Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(cfg.measure || '1 second', bx + bw / 2, by2 - 6);
   };
 
   // ── Export ─────────────────────────────────────────────────────────────────
