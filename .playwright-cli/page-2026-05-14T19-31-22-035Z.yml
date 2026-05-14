@@ -1,0 +1,25 @@
+- generic [ref=e2]:
+  - banner "EEG Lab navigation":
+    - link "Back to main site" [ref=e3] [cursor=pointer]:
+      - /url: ../../index.html
+      - img [ref=e5]
+      - generic [ref=e8]: EEG Lab
+    - button "Toggle dark/light mode" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: 
+      - generic [ref=e11]: Dark
+  - region "Exercise" [ref=e89]:
+    - article [ref=e90]:
+      - paragraph [ref=e98]: Exercise 02
+      - heading "Two views" [level=2] [ref=e166]
+      - paragraph [ref=e101]: Same event, different view.
+      - generic [ref=e105]:
+        - paragraph [ref=e106]: The flip points to...
+        - generic [ref=e107]:
+          - button "A loose wire" [ref=e167] [cursor=pointer]
+          - button "The strongest spot" [ref=e168] [cursor=pointer]
+      - navigation "Exercise navigation" [ref=e110]:
+        - button "Previous exercise" [ref=e111] [cursor=pointer]:
+          - generic [ref=e112]: 
+          - text: Prev
+        - link "Trace view" [ref=e113] [cursor=pointer]:
+          - /url: sandbox.html?preset=focal_spike

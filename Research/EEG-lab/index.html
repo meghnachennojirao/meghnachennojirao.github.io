@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EEG Lab — Practice Series</title>
+  <meta name="description" content="A quiet 30-part course for learning EEG interpretation one signal at a time." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,700&family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="css/eeg-lab.css" />
+  <script src="../../JS/theme-tokens.js"></script>
+</head>
+<body>
+
+<div class="eeg-app">
+  <div id="eeg-progress-bar" class="eeg-progress-bar" style="width:0%;opacity:0;" aria-hidden="true"></div>
+
+  <header class="eeg-topbar" aria-label="EEG Lab navigation">
+    <a href="../../index.html" class="eeg-brand" aria-label="Back to main site">
+      <span class="eeg-brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M8.8 20.8c-2.3-.4-4-2.3-4-4.7 0-2.1 1.4-4 3.4-4.6.4-2.9 2.9-5.1 5.9-5.1 1.7 0 3.2.7 4.3 1.8.9-.5 1.8-.7 2.9-.7 3.3 0 6 2.7 6 6 0 .5-.1 1-.2 1.5 1.1.9 1.8 2.2 1.8 3.7 0 2.6-2.1 4.7-4.7 4.7H10.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M9 16h4l1.5-4.3 2.8 9.5 2-7.2 1.5 2h3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>EEG Lab</span>
+    </a>
+    <button id="btn-theme" class="eeg-theme-btn" aria-label="Toggle dark/light mode">
+      <i class="fa-solid fa-moon" aria-hidden="true"></i>
+      <span>Dark</span>
+    </button>
+  </header>
+
+  <section id="screen-welcome" class="eeg-screen eeg-welcome-screen" aria-label="Welcome">
+    <div class="eeg-welcome">
+      <p class="eeg-kicker">EEG Lab</p>
+      <h1>Read one signal<br />at a time.</h1>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p class="eeg-lede">Thirty short interpretation exercises.</p>
+      <button id="btn-begin" class="btn-primary">Begin</button>
+      <button id="btn-resume" class="btn-ghost is-hidden">Resume</button>
+      <div class="eeg-dot-row" aria-hidden="true">
+        <span class="is-active"></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="eeg-welcome-wave" aria-hidden="true">
+      <canvas id="deco-canvas"></canvas>
+    </div>
+  </section>
+
+  <section id="screen-stage-intro" class="eeg-screen is-hidden" aria-label="Stage introduction">
+    <div class="eeg-stage">
+      <div id="stage-stepbar" class="eeg-stepbar" aria-hidden="true"></div>
+      <p id="stage-intro-num" class="eeg-kicker">Stage 1 of 6</p>
+      <h2 id="stage-intro-title">Foundations</h2>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p id="stage-intro-desc" class="eeg-lede">Start with location.</p>
+      <div class="eeg-stage-viz" aria-hidden="true">
+        <canvas id="stage-viz-canvas"></canvas>
+      </div>
+      <button id="btn-stage-continue" class="btn-primary">Start</button>
+    </div>
+  </section>
+
+  <section id="screen-primer" class="eeg-screen is-hidden" aria-label="Concept">
+    <article class="eeg-primer">
+      <div id="primer-stepbar" class="eeg-stepbar" aria-hidden="true"></div>
+      <p id="primer-count" class="eeg-kicker">Clue 01</p>
+      <h2 id="primer-title">Every line has an address.</h2>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p id="primer-copy" class="eeg-lede">An electrode is a listening spot.</p>
+      <div class="eeg-primer-viz" aria-hidden="true">
+        <div id="primer-graphic" class="primer-graphic"></div>
+      </div>
+      <button id="btn-primer-continue" class="btn-primary">Continue</button>
+    </article>
+  </section>
+
+  <section id="screen-look" class="eeg-screen is-hidden" aria-label="Look for">
+    <article class="eeg-look">
+      <div id="look-stepbar" class="eeg-stepbar" aria-hidden="true"></div>
+      <p id="look-count" class="eeg-kicker">Look 01</p>
+      <h2 id="look-title">Look for one thing.</h2>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p id="look-copy" class="eeg-lede">Notice the strongest clue before you answer.</p>
+      <div class="eeg-look-viz" aria-hidden="true">
+        <div id="look-graphic" class="look-graphic"></div>
+      </div>
+      <div id="look-terms" class="look-terms"></div>
+      <button id="btn-look-continue" class="btn-primary">Try it</button>
+    </article>
+  </section>
+
+  <section id="screen-exercise" class="eeg-screen is-hidden" aria-label="Exercise">
+    <article class="eeg-lesson">
+      <div id="ex-stepbar" class="eeg-stepbar" aria-hidden="true"></div>
+      <p id="ex-count" class="eeg-kicker">Exercise 1</p>
+      <h2 id="ex-title">Electrodes</h2>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p id="ex-concept" class="eeg-question">Location comes first.</p>
+
+      <div id="ex-visual-shell" class="eeg-visual-shell">
+        <canvas id="ex-viz-canvas"></canvas>
+        <div id="ex-report-wrap" class="eeg-report-visual is-hidden">
+          <div id="report-tabs" class="report-tabs"></div>
+          <div id="report-rows" class="report-rows"></div>
+        </div>
+      </div>
+
+      <p id="ex-source" class="eeg-source is-hidden"></p>
+
+      <div id="ex-interact" class="eeg-interact">
+        <div id="interact-binary" class="is-hidden">
+          <p id="interact-binary-prompt" class="interact-prompt"></p>
+          <div id="interact-binary-btns" class="interact-binary-btns"></div>
+        </div>
+        <div id="interact-tap" class="is-hidden">
+          <p id="interact-tap-prompt" class="interact-prompt"></p>
+          <p class="interact-hint">Tap the trace.</p>
+        </div>
+        <div id="interact-observe" class="is-hidden">
+          <p id="interact-observe-prompt" class="interact-prompt"></p>
+          <button id="btn-reveal" class="btn-primary">Reveal</button>
+        </div>
+      </div>
+
+      <nav class="eeg-nav" aria-label="Exercise navigation">
+        <button id="btn-prev" class="btn-ghost" aria-label="Previous exercise">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          Prev
+        </button>
+        <a id="btn-sandbox" href="sandbox.html" target="_blank" class="eeg-sandbox-link">
+          Trace view
+        </a>
+        <button id="btn-next" class="is-hidden" aria-label="Next exercise">Next</button>
+      </nav>
+    </article>
+  </section>
+
+  <section id="screen-answer" class="eeg-screen is-hidden" aria-label="Answer">
+    <div class="eeg-answer">
+      <div id="answer-icon" class="answer-icon" aria-hidden="true">✓</div>
+      <p id="answer-finding-label" class="eeg-kicker">Finding</p>
+      <h2 id="answer-verdict">Correct</h2>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p id="answer-subtitle" class="eeg-lede"></p>
+      <div class="answer-wave" aria-hidden="true">
+        <canvas id="answer-viz-canvas"></canvas>
+      </div>
+      <div id="answer-card" class="answer-card">
+        <div class="answer-card-section">
+          <p class="answer-card-label">Why</p>
+          <p id="answer-why" class="answer-card-text"></p>
+        </div>
+        <div id="answer-mistake-section" class="answer-card-section is-hidden">
+          <p class="answer-card-label">Common mistake</p>
+          <p id="answer-mistake" class="answer-card-text"></p>
+        </div>
+      </div>
+      <button id="btn-answer-next" class="btn-primary">Next</button>
+    </div>
+  </section>
+
+  <section id="screen-complete" class="eeg-screen is-hidden" aria-label="Course complete">
+    <div class="eeg-complete">
+      <p class="eeg-kicker">Complete</p>
+      <h2>Now read with context.</h2>
+      <span class="eeg-title-rule" aria-hidden="true"></span>
+      <p class="eeg-lede">Thirty interpretation passes finished.</p>
+      <button id="btn-restart" class="btn-primary">Start again</button>
+      <button id="btn-home" class="btn-ghost">Welcome</button>
+    </div>
+  </section>
+</div>
+
+<script src="js/exercises.js"></script>
+<script src="js/lesson-meta.js"></script>
+<script src="js/eeg-engine.js"></script>
+<script src="js/viz.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

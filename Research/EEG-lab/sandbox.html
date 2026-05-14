@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EEG Sandbox — Trace View</title>
+  <meta name="description" content="Minimal live EEG trace view for EEG Lab practice." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <script src="../../JS/theme-tokens.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --sb-bg: #101815;
+      --sb-ink: #f0eee8;
+      --sb-muted: #9ca7a0;
+      --sb-panel: #151e1b;
+      --sb-line: #293631;
+      --sb-teal: #5fd0bf;
+      --sb-teal-soft: rgba(95, 208, 191, 0.12);
+    }
+
+    html[data-theme="light"] {
+      --sb-bg: #fbfaf7;
+      --sb-ink: #111817;
+      --sb-muted: #737a76;
+      --sb-panel: #f5f3ef;
+      --sb-line: #ddd9d0;
+      --sb-teal: #12786e;
+      --sb-teal-soft: rgba(18, 120, 110, 0.1);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(95, 208, 191, 0.08), transparent 30rem),
+        var(--sb-bg);
+      color: var(--sb-ink);
+      font-family: var(--font-body, "Nunito Sans", sans-serif);
+    }
+
+    .sb-shell {
+      display: grid;
+      min-height: 100dvh;
+      place-items: center;
+      padding: clamp(1rem, 4vw, 2rem);
+    }
+
+    .sb-frame {
+      display: grid;
+      width: min(100%, 49rem);
+      min-height: min(56rem, calc(100dvh - 2rem));
+      overflow: hidden;
+      border: 1px solid var(--sb-line);
+      border-radius: clamp(1.2rem, 4vw, 2rem);
+      background: color-mix(in srgb, var(--sb-panel) 92%, transparent);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+    }
+
+    .sb-topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+      min-height: 5.5rem;
+      padding: 1rem clamp(1rem, 4vw, 2.1rem);
+      border-bottom: 1px solid var(--sb-line);
+    }
+
+    .sb-back,
+    .sb-theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      width: max-content;
+      border: 0;
+      background: none;
+      color: var(--sb-muted);
+      font: 800 0.78rem/1 var(--font-body, "Nunito Sans", sans-serif);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .sb-theme-btn { justify-self: end; }
+    .sb-back:hover,
+    .sb-theme-btn:hover { color: var(--sb-ink); }
+
+    .sb-title {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(1.2rem, 5vw, 1.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .sb-content {
+      display: grid;
+      align-content: start;
+      gap: clamp(1.4rem, 4vw, 2.4rem);
+      padding: clamp(1.3rem, 4vw, 2.5rem);
+    }
+
+    .sb-heading {
+      display: grid;
+      gap: 0.8rem;
+      justify-items: start;
+      margin-top: 0.5rem;
+    }
+
+    .sb-heading h1 {
+      margin: 0;
+      font-family: var(--font-display, "Newsreader", serif);
+      font-size: clamp(2.4rem, 10vw, 3.6rem);
+      font-weight: 650;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .sb-rule {
+      width: 4rem;
+      height: 0.23rem;
+      border-radius: 999px;
+      background: var(--sb-teal);
+    }
+
+    .sb-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      overflow: hidden;
+      border: 1px solid var(--sb-line);
+      border-radius: 0.95rem;
+    }
+
+    .sb-tab {
+      min-height: 3.4rem;
+      border: 0;
+      border-right: 1px solid var(--sb-line);
+      background: transparent;
+      color: var(--sb-muted);
+      font: 800 clamp(0.9rem, 3.6vw, 1.05rem)/1 var(--font-body, "Nunito Sans", sans-serif);
+      cursor: pointer;
+    }
+
+    .sb-tab:last-child { border-right: 0; }
+    .sb-tab.is-active {
+      background: var(--sb-teal-soft);
+      color: var(--sb-teal);
+      box-shadow: inset 0 0 0 1px var(--sb-teal);
+    }
+
+    .sb-picker {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.15rem;
+      scrollbar-width: none;
+    }
+
+    .sb-picker::-webkit-scrollbar { display: none; }
+
+    .sb-pill {
+      flex: 0 0 auto;
+      min-height: 2.25rem;
+      padding: 0 0.85rem;
+      border: 1px solid var(--sb-line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--sb-muted);
+      font: 800 0.78rem/1 var(--font-body, "Nunito Sans", sans-serif);
+      cursor: pointer;
+    }
+
+    .sb-pill.is-active {
+      border-color: var(--sb-teal);
+      background: var(--sb-teal-soft);
+      color: var(--sb-teal);
+    }
+
+    .sb-canvas-wrap {
+      height: clamp(18rem, 43dvh, 27rem);
+      overflow: hidden;
+      border-block: 1px solid var(--sb-line);
+    }
+
+    #eeg-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sb-controls {
+      display: grid;
+      gap: 1.5rem;
+      padding-bottom: 0.3rem;
+    }
+
+    .sb-info {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .sb-info-name {
+      margin: 0;
+      color: var(--sb-ink);
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .sb-info-desc {
+      margin: 0;
+      color: var(--sb-muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .sb-slider-row {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .sb-slider-row label {
+      color: var(--sb-ink);
+      font-weight: 800;
+    }
+
+    .sb-slider {
+      width: 100%;
+      accent-color: var(--sb-teal);
+    }
+
+    @media (max-width: 520px) {
+      .sb-shell { padding: 0; }
+      .sb-frame {
+        min-height: 100dvh;
+        border: 0;
+        border-radius: 0;
+      }
+      .sb-back span,
+      .sb-theme-btn span { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="sb-shell">
+  <main class="sb-frame">
+    <header class="sb-topbar">
+      <a href="index.html" class="sb-back">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        <span>Course</span>
+      </a>
+      <p class="sb-title">Sandbox</p>
+      <button id="btn-theme" class="sb-theme-btn" aria-label="Toggle theme">
+        <i class="fa-solid fa-sun" aria-hidden="true"></i>
+        <span>Light</span>
+      </button>
+    </header>
+
+    <section class="sb-content">
+      <div class="sb-heading">
+        <h1>Trace view</h1>
+        <span class="sb-rule" aria-hidden="true"></span>
+      </div>
+
+      <nav class="sb-tabs" aria-label="Pattern mode">
+        <button class="sb-tab is-active" data-mode="Normal">Normal</button>
+        <button class="sb-tab" data-mode="Artifact">Artifact</button>
+        <button class="sb-tab" data-mode="Seizure">Seizure</button>
+      </nav>
+
+      <div id="pattern-picker" class="sb-picker" aria-label="Pattern selector"></div>
+
+      <div class="sb-canvas-wrap">
+        <canvas id="eeg-canvas"></canvas>
+      </div>
+
+      <footer class="sb-controls">
+        <div class="sb-info">
+          <p id="info-name" class="sb-info-name">Normal Awake Adult</p>
+          <p id="info-desc" class="sb-info-desc">Posterior dominant alpha with anterior beta.</p>
+        </div>
+        <div class="sb-slider-row">
+          <label for="ctrl-gain">Gain</label>
+          <input type="range" class="sb-slider" id="ctrl-gain" min="3" max="16" step="0.5" value="7" />
+        </div>
+        <div class="sb-slider-row">
+          <label for="ctrl-speed">Speed</label>
+          <input type="range" class="sb-slider" id="ctrl-speed" min="0.5" max="2" step="0.25" value="1" />
+        </div>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<script src="js/eeg-engine.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var MODE_PRESETS = {
+    Normal: ['normal_awake', 'drowsy', 'sleep_2', 'normal_pediatric'],
+    Artifact: ['eye_blink', 'muscle', 'cardiac'],
+    Seizure: ['focal_spike', 'generalized_sw', 'temporal_seizure', 'gtc_seizure', 'triphasic']
+  };
+
+  var canvas = document.getElementById('eeg-canvas');
+  var wrap = canvas.parentElement;
+  var sim = new EEGSimulator('normal_awake');
+  var viewer = new EEGViewer(canvas);
+  var speed = 1;
+  var activeMode = 'Normal';
+  var activePreset = 'normal_awake';
+
+  function resizeCanvas() {
+    canvas.width = Math.max(320, wrap.clientWidth);
+    canvas.height = Math.max(240, wrap.clientHeight);
+  }
+
+  function selectPreset(key) {
+    activePreset = key;
+    sim.setPreset(key);
+    viewer.attach(sim);
+    var preset = EEG_PRESETS[key];
+    document.getElementById('info-name').textContent = preset.label;
+    document.getElementById('info-desc').textContent = preset.desc;
+    Array.prototype.forEach.call(document.querySelectorAll('.sb-pill'), function (pill) {
+      pill.classList.toggle('is-active', pill.dataset.key === key);
+    });
+  }
+
+  function renderPicker(mode) {
+    activeMode = mode;
+    var picker = document.getElementById('pattern-picker');
+    picker.innerHTML = '';
+    MODE_PRESETS[mode].forEach(function (key) {
+      var pill = document.createElement('button');
+      pill.className = 'sb-pill';
+      pill.dataset.key = key;
+      pill.textContent = EEG_PRESETS[key].label.replace(/\s*\([^)]*\)/g, '');
+      pill.addEventListener('click', function () { selectPreset(key); });
+      picker.appendChild(pill);
+    });
+    selectPreset(MODE_PRESETS[mode][0]);
+  }
+
+  function patchSpeed() {
+    viewer._loop = function (now) {
+      if (!viewer.running) return;
+      var dt = Math.min((now - (viewer._last || now)) / 1000, 0.1) * speed;
+      viewer._last = now;
+      if (viewer.sim) {
+        var n = Math.max(1, Math.min(Math.round(dt * 256), 32));
+        var nd = viewer.sim.generate(n);
+        var winN = 256 * 10;
+        for (var c = 0; c < 10; c++) {
+          viewer.buf[c].copyWithin(0, n);
+          viewer.buf[c].set(nd[c], winN - n);
+        }
+      }
+      viewer._draw();
+      viewer._raf = requestAnimationFrame(viewer._loop);
+    };
+  }
+
+  function syncTheme() {
+    var dark = document.documentElement.dataset.theme === 'dark';
+    viewer.setDark(dark);
+    var btn = document.getElementById('btn-theme');
+    btn.querySelector('i').className = 'fa-solid ' + (dark ? 'fa-sun' : 'fa-moon');
+    btn.querySelector('span').textContent = dark ? 'Light' : 'Dark';
+  }
+
+  window.addEventListener('resize', function () {
+    resizeCanvas();
+    viewer.attach(sim);
+  });
+
+  document.querySelectorAll('.sb-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.sb-tab').forEach(function (other) {
+        other.classList.toggle('is-active', other === tab);
+      });
+      renderPicker(tab.dataset.mode);
+    });
+  });
+
+  document.getElementById('ctrl-gain').addEventListener('input', function () {
+    viewer.setGain(parseFloat(this.value));
+  });
+
+  document.getElementById('ctrl-speed').addEventListener('input', function () {
+    speed = parseFloat(this.value);
+  });
+
+  document.getElementById('btn-theme').addEventListener('click', function () {
+    if (window.siteTheme) {
+      window.siteTheme.toggle();
+      syncTheme();
+    }
+  });
+  window.addEventListener('site-theme-change', syncTheme);
+
+  resizeCanvas();
+  patchSpeed();
+  viewer.attach(sim);
+  syncTheme();
+  renderPicker('Normal');
+
+  var urlKey = new URLSearchParams(window.location.search).get('preset');
+  if (urlKey && EEG_PRESETS[urlKey]) {
+    var group = EEG_PRESETS[urlKey].group;
+    if (group === 'Normal Variant' || group === 'Pathological' || group === 'Epileptiform') group = 'Seizure';
+    if (!MODE_PRESETS[group]) group = 'Normal';
+    document.querySelectorAll('.sb-tab').forEach(function (tab) {
+      tab.classList.toggle('is-active', tab.dataset.mode === group);
+    });
+    renderPicker(group);
+    selectPreset(urlKey);
+  }
+
+  viewer.start();
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+- generic [ref=e2]:
+  - banner "EEG Lab navigation":
+    - link "Back to main site" [ref=e3] [cursor=pointer]:
+      - /url: ../../index.html
+      - img [ref=e5]
+      - generic [ref=e8]: EEG Lab
+    - button "Toggle dark/light mode" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: 
+      - generic [ref=e11]: Dark
+  - text: O2
+  - region "Exercise" [ref=e89]:
+    - article [ref=e90]:
+      - paragraph [ref=e98]: Exercise 01
+      - heading "Head map" [level=2] [ref=e99]
+      - paragraph [ref=e101]: Find the sensor first.
+      - generic [ref=e105]:
+        - paragraph [ref=e106]: O2 sits on which side?
+        - generic [ref=e107]:
+          - button "Left side" [ref=e108] [cursor=pointer]
+          - button "Right side" [ref=e109] [cursor=pointer]
+      - navigation "Exercise navigation" [ref=e110]:
+        - button "Previous exercise" [disabled] [ref=e111]:
+          - generic [ref=e112]: 
+          - text: Prev
+        - link "Trace view" [ref=e113] [cursor=pointer]:
+          - /url: sandbox.html

@@ -1,0 +1,24 @@
+- generic [ref=e2]:
+  - banner "EEG Lab navigation":
+    - link "Back to main site" [ref=e3] [cursor=pointer]:
+      - /url: ../../index.html
+      - img [ref=e5]
+      - generic [ref=e8]: EEG Lab
+    - button "Toggle dark/light mode" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: 
+      - generic [ref=e11]: Dark
+  - text: O2 
+  - region "Answer" [ref=e114]:
+    - generic [ref=e115]:
+      - generic [ref=e116]: ✓
+      - paragraph [ref=e117]: Finding
+      - heading "Right side" [level=2] [ref=e118]
+      - paragraph [ref=e120]: Even numbers sit on the right.
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - paragraph [ref=e125]: Why
+          - paragraph [ref=e126]: O means the back of the head. The number 2 is even, so O2 is on the right.
+        - generic [ref=e127]:
+          - paragraph [ref=e128]: Common mistake
+          - paragraph [ref=e129]: Reading the wave before checking where it came from.
+      - button "Next" [ref=e130] [cursor=pointer]

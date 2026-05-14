@@ -1,0 +1,17 @@
+- generic [ref=e2]:
+  - banner "EEG Lab navigation":
+    - link "Back to main site" [ref=e3] [cursor=pointer]:
+      - /url: ../../index.html
+      - img [ref=e5]
+      - generic [ref=e8]: EEG Lab
+    - button "Toggle dark/light mode" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: 
+      - generic [ref=e11]: Dark
+  - region "Concept" [ref=e39]:
+    - article [ref=e40]:
+      - paragraph [ref=e48]: Clue 01
+      - heading "Every line starts somewhere." [level=2] [ref=e49]
+      - paragraph [ref=e51]: Before reading a wave, find where it was recorded.
+      - generic [ref=e61]: O2
+      - button "Continue" [ref=e62] [cursor=pointer]
+  - text: 

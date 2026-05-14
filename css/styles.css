@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --hue: 194;
   --hue-cool: 218;
   --hue-warm: 28;
@@ -6,8 +7,12 @@
   --hue-rose: 348;
   --font-display: "Newsreader", Georgia, serif;
   --font-body: "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --page-top: hsla(var(--hue), 35%, 98%, 1);
   --page: hsla(var(--hue), 36%, 97%, 1);
   --page-quiet: hsla(var(--hue-warm), 42%, 94%, 1);
+  --page-glow: hsla(var(--hue-leaf), 34%, 76%, 0.22);
+  --surface: hsla(var(--hue), 42%, 99%, 0.82);
+  --surface-elevated: hsla(var(--hue), 38%, 99%, 0.94);
   --ink: hsla(var(--hue), 42%, 12%, 1);
   --ink-soft: hsla(var(--hue), 28%, 23%, 1);
   --muted: hsla(var(--hue), 16%, 42%, 1);
@@ -18,9 +23,45 @@
   --leaf: hsla(var(--hue-leaf), 42%, 35%, 1);
   --cool-soft: hsla(var(--hue-cool), 58%, 44%, 0.1);
   --focus: hsla(var(--hue-cool), 82%, 46%, 0.34);
+  --button-ink: hsla(var(--hue-warm), 80%, 98%, 1);
+  --button-line-hover: hsla(var(--hue), 24%, 20%, 0.3);
+  --portrait-bg: hsla(var(--hue), 42%, 92%, 1);
+  --vector-blend: multiply;
+  --vector-green: hsla(var(--hue), 4%, 42%, 0.075);
+  --vector-blue: hsla(var(--hue), 5%, 36%, 0.055);
+  --theme-toggle-bg: hsla(var(--hue), 38%, 99%, 0.72);
+  --theme-toggle-hover: hsla(var(--hue-cool), 58%, 44%, 0.12);
   --radius: 0.75rem;
   --section-space: clamp(3.25rem, 7vw, 6.75rem);
   --container-pad: clamp(1.1rem, 3.8vw, 2.4rem);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --page-top: hsla(var(--hue), 32%, 8%, 1);
+  --page: hsla(var(--hue), 34%, 7%, 1);
+  --page-quiet: hsla(var(--hue-cool), 30%, 10%, 1);
+  --page-glow: hsla(var(--hue-leaf), 38%, 26%, 0.2);
+  --surface: hsla(var(--hue), 26%, 11%, 0.78);
+  --surface-elevated: hsla(var(--hue), 25%, 14%, 0.92);
+  --ink: hsla(var(--hue), 28%, 91%, 1);
+  --ink-soft: hsla(var(--hue), 20%, 78%, 1);
+  --muted: hsla(var(--hue), 15%, 65%, 1);
+  --line: hsla(var(--hue), 30%, 86%, 0.16);
+  --accent: hsla(var(--hue-leaf), 38%, 55%, 1);
+  --accent-strong: hsla(var(--hue-cool), 54%, 70%, 1);
+  --accent-soft: hsla(var(--hue-leaf), 42%, 54%, 0.16);
+  --leaf: hsla(var(--hue-leaf), 42%, 68%, 1);
+  --cool-soft: hsla(var(--hue-cool), 54%, 62%, 0.14);
+  --focus: hsla(var(--hue-cool), 86%, 72%, 0.42);
+  --button-ink: hsla(var(--hue), 28%, 7%, 1);
+  --button-line-hover: hsla(var(--hue-cool), 54%, 70%, 0.34);
+  --portrait-bg: hsla(var(--hue), 28%, 16%, 1);
+  --vector-blend: screen;
+  --vector-green: hsla(var(--hue-leaf), 18%, 58%, 0.11);
+  --vector-blue: hsla(var(--hue-cool), 22%, 64%, 0.085);
+  --theme-toggle-bg: hsla(var(--hue), 24%, 13%, 0.78);
+  --theme-toggle-hover: hsla(var(--hue-cool), 54%, 62%, 0.15);
 }
 
 *,
@@ -38,12 +79,14 @@ body {
   margin: 0;
   overflow-x: clip;
   background:
-    linear-gradient(180deg, hsla(var(--hue), 35%, 98%, 1) 0%, var(--page) 42%, var(--page-quiet) 100%);
+    radial-gradient(circle at 82% 8%, var(--page-glow) 0, transparent 32rem),
+    linear-gradient(180deg, var(--page-top) 0%, var(--page) 42%, var(--page-quiet) 100%);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
+  transition: background-color 260ms cubic-bezier(0.22, 1, 0.36, 1), color 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 img,
@@ -136,9 +179,17 @@ a:hover {
   list-style: none;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(0.7rem, 1.6vw, 1rem);
+  min-width: 0;
+}
+
 .nav-links a {
   color: var(--muted);
-  font-size: 0.93rem;
+  font-size: 0.95rem;
   font-weight: 800;
   text-decoration: none;
 }
@@ -256,12 +307,12 @@ a:hover {
 .btn-soft {
   border: 1px solid transparent;
   background: var(--accent);
-  color: hsla(var(--hue-warm), 80%, 98%, 1);
+  color: var(--button-ink);
 }
 
 .btn-soft:hover {
   background: var(--accent-strong);
-  color: hsla(var(--hue-warm), 80%, 98%, 1);
+  color: var(--button-ink);
 }
 
 .btn-line {
@@ -270,7 +321,7 @@ a:hover {
 }
 
 .btn-line:hover {
-  border-color: hsla(var(--hue), 24%, 20%, 0.3);
+  border-color: var(--button-line-hover);
   color: var(--ink);
 }
 
@@ -289,7 +340,7 @@ a:hover {
   inset: 50% auto auto 50%;
   width: 100%;
   aspect-ratio: 640 / 588;
-  mix-blend-mode: multiply;
+  mix-blend-mode: var(--vector-blend);
   pointer-events: none;
   overflow: visible;
   transform: translate(-50%, -50%) rotate(-8deg);
@@ -302,11 +353,11 @@ a:hover {
 }
 
 .hero-vector-green {
-  fill: hsla(var(--hue), 4%, 42%, 0.075);
+  fill: var(--vector-green);
 }
 
 .hero-vector-blue {
-  fill: hsla(var(--hue), 5%, 36%, 0.055);
+  fill: var(--vector-blue);
 }
 
 .hero-vector-flow {
@@ -354,7 +405,7 @@ a:hover {
   border-radius: 50%;
   object-fit: cover;
   padding: 0.42rem;
-  background: hsla(var(--hue), 42%, 92%, 1);
+  background: var(--portrait-bg);
   border: 1px solid var(--line);
   user-select: none;
   -webkit-user-select: none;
@@ -616,11 +667,21 @@ a:hover {
     flex-direction: column;
   }
 
+  .nav-actions {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .nav-links {
     width: 100%;
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 0.2rem;
+  }
+
+  .theme-toggle {
+    width: 100%;
   }
 
   .hero {

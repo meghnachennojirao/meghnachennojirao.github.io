@@ -1,0 +1,19 @@
+- generic [ref=e2]:
+  - banner "EEG Lab navigation":
+    - link "Back to main site" [ref=e3] [cursor=pointer]:
+      - /url: ../../index.html
+      - img [ref=e5]
+      - generic [ref=e8]: EEG Lab
+    - button "Toggle dark/light mode" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: 
+      - generic [ref=e11]: Dark
+  - region "Welcome" [ref=e12]:
+    - generic [ref=e13]:
+      - paragraph [ref=e14]: EEG Lab
+      - heading "Read one signal at a time." [level=1] [ref=e15]:
+        - text: Read one signal
+        - text: at a time.
+      - paragraph [ref=e17]: Thirty short interpretation exercises.
+      - button "Begin" [ref=e18] [cursor=pointer]
+      - button "Resume 02" [ref=e19] [cursor=pointer]
+  - text: 

@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en" data-hue="194">
+<html lang="en" data-hue="194" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <title>Dr Meghna C Rao</title>
     <meta name="description" content="Neuroscience and psychology experiments, writing, and academic work by Dr Meghna C Rao.">
     <meta name="keywords" content="Dr Meghna Rao, neuroscience, psychology, epigenetics, web experiments, Meghna Chennoji Rao">
@@ -44,14 +45,20 @@
             <img class="brand-mark" src="assets/images/Icon.png" alt="">
             <span class="brand-text">Dr Meghna C Rao</span>
           </a>
-          <nav aria-label="Main navigation">
-            <ul class="nav-links">
-              <li><a href="#about">About</a></li>
-              <li><a href="#work">Work</a></li>
-              <li><a href="#writing">Writing</a></li>
-              <li><a href="cv/">CV</a></li>
-            </ul>
-          </nav>
+          <div class="nav-actions">
+            <nav aria-label="Main navigation">
+              <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#writing">Writing</a></li>
+                <li><a href="cv/">CV</a></li>
+              </ul>
+            </nav>
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+              <i class="fa-solid fa-moon" aria-hidden="true"></i>
+              <span class="theme-toggle-text">Theme</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -444,6 +451,41 @@
     </footer>
 
     <script>
+      (function () {
+        var root = document.documentElement;
+        var toggle = document.querySelector('[data-theme-toggle]');
+
+        if (!toggle) {
+          return;
+        }
+
+        function renderThemeToggle() {
+          var isDark = root.dataset.theme === 'dark';
+          var icon = toggle.querySelector('i');
+
+          toggle.setAttribute('aria-pressed', String(isDark));
+          toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+
+          if (icon) {
+            icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+          }
+        }
+
+        toggle.addEventListener('click', function () {
+          if (window.siteTheme && typeof window.siteTheme.toggle === 'function') {
+            window.siteTheme.toggle();
+          } else {
+            root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.style.colorScheme = root.dataset.theme;
+          }
+
+          renderThemeToggle();
+        });
+
+        window.addEventListener('site-theme-change', renderThemeToggle);
+        renderThemeToggle();
+      }());
+
       (function () {
         var heroGrid = document.querySelector('.hero-grid');
         var heroMedia = document.querySelector('.hero-media');
