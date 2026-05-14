@@ -439,6 +439,21 @@ html[data-theme="dark"] .eeg-welcome-wave {
   gap: 1rem;
 }
 
+.primer-compare em {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: -0.15rem;
+  padding: 0.38rem 0.78rem;
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
 .primer-compare-card,
 .primer-report,
 .primer-field {
@@ -522,7 +537,11 @@ html[data-theme="dark"] .eeg-welcome-wave {
 .concept-landmarks,
 .concept-measure,
 .concept-intersections,
-.concept-midline {
+.concept-midline,
+.concept-dipole,
+.concept-timing,
+.concept-spike-tail,
+.concept-polarity {
   width: min(100%, 28rem);
 }
 
@@ -740,10 +759,216 @@ html[data-theme="dark"] .eeg-welcome-wave {
   transform: translate(-50%, -50%);
 }
 
+.concept-dipole {
+  position: relative;
+  min-height: 9rem;
+}
+
+.concept-dipole i {
+  position: absolute;
+  inset: 24% 18%;
+  border: 1.5px solid color-mix(in srgb, var(--lab-muted) 32%, transparent);
+  border-radius: 55% 45% 45% 55% / 50%;
+}
+
+.concept-dipole i::before {
+  content: "";
+  position: absolute;
+  left: 28%;
+  top: 50%;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: var(--lab-teal-soft);
+  box-shadow: inset 0 0 0 0.5rem var(--lab-teal);
+  transform: translateY(-50%);
+}
+
+.concept-dipole span {
+  position: absolute;
+  display: grid;
+  min-width: 5.4rem;
+  min-height: 2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.concept-dipole .is-front {
+  left: 62%;
+  top: 32%;
+}
+
+.concept-dipole .is-back {
+  left: 19%;
+  top: 58%;
+  background: color-mix(in srgb, var(--lab-muted) 14%, transparent);
+  color: var(--lab-muted);
+}
+
+.concept-dipole em {
+  position: absolute;
+  left: 50%;
+  bottom: 0.2rem;
+  transform: translateX(-50%);
+  color: var(--lab-teal);
+  font-size: 0.76rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.concept-timing {
+  position: relative;
+  display: grid;
+  gap: 0.72rem;
+  padding: 1rem 0 2.2rem;
+}
+
+.concept-timing::before,
+.concept-timing::after {
+  content: "";
+  position: absolute;
+  top: 0.7rem;
+  bottom: 2rem;
+  width: 1.5px;
+  background: color-mix(in srgb, var(--lab-teal) 48%, transparent);
+}
+
+.concept-timing::before { left: 48%; }
+.concept-timing::after { left: 73%; }
+
+.concept-timing span {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  align-items: center;
+  color: var(--lab-muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.concept-timing span i {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  height: 1.1rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent 0 45%, var(--lab-teal) 45% 47%, transparent 47% 70%, var(--lab-teal) 70% 72%, transparent 72% 100%);
+  opacity: 0.76;
+}
+
+.concept-timing b {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  padding: 0.32rem 0.68rem;
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.72rem;
+  transform: translateX(-50%);
+}
+
+.concept-spike-tail {
+  position: relative;
+  min-height: 8.8rem;
+}
+
+.concept-spike-tail::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 54%;
+  height: 1.5px;
+  background: color-mix(in srgb, var(--lab-muted) 24%, transparent);
+}
+
+.concept-spike-tail i {
+  position: absolute;
+  left: 37%;
+  top: 24%;
+  width: 2.2rem;
+  height: 4.2rem;
+  background:
+    linear-gradient(120deg, transparent 0 45%, var(--lab-teal) 46% 50%, transparent 51%),
+    linear-gradient(60deg, transparent 0 48%, var(--lab-teal) 49% 53%, transparent 54%);
+}
+
+.concept-spike-tail em {
+  position: absolute;
+  left: 52%;
+  top: 50%;
+  width: 6.5rem;
+  height: 2.4rem;
+  border-bottom: 2px solid var(--lab-teal);
+  border-radius: 0 0 999px 999px;
+  opacity: 0.78;
+}
+
+.concept-spike-tail b {
+  position: absolute;
+  left: 63%;
+  top: 74%;
+  padding: 0.32rem 0.68rem;
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.72rem;
+  transform: translateX(-50%);
+}
+
+.concept-polarity {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.concept-polarity span {
+  display: grid;
+  min-height: 7.6rem;
+  align-content: center;
+  gap: 0.7rem;
+  padding: 1rem;
+  border: 1px solid var(--lab-line);
+  border-radius: 1rem;
+  color: var(--lab-muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.concept-polarity span.is-on {
+  border-color: color-mix(in srgb, var(--lab-teal) 48%, var(--lab-line));
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+}
+
+.concept-polarity i {
+  display: block;
+  height: 2.5rem;
+  border-radius: 999px;
+}
+
+.concept-polarity .is-up {
+  background:
+    linear-gradient(120deg, transparent 0 46%, color-mix(in srgb, var(--lab-muted) 52%, transparent) 47% 50%, transparent 51%),
+    linear-gradient(60deg, transparent 0 48%, color-mix(in srgb, var(--lab-muted) 52%, transparent) 49% 52%, transparent 53%);
+}
+
+.concept-polarity .is-down {
+  background:
+    linear-gradient(60deg, transparent 0 46%, var(--lab-teal) 47% 50%, transparent 51%),
+    linear-gradient(120deg, transparent 0 48%, var(--lab-teal) 49% 52%, transparent 53%);
+}
+
 .concept-line {
   display: grid;
   min-height: 8.5rem;
   place-items: center;
+  gap: 0.8rem;
 }
 
 .concept-line i {
@@ -755,6 +980,29 @@ html[data-theme="dark"] .eeg-welcome-wave {
     linear-gradient(90deg, transparent 0 8%, var(--lab-teal) 9% 11%, transparent 12% 20%, var(--lab-teal) 21% 23%, transparent 24% 36%, var(--lab-teal) 37% 39%, transparent 40%);
   background-size: 4.6rem 100%;
   opacity: 0.72;
+}
+
+.concept-semantic-tag {
+  display: inline-grid;
+  justify-items: center;
+  gap: 0.1rem;
+  max-width: min(100%, 18rem);
+  padding: 0.45rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--lab-teal) 35%, transparent);
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+}
+
+.concept-semantic-tag b {
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.concept-semantic-tag small {
+  color: var(--lab-muted);
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
 .concept-sensor {
@@ -782,6 +1030,17 @@ html[data-theme="dark"] .eeg-welcome-wave {
   box-shadow: 0 0 0 0.72rem var(--lab-teal-soft);
 }
 
+.concept-sensor span.is-on b {
+  position: absolute;
+  left: 50%;
+  top: 1.75rem;
+  width: 8rem;
+  transform: translateX(-50%);
+  color: var(--lab-teal);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
 .concept-regions {
   display: grid;
   gap: 0.55rem;
@@ -791,6 +1050,8 @@ html[data-theme="dark"] .eeg-welcome-wave {
   display: grid;
   min-height: 2.05rem;
   place-items: center;
+  align-content: center;
+  gap: 0.16rem;
   border: 1px solid var(--lab-line);
   border-radius: 999px;
   color: var(--lab-muted);
@@ -802,6 +1063,11 @@ html[data-theme="dark"] .eeg-welcome-wave {
   border-color: color-mix(in srgb, var(--lab-teal) 45%, var(--lab-line));
   background: var(--lab-teal-soft);
   color: var(--lab-teal);
+}
+
+.concept-regions span b {
+  color: var(--lab-teal);
+  font-size: 0.68rem;
 }
 
 .concept-code {
@@ -866,11 +1132,19 @@ html[data-theme="dark"] .eeg-welcome-wave {
   display: grid;
   min-height: 7.2rem;
   place-items: center;
+  align-content: center;
+  gap: 0.4rem;
   border: 1px solid var(--lab-line);
   border-radius: 1rem;
   color: var(--lab-muted);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+.look-side span b {
+  min-height: 0.9rem;
+  color: var(--lab-teal);
+  font-size: 0.72rem;
 }
 
 .look-side span.is-on {
@@ -884,6 +1158,8 @@ html[data-theme="dark"] .eeg-welcome-wave {
   display: grid;
   min-height: 8.5rem;
   place-items: center;
+  align-content: center;
+  gap: 0.55rem;
 }
 
 .look-flip::before {
@@ -919,12 +1195,25 @@ html[data-theme="dark"] .eeg-welcome-wave {
 
 .look-speed span {
   display: grid;
-  grid-template-columns: 3.8rem 1fr;
+  grid-template-columns: 3.8rem 1fr minmax(4.5rem, auto);
   gap: 0.85rem;
   align-items: center;
   color: var(--lab-muted);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+.look-speed span b {
+  justify-self: start;
+  padding: 0.22rem 0.52rem;
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.7rem;
+}
+
+.look-speed span.is-on {
+  color: var(--lab-teal);
 }
 
 .look-speed i {
@@ -938,6 +1227,7 @@ html[data-theme="dark"] .eeg-welcome-wave {
 .look-speed span:nth-child(3) i { background-size: 1.8rem 100%; opacity: 0.55; }
 
 .look-spread {
+  position: relative;
   display: grid;
   min-height: 8.2rem;
   place-items: center;
@@ -951,9 +1241,37 @@ html[data-theme="dark"] .eeg-welcome-wave {
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--lab-muted) 16%, transparent), transparent);
 }
 
+.look-spread span {
+  position: absolute;
+  left: var(--x, 50%);
+  top: 50%;
+  max-width: 9.5rem;
+  padding: 0.34rem 0.68rem;
+  border-radius: 999px;
+  background: var(--lab-bg);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lab-teal) 38%, transparent), 0 0 0 0.55rem var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.7rem;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+}
+
 .look-story {
+  position: relative;
   display: grid;
   gap: 0.7rem;
+}
+
+.look-story b {
+  justify-self: center;
+  width: fit-content;
+  max-width: min(100%, 16rem);
+  padding: 0.38rem 0.74rem;
+  border-radius: 999px;
+  background: var(--lab-teal-soft);
+  color: var(--lab-teal);
+  font-size: 0.74rem;
+  font-weight: 900;
 }
 
 .look-story i {
@@ -961,8 +1279,8 @@ html[data-theme="dark"] .eeg-welcome-wave {
   background: linear-gradient(90deg, var(--lab-teal-soft), var(--lab-teal), var(--lab-teal-soft));
 }
 
-.look-story i:nth-child(2) { width: 72%; justify-self: center; opacity: 0.62; }
-.look-story i:nth-child(3) { width: 38%; justify-self: end; opacity: 0.36; }
+.look-story i:nth-of-type(2) { width: 72%; justify-self: center; opacity: 0.62; }
+.look-story i:nth-of-type(3) { width: 38%; justify-self: end; opacity: 0.36; }
 
 .look-report {
   display: grid;
@@ -988,6 +1306,10 @@ html[data-theme="dark"] .eeg-welcome-wave {
 
 .look-report span.is-on i {
   background: var(--lab-teal);
+}
+
+.look-report span.is-on b {
+  color: var(--lab-teal);
 }
 
 .look-terms {

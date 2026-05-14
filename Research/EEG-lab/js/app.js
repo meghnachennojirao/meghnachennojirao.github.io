@@ -295,6 +295,50 @@
     renderConceptGraphic(el, kind, { focusX: meta.focusX }, ex, meta);
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
+
+  function getConceptLabel(card, fallback) {
+    card = card || {};
+    if (card.visualLabel) return card.visualLabel;
+    if (card.terms && card.terms[0] && card.terms[0][0]) return card.terms[0][0];
+    if (card.title) return String(card.title).replace(/[.?!]+$/g, '');
+    return fallback || 'clue';
+  }
+
+  function getConceptNote(card, fallback) {
+    card = card || {};
+    if (card.visualNote) return card.visualNote;
+    if (card.terms && card.terms[0] && card.terms[0][1]) return card.terms[0][1];
+    return fallback || '';
+  }
+
+  function semanticTag(card, fallback) {
+    var label = getConceptLabel(card, fallback);
+    var note = getConceptNote(card, '');
+    return '<span class="concept-semantic-tag"><b>' + escapeHtml(label) + '</b>' + (note ? '<small>' + escapeHtml(note) + '</small>' : '') + '</span>';
+  }
+
+  function inferSide(card) {
+    var text = ((card && card.title) || '') + ' ' + ((card && card.copy) || '') + ' ' + ((card && card.terms) || []).map(function (t) { return t.join(' '); }).join(' ');
+    text = text.toLowerCase();
+    if (/both|two sides|whole head|broad|generalized/.test(text)) return 'both';
+    if (/left|odd|c3|t3|o1|fp1|f3/.test(text)) return 'left';
+    if (/right|even|c4|t4|o2|fp2|f4/.test(text)) return 'right';
+    return 'both';
+  }
+
+  function inferSpeed(card) {
+    var text = ((card && card.title) || '') + ' ' + ((card && card.copy) || '') + ' ' + ((card && card.terms) || []).map(function (t) { return t.join(' '); }).join(' ');
+    text = text.toLowerCase();
+    if (/slow|delta|theta|drowsy|k-complex|large slow|deep|yield/.test(text)) return 'slow';
+    if (/fast|spindle|beta|muscle|emg|filter|artifact/.test(text)) return 'fast';
+    return 'steady';
+  }
+
   function renderConceptGraphic(el, kind, card, ex, meta) {
     card = card || {};
 
@@ -329,20 +373,44 @@
           '<i></i><em></em>' +
           '<span style="top:22%">Fz</span><span style="top:50%">Cz</span><span style="top:78%">Pz</span>' +
         '</div>';
+    } else if (kind === 'dipole') {
+      el.innerHTML =
+        '<div class="concept-dipole">' +
+          '<i></i><span class="is-front"><b>cornea +</b></span><span class="is-back"><b>retina -</b></span>' +
+          '<em>' + escapeHtml(getConceptLabel(card, 'dipole')) + '</em>' +
+        '</div>';
+    } else if (kind === 'timing') {
+      el.innerHTML =
+        '<div class="concept-timing">' +
+          '<span>EEG mark<i></i><i></i><i></i></span>' +
+          '<span>ECG beat<i></i><i></i><i></i></span>' +
+          '<b>' + escapeHtml(getConceptLabel(card, 'same timing')) + '</b>' +
+        '</div>';
+    } else if (kind === 'spike-tail') {
+      el.innerHTML =
+        '<div class="concept-spike-tail">' +
+          '<i></i><em></em><b>' + escapeHtml(getConceptLabel(card, 'tail')) + '</b>' +
+        '</div>';
+    } else if (kind === 'polarity') {
+      el.innerHTML =
+        '<div class="concept-polarity">' +
+          '<span><i class="is-up"></i><b>upward</b></span>' +
+          '<span class="is-on"><i class="is-down"></i><b>' + escapeHtml(getConceptLabel(card, 'direction')) + '</b></span>' +
+        '</div>';
     } else if (kind === 'line') {
-      el.innerHTML = '<div class="concept-line"><i></i></div>';
+      el.innerHTML = '<div class="concept-line">' + semanticTag(card, 'trace') + '<i></i></div>';
     } else if (kind === 'sensor') {
       el.innerHTML =
         '<div class="concept-sensor">' +
           '<i></i><span style="left:34%;top:34%"></span><span style="left:62%;top:34%"></span>' +
-          '<span style="left:25%;top:58%"></span><span class="is-on" style="left:64%;top:68%"></span>' +
+          '<span style="left:25%;top:58%"></span><span class="is-on" style="left:64%;top:68%"><b>' + escapeHtml(getConceptLabel(card, 'sensor')) + '</b></span>' +
         '</div>';
     } else if (kind === 'regions') {
       var activeRegion = card.region || 'back';
       el.innerHTML =
         '<div class="concept-regions">' +
           ['front','center','side','back'].map(function (name) {
-            return '<span class="' + (name === activeRegion ? 'is-on' : '') + '">' + name + '</span>';
+            return '<span class="' + (name === activeRegion ? 'is-on' : '') + '">' + name + (name === activeRegion ? '<b>' + escapeHtml(getConceptLabel(card, name)) + '</b>' : '') + '</span>';
           }).join('') +
         '</div>';
     } else if (kind === 'code') {
@@ -359,34 +427,44 @@
         '<div class="primer-compare">' +
           '<div class="primer-compare-card"><span>' + compareLabels[0] + '</span><i class="primer-compare-line" style="--tilt:-3deg"></i></div>' +
           '<div class="primer-compare-card"><span>' + compareLabels[1] + '</span><i class="primer-compare-line" style="--tilt:3deg"></i></div>' +
+          '<em>' + escapeHtml(getConceptLabel(card, 'compare')) + '</em>' +
         '</div>';
     } else if (kind === 'side') {
+      var side = inferSide(card);
       el.innerHTML =
         '<div class="look-side">' +
-          '<span>left side</span>' +
-          '<span class="is-on">right side</span>' +
+          '<span class="' + (side === 'left' || side === 'both' ? 'is-on' : '') + '">left side<b>' + (side === 'left' ? escapeHtml(getConceptLabel(card, 'left')) : '') + '</b></span>' +
+          '<span class="' + (side === 'right' || side === 'both' ? 'is-on' : '') + '">right side<b>' + (side === 'right' ? escapeHtml(getConceptLabel(card, 'right')) : '') + '</b></span>' +
         '</div>';
     } else if (kind === 'flip') {
-      el.innerHTML = '<div class="look-flip"><i></i></div>';
+      el.innerHTML = '<div class="look-flip">' + semanticTag(card, 'phase flip') + '<i></i></div>';
     } else if (kind === 'speed') {
+      var speed = inferSpeed(card);
       el.innerHTML =
         '<div class="look-speed">' +
-          '<span>slow<i></i></span>' +
-          '<span>steady<i></i></span>' +
-          '<span>fast<i></i></span>' +
+          '<span class="' + (speed === 'slow' ? 'is-on' : '') + '">slow<i></i>' + (speed === 'slow' ? '<b>' + escapeHtml(getConceptLabel(card, 'slow')) + '</b>' : '') + '</span>' +
+          '<span class="' + (speed === 'steady' ? 'is-on' : '') + '">steady<i></i>' + (speed === 'steady' ? '<b>' + escapeHtml(getConceptLabel(card, 'steady')) + '</b>' : '') + '</span>' +
+          '<span class="' + (speed === 'fast' ? 'is-on' : '') + '">fast<i></i>' + (speed === 'fast' ? '<b>' + escapeHtml(getConceptLabel(card, 'fast')) + '</b>' : '') + '</span>' +
         '</div>';
     } else if (kind === 'report') {
       el.innerHTML =
         '<div class="look-report">' +
           '<span><b>patient</b><i></i></span>' +
-          '<span class="is-on"><b>trace</b><i></i></span>' +
+          '<span class="is-on"><b>' + escapeHtml(getConceptLabel(card, 'trace')) + '</b><i></i></span>' +
           '<span><b>meaning</b><i></i></span>' +
         '</div>';
     } else if (kind === 'story') {
-      el.innerHTML = '<div class="look-story"><i></i><i></i><i></i></div>';
+      el.innerHTML =
+        '<div class="look-story">' +
+          '<i></i><b>' + escapeHtml(getConceptLabel(card, 'step')) + '</b><i></i><i></i>' +
+        '</div>';
     } else {
       var focus = card.focusX || (meta && meta.focusX) || (ex.stage === 3 ? '34%' : (ex.stage === 4 ? '42%' : '60%'));
-      el.innerHTML = '<div class="look-spread"><i style="--x:' + focus + '"></i></div>';
+      el.innerHTML =
+        '<div class="look-spread">' +
+          '<i style="--x:' + focus + '"></i>' +
+          '<span style="--x:' + focus + '">' + escapeHtml(getConceptLabel(card, 'focus')) + '</span>' +
+        '</div>';
     }
   }
 

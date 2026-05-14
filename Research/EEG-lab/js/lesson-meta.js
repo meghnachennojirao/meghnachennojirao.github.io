@@ -1175,8 +1175,8 @@
       shortTitle: 'Direction',
       guide: 'Direction is a clue.',
       cards: [
-        c('Waves point.', 'A sharp wave can point upward or downward on the page.', 'line', [['Direction', 'which way a wave points']]),
-        c('Direction changes meaning.', 'Some sharp bursts point the wrong way for the usual danger pattern.', 'speed', [['Positive burst', 'a burst pointing the benign way']]),
+        c('Waves point.', 'A sharp wave can point upward or downward on the page.', 'polarity', [['Direction', 'which way a wave points']]),
+        c('Direction changes meaning.', 'Some sharp bursts point the wrong way for the usual danger pattern.', 'polarity', [['Positive burst', 'a burst pointing the benign way']]),
         c('Use shape plus direction.', 'Do not judge a sharp wave from shape alone.', 'story', [['Shape plus direction', 'two clues together']])
       ],
       question: 'What does this direction suggest?',
@@ -1264,8 +1264,8 @@
       shortTitle: 'Heartbeat',
       guide: 'Perfect timing is a clue.',
       cards: [
-        c('The heart can show up.', 'A heartbeat can leave a small sharp mark on EEG.', 'story', [['Heart artifact', 'heartbeat signal on EEG']]),
-        c('Timing is the giveaway.', 'Heart marks repeat at a very regular interval.', 'story', [['Regular interval', 'same time gap again and again']]),
+        c('The heart can show up.', 'A heartbeat can leave a small sharp mark on EEG.', 'timing', [['Heart artifact', 'heartbeat signal on EEG']]),
+        c('Timing is the giveaway.', 'Heart marks repeat at a very regular interval.', 'timing', [['Regular interval', 'same time gap again and again']]),
         c('Brain spikes are less exact.', 'A perfectly repeated mark is often not brain.', 'line', [['Not brain', 'signal from outside the cortex']])
       ],
       question: 'Tap the repeating heart artifact.',
@@ -1309,7 +1309,7 @@
       guide: 'A point alone is not enough.',
       cards: [
         c('A spike is very brief.', 'A spike is a short sharp brain wave.', 'line', [['Spike', 'a very brief sharp wave']]),
-        c('The tail matters.', 'A concerning spike is often followed by a slower wave.', 'story', [['Tail', 'the slower wave after it']]),
+        c('The tail matters.', 'A concerning spike is often followed by a slower wave.', 'spike-tail', [['Tail', 'the slower wave after it']]),
         c('Look for disruption.', 'The spike should interrupt the surrounding rhythm.', 'line', [['Disrupt', 'break the ongoing rhythm']])
       ],
       question: 'Watch the sharp point and its tail, then reveal.',
@@ -1644,8 +1644,8 @@
       guide: 'The heart gets its own line.',
       cards: [
         c('Not every line is brain.', 'Some pages include a heart channel.', 'line', [['ECG', 'heart rhythm line']]),
-        c('Use it for timing.', 'Regular sharp EEG marks can match the heartbeat.', 'story', [['Timing match', 'same time as ECG']]),
-        c('This prevents overcalling.', 'Heart artifact can look sharp on EEG.', 'speed', [['Heart artifact', 'heart signal on EEG']])
+        c('Use it for timing.', 'Regular sharp EEG marks can match the heartbeat.', 'timing', [['Timing match', 'same time as ECG']]),
+        c('This prevents overcalling.', 'Heart artifact can look sharp on EEG.', 'timing', [['Heart artifact', 'heart signal on EEG']])
       ],
       question: 'The bottom ECG channel helps check:',
       optionLabels: ['Hair thickness', 'Heartbeat timing'],
@@ -1691,7 +1691,7 @@
       shortTitle: 'Eye dipole',
       guide: 'Eyes have polarity.',
       cards: [
-        c('The eye is electrical too.', 'The front and back of the eye have different charge.', 'side', [['Dipole', 'two-sided electrical source']]),
+        c('The eye is electrical too.', 'The front and back of the eye have different charge.', 'dipole', [['Dipole', 'two-sided electrical source']]),
         c('Cornea is front.', 'The cornea is relatively positive.', 'regions', [['Cornea', 'front of the eye']], { region: 'front' }),
         c('Retina is back.', 'The retina is relatively negative.', 'regions', [['Retina', 'back of the eye']], { region: 'back' })
       ],
