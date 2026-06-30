@@ -1,638 +1,963 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChronoG! — Circadian Clock Game</title>
-    <!-- TailwindCSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            fontFamily: {
-              nunito: ["Nunito", "sans-serif"],
-              raleway: ["Raleway", "sans-serif"],
-            },
-            colors: {
-              primary: "#1A237E",
-              card: "#fff",
-              coin: "#FFECB3",
-              score: "#FF9800",
-              mir: "#EF4444",
-            },
-          },
-        },
-      };
-    </script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChronoG - PER/CRY Circadian Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
     <style>
-      body { font-family: "Raleway", Arial, sans-serif; }
-      .toast-enter { animation: toast-in 0.25s; }
-      .toast-leave { animation: toast-out 0.2s; }
-      @keyframes toast-in { from { opacity: 0; transform: translateY(-18px);} to { opacity:1; transform: translateY(0);} }
-      @keyframes toast-out { from { opacity:1; transform: translateY(0);} to { opacity:0; transform: translateY(-18px);} }
+      :root {
+        color-scheme: dark;
+        --bg: #07111f;
+        --panel: #0f1d2d;
+        --panel-2: #13283a;
+        --ink: #edf7ff;
+        --muted: #9fb0c5;
+        --line: rgba(177, 208, 234, 0.18);
+        --per: #ffc857;
+        --cry: #61d3ff;
+        --complex: #72e0a8;
+        --mir: #ff5a6e;
+        --pdf: #b99cff;
+        --light: #fff2a6;
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 20% 10%, rgba(97, 211, 255, 0.16), transparent 30%),
+          radial-gradient(circle at 80% 0%, rgba(255, 200, 87, 0.14), transparent 28%),
+          linear-gradient(145deg, #07111f 0%, #0a1424 42%, #120d23 100%);
+        color: var(--ink);
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button {
+        border: 0;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: minmax(320px, 1fr) 340px;
+        gap: 18px;
+        width: min(1440px, 100%);
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 18px;
+      }
+
+      .stage-shell,
+      .side-panel,
+      .overlay-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(15, 29, 45, 0.84);
+        box-shadow: var(--shadow);
+      }
+
+      .stage-shell {
+        position: relative;
+        overflow: hidden;
+        min-height: calc(100vh - 36px);
+      }
+
+      .stage-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .title-block p {
+        margin: 0 0 4px;
+        color: var(--cry);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(26px, 4vw, 48px);
+        line-height: 1;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn {
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 7px;
+        background: #f2f7ff;
+        color: #08101c;
+        font-weight: 900;
+      }
+
+      .btn.primary {
+        background: var(--complex);
+      }
+
+      .btn.ghost {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--ink);
+      }
+
+      .game-wrap {
+        padding: 16px;
+      }
+
+      .game-board {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        min-height: 420px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(15, 36, 62, 0.95), rgba(8, 17, 33, 0.98)),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 58px);
+      }
+
+      .game-board::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, rgba(255, 200, 87, 0.08), transparent 28%, rgba(97, 211, 255, 0.08) 70%, transparent),
+          radial-gradient(circle at var(--clock-x, 50%) 12%, rgba(114, 224, 168, 0.18), transparent 22%);
+        pointer-events: none;
+      }
+
+      .hud {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        z-index: 4;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .hud-box {
+        min-height: 54px;
+        padding: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 7px;
+        background: rgba(7, 17, 31, 0.72);
+      }
+
+      .hud-box span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .hud-box strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 18px;
+      }
+
+      .entity {
+        position: absolute;
+        z-index: 3;
+        display: grid;
+        place-items: center;
+        transform: translateZ(0);
+        user-select: none;
+      }
+
+      .item-label {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding-top: 3px;
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 10px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .toast-stack {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        z-index: 12;
+        display: grid;
+        gap: 8px;
+        width: min(330px, calc(100% - 24px));
+      }
+
+      .toast {
+        padding: 10px 12px;
+        border-radius: 7px;
+        background: rgba(237, 247, 255, 0.94);
+        color: #08101c;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .toast.bad {
+        background: #ffdfe4;
+      }
+
+      .toast.good {
+        background: #dcfbe9;
+      }
+
+      .touch-controls {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .touch-controls button {
+        min-height: 48px;
+        border-radius: 7px;
+        background: rgba(255, 255, 255, 0.1);
+        font-size: 22px;
+        font-weight: 900;
+      }
+
+      .side-panel {
+        align-self: start;
+        display: grid;
+        gap: 14px;
+        padding: 16px;
+        position: sticky;
+        top: 18px;
+        max-height: calc(100vh - 36px);
+        overflow: auto;
+      }
+
+      .metric-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 6px;
+      }
+
+      .metric-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .track {
+        height: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .track div {
+        height: 100%;
+        border-radius: inherit;
+        background: var(--complex);
+      }
+
+      .track.per div {
+        background: var(--per);
+      }
+
+      .track.cry div {
+        background: var(--cry);
+      }
+
+      .track.drift div {
+        background: var(--mir);
+      }
+
+      .track.clk div {
+        background: var(--light);
+      }
+
+      .facts,
+      .legend {
+        display: grid;
+        gap: 10px;
+        padding-top: 2px;
+      }
+
+      .facts h2,
+      .legend h2 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .facts p {
+        margin: 0;
+        color: #c8d5e4;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .legend-row {
+        display: grid;
+        grid-template-columns: 30px 1fr;
+        gap: 10px;
+        align-items: center;
+        color: #d7e5f2;
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .mini-token {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+      }
+
+      .mini-token.per {
+        background: var(--per);
+      }
+
+      .mini-token.cry {
+        background: var(--cry);
+      }
+
+      .mini-token.mir {
+        background: var(--mir);
+      }
+
+      .mini-token.pdf {
+        background: var(--pdf);
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        background: rgba(4, 10, 18, 0.72);
+        backdrop-filter: blur(8px);
+      }
+
+      .overlay-card {
+        width: min(620px, 100%);
+        padding: 24px;
+        text-align: center;
+      }
+
+      .overlay-card h2 {
+        margin: 0 0 10px;
+        font-size: clamp(28px, 6vw, 52px);
+        line-height: 1;
+      }
+
+      .overlay-card p {
+        margin: 0 auto 12px;
+        max-width: 520px;
+        color: #c8d5e4;
+        line-height: 1.55;
+      }
+
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin: 16px 0;
+      }
+
+      .result-grid div {
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .result-grid span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .result-grid strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 22px;
+      }
+
+      @media (max-width: 1060px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .side-panel {
+          position: static;
+          max-height: none;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .app {
+          padding: 10px;
+        }
+
+        .stage-header {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .header-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .game-wrap {
+          padding: 10px;
+        }
+
+        .game-board {
+          min-height: 410px;
+        }
+
+        .hud {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .touch-controls {
+          display: grid;
+        }
+      }
     </style>
   </head>
-  <body class="bg-[hsl(220,40%,98%)] text-[hsl(230,25%,20%)] min-h-screen antialiased">
-    <div id="root" class="flex items-center justify-center min-h-screen"></div>
-    <!-- React + Babel -->
+  <body>
+    <div id="root"></div>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-      // Utility functions and constants will go here (next block)
-      // ========== CONSTANTS and HELPERS ==========
-      const AVATAR_W = 50, AVATAR_H = 70;
-      const COIN_SIZE = 28, MIR277_SIZE = 22;
-      const AVATAR_SPEED = 25;
-      const INITIAL_COIN_FALL_SPEED = 9, MIR277_FALL_SPEED = 7;
-      const INITIAL_TARGET_COINS = 80;
-      const BASE_COIN_GENERATION_INTERVAL = 100;
-      const BASE_PHASE_DURATIONS = { Morning: 20, Evening: 15, Night: 4 };
-      const TARGET_COIN_SCALING_FACTOR = 1.35;
-      const GLOBAL_TARGET_MULTIPLIER = 2;
-      const MONSTER_INITIAL_WIDTH = 120, MONSTER_INITIAL_HEIGHT = 80;
-      const MONSTER_Y_POSITION = 15;
-      const MONSTER_BASE_SPEED = 2;
-      const LEVEL_TO_START_MIR277S = 3;
-      const BASE_MIR277_GENERATION_INTERVAL = 2000;
-      const MIR277_INCREASE_FACTOR_PER_LEVEL = 1.2;
-      const GAME_TICK_INTERVAL = 30;
+      const { useCallback, useEffect, useMemo, useRef, useState } = React;
 
-      // Clamp helper
-      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+      const BOARD_RATIO = 0.75;
+      const AVATAR = { w: 50, h: 66, speed: 9 };
+      const ITEM_SIZE = 30;
+      const TICK_MS = 33;
+      const PHASES = [
+        { name: "Dawn", seconds: 16, note: "CLK/CYC drive rises" },
+        { name: "Day", seconds: 18, note: "CRY-light reset window" },
+        { name: "Dusk", seconds: 16, note: "PER/CRY complexes build" },
+        { name: "Night", seconds: 18, note: "negative feedback stabilizes" }
+      ];
 
-      // Collision detection
-      const collide = (a, b) => !(
-        b.x > a.x + a.w ||
-        b.x + b.w < a.x ||
-        b.y > a.y + a.h ||
-        b.y + b.h < a.y
-      );
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const pct = (value, max = 100) => `${clamp((value / max) * 100, 0, 100)}%`;
+      const collide = (a, b) => !(b.x > a.x + a.w || b.x + b.w < a.x || b.y > a.y + a.h || b.y + b.h < a.y);
 
-      // =========== SVG COMPONENTS ===========
-      const AvatarSVG = ({ width = AVATAR_W, height = AVATAR_H }) => (
-        <svg width={width} height={height} viewBox="0 0 50 70" fill="none">
-          <rect width="50" height="70" rx="12" fill="#334155" />
-          <circle cx="17" cy="28" r="6" fill="#FFF" />
-          <circle cx="33" cy="28" r="6" fill="#FFF" />
-        </svg>
-      );
-      const MonsterSVG = ({ isSleeping = false, width = MONSTER_INITIAL_WIDTH, height = MONSTER_INITIAL_HEIGHT }) => (
-        <svg width={width} height={height} viewBox="0 0 120 80" fill="none">
-          <rect width="120" height="80" rx="16" fill={isSleeping ? "#7C3AED" : "#1A237E"} />
-          {!isSleeping && (
-            <>
-              <circle cx="35" cy="40" r="10" fill="#FFF" />
-              <circle cx="85" cy="40" r="10" fill="#FFF" />
-            </>
-          )}
-        </svg>
-      );
-      const CoinSVG = ({ size = COIN_SIZE }) => (
-        <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
-          <circle cx="14" cy="14" r="12" fill="#FFECB3" stroke="#FDE68A" strokeWidth="2"/>
-          <text x="14" y="20" textAnchor="middle" fontWeight="700" fontSize="15" fill="#1A237E">1</text>
-        </svg>
-      );
-    //   const MiR277SVG = ({ size = MIR277_SIZE }) => (
-    //     <svg width={size} height={size} viewBox="0 0 30 30" fill="none">
-    //       <path d="M5 15 Q10 5, 15 15 T25 15" stroke="#EF4444" strokeWidth="4" strokeLinecap="round" />
-    //       <circle cx="6" cy="13.5" r="1.2" fill="#fff"/>
-    //       <circle cx="4" cy="15.5" r="1.2" fill="#fff"/>
-    //     </svg>
-    //   );
-
-      // ========== TOAST SYSTEM ==========
-      function useToasts() {
-        const [toasts, set] = React.useState([]);
-        const add = (msg, variant = "default", ms = 2400) => {
-          const id = Date.now() + Math.random();
-          set(t => [...t, { id, msg, variant }]);
-          setTimeout(() => set(t => t.filter(x => x.id !== id)), ms);
+      function TokenSvg({ type, size = ITEM_SIZE }) {
+        const map = {
+          PER: { fill: "#ffc857", text: "PER", ink: "#231400" },
+          CRY: { fill: "#61d3ff", text: "CRY", ink: "#04141f" },
+          LIGHT: { fill: "#fff2a6", text: "LUX", ink: "#211800" },
+          PDF: { fill: "#b99cff", text: "PDF", ink: "#150928" },
+          MIR: { fill: "#ff5a6e", text: "277", ink: "#fff" }
         };
-        return { toasts, add };
-      }
-      const ToastContainer = ({ toasts }) => (
-        <div className="fixed top-4 right-4 flex flex-col gap-2 z-50 pointer-events-none">
-          {toasts.map(t => (
-            <div key={t.id} className={`toast-enter shadow-lg px-4 py-3 rounded-md font-nunito font-semibold text-sm text-white ${t.variant === "error" ? "bg-red-500" : t.variant === "success" ? "bg-emerald-600" : "bg-slate-800"}`}>
-              {t.msg}
-            </div>
-          ))}
-        </div>
-      );
-
-
-      // ================= MAIN GAME COMPONENT ===================
-      function ChronoG() {
-        // --- Game state ---
-        const [dims, setDims] = React.useState({ w: 800, h: 600 });
-        const [gameState, setGameState] = React.useState("start"); // start | playing | nightcheck | levelwon_animation | levelwon | gameover
-        const [avatar, setAvatar] = React.useState({ x: 400 - AVATAR_W / 2, y: 600 - AVATAR_H - 10 });
-        const [monster, setMonster] = React.useState({ x: 340, dir: 1, width: MONSTER_INITIAL_WIDTH, height: MONSTER_INITIAL_HEIGHT });
-        const [isMonsterSleeping, setIsMonsterSleeping] = React.useState(false);
-        const [coins, setCoins] = React.useState([]);
-        const [miR277s, setMiR277s] = React.useState([]);
-        const [rewardCoins, setRewardCoins] = React.useState([]);
-        const [score, setScore] = React.useState(0);
-        const [totalScore, setTotalScore] = React.useState(0);
-        const [currentPhase, setCurrentPhase] = React.useState("Morning");
-        const [timeLeftInPhase, setTimeLeftInPhase] = React.useState(BASE_PHASE_DURATIONS.Morning);
-        const [targetCoins, setTargetCoins] = React.useState(INITIAL_TARGET_COINS * GLOBAL_TARGET_MULTIPLIER);
-        const [currentLevel, setCurrentLevel] = React.useState(1);
-        const [miR277Hits, setMiR277Hits] = React.useState(0);
-        const [hasShownMiR277Intro, setHasShownMiR277Intro] = React.useState(false);
-        const [activeMove, setActiveMove] = React.useState(null);
-
-        // --- Refs for timers and up-to-date values ---
-        const keys = React.useRef({});
-        const tick = React.useRef();
-        const coinTimer = React.useRef();
-        const mirTimer = React.useRef();
-        const areaRef = React.useRef();
-        const phaseDur = React.useRef(BASE_PHASE_DURATIONS);
-        const toasts = useToasts();
-
-        // --- Responsive resize observer ---
-        React.useEffect(() => {
-          const node = areaRef.current;
-          if (!node) return;
-          const resize = () => {
-            let w = node.offsetWidth;
-            w = Math.max(w, 320);
-            let h = w * 0.75;
-            setDims({ w, h });
-          };
-          resize();
-          const ro = new ResizeObserver(resize);
-          ro.observe(node);
-          return () => ro.disconnect();
-        }, []);
-
-        // --- Keyboard events ---
-        React.useEffect(() => {
-          const down = (e) => (keys.current[e.key] = true);
-          const up = (e) => (keys.current[e.key] = false);
-          window.addEventListener("keydown", down);
-          window.addEventListener("keyup", up);
-          return () => {
-            window.removeEventListener("keydown", down);
-            window.removeEventListener("keyup", up);
-          };
-        }, []);
-
-        // --- Helper: scaling phase durations with level ---
-        const scalePhase = React.useCallback((base, level) =>
-          GLOBAL_TARGET_MULTIPLIER * Math.sqrt(Math.pow(TARGET_COIN_SCALING_FACTOR, Math.max(0, level - 1))) * base, []);
-
-        // --- Helper: next level's target ---
-        const nextLevelTarget = (lvl) =>
-          Math.floor(INITIAL_TARGET_COINS * GLOBAL_TARGET_MULTIPLIER * Math.pow(TARGET_COIN_SCALING_FACTOR, Math.max(0, lvl - 1)));
-
-        // --- Start game or reset level ---
-        const prepareLevel = React.useCallback((level) => {
-          setAvatar({ x: dims.w / 2 - AVATAR_W / 2, y: dims.h - AVATAR_H - 10 });
-          setMonster({ x: dims.w / 2 - MONSTER_INITIAL_WIDTH / 2, dir: 1, width: MONSTER_INITIAL_WIDTH, height: MONSTER_INITIAL_HEIGHT });
-          setCoins([]);
-          setMiR277s([]);
-          setRewardCoins([]);
-          setScore(0);
-          setMiR277Hits(0);
-          setCurrentPhase("Morning");
-          setTimeLeftInPhase(scalePhase(BASE_PHASE_DURATIONS.Morning, level));
-          setIsMonsterSleeping(false);
-          setActiveMove(null);
-        }, [dims, scalePhase]);
-
-        // --- Main Game Loop ---
-        React.useEffect(() => {
-          if (gameState !== "playing") return;
-          tick.current = setInterval(() => {
-            // Movement (keyboard or on-screen)
-            setAvatar((pos) => {
-              let x = pos.x;
-              if (activeMove === "left" || keys.current["ArrowLeft"] || keys.current["a"]) x -= AVATAR_SPEED;
-              if (activeMove === "right" || keys.current["ArrowRight"] || keys.current["d"]) x += AVATAR_SPEED;
-              return { ...pos, x: clamp(x, 0, dims.w - AVATAR_W) };
-            });
-            // Monster move
-            setMonster((m) => {
-              let x = m.x + m.dir * MONSTER_BASE_SPEED;
-              let dir = m.dir;
-              if (x <= 0 || x >= dims.w - m.width) dir *= -1;
-              x = clamp(x, 0, dims.w - m.width);
-              return { ...m, x, dir };
-            });
-            // Coins & miR277s down
-            setCoins((prev) => prev.map((c) => ({ ...c, y: c.y + INITIAL_COIN_FALL_SPEED }))
-              .filter((c) => c.y < dims.h));
-            setMiR277s((prev) => prev.map((m) => ({ ...m, y: m.y + MIR277_FALL_SPEED }))
-              .filter((m) => m.y < dims.h));
-            // Collisions: Coins
-            setCoins((prev) => {
-              let catched = 0;
-              const avRect = { x: avatar.x, y: avatar.y, w: AVATAR_W, h: AVATAR_H };
-              const rem = prev.filter((c) => {
-                const hit = collide(avRect, { x: c.x, y: c.y, w: COIN_SIZE, h: COIN_SIZE });
-                if (hit) catched++;
-                return !hit;
-              });
-              if (catched) setScore((s) => s + catched);
-              return rem;
-            });
-            // Collisions: miR277s
-            setMiR277s((prev) => {
-              const avRect = { x: avatar.x, y: avatar.y, w: AVATAR_W, h: AVATAR_H };
-              let hits = 0;
-              const rem = prev.filter((m) => {
-                const hit = collide(avRect, { x: m.x, y: m.y, w: MIR277_SIZE, h: MIR277_SIZE });
-                if (hit) hits++;
-                return !hit;
-              });
-              if (hits) {
-                setScore((s) => Math.max(0, s - 3 * hits));
-                setMiR277Hits((h) => h + hits);
-                toasts.add("miR‑277 hit! Lost 3 units.", "error", 1500);
-              }
-              return rem;
-            });
-            // Phase timing
-            setTimeLeftInPhase((t) => {
-              if (t <= GAME_TICK_INTERVAL / 1000) {
-                if (currentPhase === "Morning") {
-                  setCurrentPhase("Evening");
-                  toasts.add("Evening: Clock monster getting tired…", "default");
-                  return scalePhase(BASE_PHASE_DURATIONS.Evening, currentLevel);
-                }
-                if (currentPhase === "Evening") {
-                  setCurrentPhase("Night");
-                  setGameState("nightcheck");
-                  return BASE_PHASE_DURATIONS.Night;
-                }
-                if (currentPhase === "Night") {
-                  // Shouldn't reach here; handled by nightcheck effect
-                  return 0;
-                }
-              }
-              return t - GAME_TICK_INTERVAL / 1000;
-            });
-          }, GAME_TICK_INTERVAL);
-          return () => clearInterval(tick.current);
-        }, [gameState, dims, avatar, currentPhase, currentLevel, activeMove, scalePhase, toasts]);
-
-        // --- Coin Generation ---
-        React.useEffect(() => {
-          if (gameState !== "playing") return;
-          const interval = Math.max(50, BASE_COIN_GENERATION_INTERVAL / (currentPhase === "Evening" ? 0.9 : 1));
-          coinTimer.current = setInterval(() => {
-            setCoins((prev) => [
-              ...prev,
-              {
-                id: Date.now() + Math.random(),
-                x: monster.x + monster.width / 2 - COIN_SIZE / 2 + (Math.random() - 0.5) * monster.width * 0.6,
-                y: MONSTER_Y_POSITION + monster.height * 0.8,
-              },
-            ]);
-          }, interval);
-          return () => clearInterval(coinTimer.current);
-        }, [gameState, currentPhase, monster]);
-
-        // --- miR277 Generation ---
-        React.useEffect(() => {
-          if (gameState !== "playing" || currentLevel < LEVEL_TO_START_MIR277S) return;
-          const interval = Math.max(300, BASE_MIR277_GENERATION_INTERVAL / Math.pow(MIR277_INCREASE_FACTOR_PER_LEVEL, Math.max(0, currentLevel - LEVEL_TO_START_MIR277S)));
-          mirTimer.current = setInterval(() => {
-            setMiR277s((prev) => [
-              ...prev,
-              {
-                id: Date.now() + Math.random(),
-                x: Math.random() * (dims.w - MIR277_SIZE),
-                y: -MIR277_SIZE,
-              },
-            ]);
-          }, interval);
-          return () => clearInterval(mirTimer.current);
-        }, [gameState, currentLevel, dims]);
-
-        // --- miR277 Intro Toast ---
-        React.useEffect(() => {
-          if (gameState === "playing" && currentLevel === LEVEL_TO_START_MIR277S && !hasShownMiR277Intro) {
-            toasts.add("miR‑277s now appear! Dodge or lose 3 units!", "error", 4200);
-            setHasShownMiR277Intro(true);
-          }
-        }, [gameState, currentLevel, hasShownMiR277Intro, toasts]);
-
-        // --- Night check: did player win the level? ---
-        React.useEffect(() => {
-          if (gameState !== "nightcheck") return;
-          toasts.add("Night phase: Calculating yield…", "default", 1800);
-          setTimeout(() => {
-            if (score >= targetCoins) {
-              setGameState("levelwon_animation");
-              setIsMonsterSleeping(true);
-              setTotalScore((t) => t + score);
-              // Animate reward coins
-              setRewardCoins(
-                Array.from({ length: 15 }).map((_, i) => ({
-                  id: `reward-${Date.now()}-${i}`,
-                  x: Math.random() * dims.w,
-                  y: Math.random() * (dims.h / 2),
-                  targetX: monster.x + monster.width / 2 - COIN_SIZE / 2,
-                  targetY: monster.y + monster.height / 2 - COIN_SIZE / 2,
-                  alpha: 1,
-                }))
-              );
-              setTimeout(() => {
-                setGameState("levelwon");
-              }, 2200);
-            } else {
-              setGameState("gameover");
-            }
-          }, BASE_PHASE_DURATIONS.Night * 1000);
-        }, [gameState, score, targetCoins, monster, dims]);
-
-        // --- Reward coin animation for win ---
-        React.useEffect(() => {
-          if (gameState !== "levelwon_animation") return;
-          const interval = setInterval(() => {
-            setRewardCoins((prev) =>
-              prev
-                .map((coin) => {
-                  const dx = coin.targetX - coin.x;
-                  const dy = coin.targetY - coin.y;
-                  const dist = Math.sqrt(dx * dx + dy * dy);
-                  const moveSpeed = 15;
-                  if (dist < moveSpeed) {
-                    return { ...coin, x: coin.targetX, y: coin.targetY, alpha: Math.max(0, coin.alpha - 0.1) };
-                  }
-                  return {
-                    ...coin,
-                    x: coin.x + (dx / dist) * moveSpeed,
-                    y: coin.y + (dy / dist) * moveSpeed,
-                    alpha: coin.alpha > 0.1 ? coin.alpha - 0.02 : 0,
-                  };
-                })
-                .filter((coin) => coin.alpha > 0)
-            );
-          }, GAME_TICK_INTERVAL);
-          return () => clearInterval(interval);
-        }, [gameState]);
-
-        // --- Overlay logic for game states ---
-        function Overlay() {
-          const coinText = "PER-CRY Units";
-          if (gameState === "start")
-            return (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 text-center p-6 rounded-lg z-20">
-                <h1 className="text-4xl sm:text-5xl font-bold text-primary mb-3 font-nunito">ChronoG!</h1>
-                <p className="max-w-md text-[hsl(230,25%,25%)] mb-6">
-                  The Clock monster is experiencing severe circadian disruption! Collect <span className="font-bold">PER‑CRY units</span> while dodging mischievous <span className="font-bold">miR‑277s</span>. Put the beast to sleep before cellular chaos ensues.
-                </p>
-                <div className="flex justify-center items-center space-x-4 my-5">
-                  <AvatarSVG width={80} height={112} />
-                  <CoinSVG size={40} />
-                  <MonsterSVG width={100} height={66} isSleeping={false} />
-                </div>
-                <button onClick={() => {
-                  setCurrentLevel(1);
-                  setTargetCoins(nextLevelTarget(1));
-                  setTotalScore(0);
-                  prepareLevel(1);
-                  setGameState("playing");
-                  setHasShownMiR277Intro(false);
-                  toasts.add("Experiment starts – Level 1", "success");
-                }} className="px-6 py-3 bg-primary text-white rounded-md font-bold flex items-center gap-2 text-lg font-nunito">
-                  ▶ Start Experiment
-                </button>
-                <p className="text-xs text-muted-foreground pt-4 mt-4">Designed by Meghna C Rao</p>
-              </div>
-            );
-          if (gameState === "gameover")
-            return (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 text-center p-6 rounded-lg z-20">
-                <h2 className="text-3xl sm:text-4xl font-bold text-red-600 mb-2 font-nunito">Experiment Failed!</h2>
-                <p className="mb-3 text-base">Collected <b>{score}</b> / {targetCoins} {coinText}.</p>
-                <p className="text-md mb-3">Total yield before failure: <b>{totalScore}</b> {coinText}.</p>
-                <p className="text-xs text-muted-foreground mb-5">The Clock monster’s feedback loop broke! Try recalibrating.</p>
-                <button
-                  onClick={() => {
-                    prepareLevel(currentLevel);
-                    setGameState("playing");
-                  }}
-                  className="px-5 py-2 bg-primary text-white rounded-md font-bold"
-                >
-                  Retry Level {currentLevel}
-                </button>
-              </div>
-            );
-          if (gameState === "levelwon")
-            return (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 text-center p-6 rounded-lg z-20">
-                <h2 className="text-3xl sm:text-4xl font-bold text-emerald-600 mb-2 font-nunito">RHYTHM RESTORED!</h2>
-                <p className="mb-2 text-base">Collected <b>{score}</b> / {targetCoins} {coinText}. Monster sleeps… for now.</p>
-                <p className="mb-2 text-base">Total yield: <b>{totalScore}</b> {coinText}.</p>
-                <button onClick={() => {
-                  const nextLvl = currentLevel + 1;
-                  setCurrentLevel(nextLvl);
-                  setTargetCoins(nextLevelTarget(nextLvl));
-                  prepareLevel(nextLvl);
-                  setGameState("playing");
-                  setHasShownMiR277Intro(false);
-                  toasts.add(`Level ${nextLvl} begins!`, "success");
-                }} className="px-5 py-2 bg-primary text-white rounded-md font-bold">
-                  Next Cycle (Level {currentLevel + 1})
-                </button>
-              </div>
-            );
-          if (gameState === "nightcheck")
-            return (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 text-center p-6 rounded-lg z-10">
-                <h2 className="text-2xl font-bold mb-2 font-nunito">Night Phase: Analysis</h2>
-                <p className="text-md mb-3 text-muted-foreground">Analyzing PER‑CRY yield…</p>
-                <ProgressBar value={score} max={targetCoins} className="w-2/3 h-3 my-2" barColor="bg-primary"/>
-                <p className="text-xs text-muted-foreground mt-2">{" "}{score >= targetCoins ? "SUCCESS: Monster will sleep!" : "FAIL: Insufficient units!"}</p>
-              </div>
-            );
-          if (gameState === "levelwon_animation") {
-            return (
-              <div className="absolute inset-0 bg-white/20 flex flex-col items-center justify-center z-10 pointer-events-none"></div>
-            );
-          }
-          return null;
-        }
-
-        // --- Touch controls (for mobile) ---
-        function TouchButtons() {
+        const item = map[type];
+        if (type === "MIR") {
           return (
-            <div className="flex gap-4 justify-center mt-3">
-              <button
-                className="px-4 py-2 bg-primary/90 text-white font-bold rounded-lg"
-                onMouseDown={() => setActiveMove("left")}
-                onMouseUp={() => setActiveMove(null)}
-                onMouseLeave={() => setActiveMove(null)}
-                onTouchStart={e => { e.preventDefault(); setActiveMove("left"); }}
-                onTouchEnd={e => { e.preventDefault(); setActiveMove(null); }}
-                aria-label="Move Left"
-              >◀</button>
-              <button
-                className="px-4 py-2 bg-primary/90 text-white font-bold rounded-lg"
-                onMouseDown={() => setActiveMove("right")}
-                onMouseUp={() => setActiveMove(null)}
-                onMouseLeave={() => setActiveMove(null)}
-                onTouchStart={e => { e.preventDefault(); setActiveMove("right"); }}
-                onTouchEnd={e => { e.preventDefault(); setActiveMove(null); }}
-                aria-label="Move Right"
-              >▶</button>
-            </div>
+            <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+              <circle cx="20" cy="20" r="18" fill="#2a0d19" stroke={item.fill} strokeWidth="3" />
+              <path d="M8 21 C14 7, 22 33, 32 18" fill="none" stroke={item.fill} strokeWidth="4" strokeLinecap="round" />
+              <text x="20" y="25" textAnchor="middle" fontSize="10" fontWeight="900" fill="#fff">277</text>
+            </svg>
           );
         }
-
-        // ============ Render UI ============
         return (
-          <div className="w-full flex flex-col md:flex-row gap-6 items-stretch">
-            {/* Game Area */}
-            <div ref={areaRef} className="relative flex-1 aspect-[4/3] rounded-xl bg-white shadow-inner overflow-hidden min-w-[320px] max-w-[820px] mx-auto">
-              <Overlay />
-              {/* Monster */}
-              <div
-                style={{ left: monster.x, top: MONSTER_Y_POSITION, width: monster.width, height: monster.height, position: "absolute" }}
-                className="select-none"
-              >
-                <MonsterSVG isSleeping={isMonsterSleeping} width={monster.width} height={monster.height}/>
-              </div>
-              {/* Avatar */}
-              <div
-                style={{ left: avatar.x, top: avatar.y, width: AVATAR_W, height: AVATAR_H, position: "absolute" }}
-                className="select-none"
-              >
-                <AvatarSVG width={AVATAR_W} height={AVATAR_H}/>
-              </div>
-              {/* Coins */}
-              {coins.map((coin) => (
-                <div
-                  key={coin.id}
-                  style={{ left: coin.x, top: coin.y, width: COIN_SIZE, height: COIN_SIZE, position: "absolute" }}
-                  className="select-none"
-                >
-                  <CoinSVG size={COIN_SIZE}/>
-                </div>
-              ))}
-              {/* miR-277s */}
-              {miR277s.map((m) => (
-                <div
-                  key={m.id}
-                  style={{ left: m.x, top: m.y, width: MIR277_SIZE, height: MIR277_SIZE, position: "absolute" }}
-                  className="select-none"
-                >
-                  <MiR277SVG size={MIR277_SIZE}/>
-                </div>
-              ))}
-              {/* Reward Coins (win animation) */}
-              {gameState === "levelwon_animation" && rewardCoins.map((coin) => (
-                <div
-                  key={coin.id}
-                  style={{
-                    left: coin.x,
-                    top: coin.y,
-                    width: COIN_SIZE,
-                    height: COIN_SIZE,
-                    position: "absolute",
-                    opacity: coin.alpha,
-                    transition: "opacity 0.1s linear",
-                  }}
-                  className="select-none"
-                >
-                  <CoinSVG size={COIN_SIZE}/>
-                </div>
-              ))}
-              {/* HUD */}
-              {["playing", "nightcheck", "levelwon_animation"].includes(gameState) && (
-                <div className="absolute top-2 left-2 right-2 flex justify-between items-center text-xs md:text-sm font-semibold font-nunito z-10">
-                  <span className="flex items-center gap-1 text-coin">
-                    <CoinSVG size={16}/> {score} / {targetCoins}
-                  </span>
-                  <span>
-                    {currentPhase} – {Math.ceil(timeLeftInPhase)}s
-                  </span>
-                  <span>
-                    Level <b>{currentLevel}</b>
-                  </span>
-                </div>
-              )}
-              {/* Touch Buttons */}
-              {["playing", "nightcheck", "levelwon_animation"].includes(gameState) && (
-                <div className="absolute left-0 right-0 bottom-1 md:hidden">
-                  <TouchButtons/>
-                </div>
-              )}
-            </div>
-            {/* Sidebar */}
-            <div className="md:w-72 mt-4 md:mt-0 flex-shrink-0 space-y-4">
-              <div className="bg-white rounded-xl shadow p-4 text-sm font-nunito">
-                <h3 className="font-bold text-primary mb-2">How to Play</h3>
-                <p className="mb-1"><b>Move:</b> Arrow keys, A/D, or tap/click left/right.</p>
-                <p className="mb-1"><b>Goal:</b> Collect coins (PER‑CRY units).</p>
-                <p className="mb-1"><b>Avoid:</b> <span className="inline-block align-middle"><MiR277SVG size={14}/></span> miR‑277s — they reduce your score!</p>
-                <p className="text-xs text-muted-foreground mt-3">
-                  Stabilize the clock monster before total cellular chaos.
-                </p>
-              </div>
-              <div className="bg-white rounded-xl shadow p-4 text-xs text-slate-500 text-center font-nunito">
-                Designed by Meghna C Rao<br/>Rebuilt as single-file React by ChatGPT
-              </div>
-            </div>
-            {/* Toasts */}
-            <ToastContainer toasts={toasts.toasts}/>
-          </div>
-        );
-      }
-      // ======= Progress Bar (simple, for nightcheck) =======
-      function ProgressBar({ value, max, className, barColor="bg-primary" }) {
-        return (
-          <div className={className + " bg-slate-200 rounded-full overflow-hidden"}>
-            <div
-              className={barColor + " h-full transition-all"}
-              style={{ width: `${Math.min(100, (value / Math.max(1, max)) * 100)}%` }}
-            />
-          </div>
-        );
-      }
-
-      // ========== SVGs for miR277 (used inline above) ===========
-      function MiR277SVG({ size = MIR277_SIZE }) {
-        return (
-          <svg width={size} height={size} viewBox="0 0 30 30" fill="none">
-            <defs>
-              <filter id="mir277-glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            <path
-              d="M5 15 Q10 5, 15 15 T25 15"
-              stroke="#EF4444"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              filter="url(#mir277-glow)"
-            />
-            <circle cx="6" cy="13.5" r="1.2" fill="#fff" />
-            <circle cx="4" cy="15.5" r="1.2" fill="#fff" />
+          <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="18" fill={item.fill} stroke="rgba(255,255,255,.75)" strokeWidth="2" />
+            <text x="20" y="24" textAnchor="middle" fontSize="11" fontWeight="900" fill={item.ink}>{item.text}</text>
           </svg>
         );
       }
 
-      // =========== RENDER THE GAME =====================
-      ReactDOM.render(<ChronoG />, document.getElementById("root"));
+      function AvatarSvg() {
+        return (
+          <svg width={AVATAR.w} height={AVATAR.h} viewBox="0 0 50 66" aria-hidden="true">
+            <rect x="4" y="4" width="42" height="58" rx="14" fill="#edf7ff" />
+            <rect x="10" y="13" width="30" height="38" rx="10" fill="#14283d" />
+            <circle cx="19" cy="30" r="4" fill="#61d3ff" />
+            <circle cx="31" cy="30" r="4" fill="#ffc857" />
+            <path d="M17 43 C22 47, 28 47, 33 43" stroke="#72e0a8" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+        );
+      }
 
+      function ClockSvg({ sleeping }) {
+        return (
+          <svg width="132" height="92" viewBox="0 0 132 92" aria-hidden="true">
+            <rect x="10" y="12" width="112" height="68" rx="18" fill={sleeping ? "#153c2c" : "#162948"} stroke="#72e0a8" strokeWidth="3" />
+            <circle cx="44" cy="45" r="9" fill={sleeping ? "#72e0a8" : "#edf7ff"} />
+            <circle cx="88" cy="45" r="9" fill={sleeping ? "#72e0a8" : "#edf7ff"} />
+            <path d={sleeping ? "M47 61 C58 66, 73 66, 85 61" : "M46 61 C58 55, 73 55, 86 61"} stroke="#edf7ff" strokeWidth="4" strokeLinecap="round" fill="none" />
+            <path d="M66 18 V45 L84 53" stroke="#ffc857" strokeWidth="4" strokeLinecap="round" fill="none" />
+          </svg>
+        );
+      }
+
+      function useToasts() {
+        const [toasts, setToasts] = useState([]);
+        const addToast = useCallback((text, tone = "plain") => {
+          const id = `${Date.now()}-${Math.random()}`;
+          setToasts((items) => [...items.slice(-3), { id, text, tone }]);
+          window.setTimeout(() => setToasts((items) => items.filter((item) => item.id !== id)), 2600);
+        }, []);
+        return { toasts, addToast };
+      }
+
+      function ChronoG() {
+        const boardRef = useRef(null);
+        const keys = useRef({});
+        const moveRef = useRef(null);
+        const avatarRef = useRef({ x: 385, y: 530 });
+        const clockRef = useRef({ x: 345, dir: 1 });
+        const statsRef = useRef(null);
+        const phaseRef = useRef(0);
+        const runningRef = useRef(false);
+        const spawnClock = useRef(0);
+        const lastTick = useRef(0);
+        const [dims, setDims] = useState({ w: 820, h: 615 });
+        const [status, setStatus] = useState("start");
+        const [avatar, setAvatar] = useState({ x: 385, y: 530 });
+        const [clockX, setClockX] = useState(345);
+        const [clockDir, setClockDir] = useState(1);
+        const [items, setItems] = useState([]);
+        const [phaseIndex, setPhaseIndex] = useState(0);
+        const [phaseTime, setPhaseTime] = useState(PHASES[0].seconds);
+        const [level, setLevel] = useState(1);
+        const [stats, setStats] = useState(makeStats(1));
+        const { toasts, addToast } = useToasts();
+
+        statsRef.current = stats;
+        phaseRef.current = phaseIndex;
+
+        const target = useMemo(() => ({
+          complexes: 10 + Math.floor(level * 2.5),
+          robustness: Math.max(42, 66 - level * 3),
+          phaseError: Math.min(52, 28 + level * 3)
+        }), [level]);
+
+        useEffect(() => {
+          const board = boardRef.current;
+          if (!board) return;
+          const resize = () => {
+            const width = Math.max(320, board.clientWidth);
+            setDims({ w: width, h: Math.max(410, width * BOARD_RATIO) });
+          };
+          resize();
+          const observer = new ResizeObserver(resize);
+          observer.observe(board);
+          return () => observer.disconnect();
+        }, []);
+
+        useEffect(() => {
+          const onDown = (event) => {
+            keys.current[event.key.toLowerCase()] = true;
+            if (["arrowleft", "arrowright", "a", "d", " "].includes(event.key.toLowerCase())) event.preventDefault();
+          };
+          const onUp = (event) => {
+            keys.current[event.key.toLowerCase()] = false;
+          };
+          window.addEventListener("keydown", onDown);
+          window.addEventListener("keyup", onUp);
+          return () => {
+            window.removeEventListener("keydown", onDown);
+            window.removeEventListener("keyup", onUp);
+          };
+        }, []);
+
+        const prepareLevel = useCallback((nextLevel) => {
+          const nextStats = makeStats(nextLevel);
+          setStats(nextStats);
+          statsRef.current = nextStats;
+          setPhaseIndex(0);
+          phaseRef.current = 0;
+          setPhaseTime(PHASES[0].seconds);
+          setItems([]);
+          const nextAvatar = { x: dims.w / 2 - AVATAR.w / 2, y: dims.h - AVATAR.h - 14 };
+          const nextClock = { x: dims.w / 2 - 66, dir: 1 };
+          avatarRef.current = nextAvatar;
+          clockRef.current = nextClock;
+          setAvatar(nextAvatar);
+          setClockX(nextClock.x);
+          setClockDir(1);
+          spawnClock.current = 0;
+          lastTick.current = 0;
+        }, [dims]);
+
+        const startGame = useCallback((nextLevel = 1) => {
+          setLevel(nextLevel);
+          prepareLevel(nextLevel);
+          setStatus("playing");
+          addToast("Cycle started: pair PER with CRY.", "good");
+        }, [addToast, prepareLevel]);
+
+        useEffect(() => {
+          runningRef.current = status === "playing";
+          if (status !== "playing") return;
+          let frame = 0;
+
+          const step = (now) => {
+            if (!runningRef.current) return;
+            const dt = Math.min(0.05, lastTick.current ? (now - lastTick.current) / 1000 : TICK_MS / 1000);
+            lastTick.current = now;
+            tickGame(dt);
+            frame = window.requestAnimationFrame(step);
+          };
+
+          frame = window.requestAnimationFrame(step);
+          return () => window.cancelAnimationFrame(frame);
+        }, [status, dims, level, target]);
+
+        function tickGame(dt) {
+          const activeLeft = keys.current.arrowleft || keys.current.a || moveRef.current === "left";
+          const activeRight = keys.current.arrowright || keys.current.d || moveRef.current === "right";
+          setAvatar((current) => {
+            const dx = (activeRight ? AVATAR.speed : 0) - (activeLeft ? AVATAR.speed : 0);
+            const next = { ...current, x: clamp(current.x + dx, 0, dims.w - AVATAR.w), y: dims.h - AVATAR.h - 14 };
+            avatarRef.current = next;
+            return next;
+          });
+
+          setClockX((x) => {
+            let dir = clockRef.current.dir;
+            let next = x + dir * (1.5 + level * 0.14);
+            if (next <= 8 || next >= dims.w - 140) {
+              dir *= -1;
+              clockRef.current.dir = dir;
+              setClockDir(dir);
+              next = clamp(next, 8, dims.w - 140);
+            }
+            clockRef.current.x = next;
+            return next;
+          });
+
+          spawnClock.current += dt;
+          const spawnEvery = Math.max(0.28, 0.62 - level * 0.035);
+          if (spawnClock.current >= spawnEvery) {
+            spawnClock.current = 0;
+            setItems((current) => [...current, spawnItem()]);
+          }
+
+          const currentStats = { ...statsRef.current };
+          let collected = [];
+          setItems((current) => {
+            const currentAvatar = avatarRef.current;
+            const avatarBox = { x: currentAvatar.x, y: currentAvatar.y, w: AVATAR.w, h: AVATAR.h };
+            const kept = [];
+            for (const item of current) {
+              const next = {
+                ...item,
+                y: item.y + item.speed * dt,
+                x: item.x + Math.sin((item.y + item.seed) / 38) * item.drift
+              };
+              if (collide(avatarBox, { x: next.x, y: next.y, w: ITEM_SIZE, h: ITEM_SIZE })) {
+                collected.push(next.type);
+              } else if (next.y < dims.h + 40) {
+                kept.push(next);
+              }
+            }
+            return kept;
+          });
+          if (collected.length) {
+            for (const type of collected) applyToken(type, currentStats);
+            setStats(currentStats);
+            statsRef.current = currentStats;
+          }
+
+          setPhaseTime((time) => {
+            const next = time - dt;
+            if (next > 0) return next;
+            return advancePhase();
+          });
+        }
+
+        function spawnItem() {
+          const phase = PHASES[phaseRef.current].name;
+          const currentClockX = clockRef.current.x;
+          const phasePool = {
+            Dawn: ["PER", "CRY", "PER", "PDF", "MIR"],
+            Day: ["CRY", "LIGHT", "PER", "PDF", "MIR"],
+            Dusk: ["PER", "PER", "CRY", "MIR", "PDF"],
+            Night: ["PER", "CRY", "CRY", "MIR", "MIR"]
+          }[phase];
+          const type = phasePool[Math.floor(Math.random() * phasePool.length)];
+          return {
+            id: `${Date.now()}-${Math.random()}`,
+            type,
+            x: clamp(currentClockX + 62 + (Math.random() - 0.5) * 110, 8, dims.w - ITEM_SIZE - 8),
+            y: 86,
+            speed: (95 + Math.random() * 70 + level * 8) * (type === "MIR" ? 1.08 : 1),
+            drift: type === "MIR" ? 1.9 : 0.8,
+            seed: Math.random() * 1000
+          };
+        }
+
+        function applyToken(type, currentStats) {
+          if (type === "PER") {
+            currentStats.per += 1;
+            currentStats.score += 4;
+            addToast("PER collected: repression substrate rising.", "plain");
+          }
+          if (type === "CRY") {
+            currentStats.cry += 1;
+            currentStats.score += 4;
+            currentStats.phaseError = clamp(currentStats.phaseError - 2, 0, 100);
+            addToast("CRY collected: reset sensitivity improved.", "good");
+          }
+          if (type === "LIGHT") {
+            currentStats.cry += 1;
+            currentStats.phaseError = clamp(currentStats.phaseError - 12, 0, 100);
+            currentStats.robustness = clamp(currentStats.robustness + 5, 0, 100);
+            currentStats.score += 8;
+            addToast("Light-CRY pulse: phase drift corrected.", "good");
+          }
+          if (type === "PDF") {
+            currentStats.phaseError = clamp(currentStats.phaseError - 10, 0, 100);
+            currentStats.robustness = clamp(currentStats.robustness + 10, 0, 100);
+            currentStats.score += 10;
+            addToast("PDF sync pulse: network coherence restored.", "good");
+          }
+          if (type === "MIR") {
+            currentStats.phaseError = clamp(currentStats.phaseError + 11 + level, 0, 100);
+            currentStats.robustness = clamp(currentStats.robustness - 11, 0, 100);
+            currentStats.clkDrive = clamp(currentStats.clkDrive + 8, 0, 100);
+            currentStats.score = Math.max(0, currentStats.score - 12);
+            addToast("Mis-timed miR-277 pulse: phase noise increased.", "bad");
+          }
+          while (currentStats.per > 0 && currentStats.cry > 0) {
+            currentStats.per -= 1;
+            currentStats.cry -= 1;
+            currentStats.complexes += 1;
+            currentStats.clkDrive = clamp(currentStats.clkDrive - 5, 0, 100);
+            currentStats.phaseError = clamp(currentStats.phaseError - 4, 0, 100);
+            currentStats.robustness = clamp(currentStats.robustness + 2, 0, 100);
+            currentStats.score += 18;
+          }
+        }
+
+        function advancePhase() {
+          if (phaseRef.current >= PHASES.length - 1) {
+            setStatus("analysis");
+            runningRef.current = false;
+            window.setTimeout(() => {
+              const s = statsRef.current;
+              const passed = s.complexes >= target.complexes && s.phaseError <= target.phaseError && s.robustness >= target.robustness;
+              setStatus(passed ? "won" : "gameover");
+            }, 1400);
+            return 0;
+          }
+          const nextIndex = phaseRef.current + 1;
+          phaseRef.current = nextIndex;
+          setPhaseIndex(nextIndex);
+          addToast(`${PHASES[nextIndex].name}: ${PHASES[nextIndex].note}`, "plain");
+          return PHASES[nextIndex].seconds;
+        }
+
+        const success = stats.complexes >= target.complexes && stats.phaseError <= target.phaseError && stats.robustness >= target.robustness;
+
+        return (
+          <main className="app">
+            <section className="stage-shell">
+              <header className="stage-header">
+                <div className="title-block">
+                  <p>Drosophila clock rescue</p>
+                  <h1>ChronoG</h1>
+                </div>
+                <div className="header-actions">
+                  <button className="btn ghost" onClick={() => startGame(1)}>Restart</button>
+                  <button className="btn primary" onClick={() => startGame(level)}>Run cycle</button>
+                </div>
+              </header>
+
+              <div className="game-wrap">
+                <div
+                  className="game-board"
+                  ref={boardRef}
+                  style={{ height: dims.h, "--clock-x": `${clockX + 66}px` }}
+                >
+                  <div className="hud">
+                    <div className="hud-box"><span>Phase</span><strong>{PHASES[phaseIndex].name} {Math.ceil(phaseTime)}s</strong></div>
+                    <div className="hud-box"><span>Complexes</span><strong>{stats.complexes}/{target.complexes}</strong></div>
+                    <div className="hud-box"><span>Drift</span><strong>{Math.round(stats.phaseError)}</strong></div>
+                    <div className="hud-box"><span>Score</span><strong>{stats.score}</strong></div>
+                  </div>
+
+                  <div className="entity" style={{ left: clockX, top: 84, width: 132, height: 92 }}>
+                    <ClockSvg sleeping={status === "won"} />
+                  </div>
+                  <div className="entity" style={{ left: avatar.x, top: avatar.y, width: AVATAR.w, height: AVATAR.h }}>
+                    <AvatarSvg />
+                  </div>
+                  {items.map((item) => (
+                    <div className="entity" key={item.id} style={{ left: item.x, top: item.y, width: ITEM_SIZE, height: ITEM_SIZE }}>
+                      <TokenSvg type={item.type} />
+                      <span className="item-label">{item.type === "MIR" ? "miR-277" : item.type}</span>
+                    </div>
+                  ))}
+
+                  {status !== "playing" && <Overlay status={status} level={level} stats={stats} target={target} success={success} onStart={() => startGame(status === "won" ? level + 1 : level)} />}
+
+                  <div className="toast-stack">
+                    {toasts.map((toast) => <div key={toast.id} className={`toast ${toast.tone === "bad" ? "bad" : toast.tone === "good" ? "good" : ""}`}>{toast.text}</div>)}
+                  </div>
+                </div>
+
+                <div className="touch-controls">
+                  <button
+                    onMouseDown={() => (moveRef.current = "left")}
+                    onMouseUp={() => (moveRef.current = null)}
+                    onMouseLeave={() => (moveRef.current = null)}
+                    onTouchStart={(event) => { event.preventDefault(); moveRef.current = "left"; }}
+                    onTouchEnd={(event) => { event.preventDefault(); moveRef.current = null; }}
+                    aria-label="Move left"
+                  >{"<"}</button>
+                  <button
+                    onMouseDown={() => (moveRef.current = "right")}
+                    onMouseUp={() => (moveRef.current = null)}
+                    onMouseLeave={() => (moveRef.current = null)}
+                    onTouchStart={(event) => { event.preventDefault(); moveRef.current = "right"; }}
+                    onTouchEnd={(event) => { event.preventDefault(); moveRef.current = null; }}
+                    aria-label="Move right"
+                  >{">"}</button>
+                </div>
+              </div>
+            </section>
+
+            <aside className="side-panel">
+              <section className="metric-grid">
+                <Metric label="PER pool" value={stats.per} max={8} className="per" />
+                <Metric label="CRY pool" value={stats.cry} max={8} className="cry" />
+                <Metric label="Rhythm robustness" value={stats.robustness} max={100} />
+                <Metric label="Phase drift" value={stats.phaseError} max={100} className="drift" />
+                <Metric label="CLK/CYC drive" value={stats.clkDrive} max={100} className="clk" />
+              </section>
+
+              <section className="legend">
+                <h2>Clock pieces</h2>
+                <Legend color="per" text="PER and CRY pair into negative-feedback complexes." />
+                <Legend color="cry" text="CRY and light pulses reduce phase drift." />
+                <Legend color="mir" text="Mis-timed miR-277 pulses add phase noise." />
+                <Legend color="pdf" text="PDF sync pulses improve network robustness." />
+              </section>
+
+              <section className="facts">
+                <h2>Biology model</h2>
+                <p>PER/CRY complexes act as the stabilizing feedback currency. You win a cycle by forming enough complexes while keeping drift low and robustness high.</p>
+                <p>miR-277 is modeled as a timing modulator because Drosophila evidence links it to activity-rest phase, rhythm robustness, and Clk oscillation.</p>
+              </section>
+            </aside>
+          </main>
+        );
+      }
+
+      function makeStats(level) {
+        return {
+          per: 0,
+          cry: 0,
+          complexes: 0,
+          robustness: clamp(72 - level * 2, 45, 82),
+          phaseError: clamp(24 + level * 3, 18, 48),
+          clkDrive: 72,
+          score: 0
+        };
+      }
+
+      function Metric({ label, value, max, className = "" }) {
+        return (
+          <div className="metric">
+            <div className="metric-head"><span>{label}</span><strong>{Math.round(value)}</strong></div>
+            <div className={`track ${className}`}><div style={{ width: pct(value, max) }} /></div>
+          </div>
+        );
+      }
+
+      function Legend({ color, text }) {
+        return (
+          <div className="legend-row">
+            <span className={`mini-token ${color}`} />
+            <span>{text}</span>
+          </div>
+        );
+      }
+
+      function Overlay({ status, level, stats, target, success, onStart }) {
+        if (status === "playing") return null;
+        if (status === "analysis") {
+          return (
+            <div className="overlay">
+              <div className="overlay-card">
+                <h2>Cycle analysis</h2>
+                <p>Checking complex yield, phase drift, and rhythm robustness.</p>
+              </div>
+            </div>
+          );
+        }
+        const isStart = status === "start";
+        const isWon = status === "won";
+        return (
+          <div className="overlay">
+            <div className="overlay-card">
+              <h2>{isStart ? "Rescue the rhythm" : isWon ? "Rhythm restored" : "Clock desynchronized"}</h2>
+              <p>{isStart
+                ? "Assemble PER/CRY feedback complexes, use light and PDF timing cues, and avoid mis-timed miR-277 phase noise."
+                : isWon
+                  ? "The feedback loop is stable enough for another circadian cycle."
+                  : "The loop did not meet the complex, drift, or robustness threshold."}</p>
+              {!isStart && (
+                <div className="result-grid">
+                  <div><span>Complexes</span><strong>{stats.complexes}/{target.complexes}</strong></div>
+                  <div><span>Drift</span><strong>{Math.round(stats.phaseError)}/{target.phaseError}</strong></div>
+                  <div><span>Robustness</span><strong>{Math.round(stats.robustness)}/{target.robustness}</strong></div>
+                </div>
+              )}
+              <button className="btn primary" onClick={onStart}>{isStart ? "Start cycle" : success ? `Level ${level + 1}` : "Retry cycle"}</button>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<ChronoG />, document.getElementById("root"));
     </script>
-    </body>
+  </body>
 </html>
