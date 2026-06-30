@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSIR Life Sciences Mock Practice</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">CSIR-UGC NET Life Sciences</p>
+        <h1>Mock Practice</h1>
+      </div>
+      <div class="top-actions">
+        <button id="new-paper-top" class="secondary" type="button">New paper</button>
+        <button id="submit-top" class="primary" type="button">Submit</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <aside class="panel">
+        <section class="score-card">
+          <span class="label">Pool</span>
+          <strong id="pool-count">Loading...</strong>
+          <span class="muted">100 questions per paper</span>
+        </section>
+
+        <section class="rules">
+          <h2>Scoring</h2>
+          <div class="rule-grid">
+            <span>Part A</span><strong>+2 / -0.5</strong><em>15 scored</em>
+            <span>Part B</span><strong>+2 / -0.5</strong><em>35 scored</em>
+            <span>Part C</span><strong>+4 / -1</strong><em>25 scored</em>
+          </div>
+        </section>
+
+        <section class="progress-panel">
+          <h2>Progress</h2>
+          <div id="section-progress" class="section-progress"></div>
+          <div class="bar">
+            <div id="progress-fill"></div>
+          </div>
+          <p id="progress-text" class="muted">0 answered</p>
+        </section>
+
+        <section class="palette-wrap">
+          <h2>Questions</h2>
+          <div id="question-palette" class="palette"></div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <section id="result-panel" class="result-panel hidden"></section>
+        <section id="question-list" class="question-list" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <script src="question-bank.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
