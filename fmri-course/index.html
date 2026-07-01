@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>fMRI From Scratch</title>
+    <meta name="description" content="A full fMRI course with interactive teaching images, open dataset guide, interpretation workflow, and advanced grid-like signal lessons.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="course-header">
+      <a class="brand" href="#cover" aria-label="fMRI course home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>
+          <strong>fMRI From Scratch</strong>
+          <em>signals, maps, interpretation</em>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="Course shortcuts">
+        <a href="#datasets">Open datasets</a>
+        <a href="#labs">Interactive labs</a>
+        <a href="#grid">Grid-like signals</a>
+        <button id="reset-progress" type="button">Reset</button>
+      </nav>
+    </header>
+
+    <main id="start" class="course-shell">
+      <aside class="course-rail" aria-label="Course navigation">
+        <div class="rail-status">
+          <span>Course progress</span>
+          <strong id="progress-percent">0%</strong>
+          <div class="progress-track" aria-hidden="true"><div id="progress-fill"></div></div>
+        </div>
+        <nav id="module-nav" class="module-nav"></nav>
+      </aside>
+
+      <div class="course-body">
+        <section id="cover" class="opening" data-module="opening">
+          <div class="opening-copy">
+            <p class="eyebrow">A practical neuroimaging course</p>
+            <h1>Learn fMRI the way you would read a scan: signal first, map second, interpretation last.</h1>
+            <p class="lede">
+              This course starts with voxels and BOLD physiology, then builds toward preprocessing,
+              GLM maps, resting-state connectivity, statistical interpretation, open datasets, and
+              advanced spatial-navigation signals such as grid-like modulation.
+            </p>
+            <div class="opening-actions">
+              <a class="primary-action" href="#module-1">Start module 1</a>
+              <a class="text-action" href="#datasets">Browse datasets</a>
+            </div>
+          </div>
+          <figure class="scan-stage" aria-label="Pedagogical fMRI activation map">
+            <canvas id="hero-scan" width="760" height="520"></canvas>
+            <figcaption>
+              Pedagogical activation overlay. Real fMRI interpretation always starts by asking what
+              the image represents: raw BOLD, preprocessed time series, contrast map, connectivity
+              map, or group-level statistic.
+            </figcaption>
+          </figure>
+        </section>
+
+        <section id="module-1" class="lesson" data-module="module-1">
+          <div class="lesson-kicker">Module 1</div>
+          <h2>What fMRI Measures</h2>
+          <p>
+            Functional MRI does not measure neurons directly. It measures an MRI signal that changes
+            with blood oxygenation, blood volume, and blood flow after neural activity. The most common
+            signal is BOLD: blood-oxygen-level dependent contrast.
+          </p>
+          <div class="split">
+            <div>
+              <h3>The core chain</h3>
+              <ol class="clean-list">
+                <li>Neurons consume energy during computation.</li>
+                <li>Local vessels over-deliver oxygenated blood after a short delay.</li>
+                <li>Deoxyhemoglobin changes local magnetic properties.</li>
+                <li>The scanner detects a tiny signal change, often around 0.5 to 5 percent.</li>
+                <li>Analysis converts repeated images into time series, maps, and statistics.</li>
+              </ol>
+            </div>
+            <figure class="diagram-card">
+              <svg viewBox="0 0 720 420" role="img" aria-label="Neural activity to BOLD signal diagram">
+                <rect x="34" y="56" width="150" height="86" rx="8" class="svg-surface"></rect>
+                <text x="109" y="94" text-anchor="middle" class="svg-title">Neural event</text>
+                <text x="109" y="120" text-anchor="middle" class="svg-note">milliseconds</text>
+                <path d="M196 99 C245 99 250 99 302 99" class="svg-flow"></path>
+                <rect x="315" y="56" width="150" height="86" rx="8" class="svg-surface"></rect>
+                <text x="390" y="94" text-anchor="middle" class="svg-title">Blood response</text>
+                <text x="390" y="120" text-anchor="middle" class="svg-note">seconds</text>
+                <path d="M477 99 C525 99 531 99 582 99" class="svg-flow"></path>
+                <rect x="596" y="56" width="92" height="86" rx="8" class="svg-surface"></rect>
+                <text x="642" y="94" text-anchor="middle" class="svg-title">BOLD</text>
+                <text x="642" y="120" text-anchor="middle" class="svg-note">MRI signal</text>
+                <path d="M92 310 C155 160 223 352 286 220 C352 92 420 350 488 190 C545 84 612 265 668 148" class="bold-curve"></path>
+                <line x1="60" y1="315" x2="680" y2="315" class="axis"></line>
+                <line x1="60" y1="80" x2="60" y2="315" class="axis"></line>
+                <text x="64" y="350" class="svg-note">Time after event</text>
+                <text x="78" y="78" class="svg-note">BOLD amplitude</text>
+              </svg>
+            </figure>
+          </div>
+          <div class="takeaway">
+            <strong>Interpretation rule:</strong> fMRI is best read as an indirect, delayed, spatially
+            local but physiologically mixed signal. Never say "this voxel fired" when you mean
+            "this voxel showed a BOLD contrast."
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-1">Mark complete</button>
+        </section>
+
+        <section id="module-2" class="lesson" data-module="module-2">
+          <div class="lesson-kicker">Module 2</div>
+          <h2>From Anatomy To Voxels</h2>
+          <p>
+            An fMRI run is a stack of 3D brain volumes sampled repeatedly over time. Each tiny cube is
+            a voxel. For every voxel, the scanner records a time series. Interpretation starts by
+            knowing whether you are looking at anatomy, a single functional volume, an averaged
+            activation map, or a statistical contrast.
+          </p>
+          <div class="concept-grid">
+            <article class="concept">
+              <h3>Anatomical MRI</h3>
+              <p>High-resolution structure. Useful for localization, segmentation, normalization, and checking whether the brain looks anatomically plausible.</p>
+            </article>
+            <article class="concept">
+              <h3>Functional run</h3>
+              <p>Many fast, lower-resolution volumes. Useful for time-series analysis, activation, and connectivity.</p>
+            </article>
+            <article class="concept">
+              <h3>Contrast map</h3>
+              <p>A derived image showing the effect of a task, condition, or model contrast. This is what most published activation figures show.</p>
+            </article>
+          </div>
+          <div class="slice-lab" id="labs">
+            <div class="lab-copy">
+              <h3>Slice lab</h3>
+              <p>Move through a teaching brain volume and adjust the overlay threshold. This is simulated for learning, but it mirrors the questions you ask when reading real maps.</p>
+              <label>
+                Slice position
+                <input id="slice-slider" type="range" min="0" max="100" value="48">
+              </label>
+              <label>
+                Overlay threshold
+                <input id="threshold-slider" type="range" min="5" max="90" value="42">
+              </label>
+              <div class="lab-readout" id="slice-readout"></div>
+            </div>
+            <canvas id="slice-canvas" width="720" height="520" aria-label="Interactive simulated fMRI slice viewer"></canvas>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-2">Mark complete</button>
+        </section>
+
+        <section id="module-3" class="lesson" data-module="module-3">
+          <div class="lesson-kicker">Module 3</div>
+          <h2>BOLD, HRF, And Time</h2>
+          <p>
+            The BOLD response is delayed and blurred in time. A neural event can happen in milliseconds,
+            but the hemodynamic response usually rises after a few seconds, peaks later, and returns
+            slowly. That delay is why fMRI is strong for spatial maps but weak for precise timing.
+          </p>
+          <div class="signal-lab">
+            <div class="lab-toolbar" aria-label="Signal controls">
+              <label><input type="checkbox" data-signal="neural" checked> Neural events</label>
+              <label><input type="checkbox" data-signal="bold" checked> BOLD response</label>
+              <label><input type="checkbox" data-signal="drift" checked> Scanner drift</label>
+              <label><input type="checkbox" data-signal="motion" checked> Motion spike</label>
+            </div>
+            <canvas id="signal-canvas" width="900" height="360" aria-label="Simulated fMRI time series with neural events, BOLD response, drift, and motion spike"></canvas>
+          </div>
+          <div class="split">
+            <div>
+              <h3>Terms you must know</h3>
+              <dl class="term-list">
+                <dt>TR</dt>
+                <dd>Repetition time. How often a brain volume is sampled.</dd>
+                <dt>TE</dt>
+                <dd>Echo time. Affects BOLD sensitivity.</dd>
+                <dt>HRF</dt>
+                <dd>Hemodynamic response function. The expected BOLD shape after neural activity.</dd>
+                <dt>Percent signal change</dt>
+                <dd>A normalized way to talk about small BOLD changes.</dd>
+              </dl>
+            </div>
+            <div class="takeaway">
+              <strong>Interpretation rule:</strong> a BOLD peak does not mark the moment neurons became active.
+              It is a delayed vascular signature related to earlier neural activity.
+            </div>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-3">Mark complete</button>
+        </section>
+
+        <section id="module-4" class="lesson" data-module="module-4">
+          <div class="lesson-kicker">Module 4</div>
+          <h2>How fMRI Data Are Organized</h2>
+          <p>
+            Most modern public neuroimaging datasets use BIDS, the Brain Imaging Data Structure. BIDS
+            gives you predictable folders, filenames, JSON metadata, event timing files, and derivative
+            folders. If you can read BIDS, you can approach many open fMRI datasets without getting lost.
+          </p>
+          <div class="file-tree" aria-label="Example BIDS file tree">
+            <span>dataset_description.json</span>
+            <span>participants.tsv</span>
+            <span>sub-01/anat/sub-01_T1w.nii.gz</span>
+            <span>sub-01/func/sub-01_task-memory_bold.nii.gz</span>
+            <span>sub-01/func/sub-01_task-memory_events.tsv</span>
+            <span>derivatives/fmriprep/sub-01/func/...preproc_bold.nii.gz</span>
+          </div>
+          <div class="concept-grid">
+            <article class="concept">
+              <h3>NIfTI</h3>
+              <p>The image file format. A 4D BOLD file stores x, y, z, and time.</p>
+            </article>
+            <article class="concept">
+              <h3>JSON sidecar</h3>
+              <p>Metadata such as TR, task name, slice timing, phase encoding, and scanner settings.</p>
+            </article>
+            <article class="concept">
+              <h3>Events TSV</h3>
+              <p>Task timing. This becomes the design matrix for task-fMRI modeling.</p>
+            </article>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-4">Mark complete</button>
+        </section>
+
+        <section id="datasets" class="lesson dataset-section" data-module="datasets">
+          <div class="lesson-kicker">Open-data atlas</div>
+          <h2>Datasets Worth Learning From</h2>
+          <p>
+            Use these resources to move from course diagrams to real data. Some are fully open, while
+            others require a data-use agreement. Start with OpenNeuro or NeuroVault if you want the
+            lowest barrier to practice.
+          </p>
+          <div class="dataset-grid">
+            <article class="dataset">
+              <h3>OpenNeuro</h3>
+              <p>BIDS-formatted public neuroimaging datasets. Best for learning BIDS, task fMRI, resting-state fMRI, and reproducible workflows.</p>
+              <a href="https://openneuro.org/" target="_blank" rel="noreferrer">Open repository</a>
+            </article>
+            <article class="dataset">
+              <h3>NeuroVault</h3>
+              <p>Public statistical maps, atlases, parcellations, and unthresholded MRI/PET-derived maps. Best for learning map interpretation.</p>
+              <a href="https://neurovault.org/" target="_blank" rel="noreferrer">Open maps</a>
+            </article>
+            <article class="dataset">
+              <h3>Human Connectome Project</h3>
+              <p>High-quality structural, task, resting-state, diffusion, and MEG data for healthy adults. Best for connectivity and networks.</p>
+              <a href="https://www.humanconnectome.org/study/hcp-young-adult" target="_blank" rel="noreferrer">View HCP</a>
+            </article>
+            <article class="dataset">
+              <h3>Natural Scenes Dataset</h3>
+              <p>Large 7T fMRI dataset from subjects viewing thousands of natural scenes. Best for visual cortex, encoding models, and decoding.</p>
+              <a href="https://naturalscenesdataset.org/" target="_blank" rel="noreferrer">View NSD</a>
+            </article>
+            <article class="dataset">
+              <h3>StudyForrest</h3>
+              <p>Naturalistic fMRI around movie watching and audio narratives. Best for time-locked natural stimulus analysis.</p>
+              <a href="https://studyforrest.org/" target="_blank" rel="noreferrer">View StudyForrest</a>
+            </article>
+            <article class="dataset">
+              <h3>ABIDE</h3>
+              <p>Autism Brain Imaging Data Exchange. Best for multi-site resting-state fMRI, site effects, motion, and clinical interpretation caution.</p>
+              <a href="https://fcon_1000.projects.nitrc.org/indi/abide/" target="_blank" rel="noreferrer">View ABIDE</a>
+            </article>
+          </div>
+          <div class="takeaway">
+            <strong>Dataset rule:</strong> before analysis, read the dataset paper, task description,
+            participant table, exclusion criteria, scanner parameters, and preprocessing status.
+          </div>
+          <button class="complete-btn" type="button" data-complete="datasets">Mark complete</button>
+        </section>
+
+        <section id="module-5" class="lesson" data-module="module-5">
+          <div class="lesson-kicker">Module 5</div>
+          <h2>Preprocessing: Making Images Comparable</h2>
+          <p>
+            Preprocessing reduces nuisance variation and puts images into a form that can be modeled.
+            It does not magically remove all artifacts. Every preprocessing choice can change your
+            interpretation.
+          </p>
+          <div class="pipeline">
+            <div><strong>1</strong><span>Discard unstable volumes</span></div>
+            <div><strong>2</strong><span>Slice timing correction</span></div>
+            <div><strong>3</strong><span>Motion correction</span></div>
+            <div><strong>4</strong><span>Distortion correction</span></div>
+            <div><strong>5</strong><span>Coregister to anatomy</span></div>
+            <div><strong>6</strong><span>Normalize to template</span></div>
+            <div><strong>7</strong><span>Spatial smoothing</span></div>
+            <div><strong>8</strong><span>Denoise and model</span></div>
+          </div>
+          <div class="qc-grid">
+            <article>
+              <h3>Motion</h3>
+              <p>Head movement can create false activation and false connectivity. Check framewise displacement and motion outliers.</p>
+            </article>
+            <article>
+              <h3>Physiology</h3>
+              <p>Breathing and heartbeat affect BOLD. They can mimic networks if ignored.</p>
+            </article>
+            <article>
+              <h3>Susceptibility</h3>
+              <p>Orbitofrontal and temporal regions are vulnerable to signal dropout and distortion.</p>
+            </article>
+            <article>
+              <h3>Registration</h3>
+              <p>Bad alignment makes anatomical interpretation untrustworthy, even if the statistics look clean.</p>
+            </article>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-5">Mark complete</button>
+        </section>
+
+        <section id="module-6" class="lesson" data-module="module-6">
+          <div class="lesson-kicker">Module 6</div>
+          <h2>Task fMRI And The GLM</h2>
+          <p>
+            The general linear model asks whether a voxel time series is better explained by task
+            predictors than by noise. A contrast then asks a sharper question, such as faces greater
+            than houses, memory encoding greater than baseline, or left button press greater than right.
+          </p>
+          <div class="glm-lab">
+            <div>
+              <h3>Design matrix</h3>
+              <div id="design-matrix" class="design-matrix" aria-label="Interactive design matrix"></div>
+            </div>
+            <div>
+              <h3>Contrast preview</h3>
+              <canvas id="glm-canvas" width="580" height="420" aria-label="Simulated GLM contrast activation map"></canvas>
+            </div>
+          </div>
+          <div class="concept-grid">
+            <article class="concept">
+              <h3>Beta</h3>
+              <p>Estimated contribution of a predictor to the voxel signal.</p>
+            </article>
+            <article class="concept">
+              <h3>Contrast</h3>
+              <p>A weighted question about betas. Example: navigation greater than control.</p>
+            </article>
+            <article class="concept">
+              <h3>Statistical map</h3>
+              <p>A voxelwise map of contrast evidence, often t, z, or F values.</p>
+            </article>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-6">Mark complete</button>
+        </section>
+
+        <section id="module-7" class="lesson" data-module="module-7">
+          <div class="lesson-kicker">Module 7</div>
+          <h2>Reading Activation Maps</h2>
+          <p>
+            Activation maps are not photographs of thought. They are statistical answers to a model.
+            You need the contrast, threshold, correction method, sample size, and anatomical localization
+            before you interpret a colored blob.
+          </p>
+          <div class="reading-grid">
+            <article>
+              <span>Question 1</span>
+              <h3>What contrast is shown?</h3>
+              <p>A map without a contrast is uninterpretable.</p>
+            </article>
+            <article>
+              <span>Question 2</span>
+              <h3>What threshold was used?</h3>
+              <p>Uncorrected maps can look persuasive while being false positive heavy.</p>
+            </article>
+            <article>
+              <span>Question 3</span>
+              <h3>Where is the cluster?</h3>
+              <p>Check atlas labels, coordinates, and individual anatomy.</p>
+            </article>
+            <article>
+              <span>Question 4</span>
+              <h3>Could it be artifact?</h3>
+              <p>Motion, vessels, dropout, and smoothing can fool interpretation.</p>
+            </article>
+          </div>
+          <div class="takeaway">
+            <strong>Interpretation rule:</strong> never interpret "red" as "important." Interpret a
+            corrected statistical contrast in anatomical and experimental context.
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-7">Mark complete</button>
+        </section>
+
+        <section id="module-8" class="lesson" data-module="module-8">
+          <div class="lesson-kicker">Module 8</div>
+          <h2>Resting-State fMRI And Connectivity</h2>
+          <p>
+            Resting-state fMRI studies spontaneous low-frequency BOLD fluctuations. Regions whose time
+            series fluctuate together are said to be functionally connected. This does not prove direct
+            anatomical wiring or causality.
+          </p>
+          <div class="connectivity-lab">
+            <div class="network-list">
+              <button type="button" class="network-choice active" data-network="default">Default mode</button>
+              <button type="button" class="network-choice" data-network="visual">Visual</button>
+              <button type="button" class="network-choice" data-network="motor">Sensorimotor</button>
+              <button type="button" class="network-choice" data-network="attention">Attention</button>
+            </div>
+            <canvas id="connectivity-canvas" width="820" height="480" aria-label="Simulated resting-state network connectivity map"></canvas>
+          </div>
+          <div class="concept-grid">
+            <article class="concept">
+              <h3>Seed-based</h3>
+              <p>Pick one region and correlate its time series with the rest of the brain.</p>
+            </article>
+            <article class="concept">
+              <h3>ICA</h3>
+              <p>Let the data separate into spatial networks and noise-like components.</p>
+            </article>
+            <article class="concept">
+              <h3>Graph theory</h3>
+              <p>Represent brain regions as nodes and connectivity as edges.</p>
+            </article>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-8">Mark complete</button>
+        </section>
+
+        <section id="module-9" class="lesson" data-module="module-9">
+          <div class="lesson-kicker">Module 9</div>
+          <h2>Common Mistakes In fMRI Interpretation</h2>
+          <div class="mistake-table" role="table" aria-label="Common fMRI interpretation mistakes">
+            <div role="row">
+              <strong role="cell">Mistake</strong>
+              <strong role="cell">Better interpretation</strong>
+            </div>
+            <div role="row">
+              <span role="cell">"The amygdala lit up."</span>
+              <span role="cell">"A contrast showed higher BOLD signal in an amygdala-region cluster under this model."</span>
+            </div>
+            <div role="row">
+              <span role="cell">"This network causes memory."</span>
+              <span role="cell">"Connectivity in this network is associated with memory performance in this sample."</span>
+            </div>
+            <div role="row">
+              <span role="cell">"No activation means no neural activity."</span>
+              <span role="cell">"No significant BOLD contrast was detected under this design and threshold."</span>
+            </div>
+            <div role="row">
+              <span role="cell">"Group maps describe every participant."</span>
+              <span role="cell">"Group maps summarize a population effect and can hide individual variability."</span>
+            </div>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-9">Mark complete</button>
+        </section>
+
+        <section id="module-10" class="lesson" data-module="module-10">
+          <div class="lesson-kicker">Module 10</div>
+          <h2>From Maps To Biomarkers</h2>
+          <p>
+            A biomarker is not just a significant group difference. It should be reliable, interpretable,
+            testable in new data, and useful for prediction, diagnosis, prognosis, or mechanism. fMRI
+            biomarkers face major challenges: motion, scanner differences, small samples, analysis flexibility,
+            and weak external validation.
+          </p>
+          <div class="biomarker-stack">
+            <div><strong>Reliability</strong><span>Does it repeat within subject and across sites?</span></div>
+            <div><strong>Validity</strong><span>Does it measure the process you claim?</span></div>
+            <div><strong>Prediction</strong><span>Does it work in unseen participants?</span></div>
+            <div><strong>Clinical value</strong><span>Does it improve decisions beyond cheaper measures?</span></div>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-10">Mark complete</button>
+        </section>
+
+        <section id="grid" class="lesson advanced" data-module="grid">
+          <div class="lesson-kicker">Advanced module</div>
+          <h2>Grid-Like Signals And Spatial Navigation fMRI</h2>
+          <p>
+            Grid cells in entorhinal cortex fire in a hexagonal spatial pattern in animals. Human fMRI
+            cannot directly see individual grid cells, but some navigation tasks estimate a grid-like
+            population signal: BOLD activity varies with movement direction in a six-fold pattern.
+          </p>
+          <div class="grid-lab">
+            <div class="lab-copy">
+              <h3>Hexadirectional signal lab</h3>
+              <p>
+                Rotate the virtual path. A simplified grid-like model predicts stronger signal when
+                movement aligns with a six-fold orientation. Real analyses require careful controls
+                for speed, visual input, task timing, smoothing, and circular statistics.
+              </p>
+              <label>
+                Movement angle
+                <input id="grid-angle" type="range" min="0" max="360" value="30">
+              </label>
+              <div id="grid-readout" class="lab-readout"></div>
+            </div>
+            <canvas id="grid-canvas" width="760" height="520" aria-label="Interactive grid-like signal diagram"></canvas>
+          </div>
+          <div class="split">
+            <div>
+              <h3>How to read grid-like fMRI claims</h3>
+              <ol class="clean-list">
+                <li>Check whether the task truly requires navigation or path integration.</li>
+                <li>Check how movement direction was modeled.</li>
+                <li>Check whether the six-fold model was compared with control symmetries.</li>
+                <li>Check whether the effect is localized to entorhinal or medial temporal regions.</li>
+                <li>Check whether the result survives motion, speed, and visual confounds.</li>
+              </ol>
+            </div>
+            <div class="takeaway">
+              <strong>Advanced interpretation rule:</strong> a grid-like fMRI signal is a population-level
+              directional modulation, not proof that individual human grid cells were recorded.
+            </div>
+          </div>
+          <button class="complete-btn" type="button" data-complete="grid">Mark complete</button>
+        </section>
+
+        <section id="capstone" class="lesson" data-module="capstone">
+          <div class="lesson-kicker">Capstone</div>
+          <h2>Your fMRI Interpretation Checklist</h2>
+          <div class="checklist">
+            <label><input type="checkbox"> I know what image type I am looking at.</label>
+            <label><input type="checkbox"> I can state the task, contrast, or connectivity question.</label>
+            <label><input type="checkbox"> I can identify whether the data are raw, preprocessed, or statistical.</label>
+            <label><input type="checkbox"> I checked motion, registration, dropout, and thresholding.</label>
+            <label><input type="checkbox"> I can explain whether the claim is activation, connectivity, prediction, or mechanism.</label>
+            <label><input type="checkbox"> I can name at least one open dataset that would let me practice the analysis.</label>
+          </div>
+          <div class="final-note">
+            <h3>Where to go next</h3>
+            <p>
+              Start with a small OpenNeuro task dataset, inspect its BIDS files, open a contrast map in
+              NeuroVault, then read a paper that uses HCP or NSD. Once the basics feel natural, return
+              to spatial navigation and grid-like signals as an advanced special topic.
+            </p>
+          </div>
+          <button class="complete-btn" type="button" data-complete="capstone">Mark complete</button>
+        </section>
+
+        <section id="sources" class="sources">
+          <h2>Dataset And Standard Sources</h2>
+          <ul>
+            <li><a href="https://openneuro.org/" target="_blank" rel="noreferrer">OpenNeuro</a></li>
+            <li><a href="https://bids.neuroimaging.io/" target="_blank" rel="noreferrer">BIDS</a></li>
+            <li><a href="https://neurovault.org/" target="_blank" rel="noreferrer">NeuroVault</a></li>
+            <li><a href="https://www.humanconnectome.org/study/hcp-young-adult" target="_blank" rel="noreferrer">Human Connectome Project Young Adult</a></li>
+            <li><a href="https://naturalscenesdataset.org/" target="_blank" rel="noreferrer">Natural Scenes Dataset</a></li>
+            <li><a href="https://studyforrest.org/" target="_blank" rel="noreferrer">StudyForrest</a></li>
+            <li><a href="https://fcon_1000.projects.nitrc.org/indi/abide/" target="_blank" rel="noreferrer">ABIDE</a></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
