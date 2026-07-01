@@ -53,8 +53,8 @@
                 <li><a href="#writing">Writing</a></li>
               </ul>
             </nav>
-            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
-              <i class="fa-solid fa-moon" aria-hidden="true"></i>
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Toggle color theme">
+              <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
               <span class="theme-toggle-text">Theme</span>
             </button>
           </div>
@@ -435,7 +435,7 @@
           toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
 
           if (icon) {
-            icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            icon.className = 'fa-solid fa-circle-half-stroke';
           }
         }
 
