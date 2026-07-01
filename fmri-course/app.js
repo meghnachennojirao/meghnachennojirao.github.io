@@ -1,6 +1,7 @@
 (function () {
   const pages = [
     ["cover", "Course cover"],
+    ["module-0", "Starter vocabulary"],
     ["module-1", "What fMRI measures"],
     ["module-2", "Voxels and slices"],
     ["module-3", "BOLD and HRF"],
@@ -13,11 +14,13 @@
     ["module-9", "Interpretation traps"],
     ["module-10", "Biomarkers"],
     ["grid", "Grid-like signals"],
+    ["glossary", "Glossary"],
     ["capstone", "Checklist"],
     ["sources", "Sources"]
   ];
 
   const modules = [
+    ["module-0", "Starter vocabulary"],
     ["module-1", "What fMRI measures"],
     ["module-2", "Voxels and slices"],
     ["module-3", "BOLD and HRF"],
@@ -30,6 +33,7 @@
     ["module-9", "Interpretation traps"],
     ["module-10", "Biomarkers"],
     ["grid", "Grid-like signals"],
+    ["glossary", "Glossary"],
     ["capstone", "Checklist"]
   ];
 

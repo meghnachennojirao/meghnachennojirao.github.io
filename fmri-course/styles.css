@@ -310,6 +310,7 @@ canvas {
 
 .opening-copy {
   max-width: 720px;
+  min-width: 0;
 }
 
 .eyebrow,
@@ -335,12 +336,13 @@ h2 {
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
 }
 
 h1 {
-  max-width: 12ch;
+  max-width: 14ch;
   margin-bottom: var(--space-lg);
-  font-size: clamp(54px, 7.6vw, 118px);
+  font-size: clamp(50px, 5.2vw, 82px);
 }
 
 h2 {
@@ -506,6 +508,119 @@ figcaption {
   color: var(--ink);
 }
 
+.starter-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.82fr);
+  gap: var(--space-xl);
+  align-items: start;
+  margin-top: var(--space-xl);
+}
+
+.definition-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+}
+
+.definition-strip article,
+.word-card,
+.fluency-grid article,
+.step-explainers article,
+.analyst-flow article {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.definition-strip article {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+}
+
+.definition-strip strong {
+  color: var(--teal-deep);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.definition-strip span {
+  color: var(--ink-soft);
+}
+
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.word-card {
+  padding: var(--space-lg);
+}
+
+.word-card h3,
+.fluency-grid h3,
+.step-explainers h3,
+.analyst-flow h3 {
+  margin-bottom: var(--space-xs);
+}
+
+.word-card p,
+.fluency-grid p,
+.step-explainers p,
+.analyst-flow p {
+  margin-bottom: 0;
+  color: var(--ink-soft);
+}
+
+.fluency-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.fluency-grid article {
+  padding: var(--space-lg);
+}
+
+.step-explainers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.step-explainers article {
+  padding: var(--space-lg);
+}
+
+.analyst-flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.analyst-flow article {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+}
+
+.analyst-flow span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in oklch, var(--saffron) 38%, var(--surface));
+  color: var(--teal-deep);
+  font-weight: 900;
+}
+
 .complete-btn {
   margin-top: var(--space-xl);
   background: var(--surface);
@@ -620,9 +735,43 @@ input[type="checkbox"] {
   color: var(--ink-soft);
 }
 
+.glossary-list {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.28fr) minmax(0, 1fr);
+  gap: 0;
+  margin: var(--space-xl) 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.glossary-list dt,
+.glossary-list dd {
+  margin: 0;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--line);
+}
+
+.glossary-list dt {
+  color: var(--teal-deep);
+  font-weight: 900;
+}
+
+.glossary-list dd {
+  color: var(--ink-soft);
+}
+
+.glossary-list dt:last-of-type,
+.glossary-list dd:last-of-type {
+  border-bottom: 0;
+}
+
 .file-tree {
   display: grid;
   gap: var(--space-xs);
+  max-width: 100%;
+  min-width: 0;
   margin-top: var(--space-xl);
   padding: var(--space-lg);
   border: 1px solid var(--line);
@@ -634,8 +783,8 @@ input[type="checkbox"] {
 }
 
 .file-tree span {
-  min-width: max-content;
   color: var(--ink-soft);
+  overflow-wrap: anywhere;
 }
 
 .file-tree span::before {
@@ -936,6 +1085,7 @@ input[type="checkbox"] {
   }
 
   .split,
+  .starter-panel,
   .slice-lab,
   .grid-lab,
   .glm-lab {
@@ -948,6 +1098,11 @@ input[type="checkbox"] {
 
   .mistake-table [role="cell"] + [role="cell"] {
     border-left: 0;
+  }
+
+  .term-list,
+  .glossary-list {
+    grid-template-columns: 1fr;
   }
 
   h1 {

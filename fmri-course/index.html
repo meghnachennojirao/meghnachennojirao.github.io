@@ -17,6 +17,7 @@
         </span>
       </a>
       <nav class="top-nav" aria-label="Course shortcuts">
+        <a href="#module-0">Starter terms</a>
         <a href="#datasets">Open datasets</a>
         <a href="#labs">Interactive labs</a>
         <a href="#grid">Grid-like signals</a>
@@ -40,12 +41,13 @@
             <p class="eyebrow">A practical neuroimaging course</p>
             <h1>Learn fMRI the way you would read a scan: signal first, map second, interpretation last.</h1>
             <p class="lede">
-              This course starts with voxels and BOLD physiology, then builds toward preprocessing,
-              GLM maps, resting-state connectivity, statistical interpretation, open datasets, and
-              advanced spatial-navigation signals such as grid-like modulation.
+              Functional MRI, or fMRI, uses repeated MRI images to infer brain activity from blood
+              oxygen changes. You will first learn the beginner vocabulary, including voxel, BOLD,
+              HRF, GLM, contrast, threshold, and connectivity, then build toward preprocessing,
+              statistical maps, open datasets, and advanced spatial-navigation signals.
             </p>
             <div class="opening-actions">
-              <a class="primary-action" href="#module-1">Start module 1</a>
+              <a class="primary-action" href="#module-0">Start with terms</a>
               <a class="text-action" href="#datasets">Browse datasets</a>
             </div>
           </div>
@@ -53,10 +55,123 @@
             <canvas id="hero-scan" width="760" height="520"></canvas>
             <figcaption>
               Pedagogical activation overlay. Real fMRI interpretation always starts by asking what
-              the image represents: raw BOLD, preprocessed time series, contrast map, connectivity
-              map, or group-level statistic.
+              the image represents: raw BOLD signal over time, a preprocessed time series, a task
+              contrast map, a connectivity map, or a group-level statistic.
             </figcaption>
           </figure>
+        </section>
+
+        <section id="module-0" class="lesson starter" data-module="module-0">
+          <div class="lesson-kicker">Module 0</div>
+          <h2>First, Learn The Language</h2>
+          <p>
+            fMRI becomes much less intimidating when every technical word has a plain meaning. Keep
+            this page open as your decoder. The goal is not to memorize jargon. The goal is to know
+            what question each word helps you ask.
+          </p>
+          <div class="starter-panel">
+            <div>
+              <h3>The whole fMRI story in five sentences</h3>
+              <ol class="clean-list">
+                <li>A scanner takes repeated 3-D snapshots of the brain.</li>
+                <li>Each snapshot is made of many voxels, which are tiny 3-D measurement boxes.</li>
+                <li>Each voxel has a time series, meaning its signal value across many snapshots.</li>
+                <li>Neural activity changes local blood oxygen, producing the delayed BOLD signal.</li>
+                <li>Analysis asks whether the signal pattern matches a task, a network, or a prediction.</li>
+              </ol>
+            </div>
+            <div class="takeaway">
+              <strong>Beginner rule:</strong> when you see a colored brain image, ask three questions:
+              what was measured, what was done to the data, and what comparison made the color appear?
+            </div>
+          </div>
+
+          <div class="vocab-grid" aria-label="Beginner fMRI vocabulary">
+            <article class="word-card">
+              <h3>fMRI</h3>
+              <p>Functional magnetic resonance imaging. A method that uses repeated MRI images to study brain function indirectly through blood-related signal changes.</p>
+            </article>
+            <article class="word-card">
+              <h3>BOLD</h3>
+              <p>Blood-oxygen-level dependent signal. It changes because oxygenated and deoxygenated blood affect the MRI signal differently.</p>
+            </article>
+            <article class="word-card">
+              <h3>Voxel</h3>
+              <p>A volume pixel, or a tiny 3-D cube of brain image. A voxel contains many neurons, blood vessels, and other tissue, not one neuron.</p>
+            </article>
+            <article class="word-card">
+              <h3>Volume</h3>
+              <p>One 3-D snapshot of the brain made from many slices and voxels. A run contains many volumes collected over time.</p>
+            </article>
+            <article class="word-card">
+              <h3>Time series</h3>
+              <p>The list of signal values from the same voxel or region across the scan. Most fMRI analysis starts with time series.</p>
+            </article>
+            <article class="word-card">
+              <h3>TR</h3>
+              <p>Repetition time. The time between one brain volume and the next. If TR is 2 seconds, the scanner samples the brain every 2 seconds.</p>
+            </article>
+            <article class="word-card">
+              <h3>HRF</h3>
+              <p>Hemodynamic response function. The expected delayed BOLD shape after neural activity: slow rise, peak, and return toward baseline.</p>
+            </article>
+            <article class="word-card">
+              <h3>Preprocessing</h3>
+              <p>The cleanup and alignment steps before statistics: motion correction, distortion correction, registration, normalization, smoothing, and denoising.</p>
+            </article>
+            <article class="word-card">
+              <h3>GLM</h3>
+              <p>General linear model. A regression model that asks whether a voxel time series follows the timing of a task or condition.</p>
+            </article>
+            <article class="word-card">
+              <h3>Design matrix</h3>
+              <p>The table of predictors used by the GLM. Each column represents something that may explain the signal, such as a task condition or motion.</p>
+            </article>
+            <article class="word-card">
+              <h3>Contrast</h3>
+              <p>A specific comparison, such as faces greater than houses. It turns model estimates into an interpretable question.</p>
+            </article>
+            <article class="word-card">
+              <h3>Threshold</h3>
+              <p>A cutoff used to decide which statistical values are displayed or treated as evidence. Changing it can change the visible map.</p>
+            </article>
+            <article class="word-card">
+              <h3>Correction</h3>
+              <p>A statistical safeguard for testing thousands of voxels. It reduces false positives caused by asking many questions at once.</p>
+            </article>
+            <article class="word-card">
+              <h3>ROI</h3>
+              <p>Region of interest. A chosen brain area used to summarize signal or test a focused hypothesis.</p>
+            </article>
+            <article class="word-card">
+              <h3>Connectivity</h3>
+              <p>A measure of how similarly two time series change. Functional connectivity does not prove direct wiring or causation.</p>
+            </article>
+            <article class="word-card">
+              <h3>Confound</h3>
+              <p>Something unwanted that can affect the signal, such as head motion, breathing, heartbeat, scanner drift, or site differences.</p>
+            </article>
+          </div>
+
+          <div class="fluency-grid">
+            <article>
+              <h3>Beginner sentence</h3>
+              <p>"The red blob means this brain area lit up."</p>
+            </article>
+            <article>
+              <h3>Analyst sentence</h3>
+              <p>"This corrected contrast showed higher BOLD signal in this cluster for condition A compared with condition B."</p>
+            </article>
+            <article>
+              <h3>Beginner sentence</h3>
+              <p>"These regions are connected, so one causes the other."</p>
+            </article>
+            <article>
+              <h3>Analyst sentence</h3>
+              <p>"These regions had correlated BOLD time series in this sample, which suggests functional coupling but not direct causality."</p>
+            </article>
+          </div>
+          <button class="complete-btn" type="button" data-complete="module-0">Mark complete</button>
         </section>
 
         <section id="module-1" class="lesson" data-module="module-1">
@@ -67,6 +182,20 @@
             with blood oxygenation, blood volume, and blood flow after neural activity. The most common
             signal is BOLD: blood-oxygen-level dependent contrast.
           </p>
+          <div class="definition-strip">
+            <article>
+              <strong>BOLD in plain words</strong>
+              <span>A blood oxygen signal that acts as a delayed clue about nearby neural activity.</span>
+            </article>
+            <article>
+              <strong>Why indirect?</strong>
+              <span>The scanner is sensitive to magnetic effects of blood, not to electrical spikes from neurons.</span>
+            </article>
+            <article>
+              <strong>Expert habit</strong>
+              <span>Say "BOLD signal changed" instead of "neurons fired" unless you have direct neural recordings.</span>
+            </article>
+          </div>
           <div class="split">
             <div>
               <h3>The core chain</h3>
@@ -111,11 +240,25 @@
           <div class="lesson-kicker">Module 2</div>
           <h2>From Anatomy To Voxels</h2>
           <p>
-            An fMRI run is a stack of 3D brain volumes sampled repeatedly over time. Each tiny cube is
-            a voxel. For every voxel, the scanner records a time series. Interpretation starts by
+            An fMRI run is a stack of 3-D brain volumes sampled repeatedly over time. Each tiny cube is
+            a voxel, which is easiest to imagine as a 3-D pixel. For every voxel, the scanner records a time series. Interpretation starts by
             knowing whether you are looking at anatomy, a single functional volume, an averaged
             activation map, or a statistical contrast.
           </p>
+          <div class="definition-strip">
+            <article>
+              <strong>Voxel</strong>
+              <span>One small 3-D measurement box. It is larger than cells and usually mixes tissue, vessels, and noise.</span>
+            </article>
+            <article>
+              <strong>Volume</strong>
+              <span>One full-brain snapshot. A 10-minute scan with TR = 2 seconds has about 300 volumes.</span>
+            </article>
+            <article>
+              <strong>Time series</strong>
+              <span>The signal from one voxel or region across all volumes, like a movie frame value tracked over time.</span>
+            </article>
+          </div>
           <div class="concept-grid">
             <article class="concept">
               <h3>Anatomical MRI</h3>
@@ -127,7 +270,7 @@
             </article>
             <article class="concept">
               <h3>Contrast map</h3>
-              <p>A derived image showing the effect of a task, condition, or model contrast. This is what most published activation figures show.</p>
+              <p>A derived image showing a comparison between conditions or model estimates. This is what most published activation figures show.</p>
             </article>
           </div>
           <div class="slice-lab" id="labs">
@@ -157,6 +300,10 @@
             but the hemodynamic response usually rises after a few seconds, peaks later, and returns
             slowly. That delay is why fMRI is strong for spatial maps but weak for precise timing.
           </p>
+          <div class="takeaway">
+            <strong>Plain translation:</strong> the brain event is quick, but the blood response is slow.
+            fMRI is like watching the wake after a boat has passed, not the boat itself.
+          </div>
           <div class="signal-lab">
             <div class="lab-toolbar" aria-label="Signal controls">
               <label><input type="checkbox" data-signal="neural" checked> Neural events</label>
@@ -171,13 +318,17 @@
               <h3>Terms you must know</h3>
               <dl class="term-list">
                 <dt>TR</dt>
-                <dd>Repetition time. How often a brain volume is sampled.</dd>
+                <dd>Repetition time. How often a whole-brain volume is sampled, usually measured in seconds.</dd>
                 <dt>TE</dt>
-                <dd>Echo time. Affects BOLD sensitivity.</dd>
+                <dd>Echo time. The time between excitation and signal readout. It affects BOLD sensitivity and image contrast.</dd>
                 <dt>HRF</dt>
                 <dd>Hemodynamic response function. The expected BOLD shape after neural activity.</dd>
                 <dt>Percent signal change</dt>
                 <dd>A normalized way to talk about small BOLD changes.</dd>
+                <dt>Drift</dt>
+                <dd>Slow signal change over time that can come from scanner or physiology rather than the task.</dd>
+                <dt>Motion spike</dt>
+                <dd>A sudden signal jump caused by head movement. It can imitate brain effects if ignored.</dd>
               </dl>
             </div>
             <div class="takeaway">
@@ -196,6 +347,20 @@
             gives you predictable folders, filenames, JSON metadata, event timing files, and derivative
             folders. If you can read BIDS, you can approach many open fMRI datasets without getting lost.
           </p>
+          <div class="definition-strip">
+            <article>
+              <strong>BIDS</strong>
+              <span>A naming and folder standard that tells you where anatomy, functional runs, task timing, and metadata live.</span>
+            </article>
+            <article>
+              <strong>NIfTI</strong>
+              <span>The common brain image file format. A functional NIfTI often stores x, y, z, and time.</span>
+            </article>
+            <article>
+              <strong>Derivative</strong>
+              <span>A processed output made from raw data, such as a preprocessed BOLD image or a statistical map.</span>
+            </article>
+          </div>
           <div class="file-tree" aria-label="Example BIDS file tree">
             <span>dataset_description.json</span>
             <span>participants.tsv</span>
@@ -207,15 +372,15 @@
           <div class="concept-grid">
             <article class="concept">
               <h3>NIfTI</h3>
-              <p>The image file format. A 4D BOLD file stores x, y, z, and time.</p>
+              <p>The image file format. A 4-D BOLD file stores left-right, front-back, up-down, and time.</p>
             </article>
             <article class="concept">
               <h3>JSON sidecar</h3>
-              <p>Metadata such as TR, task name, slice timing, phase encoding, and scanner settings.</p>
+              <p>A small metadata file beside the image. It can tell you TR, task name, slice timing, phase encoding, and scanner settings.</p>
             </article>
             <article class="concept">
               <h3>Events TSV</h3>
-              <p>Task timing. This becomes the design matrix for task-fMRI modeling.</p>
+              <p>A table of when task events happened. This is what lets the GLM connect the task design to the BOLD time series.</p>
             </article>
           </div>
           <button class="complete-btn" type="button" data-complete="module-4">Mark complete</button>
@@ -276,6 +441,11 @@
             It does not magically remove all artifacts. Every preprocessing choice can change your
             interpretation.
           </p>
+          <div class="takeaway">
+            <strong>Plain translation:</strong> preprocessing is the preparation stage. It tries to make
+            images line up, reduce known noise, and produce data that can be compared across time,
+            people, and brain regions.
+          </div>
           <div class="pipeline">
             <div><strong>1</strong><span>Discard unstable volumes</span></div>
             <div><strong>2</strong><span>Slice timing correction</span></div>
@@ -285,6 +455,32 @@
             <div><strong>6</strong><span>Normalize to template</span></div>
             <div><strong>7</strong><span>Spatial smoothing</span></div>
             <div><strong>8</strong><span>Denoise and model</span></div>
+          </div>
+          <div class="step-explainers">
+            <article>
+              <h3>Discard unstable volumes</h3>
+              <p>Remove the first few volumes because the scanner signal may not be steady yet.</p>
+            </article>
+            <article>
+              <h3>Slice timing correction</h3>
+              <p>Adjust for the fact that slices in one volume were not all captured at the exact same moment.</p>
+            </article>
+            <article>
+              <h3>Motion correction</h3>
+              <p>Estimate and correct small head movements so the same voxel refers to the same brain location over time.</p>
+            </article>
+            <article>
+              <h3>Coregistration</h3>
+              <p>Align functional images to the participant's anatomical image so statistics can be localized.</p>
+            </article>
+            <article>
+              <h3>Normalization</h3>
+              <p>Warp each participant into a common template space so group analysis becomes possible.</p>
+            </article>
+            <article>
+              <h3>Smoothing</h3>
+              <p>Average nearby voxels slightly to improve signal-to-noise, while accepting some loss of spatial sharpness.</p>
+            </article>
           </div>
           <div class="qc-grid">
             <article>
@@ -315,6 +511,42 @@
             predictors than by noise. A contrast then asks a sharper question, such as faces greater
             than houses, memory encoding greater than baseline, or left button press greater than right.
           </p>
+          <div class="definition-strip">
+            <article>
+              <strong>GLM</strong>
+              <span>A regression model. It predicts the BOLD time series from task timing and nuisance predictors.</span>
+            </article>
+            <article>
+              <strong>Regressor</strong>
+              <span>One predictor column in the model, such as "faces", "houses", motion, or drift.</span>
+            </article>
+            <article>
+              <strong>Residual</strong>
+              <span>The leftover signal after the model has explained what it can. Good analysis inspects what remains.</span>
+            </article>
+          </div>
+          <div class="analyst-flow" aria-label="GLM workflow">
+            <article>
+              <span>1</span>
+              <h3>Write the question</h3>
+              <p>Example: does navigation produce more BOLD signal than a control condition?</p>
+            </article>
+            <article>
+              <span>2</span>
+              <h3>Build predictors</h3>
+              <p>Turn event timing into model columns, then add nuisance columns such as motion.</p>
+            </article>
+            <article>
+              <span>3</span>
+              <h3>Estimate betas</h3>
+              <p>For each voxel, estimate how strongly each predictor explains the time series.</p>
+            </article>
+            <article>
+              <span>4</span>
+              <h3>Test a contrast</h3>
+              <p>Compare beta weights to create a statistical map, such as navigation greater than control.</p>
+            </article>
+          </div>
           <div class="glm-lab">
             <div>
               <h3>Design matrix</h3>
@@ -328,15 +560,15 @@
           <div class="concept-grid">
             <article class="concept">
               <h3>Beta</h3>
-              <p>Estimated contribution of a predictor to the voxel signal.</p>
+              <p>Estimated contribution of one predictor to the voxel signal. Larger beta means the model thinks that predictor explains more of the signal.</p>
             </article>
             <article class="concept">
               <h3>Contrast</h3>
-              <p>A weighted question about betas. Example: navigation greater than control.</p>
+              <p>A weighted question about betas. Example: navigation greater than control, or faces greater than houses.</p>
             </article>
             <article class="concept">
               <h3>Statistical map</h3>
-              <p>A voxelwise map of contrast evidence, often t, z, or F values.</p>
+              <p>A voxelwise map of evidence for the contrast, often shown as t, z, or F values.</p>
             </article>
           </div>
           <button class="complete-btn" type="button" data-complete="module-6">Mark complete</button>
@@ -372,6 +604,24 @@
               <p>Motion, vessels, dropout, and smoothing can fool interpretation.</p>
             </article>
           </div>
+          <div class="concept-grid">
+            <article class="concept">
+              <h3>Threshold</h3>
+              <p>The cutoff for showing or trusting a statistical value. A lower threshold shows more, but it can also show more false positives.</p>
+            </article>
+            <article class="concept">
+              <h3>Multiple comparisons</h3>
+              <p>fMRI tests thousands of voxels. Correction methods reduce the chance that random noise looks meaningful somewhere.</p>
+            </article>
+            <article class="concept">
+              <h3>Cluster</h3>
+              <p>A neighboring group of voxels that pass the threshold. A cluster is not automatically a single brain area.</p>
+            </article>
+            <article class="concept">
+              <h3>Atlas label</h3>
+              <p>A named anatomical or functional label used to describe where a cluster is. Always treat it as a guide, not a guarantee.</p>
+            </article>
+          </div>
           <div class="takeaway">
             <strong>Interpretation rule:</strong> never interpret "red" as "important." Interpret a
             corrected statistical contrast in anatomical and experimental context.
@@ -387,6 +637,20 @@
             series fluctuate together are said to be functionally connected. This does not prove direct
             anatomical wiring or causality.
           </p>
+          <div class="definition-strip">
+            <article>
+              <strong>Resting-state</strong>
+              <span>A scan collected while the participant is not doing a structured task, often lying still with eyes open or closed.</span>
+            </article>
+            <article>
+              <strong>Functional connectivity</strong>
+              <span>Similarity between time series, often measured by correlation. It is association, not proof of a direct pathway.</span>
+            </article>
+            <article>
+              <strong>Network</strong>
+              <span>A set of regions whose signals tend to vary together, such as visual, motor, attention, or default-mode networks.</span>
+            </article>
+          </div>
           <div class="connectivity-lab">
             <div class="network-list">
               <button type="button" class="network-choice active" data-network="default">Default mode</button>
@@ -399,15 +663,15 @@
           <div class="concept-grid">
             <article class="concept">
               <h3>Seed-based</h3>
-              <p>Pick one region and correlate its time series with the rest of the brain.</p>
+              <p>Pick one region of interest and correlate its time series with the rest of the brain.</p>
             </article>
             <article class="concept">
               <h3>ICA</h3>
-              <p>Let the data separate into spatial networks and noise-like components.</p>
+              <p>Independent component analysis. A data-driven method that separates the scan into spatial networks and noise-like components.</p>
             </article>
             <article class="concept">
               <h3>Graph theory</h3>
-              <p>Represent brain regions as nodes and connectivity as edges.</p>
+              <p>Represent brain regions as nodes and connectivity values as edges, then study the network's organization.</p>
             </article>
           </div>
           <button class="complete-btn" type="button" data-complete="module-8">Mark complete</button>
@@ -437,6 +701,14 @@
               <span role="cell">"Group maps describe every participant."</span>
               <span role="cell">"Group maps summarize a population effect and can hide individual variability."</span>
             </div>
+            <div role="row">
+              <span role="cell">"A voxel is a neuron."</span>
+              <span role="cell">"A voxel is a 3-D measurement unit that contains many cells, vessels, and possible sources of noise."</span>
+            </div>
+            <div role="row">
+              <span role="cell">"Functional connectivity means direct wiring."</span>
+              <span role="cell">"Functional connectivity means time series similarity. It can reflect indirect paths, shared inputs, physiology, or artifacts."</span>
+            </div>
           </div>
           <button class="complete-btn" type="button" data-complete="module-9">Mark complete</button>
         </section>
@@ -450,6 +722,24 @@
             biomarkers face major challenges: motion, scanner differences, small samples, analysis flexibility,
             and weak external validation.
           </p>
+          <div class="concept-grid">
+            <article class="concept">
+              <h3>Biomarker</h3>
+              <p>A measurable signal that helps classify, predict, monitor, or explain a biological or clinical state.</p>
+            </article>
+            <article class="concept">
+              <h3>Reliability</h3>
+              <p>Whether the measure is stable enough to repeat within the same person, scanner, or study design.</p>
+            </article>
+            <article class="concept">
+              <h3>Validity</h3>
+              <p>Whether the measure actually captures the process it claims to capture.</p>
+            </article>
+            <article class="concept">
+              <h3>External validation</h3>
+              <p>Testing the marker in a new dataset or site, not only in the dataset used to discover it.</p>
+            </article>
+          </div>
           <div class="biomarker-stack">
             <div><strong>Reliability</strong><span>Does it repeat within subject and across sites?</span></div>
             <div><strong>Validity</strong><span>Does it measure the process you claim?</span></div>
@@ -467,6 +757,20 @@
             cannot directly see individual grid cells, but some navigation tasks estimate a grid-like
             population signal: BOLD activity varies with movement direction in a six-fold pattern.
           </p>
+          <div class="definition-strip">
+            <article>
+              <strong>Entorhinal cortex</strong>
+              <span>A medial temporal lobe region important for navigation and memory, often studied in grid-cell research.</span>
+            </article>
+            <article>
+              <strong>Population signal</strong>
+              <span>A combined signal from many cells and vessels inside a voxel or region, not a recording from one cell.</span>
+            </article>
+            <article>
+              <strong>Six-fold pattern</strong>
+              <span>A directional pattern that repeats every 60 degrees, which is why it is described as hexadirectional.</span>
+            </article>
+          </div>
           <div class="grid-lab">
             <div class="lab-copy">
               <h3>Hexadirectional signal lab</h3>
@@ -502,11 +806,66 @@
           <button class="complete-btn" type="button" data-complete="grid">Mark complete</button>
         </section>
 
+        <section id="glossary" class="lesson glossary-section" data-module="glossary">
+          <div class="lesson-kicker">Reference module</div>
+          <h2>fMRI Glossary You Can Return To</h2>
+          <p>
+            Use this as a quick reference while reading papers, browsing datasets, or interpreting
+            maps. The expert move is to define the term, state what it allows you to infer, and state
+            what it does not prove.
+          </p>
+          <dl class="glossary-list">
+            <dt>Activation</dt>
+            <dd>A statistically modeled BOLD difference for a task or condition. It is not direct neural firing.</dd>
+            <dt>Atlas</dt>
+            <dd>A labeled brain reference used to name regions or networks.</dd>
+            <dt>Beta</dt>
+            <dd>The GLM estimate for how strongly one predictor explains a voxel's time series.</dd>
+            <dt>BOLD</dt>
+            <dd>Blood-oxygen-level dependent signal, an indirect MRI signal linked to blood oxygenation changes.</dd>
+            <dt>Confound</dt>
+            <dd>An unwanted influence such as motion, breathing, heartbeat, scanner drift, or site effects.</dd>
+            <dt>Contrast</dt>
+            <dd>A planned comparison of model estimates, such as task greater than control.</dd>
+            <dt>Design matrix</dt>
+            <dd>The GLM table whose columns represent task predictors and nuisance predictors.</dd>
+            <dt>FWE / FDR</dt>
+            <dd>Common correction approaches for limiting false positives across many voxelwise tests.</dd>
+            <dt>GLM</dt>
+            <dd>General linear model, the regression framework commonly used for task-fMRI analysis.</dd>
+            <dt>HRF</dt>
+            <dd>Hemodynamic response function, the delayed BOLD response shape expected after neural activity.</dd>
+            <dt>ICA</dt>
+            <dd>Independent component analysis, a data-driven method that separates signal into components.</dd>
+            <dt>NIfTI</dt>
+            <dd>The common neuroimaging file format for structural and functional MRI images.</dd>
+            <dt>ROI</dt>
+            <dd>Region of interest, a selected brain area used for focused measurement or hypothesis testing.</dd>
+            <dt>Seed</dt>
+            <dd>A chosen region whose time series is compared with other regions in seed-based connectivity.</dd>
+            <dt>Statistical map</dt>
+            <dd>A brain image where each voxel stores a statistic, often from a GLM contrast.</dd>
+            <dt>Threshold</dt>
+            <dd>A cutoff for display or inference. Always report it because it affects what appears on the map.</dd>
+            <dt>Time series</dt>
+            <dd>A sequence of signal values measured from the same voxel or region over time.</dd>
+            <dt>Voxel</dt>
+            <dd>A small 3-D image unit. It contains many biological and measurement sources, not one cell.</dd>
+          </dl>
+          <div class="takeaway">
+            <strong>Fluency test:</strong> for any fMRI claim, you should be able to say the data type,
+            the preprocessing status, the model or connectivity method, the threshold or correction,
+            and the cautious interpretation.
+          </div>
+          <button class="complete-btn" type="button" data-complete="glossary">Mark complete</button>
+        </section>
+
         <section id="capstone" class="lesson" data-module="capstone">
           <div class="lesson-kicker">Capstone</div>
           <h2>Your fMRI Interpretation Checklist</h2>
           <div class="checklist">
             <label><input type="checkbox"> I know what image type I am looking at.</label>
+            <label><input type="checkbox"> I can define BOLD, voxel, volume, time series, GLM, contrast, and threshold in plain language.</label>
             <label><input type="checkbox"> I can state the task, contrast, or connectivity question.</label>
             <label><input type="checkbox"> I can identify whether the data are raw, preprocessed, or statistical.</label>
             <label><input type="checkbox"> I checked motion, registration, dropout, and thresholding.</label>
