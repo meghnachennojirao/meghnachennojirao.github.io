@@ -274,6 +274,12 @@
       grid-template-rows: auto minmax(280px, 1fr) auto;
       min-height: 610px;
       padding: clamp(var(--space-lg), 3vw, var(--space-xl));
+      scroll-margin-top: var(--space-md);
+    }
+
+    .stimulus-stage:focus {
+      outline: 3px solid color-mix(in oklch, var(--accent) 34%, transparent);
+      outline-offset: 4px;
     }
 
     .status-strip {
@@ -459,6 +465,29 @@
       font-size: 20px;
     }
 
+    .result-interpretation {
+      display: grid;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--surface-cool) 72%, var(--surface));
+      color: var(--ink-soft);
+    }
+
+    .result-interpretation h3 {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .result-interpretation p {
+      max-width: 78ch;
+      margin: 0;
+    }
+
     .trial-log {
       overflow: hidden;
     }
@@ -600,7 +629,7 @@
         </div>
 
         <div class="command-row">
-          <button id="start-btn" class="primary-btn" type="button">Start</button>
+          <button id="start-btn" class="primary-btn" type="button">Start Game</button>
           <button id="reset-btn" class="secondary-btn" type="button">Reset</button>
         </div>
 
@@ -630,7 +659,7 @@
       </aside>
 
       <div class="workspace">
-        <section class="stimulus-stage" aria-label="Stimulus display">
+        <section id="game-stage" class="stimulus-stage" aria-label="Stimulus display" tabindex="-1">
           <div class="status-strip">
             <div class="status-item"><span>Trial</span><strong id="trial-status">0 / 0</strong></div>
             <div class="status-item"><span>Task</span><strong id="task-status">Ready</strong></div>
@@ -658,6 +687,7 @@
           </div>
           <div id="metric-grid" class="metric-grid"></div>
           <div id="condition-grid" class="condition-grid"></div>
+          <div id="result-interpretation" class="result-interpretation" aria-live="polite"></div>
         </section>
 
         <section class="trial-log" aria-label="Trial log">
@@ -730,7 +760,9 @@
       responseGrid: document.getElementById("response-grid"),
       metricGrid: document.getElementById("metric-grid"),
       conditionGrid: document.getElementById("condition-grid"),
+      resultInterpretation: document.getElementById("result-interpretation"),
       logBody: document.getElementById("log-body"),
+      gameStage: document.getElementById("game-stage"),
       modeButtons: Array.from(document.querySelectorAll("[data-mode]"))
     };
 
@@ -843,9 +875,10 @@
       state.results = [];
       state.index = -1;
       state.stage = "running";
-      els.startBtn.textContent = "Restart";
+      els.startBtn.textContent = "Restart Game";
       nextTrial();
       updateResults();
+      revealGameStage();
     }
 
     function resetRun() {
@@ -855,7 +888,7 @@
       state.results = [];
       state.index = -1;
       state.current = null;
-      els.startBtn.textContent = "Start";
+      els.startBtn.textContent = "Start Game";
       els.taskLabel.textContent = "Press Start when you are ready";
       els.stimulus.textContent = "Stroop";
       els.stimulus.className = "stimulus";
@@ -867,6 +900,17 @@
       updateStatus();
       updateResults();
       renderLog();
+    }
+
+    function revealGameStage() {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.requestAnimationFrame(() => {
+        els.gameStage.focus({ preventScroll: true });
+        els.gameStage.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start"
+        });
+      });
     }
 
     function nextTrial() {
@@ -908,7 +952,7 @@
       els.stimulus.textContent = "Done";
       els.stimulus.className = "stimulus";
       els.stimulus.style.color = "var(--accent)";
-      els.prompt.textContent = "Review the interference cost below. Larger incongruent-minus-congruent values mean more Stroop interference.";
+      els.prompt.textContent = "Your interference score compares correct incongruent trials with correct congruent trials. Use the explanation below to read what the numbers mean.";
       els.feedback.textContent = "";
       renderResponses([]);
       updateStatus();
@@ -1031,6 +1075,8 @@
         conditionCard("Congruent", conditionMean("congruent")),
         conditionCard("Incongruent", conditionMean("incongruent"))
       ].join("");
+
+      els.resultInterpretation.innerHTML = resultExplanation(summary);
     }
 
     function conditionMean(condition) {
@@ -1046,6 +1092,51 @@
     function conditionCard(label, value) {
       const display = value == null ? "Need more data" : `${value} ms`;
       return `<article class="condition-card"><span>${label}</span><strong>${display}</strong></article>`;
+    }
+
+    function resultExplanation(summary) {
+      if (!summary.attempted) {
+        return `
+          <h3>What happens during the test?</h3>
+          <p>You will see trials where two pieces of information either agree, conflict, or stay neutral. Your job is to answer only the requested feature: ink color for color-word trials, quantity for digit trials, and quantity for number-word trials.</p>
+          <p>The Stroop effect appears when an automatic response, such as reading a word or noticing a digit value, slows down the response you are actually supposed to make.</p>
+        `;
+      }
+
+      if (summary.attempted < state.trials.length || state.stage !== "finished") {
+        return `
+          <h3>What is being measured?</h3>
+          <p>Reaction time is recorded only after the stimulus appears. Congruent trials are easier because the features point to the same answer; incongruent trials are harder because you must inhibit the distracting feature.</p>
+        `;
+      }
+
+      const accuracyNote = summary.accuracy < 75
+        ? "Because accuracy was low, read the reaction-time scores cautiously; missed or guessed trials can make the interference estimate unstable."
+        : "Because accuracy was reasonably high, the reaction-time scores are more meaningful.";
+      const colorText = describeCost("Color", summary.colorCost);
+      const numberText = describeCost("Numerical", summary.numberCost);
+
+      return `
+        <h3>What your result means</h3>
+        <p>${colorText} ${numberText}</p>
+        <p>${accuracyNote} A larger positive interference score means incongruent trials slowed you down more, which is the classic Stroop effect. A score near zero means you ignored the distracting feature efficiently in this run; a negative score can happen with short runs, practice effects, or random variation.</p>
+      `;
+    }
+
+    function describeCost(label, cost) {
+      if (cost == null) {
+        return `${label} interference needs more correct congruent and incongruent trials before it can be interpreted.`;
+      }
+      if (cost >= 150) {
+        return `${label} interference was strong at ${cost} ms, meaning conflict noticeably slowed your correct responses.`;
+      }
+      if (cost >= 50) {
+        return `${label} interference was moderate at ${cost} ms, showing that the distracting feature added measurable delay.`;
+      }
+      if (cost >= -25) {
+        return `${label} interference was small at ${cost} ms, suggesting you handled that conflict efficiently in this run.`;
+      }
+      return `${label} interference was ${cost} ms, so incongruent trials were faster here; treat that as noise or practice effect unless it repeats across longer runs.`;
     }
 
     function renderLog() {
