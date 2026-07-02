@@ -431,17 +431,13 @@
         //==================================================
         // (6) Log final feedback
         //==================================================
-        const recordTrial = (didFlashHelp) => {
-          // didFlashHelp = true => user realized the answer upon seeing flash
-          // didFlashHelp = false => user did not realize only from flash
-
+        const recordTrial = (realizationTiming) => {
           setLog((prev) => [
             ...prev,
             {
               ...currentTrial,
               rt: reactionTime ? Math.round(reactionTime) : null,
-              // store their response about if the flash triggered realization:
-              realizedAfterFlash: didFlashHelp,
+              realizationTiming,
               discarded: false,
             },
           ]);
@@ -588,7 +584,7 @@
               {stage === "triad" && currentTrial && (
                 <div className="glass-card">
                   <div className="rat-question">
-                    What word connects: {currentTrial.words.join(" – ")}
+                    What word connects: {currentTrial.words.join(" - ")}
                   </div>
                   <div className="timer">Time remaining: {timer}s</div>
                   <input
@@ -634,8 +630,9 @@
                     <p>
                     Reaction time: {reactionTime ? reactionTime.toFixed(0) : "(missed)"} ms
                     </p>
-                    <p>The solution for the question : {currentTrial.words.join(" – ")} --->  
-                    was: {currentTrial.solution}</p>
+                    <p>
+                    Solution for {currentTrial.words.join(" - ")}: {currentTrial.solution}
+                    </p>
                     <p>When did you realize the answer?</p>
                     <button className="button" onClick={() => recordTrial("before")}>
                     Before the word was flashed
@@ -672,7 +669,7 @@
                         <th>Hemisphere</th>
                         <th>Flashed Word</th>
                         <th>RT (ms)</th>
-                        <th>Realized After Flash?</th>
+                        <th>Realization Timing</th>
                         <th>Discarded?</th>
                       </tr>
                     </thead>
@@ -685,11 +682,7 @@
                           <td>{t.word}</td>
                           <td>{t.rt ?? "-"}</td>
                           <td>
-                            {t.realizedAfterFlash == null
-                              ? "-"
-                              : t.realizedAfterFlash
-                              ? "Yes"
-                              : "No"}
+                            {t.realizationTiming ?? "-"}
                           </td>
                           <td>{t.discarded ? "Yes" : "No"}</td>
                         </tr>

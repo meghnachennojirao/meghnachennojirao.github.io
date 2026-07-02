@@ -1,101 +1,1123 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Numerical Stroop Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color And Numerical Stroop Test</title>
   <style>
-    /* CSS styles */
-    body {
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+    :root {
+      color-scheme: light;
+      --paper: oklch(97% 0.018 82);
+      --surface: oklch(99% 0.008 95);
+      --surface-cool: oklch(95.5% 0.025 205);
+      --ink: oklch(21% 0.038 215);
+      --ink-soft: oklch(39% 0.038 218);
+      --muted: oklch(55% 0.036 220);
+      --line: oklch(84% 0.028 210);
+      --red: oklch(55% 0.2 27);
+      --green: oklch(50% 0.14 150);
+      --blue: oklch(48% 0.16 252);
+      --yellow: oklch(65% 0.15 82);
+      --violet: oklch(50% 0.13 305);
+      --accent: oklch(48% 0.12 205);
+      --good: oklch(48% 0.13 150);
+      --bad: oklch(55% 0.18 28);
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --radius: 8px;
+      --shadow: 0 22px 60px color-mix(in oklch, var(--ink) 11%, transparent);
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: Aptos, "Gill Sans", "Trebuchet MS", sans-serif;
     }
-    
-    .test-container {
-      width: 95%;
-      max-width: 500px;
-      margin: 20px auto;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      padding: 20px;
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, color-mix(in oklch, var(--line) 28%, transparent) 1px, transparent 1px),
+        linear-gradient(180deg, color-mix(in oklch, var(--line) 24%, transparent) 1px, transparent 1px),
+        var(--paper);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app-shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: clamp(var(--space-md), 3vw, var(--space-2xl));
+    }
+
+    .app-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-lg);
+      align-items: end;
+      padding: var(--space-lg) 0 var(--space-xl);
+    }
+
+    .eyebrow {
+      margin: 0 0 var(--space-sm);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2 {
+      font-family: var(--serif);
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin-bottom: var(--space-md);
+      font-size: clamp(48px, 8vw, 94px);
+      line-height: 0.95;
+      overflow-wrap: anywhere;
+    }
+
+    .lede {
+      max-width: 72ch;
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: clamp(17px, 2vw, 20px);
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 var(--space-md);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .experiment-grid {
+      display: grid;
+      grid-template-columns: minmax(270px, 0.34fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .panel,
+    .stimulus-stage,
+    .results-panel,
+    .trial-log {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      position: sticky;
+      top: var(--space-md);
+    }
+
+    .control-group {
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .control-group h2 {
+      margin-bottom: 0;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+
+    .field-label {
+      display: grid;
+      gap: var(--space-xs);
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    select {
+      min-height: 42px;
+      padding: 0 var(--space-sm);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-cool);
+      color: var(--ink);
+    }
+
+    .mode-buttons,
+    .command-row,
+    .response-grid {
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .mode-buttons {
+      grid-template-columns: 1fr;
+    }
+
+    .command-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .mode-btn,
+    .response-btn {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .primary-btn {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--surface);
+    }
+
+    .primary-btn:hover,
+    .mode-btn:hover,
+    .secondary-btn:hover,
+    .response-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .mode-btn.active {
+      border-color: var(--accent);
+      background: color-mix(in oklch, var(--accent) 12%, var(--surface));
+      color: color-mix(in oklch, var(--accent) 70%, var(--ink));
+    }
+
+    .hint-list {
+      display: grid;
+      gap: var(--space-xs);
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    .keyboard-map {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-xs);
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .key-chip {
+      display: inline-grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-xs);
+      align-items: center;
+      min-height: 34px;
+      padding: 0 var(--space-xs);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-cool);
+    }
+
+    .key-chip strong {
+      display: grid;
+      place-items: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .workspace {
+      display: grid;
+      gap: var(--space-lg);
+      min-width: 0;
+    }
+
+    .stimulus-stage {
+      display: grid;
+      grid-template-rows: auto minmax(280px, 1fr) auto;
+      min-height: 610px;
+      padding: clamp(var(--space-lg), 3vw, var(--space-xl));
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .status-item {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+      padding: var(--space-sm);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--surface-cool) 70%, var(--surface));
+    }
+
+    .status-item span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .status-item strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .stimulus-wrap {
+      display: grid;
+      place-items: center;
+      gap: var(--space-lg);
+      min-height: 300px;
+      padding: var(--space-xl) 0;
       text-align: center;
     }
-    
-    .number {
-      font-size: 48px;
-      font-weight: bold;
-      color: #333333;
-      margin-bottom: 20px;
+
+    .task-label {
+      min-height: 30px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
     }
-    
-    .instruction {
+
+    .fixation {
+      color: var(--accent);
+      font-family: var(--serif);
+      font-size: clamp(78px, 12vw, 132px);
+      line-height: 1;
+    }
+
+    .stimulus {
+      display: grid;
+      place-items: center;
+      min-height: 172px;
+      max-width: 100%;
+      color: var(--ink);
+      font-size: clamp(56px, 12vw, 132px);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 0.94;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .stimulus.word-number {
+      font-size: clamp(36px, 7vw, 82px);
+      line-height: 1.05;
+    }
+
+    .prompt {
+      max-width: 62ch;
+      margin: 0 auto;
+      color: var(--ink-soft);
+      font-size: 18px;
+    }
+
+    .feedback {
+      min-height: 28px;
+      color: var(--ink-soft);
+      font-weight: 900;
+    }
+
+    .feedback.good {
+      color: var(--good);
+    }
+
+    .feedback.bad {
+      color: var(--bad);
+    }
+
+    .response-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .response-btn {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-xs);
+      align-items: center;
+      padding: var(--space-xs) var(--space-sm);
+      text-align: left;
+    }
+
+    .response-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .response-btn strong {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: var(--surface-cool);
+      font-size: 13px;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border: 1px solid color-mix(in oklch, var(--ink) 24%, transparent);
+      border-radius: 50%;
+    }
+
+    .results-panel {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-md);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .results-header h2 {
+      margin-bottom: 0;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+
+    .metric-grid,
+    .condition-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .metric,
+    .condition-card {
+      display: grid;
+      gap: var(--space-xs);
+      padding: var(--space-md);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-cool);
+    }
+
+    .metric span,
+    .condition-card span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .condition-card strong {
       font-size: 20px;
-      color: #888888;
-      margin-bottom: 10px;
     }
-    
-    .response {
-      margin-top: 20px;
+
+    .trial-log {
+      overflow: hidden;
     }
-    
-    .response input {
-      padding: 8px;
-      font-size: 16px;
+
+    .trial-log h2 {
+      margin: 0;
+      padding: var(--space-lg) var(--space-lg) 0;
+      font-size: 30px;
     }
-    
-    .response button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+
+    .table-wrap {
+      max-height: 340px;
+      overflow: auto;
+      padding: var(--space-lg);
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: var(--space-sm);
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 var(--space-xs);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: capitalize;
+    }
+
+    .empty-state {
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 900px) {
+      .app-header,
+      .experiment-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app-shell {
+        padding: var(--space-md);
+      }
+
+      h1 {
+        font-size: clamp(42px, 14vw, 68px);
+      }
+
+      .status-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .command-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stimulus-stage {
+        min-height: 560px;
+      }
+
+      .keyboard-map {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="test-container">
-    <div class="number" id="number">42</div>
-    <div class="instruction">Enter the number you see:</div>
-    <div class="response">
-      <input type="text" id="responseInput" autofocus>
-      <button onclick="checkAnswer()">Submit</button>
-    </div>
-  </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Attention and interference</p>
+        <h1>Color And Numerical Stroop Test</h1>
+        <p class="lede">
+          Measure how quickly you can answer the task-relevant feature while ignoring a competing feature:
+          ink color, digit value, or number-word meaning.
+        </p>
+      </div>
+      <a class="home-link" href="../index.html">Back to experiments</a>
+    </header>
+
+    <section class="experiment-grid" aria-label="Stroop experiment">
+      <aside class="panel" aria-label="Experiment controls">
+        <div class="control-group">
+          <h2>Run Setup</h2>
+          <label class="field-label" for="trial-count">
+            Trial count
+            <select id="trial-count">
+              <option value="18">18 trials</option>
+              <option value="30" selected>30 trials</option>
+              <option value="45">45 trials</option>
+              <option value="60">60 trials</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="control-group">
+          <h3>Task mix</h3>
+          <div class="mode-buttons" role="group" aria-label="Choose task mix">
+            <button class="mode-btn active" type="button" data-mode="mixed">Mixed Stroop</button>
+            <button class="mode-btn" type="button" data-mode="color">Color-word only</button>
+            <button class="mode-btn" type="button" data-mode="number">Numerical only</button>
+          </div>
+        </div>
+
+        <div class="command-row">
+          <button id="start-btn" class="primary-btn" type="button">Start</button>
+          <button id="reset-btn" class="secondary-btn" type="button">Reset</button>
+        </div>
+
+        <div class="control-group">
+          <h3>Rules</h3>
+          <ul class="hint-list">
+            <li>Color trials: name the ink color, ignore the word.</li>
+            <li>Digit trials: report how many digits are shown, ignore digit value.</li>
+            <li>Word-number trials: report how many words are shown, ignore word meaning.</li>
+            <li>Respond as fast as you can without guessing wildly.</li>
+          </ul>
+        </div>
+
+        <div class="control-group">
+          <h3>Keyboard</h3>
+          <div class="keyboard-map">
+            <span class="key-chip"><strong>R</strong> Red</span>
+            <span class="key-chip"><strong>G</strong> Green</span>
+            <span class="key-chip"><strong>B</strong> Blue</span>
+            <span class="key-chip"><strong>Y</strong> Yellow</span>
+            <span class="key-chip"><strong>1</strong> One</span>
+            <span class="key-chip"><strong>2</strong> Two</span>
+            <span class="key-chip"><strong>3</strong> Three</span>
+            <span class="key-chip"><strong>4</strong> Four</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <section class="stimulus-stage" aria-label="Stimulus display">
+          <div class="status-strip">
+            <div class="status-item"><span>Trial</span><strong id="trial-status">0 / 0</strong></div>
+            <div class="status-item"><span>Task</span><strong id="task-status">Ready</strong></div>
+            <div class="status-item"><span>Condition</span><strong id="condition-status">-</strong></div>
+            <div class="status-item"><span>Accuracy</span><strong id="accuracy-status">-</strong></div>
+          </div>
+
+          <div class="stimulus-wrap" aria-live="polite">
+            <div id="task-label" class="task-label">Press Start when you are ready</div>
+            <div id="stimulus" class="stimulus">Stroop</div>
+            <p id="prompt" class="prompt">
+              Congruent trials are easy because both features agree. Incongruent trials create interference
+              because the automatic reading response conflicts with the requested answer.
+            </p>
+            <div id="feedback" class="feedback"></div>
+          </div>
+
+          <div id="response-grid" class="response-grid" aria-label="Response buttons"></div>
+        </section>
+
+        <section class="results-panel" aria-label="Results summary">
+          <div class="results-header">
+            <h2>Results</h2>
+            <button id="download-btn" class="secondary-btn" type="button">Download CSV</button>
+          </div>
+          <div id="metric-grid" class="metric-grid"></div>
+          <div id="condition-grid" class="condition-grid"></div>
+        </section>
+
+        <section class="trial-log" aria-label="Trial log">
+          <h2>Trial Log</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Task</th>
+                  <th>Condition</th>
+                  <th>Stimulus</th>
+                  <th>Correct</th>
+                  <th>Response</th>
+                  <th>RT</th>
+                </tr>
+              </thead>
+              <tbody id="log-body">
+                <tr><td colspan="7" class="empty-state">No trials yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
 
   <script>
-    // JavaScript code
-    const numberElement = document.getElementById('number');
-    const responseInput = document.getElementById('responseInput');
+    const COLORS = [
+      { key: "red", label: "Red", hotkey: "r", css: "var(--red)" },
+      { key: "green", label: "Green", hotkey: "g", css: "var(--green)" },
+      { key: "blue", label: "Blue", hotkey: "b", css: "var(--blue)" },
+      { key: "yellow", label: "Yellow", hotkey: "y", css: "var(--yellow)" }
+    ];
 
-    function generateRandomNumber() {
-      return Math.floor(Math.random() * 100);
+    const NUMBERS = [
+      { key: "1", label: "One", hotkey: "1", word: "ONE" },
+      { key: "2", label: "Two", hotkey: "2", word: "TWO" },
+      { key: "3", label: "Three", hotkey: "3", word: "THREE" },
+      { key: "4", label: "Four", hotkey: "4", word: "FOUR" }
+    ];
+
+    const COLOR_NEUTRALS = ["TABLE", "CLOUD", "BRIDGE", "WINDOW", "PENCIL", "MARKET"];
+    const CONDITIONS = ["congruent", "incongruent", "neutral"];
+
+    const state = {
+      mode: "mixed",
+      stage: "ready",
+      trials: [],
+      index: -1,
+      current: null,
+      results: [],
+      stimulusStartedAt: 0,
+      timers: []
+    };
+
+    const els = {
+      trialCount: document.getElementById("trial-count"),
+      startBtn: document.getElementById("start-btn"),
+      resetBtn: document.getElementById("reset-btn"),
+      downloadBtn: document.getElementById("download-btn"),
+      trialStatus: document.getElementById("trial-status"),
+      taskStatus: document.getElementById("task-status"),
+      conditionStatus: document.getElementById("condition-status"),
+      accuracyStatus: document.getElementById("accuracy-status"),
+      taskLabel: document.getElementById("task-label"),
+      stimulus: document.getElementById("stimulus"),
+      prompt: document.getElementById("prompt"),
+      feedback: document.getElementById("feedback"),
+      responseGrid: document.getElementById("response-grid"),
+      metricGrid: document.getElementById("metric-grid"),
+      conditionGrid: document.getElementById("condition-grid"),
+      logBody: document.getElementById("log-body"),
+      modeButtons: Array.from(document.querySelectorAll("[data-mode]"))
+    };
+
+    function choice(items) {
+      return items[Math.floor(Math.random() * items.length)];
     }
 
-    function updateNumber() {
-      const randomNumber = generateRandomNumber();
-      numberElement.textContent = randomNumber;
+    function shuffle(items) {
+      const copy = items.slice();
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
-    function checkAnswer() {
-      const enteredValue = responseInput.value.trim();
-      const currentNumber = numberElement.textContent;
+    function different(items, key) {
+      return choice(items.filter((item) => item.key !== key));
+    }
 
-      if (enteredValue === currentNumber) {
-        alert('Correct!');
-      } else {
-        alert('Incorrect!');
+    function buildColorTrial(condition) {
+      const ink = choice(COLORS);
+      let word = ink.label.toUpperCase();
+      if (condition === "incongruent") word = different(COLORS, ink.key).label.toUpperCase();
+      if (condition === "neutral") word = choice(COLOR_NEUTRALS);
+      return {
+        task: "color",
+        taskLabel: "Color-word Stroop",
+        condition,
+        stimulus: word,
+        answer: ink.key,
+        answerLabel: ink.label,
+        ink: ink.css,
+        prompt: "Name the ink color. Ignore what the word says."
+      };
+    }
+
+    function buildDigitTrial(condition) {
+      const quantity = choice(NUMBERS);
+      let digit = quantity.key;
+      if (condition === "incongruent") digit = different(NUMBERS, quantity.key).key;
+      const stimulus = condition === "neutral" ? "#".repeat(Number(quantity.key)) : digit.repeat(Number(quantity.key));
+      return {
+        task: "digit",
+        taskLabel: "Numerical Stroop",
+        condition,
+        stimulus,
+        answer: quantity.key,
+        answerLabel: quantity.label,
+        ink: "var(--ink)",
+        prompt: "Report how many symbols are shown. Ignore the digit value."
+      };
+    }
+
+    function buildWordNumberTrial(condition) {
+      const quantity = choice(NUMBERS);
+      let word = quantity.word;
+      if (condition === "incongruent") word = different(NUMBERS, quantity.key).word;
+      if (condition === "neutral") word = "MARK";
+      return {
+        task: "word-number",
+        taskLabel: "Number-word Stroop",
+        condition,
+        stimulus: Array(Number(quantity.key)).fill(word).join(" "),
+        answer: quantity.key,
+        answerLabel: quantity.label,
+        ink: "var(--violet)",
+        prompt: "Report how many words are shown. Ignore the number-word meaning."
+      };
+    }
+
+    function buildTrials(mode, count) {
+      const builders = mode === "color"
+        ? [buildColorTrial]
+        : mode === "number"
+          ? [buildDigitTrial, buildWordNumberTrial]
+          : [buildColorTrial, buildDigitTrial, buildWordNumberTrial];
+
+      const trials = [];
+      for (let i = 0; i < count; i += 1) {
+        const builder = builders[i % builders.length];
+        const condition = CONDITIONS[Math.floor(i / builders.length) % CONDITIONS.length];
+        trials.push(builder(condition));
+      }
+      return shuffle(trials);
+    }
+
+    function clearTimers() {
+      state.timers.forEach((timer) => window.clearTimeout(timer));
+      state.timers = [];
+    }
+
+    function schedule(fn, ms) {
+      const timer = window.setTimeout(fn, ms);
+      state.timers.push(timer);
+      return timer;
+    }
+
+    function setMode(mode) {
+      if (state.stage === "stimulus" || state.stage === "fixation") return;
+      state.mode = mode;
+      els.modeButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.mode === mode);
+      });
+    }
+
+    function startRun() {
+      clearTimers();
+      state.trials = buildTrials(state.mode, Number(els.trialCount.value));
+      state.results = [];
+      state.index = -1;
+      state.stage = "running";
+      els.startBtn.textContent = "Restart";
+      nextTrial();
+      updateResults();
+    }
+
+    function resetRun() {
+      clearTimers();
+      state.stage = "ready";
+      state.trials = [];
+      state.results = [];
+      state.index = -1;
+      state.current = null;
+      els.startBtn.textContent = "Start";
+      els.taskLabel.textContent = "Press Start when you are ready";
+      els.stimulus.textContent = "Stroop";
+      els.stimulus.className = "stimulus";
+      els.stimulus.style.color = "var(--ink)";
+      els.prompt.textContent = "Congruent trials are easy because both features agree. Incongruent trials create interference because the automatic reading response conflicts with the requested answer.";
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      renderResponses([]);
+      updateStatus();
+      updateResults();
+      renderLog();
+    }
+
+    function nextTrial() {
+      clearTimers();
+      state.index += 1;
+      if (state.index >= state.trials.length) {
+        finishRun();
+        return;
+      }
+      state.current = state.trials[state.index];
+      state.stage = "fixation";
+      els.taskLabel.textContent = state.current.taskLabel;
+      els.stimulus.textContent = "+";
+      els.stimulus.className = "stimulus fixation";
+      els.stimulus.style.color = "var(--accent)";
+      els.prompt.textContent = state.current.prompt;
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      renderResponses(responseOptionsFor(state.current), true);
+      updateStatus();
+
+      schedule(showStimulus, 650);
+    }
+
+    function showStimulus() {
+      state.stage = "stimulus";
+      state.stimulusStartedAt = performance.now();
+      els.stimulus.textContent = state.current.stimulus;
+      els.stimulus.className = "stimulus" + (state.current.task === "word-number" ? " word-number" : "");
+      els.stimulus.style.color = state.current.ink;
+      renderResponses(responseOptionsFor(state.current), false);
+      schedule(() => recordResponse(null), 3000);
+    }
+
+    function finishRun() {
+      state.stage = "finished";
+      state.current = null;
+      els.taskLabel.textContent = "Run complete";
+      els.stimulus.textContent = "Done";
+      els.stimulus.className = "stimulus";
+      els.stimulus.style.color = "var(--accent)";
+      els.prompt.textContent = "Review the interference cost below. Larger incongruent-minus-congruent values mean more Stroop interference.";
+      els.feedback.textContent = "";
+      renderResponses([]);
+      updateStatus();
+      updateResults();
+      renderLog();
+    }
+
+    function responseOptionsFor(trial) {
+      return trial && trial.task === "color" ? COLORS : NUMBERS;
+    }
+
+    function renderResponses(options, disabled = state.stage !== "stimulus") {
+      if (!options.length) {
+        els.responseGrid.innerHTML = "";
+        return;
       }
 
-      responseInput.value = '';
-      updateNumber();
+      els.responseGrid.innerHTML = options.map((option) => {
+        const swatch = option.css ? `<span class="swatch" style="background:${option.css}"></span>` : "";
+        return `
+          <button class="response-btn" type="button" data-answer="${option.key}" ${disabled ? "disabled" : ""}>
+            <strong>${option.hotkey.toUpperCase()}</strong>
+            <span>${swatch}${option.label}</span>
+          </button>
+        `;
+      }).join("");
     }
 
-    updateNumber();
+    function recordResponse(answer) {
+      if (state.stage !== "stimulus" || !state.current) return;
+      clearTimers();
+      const rt = answer ? Math.round(performance.now() - state.stimulusStartedAt) : null;
+      const correct = answer === state.current.answer;
+      state.results.push({
+        trial: state.index + 1,
+        task: state.current.task,
+        taskLabel: state.current.taskLabel,
+        condition: state.current.condition,
+        stimulus: state.current.stimulus,
+        correctAnswer: state.current.answerLabel,
+        response: answer ? labelForAnswer(state.current, answer) : "No response",
+        rt,
+        correct
+      });
+
+      state.stage = "feedback";
+      els.feedback.textContent = correct ? `Correct - ${rt} ms` : `Correct answer: ${state.current.answerLabel}`;
+      els.feedback.className = "feedback " + (correct ? "good" : "bad");
+      renderResponses(responseOptionsFor(state.current), true);
+      updateStatus();
+      updateResults();
+      renderLog();
+      schedule(nextTrial, 650);
+    }
+
+    function labelForAnswer(trial, answer) {
+      const options = responseOptionsFor(trial);
+      const match = options.find((option) => option.key === answer);
+      return match ? match.label : answer;
+    }
+
+    function mean(values) {
+      if (!values.length) return null;
+      return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }
+
+    function median(values) {
+      if (!values.length) return null;
+      const sorted = values.slice().sort((a, b) => a - b);
+      const mid = Math.floor(sorted.length / 2);
+      return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+    }
+
+    function correctRts(filterFn) {
+      return state.results
+        .filter((trial) => trial.correct && trial.rt != null && filterFn(trial))
+        .map((trial) => trial.rt);
+    }
+
+    function summarize() {
+      const attempted = state.results.length;
+      const correct = state.results.filter((trial) => trial.correct).length;
+      const correctWithRt = state.results.filter((trial) => trial.correct && trial.rt != null).map((trial) => trial.rt);
+      const accuracy = attempted ? Math.round((correct / attempted) * 100) : null;
+      const medianRt = median(correctWithRt);
+      const colorCost = interferenceCost((trial) => trial.task === "color");
+      const numberCost = interferenceCost((trial) => trial.task === "digit" || trial.task === "word-number");
+      return { attempted, correct, accuracy, medianRt, colorCost, numberCost };
+    }
+
+    function interferenceCost(taskFilter) {
+      const congruent = mean(correctRts((trial) => taskFilter(trial) && trial.condition === "congruent"));
+      const incongruent = mean(correctRts((trial) => taskFilter(trial) && trial.condition === "incongruent"));
+      if (congruent == null || incongruent == null) return null;
+      return Math.round(incongruent - congruent);
+    }
+
+    function updateStatus() {
+      const summary = summarize();
+      const total = state.trials.length;
+      const current = state.index >= 0 && state.stage !== "finished" ? state.index + 1 : Math.min(state.results.length, total);
+      els.trialStatus.textContent = total ? `${current} / ${total}` : "0 / 0";
+      els.taskStatus.textContent = state.current ? state.current.taskLabel : state.stage === "finished" ? "Finished" : "Ready";
+      els.conditionStatus.textContent = state.current ? state.current.condition : "-";
+      els.accuracyStatus.textContent = summary.accuracy == null ? "-" : `${summary.accuracy}%`;
+    }
+
+    function updateResults() {
+      const summary = summarize();
+      els.metricGrid.innerHTML = [
+        metric("Trials", `${summary.attempted}`),
+        metric("Accuracy", summary.accuracy == null ? "-" : `${summary.accuracy}%`),
+        metric("Median RT", summary.medianRt == null ? "-" : `${Math.round(summary.medianRt)} ms`),
+        metric("Correct", `${summary.correct}`)
+      ].join("");
+
+      els.conditionGrid.innerHTML = [
+        conditionCard("Color interference", summary.colorCost),
+        conditionCard("Numerical interference", summary.numberCost),
+        conditionCard("Congruent", conditionMean("congruent")),
+        conditionCard("Incongruent", conditionMean("incongruent"))
+      ].join("");
+    }
+
+    function conditionMean(condition) {
+      const rts = correctRts((trial) => trial.condition === condition);
+      const avg = mean(rts);
+      return avg == null ? null : Math.round(avg);
+    }
+
+    function metric(label, value) {
+      return `<article class="metric"><span>${label}</span><strong>${value}</strong></article>`;
+    }
+
+    function conditionCard(label, value) {
+      const display = value == null ? "Need more data" : `${value} ms`;
+      return `<article class="condition-card"><span>${label}</span><strong>${display}</strong></article>`;
+    }
+
+    function renderLog() {
+      if (!state.results.length) {
+        els.logBody.innerHTML = '<tr><td colspan="7" class="empty-state">No trials yet.</td></tr>';
+        return;
+      }
+
+      els.logBody.innerHTML = state.results.slice().reverse().map((trial) => `
+        <tr>
+          <td>${trial.trial}</td>
+          <td>${trial.taskLabel}</td>
+          <td><span class="pill">${trial.condition}</span></td>
+          <td>${trial.stimulus}</td>
+          <td>${trial.correctAnswer}</td>
+          <td>${trial.response}</td>
+          <td>${trial.rt == null ? "-" : `${trial.rt} ms`}</td>
+        </tr>
+      `).join("");
+    }
+
+    function downloadCsv() {
+      if (!state.results.length) return;
+      const rows = [
+        ["trial", "task", "condition", "stimulus", "correct_answer", "response", "rt_ms", "correct"],
+        ...state.results.map((trial) => [
+          trial.trial,
+          trial.task,
+          trial.condition,
+          trial.stimulus,
+          trial.correctAnswer,
+          trial.response,
+          trial.rt == null ? "" : trial.rt,
+          trial.correct
+        ])
+      ];
+      const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "stroop-results.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    els.modeButtons.forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.mode));
+    });
+
+    els.startBtn.addEventListener("click", startRun);
+    els.resetBtn.addEventListener("click", resetRun);
+    els.downloadBtn.addEventListener("click", downloadCsv);
+
+    els.responseGrid.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-answer]");
+      if (!button || button.disabled) return;
+      recordResponse(button.dataset.answer);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+      const key = event.key.toLowerCase();
+      if (state.stage !== "stimulus") return;
+      const options = responseOptionsFor(state.current);
+      const match = options.find((option) => option.hotkey === key);
+      if (!match) return;
+      event.preventDefault();
+      recordResponse(match.key);
+    });
+
+    resetRun();
   </script>
 </body>
 </html>
