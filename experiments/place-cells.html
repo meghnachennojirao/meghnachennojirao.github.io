@@ -417,8 +417,9 @@
 
             gameGraphBasic.setMouseLocation = function(x, y) {
                 gameGraphBasic.mouse.location = [x, y]
+                mouseLabelPosition = gameGraphBasic.getMouseLabelPosition()
                 viewX.updatePointXY("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouse", gameGraphBasic.mouse.location[0], gameGraphBasic.mouse.location[1]);
-                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, fontFamily: "Nunito"});
+                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: mouseLabelPosition.x, y: mouseLabelPosition.y, fontFamily: "Nunito"});
                 
             }
 
@@ -447,6 +448,71 @@
                 }
             }
 
+            gameGraphBasic.levelHasCellType = function(configData, cellType) {
+                cellCollections = [configData.cellInitialPositions || {}, configData.timeCellInitialPositions || {}]
+                for (collectionIndex = 0; collectionIndex < cellCollections.length; collectionIndex++) {
+                    cellCollection = cellCollections[collectionIndex]
+                    for (var colorKey in cellCollection) {
+                        if (cellCollection.hasOwnProperty(colorKey) == false) {
+                            continue
+                        }
+                        cellEntries = cellCollection[colorKey]
+                        for (entryIndex = 0; entryIndex < cellEntries.length; entryIndex++) {
+                            if (cellEntries[entryIndex].cellType == cellType || (cellType == 'headDirection' && cellEntries[entryIndex].zone == 'direction')) {
+                                return true
+                            }
+                        }
+                    }
+                }
+                return false
+            }
+
+            gameGraphBasic.getHeadDirectionSpaceLayout = function(configData) {
+                if (gameGraphBasic.levelHasCellType(configData, 'headDirection') == false) {
+                    return null
+                }
+
+                timeLayout = gameGraphBasic.timeSpaceLayout
+                gapHeight = 0.07
+                panelHeight = 0.24
+                panelTop = timeLayout != null ? timeLayout.yMin - gapHeight : -gapHeight
+                slotWidth = (0.92 - 0.08)/4
+
+                return {
+                    yMax: panelTop,
+                    yMin: panelTop - panelHeight,
+                    height: panelHeight,
+                    centerY: panelTop - panelHeight/2,
+                    slotY: panelTop - panelHeight*0.52,
+                    xMin: 0.08,
+                    xMax: 0.92,
+                    slotWidth: slotWidth
+                }
+            }
+
+            gameGraphBasic.getGraphYMin = function() {
+                graphYMin = -0.03
+                if (gameGraphBasic.timeSpaceLayout != null) {
+                    graphYMin = Math.min(graphYMin, gameGraphBasic.timeSpaceLayout.yMin - 0.06)
+                }
+                if (gameGraphBasic.headDirectionSpaceLayout != null) {
+                    graphYMin = Math.min(graphYMin, gameGraphBasic.headDirectionSpaceLayout.yMin - 0.06)
+                }
+                return graphYMin
+            }
+
+            gameGraphBasic.getHeadDirectionCellPosition = function(placeCellConfig) {
+                if (gameGraphBasic.headDirectionSpaceLayout == null) {
+                    return placeCellConfig.position
+                }
+                slotIndex = placeCellConfig.slotIndex != null ? placeCellConfig.slotIndex : 0
+                slotIndex = Math.max(0, Math.min(3, slotIndex))
+                return [
+                    gameGraphBasic.headDirectionSpaceLayout.xMin + gameGraphBasic.headDirectionSpaceLayout.slotWidth*(slotIndex + 0.5),
+                    gameGraphBasic.headDirectionSpaceLayout.slotY
+                ]
+            }
+
 
             gameGraphBasic.getPlaceCellLabelPosition = function(placeCellData) {
                 if (placeCellData.zone == 'time') {
@@ -456,9 +522,34 @@
                     }
                 }
 
+                if (placeCellData.zone == 'direction') {
+                    return {
+                        x: placeCellData.location[0],
+                        y: placeCellData.location[1] - placeCellData.radius - 0.035
+                    }
+                }
+
+                if (placeCellData.zone == 'speed') {
+                    return {
+                        x: Math.max(0.08, Math.min(0.92, placeCellData.location[0])),
+                        y: Math.max(0.08, Math.min(0.92, placeCellData.location[1] - placeCellData.radius - 0.055))
+                    }
+                }
+
                 return {
-                    x: placeCellData.location[0],
-                    y: placeCellData.location[1] - gameGraphBasic.reward.radius - 0.07
+                    x: Math.max(0.08, Math.min(0.92, placeCellData.location[0])),
+                    y: Math.max(0.08, Math.min(0.92, placeCellData.location[1] - gameGraphBasic.reward.radius - 0.07))
+                }
+            }
+
+            gameGraphBasic.getMouseLabelPosition = function() {
+                if (gameGraphBasic.mouse == null) {
+                    return {x: 0.5, y: 0.5}
+                }
+                yOffset = gameGraphBasic.mouse.location[1] < 0.13 ? 0.065 : -0.045
+                return {
+                    x: Math.max(0.08, Math.min(0.92, gameGraphBasic.mouse.location[0] + 0.012)),
+                    y: Math.max(0.08, Math.min(0.92, gameGraphBasic.mouse.location[1] + yOffset))
                 }
             }
 
@@ -482,6 +573,14 @@
                         Math.max(gameGraphBasic.timeSpaceLayout.xMin, Math.min(gameGraphBasic.timeSpaceLayout.xMax, x)),
                         gameGraphBasic.timeSpaceLayout.centerY
                     ]
+                }
+
+                if (placeCellData.zone == 'direction') {
+                    return placeCellData.location
+                }
+
+                if (placeCellData.zone == 'speed') {
+                    return placeCellData.location
                 }
 
                 if (gameGraphBasic.timeSpaceLayout != null) {
@@ -533,6 +632,9 @@
                     timeCellValue = gameGraphBasic.getTimeSpaceXForSeconds(rawCellLocation)
                 }
                 initialLocation = cellZone == 'time' ? [timeCellValue, gameGraphBasic.timeSpaceLayout.centerY] : rawCellLocation
+                if (cellZone == 'direction') {
+                    initialLocation = gameGraphBasic.getHeadDirectionCellPosition(placeCellConfig)
+                }
                 cellType = placeCellConfig.cellType || (cellZone == 'time' ? 'time' : 'place')
                 cellLabel = placeCellConfig.label || (cellZone == 'time' ? "Time Field" : "Place Field")
                 cellRadius = placeCellConfig.radius != null ? placeCellConfig.radius : (cellZone == 'time' ? 0.08 : 0.1)
@@ -634,6 +736,18 @@
  
             }
 
+            gameGraphBasic.resetPlaceCellVisualState = function(placeCellColorKey) {
+                placeCellData = gameGraphBasic.placeCells[placeCellColorKey]
+                if (placeCellData == null) {
+                    return
+                }
+                placeCellColorFiring = placeCellData.placeCellColor
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")"});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle2-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.1: 0.3) + ")"});
+                viewX.updateCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Circle3-" + placeCellColorKey, {circlecolor: "hsla(" + placeCellColorFiring + ", 100%, " + (darkmode ? 50 : 50) +  "%, " + (darkmode ? 0.2: 0.3) + ")"});
+                viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-Text-" + placeCellColorKey, {text: placeCellData.defaultLabel, fontFamily: "Nunito"});
+            }
+
 
 
             
@@ -722,6 +836,7 @@
                 gameGraphBasic.colliders = {}
                 gameGraphBasic.timeSpaceConfig = configData.hasOwnProperty('timeSpace') ? configData.timeSpace : null
                 gameGraphBasic.timeSpaceLayout = gameGraphBasic.getTimeSpaceLayout(configData)
+                gameGraphBasic.headDirectionSpaceLayout = gameGraphBasic.getHeadDirectionSpaceLayout(configData)
 
                 gameGraphBasic.time = configData.timer ? configData.timer.timeRemaining : null
                 gameGraphBasic.timeRemaining = configData.timer ? configData.timer.timeRemaining : null
@@ -736,9 +851,17 @@
                 levelDisplayName = configData.levelInfo != null && configData.levelInfo.name != null ? " - " + configData.levelInfo.name : ""
                 document.getElementById("level-text").innerText = "Level " + (gameGraphBasic.currentLevel + 1) + " / " + totalLevelCount + levelDisplayName
 
+                gameSpaceElement = document.getElementById('gameSpace')
+                if (gameGraphBasic.headDirectionSpaceLayout != null) {
+                    gameSpaceElement.style.minHeight = window.innerWidth < 400 ? '520px' : '560px'
+                }
+                else {
+                    gameSpaceElement.style.minHeight = window.innerWidth < 400 ? '440px' : '500px'
+                }
+
                 defaultGraphOptions['xmin'] = -0.1
                 defaultGraphOptions['xmax'] = 1.1
-                defaultGraphOptions['ymin'] = gameGraphBasic.timeSpaceLayout != null ? gameGraphBasic.timeSpaceLayout.yMin - 0.06 : -0.03
+                defaultGraphOptions['ymin'] = gameGraphBasic.getGraphYMin()
                 defaultGraphOptions['ymax'] = 1.03
                 gameGraphBasic.graph = document.getElementById('gameSpace')
                 viewX.addGraph(gameGraphBasic.graph, "mainGameCanvas-" + gameGraphBasic.graphNameIndex, defaultGraphOptions)
@@ -762,20 +885,32 @@
                     viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-timePointText", {x: gameGraphBasic.timeSpaceLayout.xMin - 0.08, y: gameGraphBasic.timeSpaceLayout.centerY + 0.07, textcolor: "hsla(46, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "Mouse Time", fontFamily: "Nunito", fontSize: mouseGraph['font-size']*0.75, textAlign: 'left'});
                 }
 
+                if (gameGraphBasic.headDirectionSpaceLayout != null) {
+                    headDirectionRect = viewX.addRectangle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-hd-boundary", {x: 0, y: gameGraphBasic.headDirectionSpaceLayout.yMax, w: 1, h: gameGraphBasic.headDirectionSpaceLayout.height, stroke: "hsla(0, 0%, " + (darkmode ? 30: 50) + "%, 0.5)", strokewidth: 1, rectcolor: "hsla(260, 100%, " + (darkmode ? 35 : 86) +  "%, 0.07)"})[0];
+                    headDirectionRect.setAttribute('rx','1.1');
+                    viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-hd-box-label", {x: 0.5, y: gameGraphBasic.headDirectionSpaceLayout.yMax - 0.035, textcolor: "hsla(260, 100%, " + (darkmode ? 82: 25) + "%, 1)", text: "Head Direction Space", fontFamily: "Nunito", fontSize: mouseGraph['font-size']*0.85, textAlign: 'center'});
+                    for (hdSlotIndex = 1; hdSlotIndex < 4; hdSlotIndex++) {
+                        hdSlotX = gameGraphBasic.headDirectionSpaceLayout.xMin + gameGraphBasic.headDirectionSpaceLayout.slotWidth*hdSlotIndex
+                        viewX.addLine("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-hd-slot-line-" + hdSlotIndex, {x1: hdSlotX, y1: gameGraphBasic.headDirectionSpaceLayout.yMax - 0.055, x2: hdSlotX, y2: gameGraphBasic.headDirectionSpaceLayout.yMin + 0.03, strokewidth: 1, linecolor: "hsla(260, 100%, " + (darkmode ? 60: 35) + "%, 0.35)"});
+                    }
+                }
+
                 gameGraphBasic.mouse = {}
                 gameGraphBasic.mouse.location = configData.mouse.location
                 gameGraphBasic.mouse.velocity = configData.mouse.velocity
 
 
                 viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouse", {x: gameGraphBasic.mouse.location[0], y: gameGraphBasic.mouse.location[1], pointcolor: "hsla(199, 100%, " + (darkmode ? 100: 0) + "%, 1)"});
-                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: gameGraphBasic.mouse.location[0] + 0.009, y: gameGraphBasic.mouse.location[1] - 0.04, textcolor: "hsla(199, 100%, " + (darkmode ? 100: 0) + "%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
+                mouseLabelPosition = gameGraphBasic.getMouseLabelPosition()
+                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {x: mouseLabelPosition.x, y: mouseLabelPosition.y, textcolor: "hsla(199, 100%, " + (darkmode ? 100: 0) + "%, 1)", text: "Mouse", fontFamily: "Nunito", fontSize: mouseGraph['font-size']});
 
                 gameGraphBasic.reward = {}
                 gameGraphBasic.reward.location = configData.reward.location
                 gameGraphBasic.reward.radius = configData.reward.radius
                 viewX.addCircle("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardCircle", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1], radius: gameGraphBasic.reward.radius, circlecolor: "hsla(249, 100%, " + (darkmode ? 80: 20) + "%, 0.5)", stroke: "transparent"});
 
-                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardText", {x: gameGraphBasic.reward.location[0], y: gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.04, textcolor: "hsla(249, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "Food", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
+                rewardTextY = gameGraphBasic.reward.location[1] < 0.12 ? gameGraphBasic.reward.location[1] + gameGraphBasic.reward.radius + 0.055 : gameGraphBasic.reward.location[1] - gameGraphBasic.reward.radius - 0.045
+                viewX.addText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-rewardText", {x: Math.max(0.08, Math.min(0.92, gameGraphBasic.reward.location[0])), y: Math.max(0.08, Math.min(0.92, rewardTextY)), textcolor: "hsla(249, 100%, " + (darkmode ? 80: 20) + "%, 1)", text: "Food", fontFamily: "Nunito", fontSize: mouseGraph['font-size'], textAlign: 'center'});
 
 
 
@@ -1012,17 +1147,17 @@
             gameGraphBasic.runNonSpatialCells = function() {
                 now = Date.now()
                 currentSpeed = gameGraphBasic.currentSpeed()
+                headDirectionCellsByColor = {}
                 for (var key in gameGraphBasic.placeCells) {
                     if (gameGraphBasic.placeCells.hasOwnProperty(key) == false) {
                         continue
                     }
                     readoutCell = gameGraphBasic.placeCells[key]
                     if (readoutCell.cellType == 'headDirection' && readoutCell.preferredDirection != null) {
-                        angleFromPreferred = Math.abs(gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, readoutCell.preferredDirection))
-                        if (angleFromPreferred <= readoutCell.tuningWidth && now - readoutCell.lastAutoFire > readoutCell.autoFireCooldown) {
-                            readoutCell.lastAutoFire = now
-                            gameGraphBasic.triggerNeuron(readoutCell.id, 0, {alwaysTrigger: true})
+                        if (headDirectionCellsByColor[readoutCell.placeCellColor] == null) {
+                            headDirectionCellsByColor[readoutCell.placeCellColor] = []
                         }
+                        headDirectionCellsByColor[readoutCell.placeCellColor].push(readoutCell)
                     }
                     if (readoutCell.cellType == 'speed') {
                         speedCooldown = Math.max(130, 780 - currentSpeed*2100)
@@ -1030,6 +1165,36 @@
                             readoutCell.lastAutoFire = now
                             gameGraphBasic.triggerNeuron(readoutCell.id, 0, {alwaysTrigger: true})
                         }
+                    }
+                }
+
+                if (currentSpeed <= 0) {
+                    return
+                }
+
+                for (var headDirectionColor in headDirectionCellsByColor) {
+                    if (headDirectionCellsByColor.hasOwnProperty(headDirectionColor) == false) {
+                        continue
+                    }
+                    bestDirectionCell = null
+                    bestDirectionAngle = 999
+                    directionCells = headDirectionCellsByColor[headDirectionColor]
+                    for (directionIndex = 0; directionIndex < directionCells.length; directionIndex++) {
+                        directionCell = directionCells[directionIndex]
+                        angleFromPreferred = Math.abs(gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, directionCell.preferredDirection))
+                        if (angleFromPreferred < bestDirectionAngle) {
+                            bestDirectionAngle = angleFromPreferred
+                            bestDirectionCell = directionCell
+                        }
+                    }
+                    if (bestDirectionCell != null && bestDirectionAngle <= bestDirectionCell.tuningWidth && now - bestDirectionCell.lastAutoFire > bestDirectionCell.autoFireCooldown) {
+                        for (resetDirectionIndex = 0; resetDirectionIndex < directionCells.length; resetDirectionIndex++) {
+                            if (directionCells[resetDirectionIndex].id != bestDirectionCell.id) {
+                                gameGraphBasic.resetPlaceCellVisualState(directionCells[resetDirectionIndex].id)
+                            }
+                        }
+                        bestDirectionCell.lastAutoFire = now
+                        gameGraphBasic.triggerNeuron(bestDirectionCell.id, 0, {alwaysTrigger: true})
                     }
                 }
             }
@@ -1430,19 +1595,31 @@
                 return gameGraphBasic.makeCellFields(points, options)
             }
 
-            gameGraphBasic.headDirectionReadout = function(position, direction, options) {
+            gameGraphBasic.headDirectionCompass = function(options) {
                 options = options || {}
-                return [{
-                    position: position,
-                    label: options.label || "Head Direction",
-                    cellType: "headDirection",
-                    zone: "direction",
-                    radius: options.radius || 0.055,
-                    fixed: true,
-                    preferredDirection: direction,
-                    tuningWidth: options.tuningWidth || 28,
-                    autoFireCooldown: options.autoFireCooldown || 420
-                }]
+                headDirectionSlots = [
+                    {label: "North HD", direction: [0, 1]},
+                    {label: "East HD", direction: [1, 0]},
+                    {label: "South HD", direction: [0, -1]},
+                    {label: "West HD", direction: [-1, 0]}
+                ]
+                return headDirectionSlots.map(function(slotData, slotIndex) {
+                    return {
+                        label: slotData.label,
+                        cellType: "headDirection",
+                        zone: "direction",
+                        radius: options.radius || 0.045,
+                        fixed: true,
+                        slotIndex: slotIndex,
+                        preferredDirection: slotData.direction,
+                        tuningWidth: options.tuningWidth || 48,
+                        autoFireCooldown: options.autoFireCooldown || 360
+                    }
+                })
+            }
+
+            gameGraphBasic.headDirectionReadout = function(position, direction, options) {
+                return gameGraphBasic.headDirectionCompass(options)
             }
 
             gameGraphBasic.speedReadout = function(position, options) {
@@ -2277,7 +2454,7 @@
                         198: [
                             {position: [0.72, 0.68], label: "Place Field", cellType: "place", radius: 0.08}
                         ],
-                        260: gameGraphBasic.headDirectionReadout([0.12, 0.90], [1, 0], {label: "East HD", radius: 0.05})
+                        260: gameGraphBasic.headDirectionCompass({radius: 0.045})
                     },
                     walls: {},
                     timer: {
@@ -2285,8 +2462,8 @@
                     },
                     levelInfo : {
                         name: "Hex Grid Map",
-                        instruction: "This level shows a clearer <b style='color: hsla(30,100%,70%, 1)'>grid-cell module</b>: repeated firing fields tile the arena like a loose hex map. The head-direction cell fires only when the mouse is facing east.",
-                        summary: "Grid cells fire at repeated spatial locations, while the head-direction cell acts like a compass readout."
+                        instruction: "This level shows a clearer <b style='color: hsla(30,100%,70%, 1)'>grid-cell module</b>: repeated firing fields tile the arena like a loose hex map. Watch the compass panel: the matching HD cell fires when the mouse points north, east, south, or west.",
+                        summary: "Grid cells fire at repeated spatial locations, while head-direction cells act like compass readouts outside the arena."
                     },
                     placeFieldsOnlyInBeginning: false
                 },
@@ -2321,7 +2498,7 @@
                         198: [
                             {position: [0.38, 0.56], label: "Place Field", cellType: "place", radius: 0.075}
                         ],
-                        260: gameGraphBasic.headDirectionReadout([0.08, 0.84], [0, -1], {label: "South HD", radius: 0.05})
+                        260: gameGraphBasic.headDirectionCompass({radius: 0.045})
                     },
                     walls: {
                         'south-border-cue': [[0.08, 0.16], [0.92, 0.16]],
@@ -2333,7 +2510,7 @@
                     },
                     levelInfo : {
                         name: "South Border Cue",
-                        instruction: "The fixed <b style='color: hsla(310,100%,70%, 1)'>border fields</b> fire along the lower wall. The head-direction cell fires only when the mouse is facing downward.",
+                        instruction: "The fixed <b style='color: hsla(310,100%,70%, 1)'>border fields</b> fire along the lower wall. The HD panel outside the arena shows which compass direction the mouse is facing.",
                         summary: "Border cells encode proximity to walls or boundaries; head-direction cells encode heading, not location."
                     },
                     placeFieldsOnlyInBeginning: false
@@ -2435,7 +2612,7 @@
                         198: [
                             {position: [0.66, 0.78], label: "Place Field", cellType: "place", radius: 0.08}
                         ],
-                        260: gameGraphBasic.headDirectionReadout([0.86, 0.86], [-1, 0], {label: "West HD", radius: 0.05})
+                        260: gameGraphBasic.headDirectionCompass({radius: 0.045})
                     },
                     walls: {
                         'corridor-1': [[0.22, 0.18], [0.82, 0.18]],
@@ -2449,7 +2626,7 @@
                     },
                     levelInfo : {
                         name: "Left Wall Corridor",
-                        instruction: "This one flips the path: the mouse starts on the right and works back toward the <b style='color: hsla(40,100%,70%, 1)'>west-border cue</b>. The head-direction cell fires when the mouse faces west.",
+                        instruction: "This one flips the path: the mouse starts on the right and works back toward the <b style='color: hsla(40,100%,70%, 1)'>west-border cue</b>. The outside HD panel fires whichever compass cell best matches the mouse heading.",
                         summary: "Border cells encode the wall; head-direction cells encode the compass heading independent of position."
                     },
                     placeFieldsOnlyInBeginning: false
@@ -2561,7 +2738,7 @@
                             [0.64, 0.12]
                         ], {label: "Border", cellType: "border", fixed: true, radius: 0.06}),
                         40: gameGraphBasic.speedReadout([0.50, 0.50], {label: "Speed", radius: 0.05, speedThreshold: 0.17}),
-                        260: gameGraphBasic.headDirectionReadout([0.50, 0.76], [1, 0], {label: "East HD", radius: 0.05}),
+                        260: gameGraphBasic.headDirectionCompass({radius: 0.045}),
                         198: [
                             {position: [0.34, 0.82], label: "Place Field", cellType: "place", radius: 0.07},
                             {position: [0.66, 0.18], label: "Place Field", cellType: "place", radius: 0.07}
@@ -2582,8 +2759,8 @@
                     },
                     levelInfo : {
                         name: "Ring Maze Mix",
-                        instruction: "Final concept challenge: the arena is a ring. Grid fields mark the loop, border cells react to the walls, the head-direction cell reports east-facing movement, and the speed cell reports velocity.",
-                        summary: "Grid, border, head-direction, speed, and place cells are all working together inside a ring-shaped maze."
+                        instruction: "Final concept challenge: the arena is a ring. Grid fields mark the loop, border cells react to the walls, the outside HD panel reports heading, and the speed cell reports velocity.",
+                        summary: "Grid, border, head-direction, speed, and place cells work together while the HD cells stay outside the maze as compass readouts."
                     },
                     placeFieldsOnlyInBeginning: true
                 },
