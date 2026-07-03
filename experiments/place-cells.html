@@ -4,13 +4,13 @@
 		<title>Neuro Navigator - Spatial Cells Game</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta charset="UTF-8">
-        <meta name="description" content="A spatial navigation game about place cells, grid cells, edge cells, border cells, and time cells">
-        <meta name="keywords" content="place cells, grid cells, edge cells, border cells, neuroscience game, Dr Meghna Rao">
+        <meta name="description" content="A spatial navigation game about place cells, grid cells, border cells, head-direction cells, and speed cells">
+        <meta name="keywords" content="place cells, grid cells, border cells, head direction cells, speed cells, neuroscience game, Dr Meghna Rao">
         <meta name="author" content="Dr. Meghna Rao, Prajwal DSouza">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <meta property="og:title" content="Place Cells Game - Neuro Navigator" />
-        <meta property="og:description" content="A spatial navigation game about place cells, grid cells, edge cells, border cells, and time cells" />
+        <meta property="og:description" content="A spatial navigation game about place cells, grid cells, border cells, head-direction cells, and speed cells" />
         <meta property="og:image" content="https://meghnachennojirao.github.io/assets/images/Icon.png" />
         <meta property="og:url" content="https://meghnachennojirao.github.io/experiments/place-cells">
         <meta property="og:type" content="game, educational game" />
@@ -20,7 +20,7 @@
         <meta property="twitter:domain" content="meghnachennojirao.github.io">
         <meta property="twitter:url" content="https://meghnachennojirao.github.io/experiments/place-cells">
         <meta name="twitter:title" content="Place Cells Game - Neuro Navigator">
-        <meta name="twitter:description" content="A spatial navigation game about place cells, grid cells, edge cells, border cells, and time cells">
+        <meta name="twitter:description" content="A spatial navigation game about place cells, grid cells, border cells, head-direction cells, and speed cells">
         <meta name="twitter:image" content="https://meghnachennojirao.github.io/assets/images/Icon.png">
 
 			<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@
 			  "@type": "blog",
 			  "name": "Place Cells Game",
 			  "author": "Dr. Meghna Rao, Prajwal DSouza",
-			  "description": "A spatial navigation game about place cells, grid cells, edge cells, border cells, and time cells"
+			  "description": "A spatial navigation game about place cells, grid cells, border cells, head-direction cells, and speed cells"
 			  }
 		</script>
 
@@ -185,7 +185,7 @@
                                     <div id="gameSpace" style="min-height: 500px;">
                                     </div>
                                     <div class="text-ignus text-grey-ignus text-small-ignus text-center pt-4 mt-3" style="color: grey;">
-                                        <span id="main-explanation-text">Drag the firing fields to build a route from hippocampal place fields, entorhinal grid-like fields, edge/border fields, and time fields.</span>
+                                        <span id="main-explanation-text">Drag the firing fields to build a route from hippocampal place fields, entorhinal grid-like fields, border fields, head-direction readouts, and speed readouts.</span>
                                         The mouse turns when the active neural pathway fires. Use the neural map to guide it to food.
                                     </div>
                                 </div>
@@ -202,7 +202,7 @@
                                                 </div>
                                                 <div class="col-4 col-xl-3" style="font-size: larger;"><b>Neurons</b><br/>
                                                     <p style="font-size: small;">
-                                                        The spatial neurons that fire from place fields, grid nodes, borders, edges, or time anchors.
+                                                        The spatial neurons that fire from place fields, grid nodes, borders, heading, or running speed.
                                                     </p>
                                                 </div>
                                                 <div class="col-4 col-xl-6" style="font-size: larger;"><b>Firings</b><br/>
@@ -224,7 +224,7 @@
                                                 </div>
                                                 <div class="col-4 col-xl-3" style="font-size: larger;"><b>Neurons</b><br/>
                                                     <p style="font-size: small;">
-                                                        The spatial neurons that fire from place fields, grid nodes, borders, edges, or time anchors.
+                                                        The spatial neurons that fire from place fields, grid nodes, borders, heading, or running speed.
                                                     </p>
                                                 </div>
                                                 <div class="col-4 col-xl-6" style="font-size: larger;"><b>Firings</b><br/>
@@ -527,17 +527,18 @@
                 placeCellColorKey = getUiD()
                 placeCellConfig = (typeof cellLocation === 'object' && cellLocation !== null && !Array.isArray(cellLocation)) ? cellLocation : {position: cellLocation}
                 rawCellLocation = placeCellConfig.position
+                cellZone = placeCellConfig.zone || zone
                 timeCellValue = rawCellLocation
-                if (zone == 'time' && gameGraphBasic.timeSpaceConfig != null && gameGraphBasic.timeSpaceConfig.timeCellPositionsAreSeconds) {
+                if (cellZone == 'time' && gameGraphBasic.timeSpaceConfig != null && gameGraphBasic.timeSpaceConfig.timeCellPositionsAreSeconds) {
                     timeCellValue = gameGraphBasic.getTimeSpaceXForSeconds(rawCellLocation)
                 }
-                initialLocation = zone == 'time' ? [timeCellValue, gameGraphBasic.timeSpaceLayout.centerY] : rawCellLocation
-                cellType = placeCellConfig.cellType || (zone == 'time' ? 'time' : 'place')
-                cellLabel = placeCellConfig.label || (zone == 'time' ? "Time Field" : "Place Field")
-                cellRadius = placeCellConfig.radius != null ? placeCellConfig.radius : (zone == 'time' ? 0.08 : 0.1)
+                initialLocation = cellZone == 'time' ? [timeCellValue, gameGraphBasic.timeSpaceLayout.centerY] : rawCellLocation
+                cellType = placeCellConfig.cellType || (cellZone == 'time' ? 'time' : 'place')
+                cellLabel = placeCellConfig.label || (cellZone == 'time' ? "Time Field" : "Place Field")
+                cellRadius = placeCellConfig.radius != null ? placeCellConfig.radius : (cellZone == 'time' ? 0.08 : 0.1)
                 isFixedCell = false
                 if (gameGraphBasic.timeSpaceConfig != null) {
-                    if (zone == 'time') {
+                    if (cellZone == 'time') {
                         isFixedCell = gameGraphBasic.timeSpaceConfig.fixedTimeCells === true
                     }
                     else {
@@ -552,10 +553,15 @@
                 gameGraphBasic.placeCells[placeCellColorKey].location = initialLocation
                 gameGraphBasic.placeCells[placeCellColorKey].radius = cellRadius
                 gameGraphBasic.placeCells[placeCellColorKey].placeCellColor = placeCellColor
-                gameGraphBasic.placeCells[placeCellColorKey].zone = zone
+                gameGraphBasic.placeCells[placeCellColorKey].zone = cellZone
                 gameGraphBasic.placeCells[placeCellColorKey].cellType = cellType
                 gameGraphBasic.placeCells[placeCellColorKey].defaultLabel = cellLabel
                 gameGraphBasic.placeCells[placeCellColorKey].isFixed = isFixedCell
+                gameGraphBasic.placeCells[placeCellColorKey].preferredDirection = placeCellConfig.preferredDirection || null
+                gameGraphBasic.placeCells[placeCellColorKey].tuningWidth = placeCellConfig.tuningWidth || 28
+                gameGraphBasic.placeCells[placeCellColorKey].speedThreshold = placeCellConfig.speedThreshold || 0.18
+                gameGraphBasic.placeCells[placeCellColorKey].autoFireCooldown = placeCellConfig.autoFireCooldown || 450
+                gameGraphBasic.placeCells[placeCellColorKey].lastAutoFire = 0
 
                 labelPosition = gameGraphBasic.getPlaceCellLabelPosition(gameGraphBasic.placeCells[placeCellColorKey])
 
@@ -570,6 +576,12 @@
 
 
                 viewX.addPoint("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-placeCell-moveKnob-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x: gameGraphBasic.placeCells[placeCellColorKey].location[0], y: gameGraphBasic.placeCells[placeCellColorKey].location[1], pointsize: 9, pointcolor: "transparent", stroke: "transparent",  draggability: isFixedCell ? "no" : "yes", runFunctionDuringDrag: "gameGraphBasic.movePlace(" + gameGraphBasic.placeCells[placeCellColorKey].id + ")"});
+
+                if (cellType == 'headDirection' && gameGraphBasic.placeCells[placeCellColorKey].preferredDirection != null) {
+                    preferredDirection = viewX.unitVec(gameGraphBasic.placeCells[placeCellColorKey].preferredDirection)
+                    arrowEnd = viewX.addVec(gameGraphBasic.placeCells[placeCellColorKey].location, viewX.scalarMultiplyVec(0.11, preferredDirection))
+                    viewX.addLine("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-headDirection-Line-" + gameGraphBasic.placeCells[placeCellColorKey].id, {x1: gameGraphBasic.placeCells[placeCellColorKey].location[0], y1: gameGraphBasic.placeCells[placeCellColorKey].location[1], x2: arrowEnd[0], y2: arrowEnd[1], strokewidth: 2, linecolor: "hsla(" + placeCellColor + ", 100%, " + (darkmode ? 70 : 35) + "%, 0.9)"});
+                }
 
 
 
@@ -696,7 +708,7 @@
                     document.getElementById('main-explanation-text').innerHTML = configData.levelInfo.summary
                 }
                 else {
-                    document.getElementById('main-explanation-text').innerHTML = "Drag the firing fields to build a route from hippocampal place fields, entorhinal grid-like fields, edge/border fields, and time fields."
+                    document.getElementById('main-explanation-text').innerHTML = "Drag the firing fields to build a route from hippocampal place fields, entorhinal grid-like fields, border fields, head-direction readouts, and speed readouts."
                 }
 
 
@@ -912,7 +924,7 @@
 
                     for (var key in gameGraphBasic.placeCells) {
                         if (gameGraphBasic.placeCells.hasOwnProperty(key)) {
-                            if (gameGraphBasic.placeCells[key].zone == 'time') {
+                            if (gameGraphBasic.placeCells[key].zone == 'time' || gameGraphBasic.placeCells[key].zone == 'direction' || gameGraphBasic.placeCells[key].zone == 'speed') {
                                 continue
                             }
                             distanceFromPlaceCell = viewX.distF(newlocation, gameGraphBasic.placeCells[key].location)
@@ -934,6 +946,8 @@
                             }
                         }
                     }
+
+                    gameGraphBasic.runNonSpatialCells()
 
 
 
@@ -974,6 +988,50 @@
 
 
                 gameGraphBasic.firingGraphElements[idForSpike] = {x1: 0.3 , y1: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15, x2: 0.3, y2: 0.71 - 0.04 - gameGraphBasic.placeCellColors.indexOf(parseInt(placeCellColor))*0.15 + 0.08}
+            }
+
+            gameGraphBasic.currentSpeed = function() {
+                if (gameGraphBasic.mouse == null || gameGraphBasic.mouse.velocity == null) {
+                    return 0
+                }
+                return Math.sqrt(gameGraphBasic.mouse.velocity[0]*gameGraphBasic.mouse.velocity[0] + gameGraphBasic.mouse.velocity[1]*gameGraphBasic.mouse.velocity[1])
+            }
+
+            gameGraphBasic.scaleVelocity = function(multiplier, minSpeed, maxSpeed) {
+                currentSpeed = gameGraphBasic.currentSpeed()
+                if (currentSpeed <= 0) {
+                    return
+                }
+                targetSpeed = Math.max(minSpeed, Math.min(maxSpeed, currentSpeed*multiplier))
+                gameGraphBasic.mouse.velocity = [
+                    gameGraphBasic.mouse.velocity[0]*targetSpeed/currentSpeed,
+                    gameGraphBasic.mouse.velocity[1]*targetSpeed/currentSpeed
+                ]
+            }
+
+            gameGraphBasic.runNonSpatialCells = function() {
+                now = Date.now()
+                currentSpeed = gameGraphBasic.currentSpeed()
+                for (var key in gameGraphBasic.placeCells) {
+                    if (gameGraphBasic.placeCells.hasOwnProperty(key) == false) {
+                        continue
+                    }
+                    readoutCell = gameGraphBasic.placeCells[key]
+                    if (readoutCell.cellType == 'headDirection' && readoutCell.preferredDirection != null) {
+                        angleFromPreferred = Math.abs(gameGraphBasic.angleToRotateAToGetB(gameGraphBasic.mouse.velocity, readoutCell.preferredDirection))
+                        if (angleFromPreferred <= readoutCell.tuningWidth && now - readoutCell.lastAutoFire > readoutCell.autoFireCooldown) {
+                            readoutCell.lastAutoFire = now
+                            gameGraphBasic.triggerNeuron(readoutCell.id, 0, {alwaysTrigger: true})
+                        }
+                    }
+                    if (readoutCell.cellType == 'speed') {
+                        speedCooldown = Math.max(130, 780 - currentSpeed*2100)
+                        if (currentSpeed >= readoutCell.speedThreshold && now - readoutCell.lastAutoFire > speedCooldown) {
+                            readoutCell.lastAutoFire = now
+                            gameGraphBasic.triggerNeuron(readoutCell.id, 0, {alwaysTrigger: true})
+                        }
+                    }
+                }
             }
 
             gameGraphBasic.triggerNeuron = function(placeCellColorFullKey, placeCellDistance, triggerOptions={}) {
@@ -1054,16 +1112,15 @@
                         }
                         
                         
-                        // if (behavior == "speedUp") {
-                        //     gameGraphBasic.mouse.velocity = gameGraphBasic.mouse.velocity*1.2
+                        if (behavior == "speedUp") {
+                            gameGraphBasic.scaleVelocity(1.16, 0.08, 0.34)
+                            behaviorsExecutedString = behaviorsExecutedString + "Running Faster, "
+                        }
 
-                        //     viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {text: "Speeding Up"});
-
-                        //     setTimeout(function() {
-                        //         viewX.updateText("mainGameCanvas-" + gameGraphBasic.graphNameIndex, "mainGame-mouseText", {text: "Mouse"});
-                        //     }, 700);
-
-                        // }
+                        if (behavior == "slowDown") {
+                            gameGraphBasic.scaleVelocity(0.82, 0.08, 0.34)
+                            behaviorsExecutedString = behaviorsExecutedString + "Running Slower, "
+                        }
                         
 
 
@@ -1365,12 +1422,40 @@
                 return gameGraphBasic.makeCellFields(points, options)
             }
 
-            gameGraphBasic.edgeFields = function(points, options) {
+            gameGraphBasic.borderFields = function(points, options) {
                 options = options || {}
-                options.label = options.label || "Edge Field"
-                options.cellType = options.cellType || "edge"
+                options.label = options.label || "Border"
+                options.cellType = "border"
                 options.radius = options.radius || 0.06
                 return gameGraphBasic.makeCellFields(points, options)
+            }
+
+            gameGraphBasic.headDirectionReadout = function(position, direction, options) {
+                options = options || {}
+                return [{
+                    position: position,
+                    label: options.label || "Head Direction",
+                    cellType: "headDirection",
+                    zone: "direction",
+                    radius: options.radius || 0.055,
+                    fixed: true,
+                    preferredDirection: direction,
+                    tuningWidth: options.tuningWidth || 28,
+                    autoFireCooldown: options.autoFireCooldown || 420
+                }]
+            }
+
+            gameGraphBasic.speedReadout = function(position, options) {
+                options = options || {}
+                return [{
+                    position: position,
+                    label: options.label || "Speed",
+                    cellType: "speed",
+                    zone: "speed",
+                    radius: options.radius || 0.055,
+                    fixed: true,
+                    speedThreshold: options.speedThreshold || 0.18
+                }]
             }
 
             gameGraphBasic.levels = {
@@ -2157,15 +2242,17 @@
                     placeFieldsOnlyInBeginning: true
                 },
                 20 : {
-                    neurons : [30, 198],
+                    neurons : [30, 198, 260],
                     neuronLabels: {
                         30: "Grid Cell",
-                        198: "Place Cell"
+                        198: "Place Cell",
+                        260: "Head Direction Cell"
                     },
                     behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}],
                     brain: {
                         30: ['turnNorth'],
-                        198 : ['turnEast']
+                        198 : ['turnEast'],
+                        260: []
                     },
                     mouse: {
                         location: [0.08, 0.12],
@@ -2189,7 +2276,8 @@
                         ], {label: "Grid", fixed: true, radius: 0.055}),
                         198: [
                             {position: [0.72, 0.68], label: "Place Field", cellType: "place", radius: 0.08}
-                        ]
+                        ],
+                        260: gameGraphBasic.headDirectionReadout([0.12, 0.90], [1, 0], {label: "East HD", radius: 0.05})
                     },
                     walls: {},
                     timer: {
@@ -2197,21 +2285,23 @@
                     },
                     levelInfo : {
                         name: "Hex Grid Map",
-                        instruction: "This level shows a clearer <b style='color: hsla(30,100%,70%, 1)'>grid-cell module</b>: repeated firing fields tile the arena like a loose hex map. Move the place field for one precise correction near the reward.",
-                        summary: "Grid cells are modeled as repeated firing nodes from one neuron, while a place field supplies a local correction."
+                        instruction: "This level shows a clearer <b style='color: hsla(30,100%,70%, 1)'>grid-cell module</b>: repeated firing fields tile the arena like a loose hex map. The head-direction cell fires only when the mouse is facing east.",
+                        summary: "Grid cells fire at repeated spatial locations, while the head-direction cell acts like a compass readout."
                     },
                     placeFieldsOnlyInBeginning: false
                 },
                 21 : {
-                    neurons : [310, 198],
+                    neurons : [310, 198, 260],
                     neuronLabels: {
-                        310: "Floor Edge Cell",
-                        198: "Place Cell"
+                        310: "South Border Cell",
+                        198: "Place Cell",
+                        260: "Head Direction Cell"
                     },
                     behaviors : [{name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}],
                     brain: {
                         310: ['turnEast'],
-                        198 : ['turnSouth']
+                        198 : ['turnSouth'],
+                        260: []
                     },
                     mouse: {
                         location: [0.16, 0.88],
@@ -2222,18 +2312,19 @@
                         radius: 0.035
                     },
                     cellInitialPositions : {
-                        310: gameGraphBasic.edgeFields([
+                        310: gameGraphBasic.borderFields([
                             [0.22, 0.14],
                             [0.42, 0.14],
                             [0.62, 0.14],
                             [0.82, 0.14]
-                        ], {label: "Floor", fixed: true, radius: 0.075}),
+                        ], {label: "South Border", fixed: true, radius: 0.075}),
                         198: [
                             {position: [0.38, 0.56], label: "Place Field", cellType: "place", radius: 0.075}
-                        ]
+                        ],
+                        260: gameGraphBasic.headDirectionReadout([0.08, 0.84], [0, -1], {label: "South HD", radius: 0.05})
                     },
                     walls: {
-                        'floor-cue': [[0.08, 0.16], [0.92, 0.16]],
+                        'south-border-cue': [[0.08, 0.16], [0.92, 0.16]],
                         'left-baffle': [[0.24, 0.38], [0.24, 0.88]],
                         'right-baffle': [[0.64, 0.16], [0.64, 0.62]]
                     },
@@ -2241,9 +2332,9 @@
                         timeRemaining: 42
                     },
                     levelInfo : {
-                        name: "Floor Edge Cue",
-                        instruction: "The fixed <b style='color: hsla(310,100%,70%, 1)'>floor-edge fields</b> fire along the lower boundary instead of the right wall. Use the place field to drop the mouse into the edge-guided lane.",
-                        summary: "Edge fields anchor firing to a boundary, so the route can use the floor as a spatial cue."
+                        name: "South Border Cue",
+                        instruction: "The fixed <b style='color: hsla(310,100%,70%, 1)'>border fields</b> fire along the lower wall. The head-direction cell fires only when the mouse is facing downward.",
+                        summary: "Border cells encode proximity to walls or boundaries; head-direction cells encode heading, not location."
                     },
                     placeFieldsOnlyInBeginning: false
                 },
@@ -2277,7 +2368,7 @@
                             [0.72, 0.76],
                             [0.88, 0.50]
                         ], {label: "Grid", fixed: true, radius: 0.06}),
-                        310: gameGraphBasic.edgeFields([
+                        310: gameGraphBasic.borderFields([
                             [0.42, 0.68],
                             [0.52, 0.68],
                             [0.62, 0.68],
@@ -2301,23 +2392,25 @@
                     },
                     levelInfo : {
                         name: "Central Island",
-                        instruction: "The arena now has an island obstacle. <b style='color: hsla(310,100%,70%, 1)'>Border fields</b> fire around the island, while grid and place fields guide the mouse around it.",
-                        summary: "This map combines repeated grid firing with boundary-tuned correction around an internal obstacle."
+                        instruction: "The arena now has an island obstacle. This is <b style='color: orange;'>not</b> an island-cell level: <b style='color: hsla(310,100%,70%, 1)'>border cells</b> fire around the island boundary.",
+                        summary: "I use border cells for the island because their known function is boundary coding; I am not inventing a separate island-cell navigation rule."
                     },
                     placeFieldsOnlyInBeginning: false
                 },
                 23 : {
-                    neurons : [198, 40, 30],
+                    neurons : [198, 40, 30, 260],
                     neuronLabels: {
                         198: "Place Cell",
-                        40: "Left Edge Cell",
-                        30: "Grid Cell"
+                        40: "West Border Cell",
+                        30: "Grid Cell",
+                        260: "Head Direction Cell"
                     },
                     behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
                     brain: {
                         198 : ['turnEast'],
                         40 : ['turnWest'],
-                        30: ['turnNorth']
+                        30: ['turnNorth'],
+                        260: []
                     },
                     mouse: {
                         location: [0.86, 0.12],
@@ -2334,14 +2427,15 @@
                             [0.40, 0.52],
                             [0.22, 0.68]
                         ], {label: "Grid", fixed: true, radius: 0.06}),
-                        40: gameGraphBasic.edgeFields([
+                        40: gameGraphBasic.borderFields([
                             [0.12, 0.34],
                             [0.12, 0.54],
                             [0.12, 0.74]
-                        ], {label: "Left", fixed: true, radius: 0.07}),
+                        ], {label: "West Border", fixed: true, radius: 0.07}),
                         198: [
                             {position: [0.66, 0.78], label: "Place Field", cellType: "place", radius: 0.08}
-                        ]
+                        ],
+                        260: gameGraphBasic.headDirectionReadout([0.86, 0.86], [-1, 0], {label: "West HD", radius: 0.05})
                     },
                     walls: {
                         'corridor-1': [[0.22, 0.18], [0.82, 0.18]],
@@ -2355,23 +2449,25 @@
                     },
                     levelInfo : {
                         name: "Left Wall Corridor",
-                        instruction: "This one flips the path: the mouse starts on the right and must work back toward the <b style='color: hsla(40,100%,70%, 1)'>left-edge cue</b>. The wall layout is a stepped corridor instead of an open field.",
-                        summary: "Edge cues can also pull navigation toward a specific wall, while grid fields preserve route structure."
+                        instruction: "This one flips the path: the mouse starts on the right and works back toward the <b style='color: hsla(40,100%,70%, 1)'>west-border cue</b>. The head-direction cell fires when the mouse faces west.",
+                        summary: "Border cells encode the wall; head-direction cells encode the compass heading independent of position."
                     },
                     placeFieldsOnlyInBeginning: false
                 },
                 24 : {
-                    neurons : [198, 30, 310],
+                    neurons : [198, 30, 310, 40],
                     neuronLabels: {
-                        198: "Time Cell",
+                        198: "Place Cell",
                         30: "Grid Cell",
-                        310: "Border Cell"
+                        310: "Border Cell",
+                        40: "Speed Cell"
                     },
-                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnSouth', label: 'Turn Down'}],
+                    behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'speedUp', label: 'Run Faster'}],
                     brain: {
-                        198 : ['turnEast'],
+                        198 : ['speedUp'],
                         30: ['turnNorth'],
-                        310: ['turnSouth']
+                        310: ['turnSouth'],
+                        40: []
                     },
                     mouse: {
                         location: [0.08, 0.50],
@@ -2390,28 +2486,18 @@
                             [0.58, 0.70],
                             [0.74, 0.48]
                         ], {label: "Grid", fixed: true, radius: 0.055}),
-                        310: gameGraphBasic.edgeFields([
+                        310: gameGraphBasic.borderFields([
                             [0.24, 0.68],
                             [0.50, 0.68],
                             [0.76, 0.68],
                             [0.24, 0.32],
                             [0.50, 0.32],
                             [0.76, 0.32]
-                        ], {label: "Lane", cellType: "border", fixed: true, radius: 0.06})
-                    },
-                    timeCellInitialPositions : {
+                        ], {label: "Lane Border", cellType: "border", fixed: true, radius: 0.06}),
                         198: [
-                            {position: 16, label: "Time Gate", cellType: "time", radius: 0.07, fixed: false}
-                        ]
-                    },
-                    timeSpace: {
-                        mainHeightFraction: 0.75,
-                        gapFraction: 0.05,
-                        timeHeightFraction: 0.20,
-                        timeCellPositionsAreSeconds: true,
-                        fixedSpaceCells: true,
-                        fixedTimeCells: false,
-                        timePointSize: 1.5
+                            {position: [0.46, 0.50], label: "Speed Cue", cellType: "place", radius: 0.075}
+                        ],
+                        40: gameGraphBasic.speedReadout([0.12, 0.88], {label: "Speed", radius: 0.055, speedThreshold: 0.18})
                     },
                     walls: {
                         'upper-lane-left': [[0.10, 0.68], [0.40, 0.68]],
@@ -2423,25 +2509,27 @@
                         timeRemaining: 42
                     },
                     levelInfo : {
-                        name: "Timed Lane Switch",
-                        instruction: "The visual layout is now a two-lane track. Grid fields handle position, lane-border fields push the mouse away from the rails, and the movable <b style='color: hsla(198,100%,70%,1)'>time gate</b> controls an eastward correction.",
-                        summary: "This level combines spatial coding with timing inside a lane-switch arena."
+                        name: "Speedometer Lane",
+                        instruction: "The visual layout is a two-lane track. The <b style='color: hsla(40,100%,70%,1)'>speed cell</b> is a readout: it spikes more often after the mouse accelerates, instead of causing the acceleration.",
+                        summary: "Speed cells encode running speed; in this level the speed cell reports velocity while grid and border fields handle the route."
                     }
                 },
                 25 : {
-                    neurons : [198, 30, 310, 40],
+                    neurons : [198, 30, 310, 40, 260],
                     neuronLabels: {
                         198: "Place Cell",
                         30: "Grid Cell",
                         310: "Border Cell",
-                        40: "Edge Cell"
+                        40: "Speed Cell",
+                        260: "Head Direction Cell"
                     },
                     behaviors : [{name: 'turnNorth', label: 'Turn Up'}, {name: 'turnSouth', label: 'Turn Down'}, {name: 'turnEast', label: 'Turn Right'}, {name: 'turnWest', label: 'Turn Left'}],
                     brain: {
                         198 : ['turnEast'],
                         30: ['turnNorth'],
-                        310: ['turnSouth'],
-                        40: ['turnWest']
+                        310: ['turnSouth', 'turnWest'],
+                        40: [],
+                        260: []
                     },
                     mouse: {
                         location: [0.18, 0.82],
@@ -2462,18 +2550,18 @@
                             [0.18, 0.18],
                             [0.18, 0.50]
                         ], {label: "Grid", fixed: true, radius: 0.055}),
-                        310: gameGraphBasic.edgeFields([
+                        310: gameGraphBasic.borderFields([
                             [0.88, 0.72],
                             [0.88, 0.50],
-                            [0.88, 0.28]
-                        ], {label: "Outer", cellType: "border", fixed: true, radius: 0.065}),
-                        40: gameGraphBasic.edgeFields([
+                            [0.88, 0.28],
                             [0.12, 0.72],
                             [0.12, 0.50],
                             [0.12, 0.28],
                             [0.36, 0.12],
                             [0.64, 0.12]
-                        ], {label: "Inner", fixed: true, radius: 0.06}),
+                        ], {label: "Border", cellType: "border", fixed: true, radius: 0.06}),
+                        40: gameGraphBasic.speedReadout([0.50, 0.50], {label: "Speed", radius: 0.05, speedThreshold: 0.17}),
+                        260: gameGraphBasic.headDirectionReadout([0.50, 0.76], [1, 0], {label: "East HD", radius: 0.05}),
                         198: [
                             {position: [0.34, 0.82], label: "Place Field", cellType: "place", radius: 0.07},
                             {position: [0.66, 0.18], label: "Place Field", cellType: "place", radius: 0.07}
@@ -2494,8 +2582,8 @@
                     },
                     levelInfo : {
                         name: "Ring Maze Mix",
-                        instruction: "Final concept challenge: the arena is a ring. Grid fields mark the loop, border and edge fields react to the outer and inner walls, and place fields give precise turns. Plan the whole route before pressing Start Run.",
-                        summary: "Grid, border, edge, and place cells are all working together inside a ring-shaped maze."
+                        instruction: "Final concept challenge: the arena is a ring. Grid fields mark the loop, border cells react to the walls, the head-direction cell reports east-facing movement, and the speed cell reports velocity.",
+                        summary: "Grid, border, head-direction, speed, and place cells are all working together inside a ring-shaped maze."
                     },
                     placeFieldsOnlyInBeginning: true
                 },
