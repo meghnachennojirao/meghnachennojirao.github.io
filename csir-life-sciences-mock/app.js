@@ -4,6 +4,7 @@
   const letters = ["a", "b", "c", "d"];
   const sectionOrder = Object.keys(rules);
   const totalAttemptLimit = sectionOrder.reduce((sum, section) => sum + rules[section].attemptLimit, 0);
+  const paperCycleKey = "csir-life-sciences-question-cycle-v3";
 
   const state = {
     paper: [],
@@ -56,25 +57,75 @@
     return bank.filter((question) => question.section === section);
   }
 
-  function sampleSection(section, count, seed) {
-    const shuffled = shuffle(sectionQuestions(section), seed);
-    const chosen = [];
-    const seenConcepts = new Set();
+  function loadPaperCycle() {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(paperCycleKey) || "{}");
+      return sectionOrder.reduce((cycle, section) => {
+        cycle[section] = Array.isArray(parsed[section]) ? parsed[section] : [];
+        return cycle;
+      }, {});
+    } catch (error) {
+      return sectionOrder.reduce((cycle, section) => {
+        cycle[section] = [];
+        return cycle;
+      }, {});
+    }
+  }
 
-    for (const question of shuffled) {
-      if (!seenConcepts.has(question.concept)) {
-        chosen.push(question);
-        seenConcepts.add(question.concept);
-      }
+  function savePaperCycle(cycle) {
+    try {
+      window.localStorage.setItem(paperCycleKey, JSON.stringify(cycle));
+    } catch (error) {
+      // Rotation still works for the current paper if localStorage is unavailable.
+    }
+  }
+
+  function chooseQuestions(candidates, count, excludedIds = new Set()) {
+    const chosen = [];
+    const chosenIds = new Set(excludedIds);
+    const concepts = new Set();
+
+    for (const question of candidates) {
+      if (chosenIds.has(question.id) || concepts.has(question.concept)) continue;
+      chosen.push(question);
+      chosenIds.add(question.id);
+      concepts.add(question.concept);
       if (chosen.length === count) return chosen;
     }
 
-    for (const question of shuffled) {
-      if (!chosen.includes(question)) chosen.push(question);
+    for (const question of candidates) {
+      if (chosenIds.has(question.id)) continue;
+      chosen.push(question);
+      chosenIds.add(question.id);
       if (chosen.length === count) return chosen;
     }
 
     return chosen;
+  }
+
+  function sampleSection(section, count, seed) {
+    const cycle = loadPaperCycle();
+    const sectionPool = sectionQuestions(section);
+    const seenIds = new Set(cycle[section]);
+    const shuffledPool = shuffle(sectionPool, seed);
+    const unseen = shuffledPool.filter((question) => !seenIds.has(question.id));
+    const chosen = chooseQuestions(unseen, count);
+    let nextSeen = new Set(seenIds);
+
+    if (chosen.length < count) {
+      const chosenIds = new Set(chosen.map((question) => question.id));
+      nextSeen = new Set();
+      const refill = shuffle(sectionPool.filter((question) => !chosenIds.has(question.id)), seed + 997);
+      const filler = chooseQuestions(refill, count - chosen.length, chosenIds);
+      chosen.push(...filler);
+      filler.forEach((question) => nextSeen.add(question.id));
+    } else {
+      chosen.forEach((question) => nextSeen.add(question.id));
+    }
+
+    cycle[section] = Array.from(nextSeen);
+    savePaperCycle(cycle);
+    return shuffle(chosen, seed + 1999);
   }
 
   function newPaper() {
@@ -257,7 +308,7 @@
   }
 
   function render() {
-    els.poolCount.textContent = `${bank.length.toLocaleString()} practice variants`;
+    els.poolCount.textContent = `${bank.length.toLocaleString()} in rotation`;
     renderQuestions();
     renderPalette();
     updateProgress();
@@ -303,6 +354,7 @@
           <span class="chip">${index + 1}</span>
           <span class="chip">${question.section}</span>
           <span class="chip">${escapeHtml(question.area)}</span>
+          <span class="chip repeat">Repeat frequency: ${escapeHtml(question.pyqRepeat)}x</span>
           ${status ? `<span class="chip">${status}</span>` : ""}
         </div>
         <h3>${escapeHtml(question.stem)}</h3>

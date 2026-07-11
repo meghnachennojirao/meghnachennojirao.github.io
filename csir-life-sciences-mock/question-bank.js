@@ -464,8 +464,33 @@
     return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
 
-  function conceptStem(topic) {
-    return topic.prompt;
+  function lowerFirst(text) {
+    return text.charAt(0).toLowerCase() + text.slice(1);
+  }
+
+  function conceptStem(topic, variant) {
+    const prompt = topic.prompt;
+    const lowerPrompt = lowerFirst(prompt);
+    const area = topic.area.toLowerCase();
+    const forms = [
+      prompt,
+      `In ${area}, ${lowerPrompt}`,
+      `A researcher is reviewing ${topic.concept}. ${prompt}`,
+      `Which choice matches this ${area} idea? ${prompt}`,
+      `For ${topic.concept}, ${lowerPrompt}`,
+      `During interpretation of ${topic.concept}, ${lowerPrompt}`,
+      `A lab discussion turns to ${topic.concept}. ${prompt}`,
+      `Apply the concept of ${topic.concept}: ${lowerPrompt}`,
+      `In a biological system involving ${topic.concept}, ${lowerPrompt}`,
+      `A result is being interpreted using ${topic.concept}. ${prompt}`,
+      `Choose the statement that fits ${topic.concept}: ${lowerPrompt}`,
+      `A mechanism in ${area} is being tested. ${prompt}`,
+      `To identify ${topic.concept}, ${lowerPrompt}`,
+      `A comparison of related mechanisms asks: ${prompt}`,
+      `For ${area} reasoning, ${lowerPrompt}`,
+      `A case centered on ${topic.concept} requires this answer: ${lowerPrompt}`
+    ];
+    return forms[variant % forms.length];
   }
 
   function buildConceptQuestions(raw, section, offset) {
