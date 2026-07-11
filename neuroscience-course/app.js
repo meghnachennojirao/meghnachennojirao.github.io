@@ -205,7 +205,16 @@ function selectLesson(id) {
   saveState();
   history.replaceState(null, "", `#${id}`);
   renderShell();
-  document.querySelector("#lesson").focus({ preventScroll: true });
+  const lessonElement = document.querySelector("#lesson");
+  lessonElement.focus({ preventScroll: true });
+
+  if (window.matchMedia("(max-width: 720px)").matches) {
+    const headerHeight = document.querySelector(".topbar")?.offsetHeight || 0;
+    const lessonTop = lessonElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+    window.scrollTo({ top: Math.max(0, lessonTop), behavior: "auto" });
+    return;
+  }
+
   window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
 }
 
