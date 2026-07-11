@@ -48,13 +48,13 @@
     2: {
       shortTitle: 'Montage',
       guide: 'Wiring changes the picture.',
-      question: 'A phase reversal marks what?',
-      optionLabels: ['Bad lead', 'Local maximum'],
+      question: 'A phase reversal most directly marks what?',
+      optionLabels: ['Proven cortical source', 'Local scalp maximum or minimum'],
       visual: compare('focal_spike', 'focal_spike', 'Referential', 'Bipolar'),
-      verdict: 'Local maximum',
-      subtitle: 'The reversal points toward the source.',
-      why: 'In bipolar montage, adjacent channels point away from the electrode closest to the discharge.',
-      mistake: 'A montage is not neutral; always check how the channels are linked.'
+      verdict: 'Local scalp maximum or minimum',
+      subtitle: 'The reversal describes a scalp voltage extremum.',
+      why: 'Opposite deflections in adjacent bipolar channels place an extremum at the shared electrode, not a unique cortical source.',
+      mistake: 'Check montage, polarity, field, and electrode quality before localizing.'
     },
     3: {
       shortTitle: 'Alpha',
@@ -97,12 +97,12 @@
     7: {
       shortTitle: 'Filters',
       guide: 'Settings shape what you see.',
-      question: 'LFF at 5 Hz removes what?',
+      question: 'A 5 Hz high-pass most attenuates what?',
       optionLabels: ['Fast', 'Slow'],
       visual: compare('normal_awake', 'diffuse_slowing', 'Before', 'After'),
       verdict: 'Slow activity',
-      subtitle: 'Low-frequency filters cut slow waves.',
-      why: 'A 5 Hz low-frequency filter removes delta and most theta.',
+      subtitle: 'A 5 Hz setting markedly attenuates slow waves.',
+      why: 'Filters have a roll-off: delta and lower theta are attenuated and may be distorted rather than uniformly erased.',
       mistake: 'Never interpret absent delta before checking filter settings.'
     },
     8: {
@@ -159,14 +159,14 @@
     },
     13: {
       shortTitle: 'SREDA',
-      guide: 'Context prevents overtreatment.',
+      guide: 'Context prevents misclassification.',
       question: 'Awake, asymptomatic, no slowing?',
-      optionLabels: ['Treat', 'Benign'],
+      optionLabels: ['NCSE from rhythm alone', 'SREDA after context review'],
       visual: compare('drowsy', 'temporal_seizure', 'No evolution', 'Evolution'),
       verdict: 'Benign variant',
       subtitle: 'No symptoms and no post-ictal slowing.',
       why: 'SREDA is sustained rhythmic activity without clinical change.',
-      mistake: 'Treating SREDA as NCSE exposes patients to unnecessary medication.'
+      mistake: 'Do not classify SREDA as NCSE from rhythm appearance alone.'
     },
     14: {
       shortTitle: 'Eye blink',
@@ -185,19 +185,19 @@
       question: 'Tap the noisy muscle lead.',
       visual: multi('muscle', ['F3', 'F4', 'T3', 'T4', 'O1', 'O2'], ['T3', 'T4']),
       verdict: 'Temporal EMG',
-      subtitle: 'Temporalis muscle contaminates T3/T4.',
+      subtitle: 'Temporalis muscle often affects T7/T8 (legacy T3/T4).',
       why: 'Muscle artifact is irregular, fast, and strongest over lateral leads.',
       mistake: 'Fast activity from jaw tension is not fast ictal activity.'
     },
     16: {
       shortTitle: 'Cardiac',
-      guide: 'Regular means not cortical.',
+      guide: 'Check timing against the ECG.',
       question: 'Tap the QRS-locked artifact.',
       visual: multi('cardiac', ['C3', 'C4', 'T3', 'T4', 'O1', 'O2'], ['T3', 'T4']),
       verdict: 'Cardiac artifact',
-      subtitle: 'A perfectly regular interval is the clue.',
-      why: 'Cardiac artifact repeats with the heart rhythm and often appears temporally.',
-      mistake: 'Epileptiform discharges are not mechanically regular.'
+      subtitle: 'QRS time-locking supports cardiac artifact.',
+      why: 'A consistent relationship to each QRS complex is stronger evidence than regularity alone.',
+      mistake: 'Cerebral periodic activity can be regular; confirm with ECG and montage review.'
     },
     17: {
       shortTitle: 'Slow artifact',
@@ -212,33 +212,33 @@
     },
     18: {
       shortTitle: 'Single channel',
-      guide: 'No field, no brain.',
+      guide: 'A limited field raises uncertainty.',
       question: 'Only F8 spikes?',
       optionLabels: ['IED', 'Electrode'],
       visual: { kind: 'head-diagram', config: { targets: ['F8'] } },
       verdict: 'Electrode artifact',
-      subtitle: 'A true discharge spreads to neighbours.',
-      why: 'Single-channel transients without a field are technical until proven otherwise.',
-      mistake: 'Do not localize pathology from one isolated electrode pop.'
+      subtitle: 'Artifact is favored, not proven.',
+      why: 'An isolated transient favors a technical problem but requires impedance, montage, and physiologic-channel checks.',
+      mistake: 'Do not make a definite cerebral or artifact call from one displayed channel.'
     },
     19: {
-      shortTitle: 'Spike criteria',
-      guide: 'Sharp is not enough.',
+      shortTitle: 'IED criteria',
+      guide: 'Use all six IFCN features.',
       visual: single('focal_spike', 'T3', 'after-wave'),
-      verdict: 'Spike-wave complex',
-      subtitle: 'The slow wave matters.',
-      why: 'A spike should disrupt background and be followed by an after-going slow wave.',
-      mistake: 'Pointed morphology alone is not epileptiform.'
+      verdict: 'Combined IFCN features',
+      subtitle: 'No single feature establishes an IED.',
+      why: 'Assess pointed multiphasic morphology, distinct duration, asymmetry, possible slow after-wave, background disruption, and a plausible scalp field.',
+      mistake: 'Pointed morphology or a slow after-wave alone is not diagnostic.'
     },
     20: {
       shortTitle: 'Focal IED',
-      guide: 'Find the center.',
-      question: 'Tap the phase reversal.',
+      guide: 'Find the local scalp maximum.',
+      question: 'Tap the local scalp maximum.',
       visual: multi('focal_spike', ['F3', 'C3', 'T3', 'O1', 'F4', 'T4'], ['T3']),
       verdict: 'Left temporal IED',
-      subtitle: 'T3 is the discharge maximum.',
-      why: 'The field is strongest over the left temporal region.',
-      mistake: 'Always report lateralization and localization, not just presence.'
+      subtitle: 'T7 (legacy T3) is the scalp maximum.',
+      why: 'The field is strongest over the left temporal region; this is approximate scalp localization, not source certainty.',
+      mistake: 'Report the field and localization uncertainty, not just presence.'
     },
     21: {
       shortTitle: '3 Hz',
@@ -266,8 +266,8 @@
       visual: multi('lpd', ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4', 'T3', 'T4'], ['Fp2', 'F4', 'C4', 'T4']),
       verdict: 'Right LPDs',
       subtitle: 'Lateralized periodic discharges carry seizure risk.',
-      why: 'Regular sharp-slow complexes over one hemisphere sit on the ictal-interictal continuum.',
-      mistake: 'Do not treat periodicity as benign repetition.'
+      why: 'Right-sided LPDs are associated with seizure risk; rate, modifiers, fluctuation, and context determine whether IIC criteria are met.',
+      mistake: 'Do not call every periodic pattern ictal or benign from rate alone.'
     },
     24: {
       shortTitle: 'Ictal',
@@ -284,29 +284,29 @@
       question: 'Tap the onset channel.',
       visual: multi('temporal_seizure', ['F3', 'C3', 'T3', 'O1', 'F4', 'T4'], ['T3']),
       verdict: 'Left temporal onset',
-      subtitle: 'The seizure begins at T3.',
-      why: 'The rhythmic activity begins focally, then spreads ipsilaterally and beyond.',
-      mistake: 'Do not localize from the largest late spread.'
+      subtitle: 'The first visible change is maximal at T7 (legacy T3).',
+      why: 'This supports approximate lateralization but does not prove the cortical seizure-onset zone.',
+      mistake: 'Do not equate the largest late wave or earliest scalp electrode with a unique cortical onset.'
     },
     26: {
       shortTitle: 'GTC',
       guide: 'The trace has phases.',
       visual: multi('gtc_seizure', ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4'], ['Fp1', 'Fp2', 'F3', 'F4']),
-      verdict: 'Convulsive seizure pattern',
-      subtitle: 'Fast tonic activity, clonic slowing, suppression.',
-      why: 'Post-ictal suppression strongly supports a true generalized tonic-clonic seizure.',
-      mistake: 'PNES does not produce true post-ictal EEG suppression.'
+      verdict: 'Compatible convulsive seizure pattern',
+      subtitle: 'Visible phases may be obscured by muscle artifact.',
+      why: 'An evolving electroclinical sequence with postictal slowing or attenuation can be supportive, but no single feature proves epilepsy.',
+      mistake: 'Do not use postictal attenuation alone to confirm epilepsy or exclude a functional event.'
     },
     27: {
       shortTitle: 'NCSE',
-      guide: 'Altered patient, active EEG.',
-      question: 'Unresponsive with continuous spike-wave?',
-      optionLabels: ['Observe', 'Treat'],
+      guide: 'Apply electroclinical criteria.',
+      question: 'Unresponsive with persistent epileptiform activity?',
+      optionLabels: ['Routine observation', 'Urgent expert evaluation'],
       visual: multi('generalized_sw', ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4'], ['F3', 'F4']),
-      verdict: 'Treat urgently',
-      subtitle: 'This is status until proven otherwise.',
-      why: 'NCSE is an emergency when epileptiform activity persists with impaired consciousness.',
-      mistake: 'Waiting can prolong neuronal injury.'
+      verdict: 'Urgent electroclinical evaluation',
+      subtitle: 'Possible NCSE requires formal criteria and context.',
+      why: 'Persistent epileptiform activity with impaired responsiveness raises concern for NCSE but periodicity alone is insufficient.',
+      mistake: 'Do not wait for shaking or declare definite status from one pattern alone.'
     },
     28: {
       shortTitle: 'Triphasic',
@@ -314,9 +314,9 @@
       question: 'Where are waves strongest?',
       visual: multi('triphasic', ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4'], ['Fp1', 'Fp2', 'F3', 'F4']),
       verdict: 'Frontal predominance',
-      subtitle: 'Triphasic waves lead frontally.',
-      why: 'Clinical context and anterior-posterior lag help separate encephalopathy from NCSE.',
-      mistake: 'Do not read triphasic waves without metabolic context.'
+      subtitle: 'GPDs with triphasic morphology may be frontally predominant.',
+      why: 'Morphology and anterior-posterior lag are descriptive; evolution, modifiers, and clinical context determine whether NCSE remains a concern.',
+      mistake: 'Triphasic morphology is nonspecific and does not by itself exclude NCSE.'
     },
     29: {
       shortTitle: 'Over-read',
@@ -333,7 +333,7 @@
       shortTitle: 'Clinical context',
       guide: 'The waveform needs a patient.',
       question: 'Choose the best impression.',
-      optionLabels: ['Absence', 'NCSE'],
+      optionLabels: ['Childhood absence from waveform alone', 'Possible NCSE — correlate'],
       visual: {
         kind: 'report',
         report: {
@@ -346,10 +346,10 @@
           ]
         }
       },
-      verdict: 'NCSE until proven otherwise',
-      subtitle: 'Same waveform, different diagnosis.',
-      why: '3 Hz spike-wave in a confused adult after convulsion is an emergency pattern.',
-      mistake: 'Do not apply a childhood absence label without clinical context.'
+      verdict: 'Possible NCSE — urgent evaluation',
+      subtitle: 'Context raises concern without proving the diagnosis.',
+      why: 'Persistent generalized spike-wave with impaired responsiveness requires formal electroclinical assessment.',
+      mistake: 'Do not diagnose childhood absence or definite NCSE from waveform and age alone.'
     }
   };
 
@@ -408,7 +408,7 @@
       question: 'When the lines flip, what does it point to?',
       optionLabels: ['Loose wire', 'Strongest spot'],
       verdict: 'Strongest spot',
-      subtitle: 'The flip points toward the source.'
+      subtitle: 'The flip marks a local scalp maximum or minimum.'
     },
     3: {
       notice: 'Look for the steady rhythm that repeats about ten times each second near the back of the head.',
@@ -473,7 +473,7 @@
       notice: 'If the patient is awake and unchanged, a rhythmic pattern may be harmless.',
       terms: [['Clinical correlate', 'a matching symptom in the patient']],
       question: 'Awake, no symptoms, no slowing after. What is safer?',
-      optionLabels: ['Treat as emergency', 'Call benign pattern'],
+      optionLabels: ['NCSE from rhythm alone', 'SREDA after context review'],
       verdict: 'Benign pattern'
     },
     14: {
@@ -551,8 +551,8 @@
       notice: 'A patient can keep seizing on EEG without large body movements.',
       terms: [['NCSE', 'ongoing seizure activity without convulsions']],
       question: 'Unresponsive patient with continuous seizure waves:',
-      optionLabels: ['Wait and watch', 'Treat urgently'],
-      verdict: 'Treat urgently'
+      optionLabels: ['Routine observation', 'Urgent expert evaluation'],
+      verdict: 'Urgent electroclinical evaluation'
     },
     28: {
       notice: 'Metabolic illness can create seizure-like waves, so context matters.',
@@ -570,8 +570,8 @@
       notice: 'The final report should answer the patient question, not just name a waveform.',
       terms: [['Impression', 'the final meaning of the EEG']],
       question: 'Choose the best final meaning.',
-      optionLabels: ['Childhood absence', 'Emergency seizure state'],
-      verdict: 'Emergency seizure state'
+      optionLabels: ['Childhood absence from waveform alone', 'Possible NCSE — correlate'],
+      verdict: 'Possible NCSE — urgent evaluation'
     }
   };
 
@@ -673,7 +673,7 @@
       optionLabels: ['Fast waves', 'Slow waves'],
       visual: compare('normal_awake', 'diffuse_slowing', 'before setting', 'after setting'),
       verdict: 'Slow waves',
-      subtitle: 'The setting removed them.',
+      subtitle: 'The setting markedly attenuated them.',
       why: 'The cutoff is above the slow waves, so those waves disappear from view.',
       mistake: 'Saying slow waves are absent before checking the settings.'
     },
@@ -757,7 +757,7 @@
       notice: 'If the patient is awake, unchanged, and recovers normally, the rhythm is less alarming.',
       terms: [['Symptom match', 'a patient change that matches the trace']],
       question: 'Awake, no symptoms, no after-change. What is safer?',
-      optionLabels: ['Treat as emergency', 'Call benign pattern'],
+      optionLabels: ['NCSE from rhythm alone', 'SREDA after context review'],
       visual: compare('drowsy', 'temporal_seizure', 'unchanged', 'changing'),
       verdict: 'Benign pattern',
       subtitle: 'The patient did not change.',
@@ -825,7 +825,7 @@
       explain: { title: 'A real brain event has neighbors.', copy: 'If only one sensor pops, first suspect the sensor.' },
       lookTitle: 'Check the neighbors.',
       lookKind: 'side',
-      notice: 'A true brain signal usually appears in nearby sensors too.',
+      notice: 'A cerebral signal often has a plausible field, but a limited field can occur.',
       terms: [['Field', 'spread of a signal to nearby sensors']],
       question: 'Only one sensor pops. What is more likely?',
       optionLabels: ['Brain spike', 'Sensor problem'],
@@ -858,7 +858,7 @@
       terms: [['Brief burst', 'a short abnormal event']],
       question: 'Tap the strongest center.',
       verdict: 'Left-side center',
-      subtitle: 'The strongest sharp wave sits at T3.',
+      subtitle: 'The local scalp maximum is at T7 (legacy T3).',
       why: 'The nearby lines point toward the same left temporal center.',
       mistake: 'Reporting a spike without saying where it is strongest.'
     },
@@ -928,8 +928,8 @@
       terms: [['Onset', 'where the event begins']],
       question: 'Tap where it starts.',
       verdict: 'Left temporal start',
-      subtitle: 'The first change appears at T3.',
-      why: 'The rhythm begins at T3 before it spreads elsewhere.',
+      subtitle: 'The first visible change is maximal at T7 (legacy T3).',
+      why: 'This supports approximate left temporal lateralization without proving the cortical onset zone.',
       mistake: 'Choosing the largest late wave instead of the earliest change.'
     },
     26: {
@@ -942,7 +942,7 @@
       terms: [['Quiet after', 'a quiet period after a seizure']],
       verdict: 'Convulsive seizure sequence',
       subtitle: 'Fast, rhythmic, then quiet.',
-      why: 'The phase sequence supports a true convulsive seizure pattern.',
+      why: 'The phase sequence is compatible with a convulsive epileptic seizure, but no single postictal feature is diagnostic.',
       mistake: 'Stopping the recording before the quiet after-phase appears.'
     },
     27: {
@@ -955,8 +955,8 @@
       notice: 'The patient is unresponsive while seizure-like waves continue.',
       terms: [['Nonconvulsive seizure', 'ongoing seizure activity without convulsions']],
       question: 'Unresponsive patient with continuous seizure waves:',
-      optionLabels: ['Wait and watch', 'Treat urgently'],
-      verdict: 'Treat urgently',
+      optionLabels: ['Routine observation', 'Urgent expert evaluation'],
+      verdict: 'Urgent electroclinical evaluation',
       subtitle: 'The EEG is still active.',
       why: 'Ongoing seizure activity with impaired responsiveness is urgent.',
       mistake: 'Waiting for shaking before acting.'
@@ -1000,7 +1000,7 @@
       notice: 'Same-looking waves can lead to different conclusions in different patients.',
       terms: [['Impression', 'the final meaning of the EEG']],
       question: 'Choose the best final meaning.',
-      optionLabels: ['Childhood absence', 'Emergency seizure state'],
+      optionLabels: ['Childhood absence from waveform alone', 'Possible NCSE — correlate'],
       visual: {
         kind: 'report',
         report: {
@@ -1009,11 +1009,11 @@
             ['Patient', 'Adult, confused after a convulsion.'],
             ['Trace', 'Both-side repeated seizure waves.'],
             ['State', 'Awake but not responding.'],
-            ['Meaning', 'Treat as an emergency pattern.']
+            ['Meaning', 'Possible NCSE; correlate urgently.']
           ]
         }
       },
-      verdict: 'Emergency seizure state',
+      verdict: 'Possible NCSE — urgent evaluation',
       subtitle: 'The patient context changes the meaning.',
       why: 'In a confused adult, continuous seizure waves are an emergency pattern.',
       mistake: 'Naming the waveform without answering the clinical question.'
@@ -1056,16 +1056,16 @@
       cards: [
         c('The same signal can be redrawn.', 'One view shows each sensor alone.', 'sensor', [['View', 'how the EEG is drawn']]),
         c('Another view compares neighbors.', 'A line can show the difference between two nearby sensors.', 'compare', [['Neighbor pair', 'two sensors compared']]),
-        c('A flip is a locator.', 'When nearby lines point away from each other, the center is strongest.', 'flip', [['Flip', 'nearby lines turn opposite ways']]),
-        c('Do not name it yet.', 'First ask: where is the strongest spot?', 'spread', [['Strongest spot', 'where the event is largest']], { focusX: '50%' })
+        c('A flip marks a scalp extremum.', 'Opposite deflections can place a local voltage maximum or minimum at the shared electrode.', 'flip', [['Phase reversal', 'opposite deflections around a shared electrode']]),
+        c('Do not name a source yet.', 'Confirm the field, montage, polarity, and electrode quality.', 'spread', [['Scalp extremum', 'local measured maximum or minimum']], { focusX: '50%' })
       ],
-      question: 'The flip points to...',
-      optionLabels: ['A loose wire', 'The strongest spot'],
+      question: 'A bipolar phase reversal most directly marks...',
+      optionLabels: ['A proven cortical source', 'A local scalp maximum or minimum'],
       visual: compare('focal_spike', 'focal_spike', 'single sensors', 'neighbor pairs'),
-      verdict: 'Strongest spot',
-      subtitle: 'The flip helps locate it.',
-      why: 'The event is biggest at the sensor between the opposite lines.',
-      mistake: 'Calling a flip a loose wire before checking the pattern around it.'
+      verdict: 'Local scalp maximum or minimum',
+      subtitle: 'The reversal describes the recorded field.',
+      why: 'Opposite deflections in adjacent bipolar channels place a local voltage extremum at their shared electrode; they do not prove a unique cortical generator.',
+      mistake: 'Calling a phase reversal the source before checking montage, polarity, the full field, and electrode quality.'
     },
     3: {
       shortTitle: 'Back rhythm',
@@ -1130,15 +1130,15 @@
       guide: 'The machine can hide waves.',
       cards: [
         c('The display is not raw truth.', 'Machine settings can change what you see.', 'line', [['Display', 'the drawn view of the signal']]),
-        c('A filter is a sieve.', 'It can hide waves that are too slow or too fast.', 'speed', [['Filter', 'a setting that hides part of the signal']]),
-        c('Check settings before judging.', 'If slow waves are hidden, the trace can look falsely clean.', 'compare', [['Slow waves', 'waves that repeat slowly']])
+        c('A filter has a roll-off.', 'It attenuates frequencies progressively rather than making a brick-wall cut.', 'speed', [['Filter', 'a setting that changes frequency content']]),
+        c('Check settings before judging.', 'Strong attenuation can hide or distort slow waves and make the trace look falsely clean.', 'compare', [['Slow waves', 'waves that repeat slowly']])
       ],
-      question: 'If slow waves below 5 per second are hidden, what disappears?',
+      question: 'With a 5 Hz high-pass setting, what is most attenuated?',
       optionLabels: ['Fast waves', 'Slow waves'],
       visual: compare('normal_awake', 'diffuse_slowing', 'before setting', 'after setting'),
       verdict: 'Slow waves',
-      subtitle: 'The setting removed them.',
-      why: 'The setting cuts off waves below that speed.',
+      subtitle: 'Delta and lower theta are markedly attenuated.',
+      why: 'A 5 Hz high-pass setting progressively attenuates slower activity and can distort morphology; it does not erase every frequency below 5 Hz equally.',
       mistake: 'Saying slow waves are absent before checking the settings.'
     },
     8: {
@@ -1161,14 +1161,14 @@
       guide: 'Sharp is not enough.',
       cards: [
         c('A pointed wave is only a shape.', 'Shape alone does not decide whether a pattern is dangerous.', 'line', [['Pointed wave', 'a sharp-looking shape']]),
-        c('Look after the point.', 'A concerning point often has a slow tail after it.', 'story', [['Tail', 'the slower wave after a point']]),
+        c('Look beyond the point.', 'A slow after-wave is one helpful feature, not a stand-alone rule.', 'story', [['After-wave', 'a slower wave following the transient']]),
         c('Temporal means side head.', 'The side sensors sit near the temples.', 'regions', [['Temporal', 'side of the head']], { region: 'side' }),
-        c('Wickets are a look-alike.', 'A temporal sharp-looking run with no tail can be harmless.', 'story', [['Wicket', 'a harmless temporal look-alike']])
+        c('Wickets are a look-alike.', 'Arciform temporal waves in drowsiness may occur singly or in trains.', 'story', [['Wicket', 'a benign temporal look-alike']])
       ],
       question: 'Tap the harmless temporal run.',
       verdict: 'Wicket wave',
-      subtitle: 'Sharp-looking, but no slow tail.',
-      why: 'The run sits near the side and lacks the slow tail that would raise concern.',
+      subtitle: 'Morphology, state, field, and background favor a wicket.',
+      why: 'The arciform temporal morphology, drowsy state, preserved background, and lack of a prominent slow after-wave together favor a wicket wave.',
       mistake: 'Calling a look-alike dangerous from shape alone.'
     },
     10: {
@@ -1176,29 +1176,29 @@
       guide: 'Direction is a clue.',
       cards: [
         c('Waves point.', 'A sharp wave can point upward or downward on the page.', 'polarity', [['Direction', 'which way a wave points']]),
-        c('Direction changes meaning.', 'Some sharp bursts point the wrong way for the usual danger pattern.', 'polarity', [['Positive burst', 'a burst pointing the benign way']]),
-        c('Use shape plus direction.', 'Do not judge a sharp wave from shape alone.', 'story', [['Shape plus direction', 'two clues together']])
+        c('Direction adds information.', 'The named 14- and 6-Hz variant is surface-positive in its characteristic field.', 'polarity', [['Positive burst', 'a surface-positive burst']]),
+        c('Combine the clues.', 'Polarity, comb morphology, posterior temporal field, and drowsy state must agree.', 'story', [['Combined features', 'several clues interpreted together']])
       ],
-      question: 'What does this direction suggest?',
-      optionLabels: ['Still suspicious', 'More likely harmless'],
-      verdict: 'More likely harmless',
-      subtitle: 'Direction lowered concern.',
-      why: 'The sharp burst points in a way that argues against the usual danger pattern.',
-      mistake: 'Treating shape alone as the whole answer.'
+      question: 'How should surface-positive polarity be used here?',
+      optionLabels: ['As proof by itself', 'As one clue with morphology, field, and state'],
+      verdict: 'One clue in a pattern',
+      subtitle: 'Polarity alone is not diagnostic.',
+      why: 'Surface-positive polarity supports this benign named pattern only when its morphology, posterior temporal distribution, and drowsy state also fit.',
+      mistake: 'Declaring a transient benign or epileptiform from polarity alone.'
     },
     11: {
       shortTitle: 'No change',
-      guide: 'Danger usually changes.',
+      guide: 'Evolution is one major clue.',
       cards: [
-        c('A seizure is a changing event.', 'It usually builds, spreads, or changes speed.', 'story', [['Seizure', 'abnormal brain activity that evolves']]),
+        c('Many seizures evolve.', 'They may change in frequency, morphology, or distribution.', 'story', [['Evolution', 'progressive change over time']]),
         c('No change is a clue.', 'A rhythm that appears and stops without changing is less suspicious.', 'story', [['Evolution', 'change over time']]),
-        c('Ask what happened over time.', 'Speed, size, and spread are the three questions.', 'speed', [['Spread', 'movement to more sensors']])
+        c('Use more than evolution.', 'State, field, duration, artifact, and clinical correlation still matter.', 'speed', [['Context', 'other evidence around the rhythm']])
       ],
       question: 'Watch for change over time, then reveal.',
       verdict: 'No-change rhythm',
       subtitle: 'No build-up, no spread.',
-      why: 'The rhythm stays the same instead of evolving like a seizure.',
-      mistake: 'Calling any repeated rhythm a seizure.'
+      why: 'The stereotyped temporal rhythm in drowsiness favors RMTD; absence of evolution alone does not exclude every seizure.',
+      mistake: 'Calling any repeated rhythm a seizure—or harmless—from evolution alone.'
     },
     12: {
       shortTitle: 'Tiny sleep sharp',
@@ -1221,15 +1221,15 @@
       cards: [
         c('A trace is not the whole story.', 'The patient state can change the meaning.', 'report', [['Patient state', 'what the patient is doing or feeling']]),
         c('Look for a matching symptom.', 'If the trace changes but the patient does not, be careful.', 'compare', [['Symptom match', 'patient change matching the trace']]),
-        c('After-change matters too.', 'A seizure often leaves the trace slower afterward.', 'story', [['After-change', 'what happens after the event']])
+        c('After-change is supportive.', 'Post-event slowing may support a seizure interpretation but is not required or diagnostic alone.', 'story', [['After-change', 'what happens after the event']])
       ],
-      question: 'Awake, no symptoms, no after-change. What is safer?',
-      optionLabels: ['Treat as emergency', 'Call benign pattern'],
+      question: 'Awake, asymptomatic, characteristic non-evolving rhythm. What is favored?',
+      optionLabels: ['NCSE from rhythm alone', 'SREDA after full context review'],
       visual: compare('drowsy', 'temporal_seizure', 'unchanged', 'changing'),
       verdict: 'Benign pattern',
       subtitle: 'The patient did not change.',
-      why: 'The trace alone is not enough. The patient stayed well during it.',
-      mistake: 'Treating a rhythm without checking the patient.'
+      why: 'The characteristic pattern, unchanged patient state, preserved background, and lack of progressive evolution favor SREDA; no single negative feature excludes NCSE in every case.',
+      mistake: 'Classifying a sustained rhythm without state, evolution, background, and clinical correlation.'
     },
     14: {
       shortTitle: 'Blink',
@@ -1262,17 +1262,17 @@
     },
     16: {
       shortTitle: 'Heartbeat',
-      guide: 'Perfect timing is a clue.',
+      guide: 'Check timing against the ECG.',
       cards: [
         c('The heart can show up.', 'A heartbeat can leave a small sharp mark on EEG.', 'timing', [['Heart artifact', 'heartbeat signal on EEG']]),
-        c('Timing is the giveaway.', 'Heart marks repeat at a very regular interval.', 'timing', [['Regular interval', 'same time gap again and again']]),
-        c('Brain spikes are less exact.', 'A perfectly repeated mark is often not brain.', 'line', [['Not brain', 'signal from outside the cortex']])
+        c('QRS locking is the key test.', 'Compare every mark with the simultaneously recorded ECG.', 'timing', [['QRS-locked', 'same temporal relationship to each heartbeat']]),
+        c('Regularity is not enough.', 'Cerebral periodic activity can also be regular, so review timing and montage.', 'line', [['Montage review', 'checking another display view']])
       ],
       question: 'Tap the repeating heart artifact.',
       verdict: 'Heartbeat artifact',
-      subtitle: 'The timing is too regular for a brain event.',
-      why: 'Each mark lands at a steady heartbeat interval.',
-      mistake: 'Ignoring timing and judging only the sharp shape.'
+      subtitle: 'QRS time-locking supports cardiac artifact.',
+      why: 'A consistent relationship to each QRS complex is stronger evidence than regularity alone; the visible field can change with reference and electrode contacts.',
+      mistake: 'Declaring a regular sharp pattern cardiac without ECG correlation and montage review.'
     },
     17: {
       shortTitle: 'Skin drift',
@@ -1280,58 +1280,58 @@
       cards: [
         c('The baseline is the resting line.', 'Sometimes the whole line slowly slides up or down.', 'line', [['Baseline', 'the resting position of a line']]),
         c('Sweat can cause drift.', 'Skin changes can move the baseline very slowly.', 'speed', [['Drift', 'slow sliding of the line']]),
-        c('Too slow is suspicious.', 'If it is slower than brain rhythm, think skin first.', 'speed', [['Sweat drift', 'skin-related baseline drift']])
+        c('Very slow is only one clue.', 'Electrode behavior, sweating, distribution, and the underlying background help identify the source.', 'speed', [['Sweat drift', 'skin-related baseline drift']])
       ],
-      question: 'Very slow drifting across the page is more likely:',
+      question: 'Very slow drift with sweating and unstable electrode baselines is more likely:',
       optionLabels: ['Brain slowing', 'Sweat drift'],
       verdict: 'Sweat drift',
       subtitle: 'The baseline is sliding.',
-      why: 'The movement is broad and extremely slow, which fits skin or sweat artifact.',
-      mistake: 'Calling baseline drift a brain rhythm.'
+      why: 'The rate, sweating, and electrode instability favor artifact, but frequency alone does not prove a noncerebral source.',
+      mistake: 'Calling baseline drift cerebral or artifactual without technical correlation.'
     },
     18: {
       shortTitle: 'One sensor',
-      guide: 'Brain signals have neighbors.',
+      guide: 'A limited field raises uncertainty.',
       cards: [
-        c('Brain events spread nearby.', 'A real brain signal usually reaches neighboring sensors.', 'sensor', [['Neighbor', 'a nearby sensor']]),
-        c('Spread is called a field.', 'Field means the signal shows up around the source.', 'spread', [['Field', 'spread to nearby sensors']], { focusX: '54%' }),
-        c('One lonely pop is suspicious.', 'If only one sensor pops, check the sensor first.', 'code', [['Single pop', 'one isolated sensor event']], { parts: ['F8', 'only'], labels: ['one sensor', 'no neighbors'] })
+        c('Cerebral events often have a field.', 'Nearby electrodes may sample the same volume-conducted event.', 'sensor', [['Field', 'spatial distribution across electrodes']]),
+        c('A small field can still be cerebral.', 'Limited spread makes artifact more likely but does not prove it.', 'spread', [['Limited field', 'seen in very few derivations']], { focusX: '54%' }),
+        c('Check the hardware and montage.', 'Inspect every derivation containing F8 and review impedance, video, EOG, and ECG.', 'code', [['Technical check', 'evidence about the electrode and recording']], { parts: ['F8', 'check'], labels: ['shared input', 'verify'] })
       ],
       question: 'Only one sensor pops. What is more likely?',
       optionLabels: ['Brain spike', 'Sensor problem'],
       verdict: 'Sensor problem',
-      subtitle: 'No neighboring spread.',
-      why: 'The event is isolated instead of spreading to nearby sensors.',
-      mistake: 'Localizing disease from one lonely sensor pop.'
+      subtitle: 'Artifact is favored, not proven.',
+      why: 'An isolated transient raises concern for electrode artifact. Confirm with impedance, every derivation containing F8, another montage, and physiologic channels.',
+      mistake: 'Making a definite cerebral or artifact call from one displayed channel.'
     },
     19: {
-      shortTitle: 'Spike rule',
-      guide: 'A point alone is not enough.',
+      shortTitle: 'IED features',
+      guide: 'Use the full IFCN feature set.',
       cards: [
-        c('A spike is very brief.', 'A spike is a short sharp brain wave.', 'line', [['Spike', 'a very brief sharp wave']]),
-        c('The tail matters.', 'A concerning spike is often followed by a slower wave.', 'spike-tail', [['Tail', 'the slower wave after it']]),
-        c('Look for disruption.', 'The spike should interrupt the surrounding rhythm.', 'line', [['Disrupt', 'break the ongoing rhythm']])
+        c('Start with shape and duration.', 'Look for a pointed di- or triphasic transient whose duration differs from the background.', 'line', [['IFCN', 'International Federation of Clinical Neurophysiology']]),
+        c('Add asymmetry and after-wave.', 'Waveform asymmetry and a possible slow after-wave are two more features.', 'spike-tail', [['Possible after-wave', 'helpful but not mandatory by itself']]),
+        c('Check disruption and field.', 'Background disruption and a physiologically plausible scalp voltage field complete the six-feature assessment.', 'spread', [['Scalp field', 'distribution of positive and negative voltages']], { focusX: '38%' })
       ],
-      question: 'Watch the sharp point and its tail, then reveal.',
-      verdict: 'Spike with slow tail',
-      subtitle: 'The tail makes the point matter more.',
-      why: 'The sharp point disrupts the rhythm and is followed by a slow wave.',
-      mistake: 'Calling every pointed wave a spike.'
+      question: 'Review morphology, duration, asymmetry, after-wave, disruption, and field.',
+      verdict: 'Use all six IFCN features',
+      subtitle: 'No single feature establishes an IED.',
+      why: 'IED interpretation rests on a combination of the six IFCN features and exclusion of artifact and benign variants.',
+      mistake: 'Using pointedness or a slow after-wave as a stand-alone diagnostic rule.'
     },
     20: {
-      shortTitle: 'Spike center',
-      guide: 'Find the source area.',
+      shortTitle: 'Scalp maximum',
+      guide: 'Locate the field, not a proven source.',
       cards: [
-        c('A spike has a center.', 'The center is where the sharp wave is strongest.', 'spread', [['Center', 'strongest part of the event']], { focusX: '38%' }),
+        c('A discharge has a scalp field.', 'Find the local voltage maximum or minimum and its surrounding distribution.', 'spread', [['Scalp maximum', 'strongest recorded location']], { focusX: '38%' }),
         c('T means temporal.', 'Temporal means the side of the head, near the temple.', 'regions', [['Temporal', 'side of the head'], ['T', 'short for temporal']], { region: 'side' }),
-        c('T3 means left temporal.', 'T is side head. 3 is odd, so it is left.', 'code', [['T3', 'left temporal sensor']], { parts: ['T', '3'], labels: ['side', 'left'] }),
-        c('Tap the center, not the edge.', 'The strongest line is the best locator.', 'spread', [['Locator', 'clue to source area']], { focusX: '38%' })
+        c('T7 is left mid-temporal.', 'T7 is the modern name; older systems call the same electrode T3.', 'code', [['T7 (legacy T3)', 'left mid-temporal electrode']], { parts: ['T', '7'], labels: ['temporal', 'left'] }),
+        c('Tap the local maximum.', 'It describes the scalp field but does not prove a unique cortical generator.', 'spread', [['Localization', 'an approximate inference from the scalp field']], { focusX: '38%' })
       ],
-      question: 'Tap the strongest center.',
-      verdict: 'Left temporal center',
-      subtitle: 'The strongest sharp wave sits at T3.',
-      why: 'T3 means left temporal, and the nearby lines point toward that center.',
-      mistake: 'Reporting a spike without saying where it is strongest.'
+      question: 'Tap the local scalp maximum.',
+      verdict: 'Left temporal scalp maximum',
+      subtitle: 'T7 (legacy T3) is the local scalp maximum.',
+      why: 'The synthetic field is strongest at T7 (legacy T3). Montage and field review support approximate scalp localization, not source certainty.',
+      mistake: 'Calling the scalp maximum the proven cortical source.'
     },
     21: {
       shortTitle: 'Both sides',
@@ -1351,115 +1351,115 @@
       shortTitle: 'Slow side',
       guide: 'Compare the halves.',
       cards: [
-        c('Slow can be local.', 'Slow waves in one area can point to stress there.', 'speed', [['Slow wave', 'a wave that repeats slowly']]),
+        c('Slow can be focal.', 'Persistent focal slowing indicates focal cerebral dysfunction but not one specific cause.', 'speed', [['Focal slowing', 'slowing concentrated in one region']]),
         c('Compare left with right.', 'One side may carry more slow activity than the other.', 'side', [['Side difference', 'left and right do not match']]),
-        c('One area is a clue.', 'If slow waves stay in one region, name the region.', 'spread', [['One area', 'limited to one region']], { focusX: '36%' })
+        c('Name the distribution, then correlate.', 'Structural, postictal, inflammatory, migraine-related, and other processes can produce focal slowing.', 'spread', [['Nonspecific', 'does not identify one cause']], { focusX: '36%' })
       ],
       question: 'Tap the slow side.',
       verdict: 'Left-side slowing',
       subtitle: 'The slow waves are one-sided.',
-      why: 'Persistent slow activity is concentrated over the left side.',
-      mistake: 'Calling one-sided slowing a whole-brain problem.'
+      why: 'Persistent slow activity is concentrated over the left side, localizing dysfunction without identifying its cause.',
+      mistake: 'Calling focal slowing a whole-brain problem or a specific structural lesion from EEG alone.'
     },
     23: {
-      shortTitle: 'Repeating side',
-      guide: 'Repetition can raise risk.',
+      shortTitle: 'LPDs',
+      guide: 'Describe repetition, modifiers, and risk.',
       cards: [
-        c('Repetition changes concern.', 'A sharp wave that keeps returning deserves attention.', 'story', [['Repeating', 'returning again and again']]),
-        c('Side matters again.', 'If repetition stays on one side, that side is active.', 'side', [['Active side', 'side with repeated events']]),
-        c('Regular is not always harmless.', 'Some dangerous patterns repeat steadily.', 'story', [['Steady pace', 'similar time gap each time']])
+        c('LPDs repeat on one side.', 'Lateralized periodic discharges are associated with focal dysfunction and increased seizure risk.', 'story', [['LPD', 'lateralized periodic discharge']]),
+        c('Frequency is only part of the description.', 'Plus modifiers, fluctuation, evolution, burden, and clinical state also matter.', 'side', [['Modifier', 'feature that changes interpretation']]),
+        c('IIC is conditional.', 'LPDs enter the ACNS ictal-interictal continuum only when rate and modifier or fluctuation criteria are met.', 'story', [['IIC', 'ictal-interictal continuum descriptor']])
       ],
       question: 'Tap the active side.',
-      verdict: 'Right-side repeating waves',
-      subtitle: 'The right side keeps producing them.',
-      why: 'The activity repeats over the right side at a steady interval.',
-      mistake: 'Dismissing repeated sharp waves because they look too regular.'
+      verdict: 'Right-sided LPDs',
+      subtitle: 'LPDs are associated with increased seizure risk.',
+      why: 'The periodic discharges are lateralized to the right. Frequency, modifiers, fluctuation, evolution, burden, and clinical context determine whether IIC or seizure criteria are met.',
+      mistake: 'Calling every LPD ictal—or benign—from periodicity or frequency alone.'
     },
     24: {
       shortTitle: 'Changing event',
-      guide: 'A seizure changes over time.',
+      guide: 'Evolution strongly supports ictal activity.',
       cards: [
-        c('A seizure is a story.', 'It has a beginning, changes, and then ends.', 'story', [['Seizure', 'abnormal brain activity that evolves']]),
-        c('Evolution means change.', 'Watch speed, size, and spread over time.', 'speed', [['Evolution', 'change over time']]),
-        c('One clue is not enough.', 'A steady rhythm is less convincing than a changing one.', 'story', [['Steady', 'not changing much']])
+        c('Many seizures tell a changing story.', 'Frequency, morphology, or distribution may evolve over time.', 'story', [['Evolution', 'progressive change over time']]),
+        c('Track the formal dimensions.', 'Watch frequency, morphology, location, and duration—not amplitude alone.', 'speed', [['Duration', 'how long the pattern lasts']]),
+        c('Evolution is not the only route.', 'Some electrographic seizures meet rate-and-duration criteria, while artifact can look evolving.', 'story', [['Criteria', 'rules applied with context']])
       ],
       question: 'Watch the changing rhythm, then reveal.',
       verdict: 'Seizure evolution',
       subtitle: 'The rhythm changes in several ways.',
-      why: 'It starts small, builds, spreads, and then slows down.',
-      mistake: 'Calling a steady unchanged rhythm a seizure.'
+      why: 'This synthetic pattern changes in frequency, morphology, and distribution. Duration and clinical correlation determine its final classification.',
+      mistake: 'Using evolution as an all-or-none shortcut or classifying amplitude change alone as evolution.'
     },
     25: {
-      shortTitle: 'Start point',
-      guide: 'Start beats spread.',
+      shortTitle: 'Earliest scalp change',
+      guide: 'Track the first visible change before spread.',
       cards: [
-        c('Onset means start.', 'The onset is where the event begins.', 'story', [['Onset', 'where the event starts']]),
-        c('Spread can be louder.', 'The biggest late signal may not be the start.', 'spread', [['Spread', 'movement after the start']], { focusX: '68%' }),
-        c('Use the first change.', 'Find the earliest rhythm change before choosing a location.', 'spread', [['First change', 'earliest new activity']], { focusX: '38%' }),
-        c('Here, watch T3.', 'T3 is the left temporal sensor you decoded earlier.', 'code', [['T3', 'left temporal sensor']], { parts: ['T', '3'], labels: ['side', 'left'] })
+        c('Scalp onset is what you can see.', 'The earliest scalp change may occur after the cortical seizure has already begun.', 'story', [['Scalp onset', 'earliest change visible at scalp electrodes']]),
+        c('Spread can be louder.', 'The biggest late signal may not be the earliest visible change.', 'spread', [['Spread', 'later involvement of more electrodes']], { focusX: '68%' }),
+        c('Use the first visible change.', 'It provides approximate lateralizing information, not a unique cortical onset zone.', 'spread', [['Lateralization', 'estimating left versus right']], { focusX: '38%' }),
+        c('Here, watch T7.', 'T7 is the modern left mid-temporal name; legacy systems call it T3.', 'code', [['T7 (legacy T3)', 'left mid-temporal electrode']], { parts: ['T', '7'], labels: ['temporal', 'left'] })
       ],
-      question: 'Tap where it starts.',
-      verdict: 'Left temporal start',
-      subtitle: 'The first change appears at T3.',
-      why: 'The rhythm begins at T3 before it spreads elsewhere.',
-      mistake: 'Choosing the largest late wave instead of the earliest change.'
+      question: 'Tap the earliest visible scalp change.',
+      verdict: 'Earliest left temporal scalp change',
+      subtitle: 'The first visible change is maximal at T7 (legacy T3).',
+      why: 'This supports approximate left temporal lateralization but does not prove the cortical seizure-onset zone.',
+      mistake: 'Equating the largest late wave—or earliest scalp electrode—with a uniquely proven cortical onset.'
     },
     26: {
       shortTitle: 'Three phases',
       guide: 'The trace has phases.',
       cards: [
-        c('A convulsion has phases.', 'The EEG can move through a clear sequence.', 'story', [['Phase', 'one part of a sequence']]),
-        c('Fast, rhythmic, quiet.', 'Fast activity comes first, rhythmic bursts follow, then quiet.', 'story', [['Quiet after', 'brief quiet period afterward']]),
-        c('The quiet part matters.', 'The after-quiet helps confirm the sequence.', 'line', [['After-quiet', 'quiet trace after the event']])
+        c('Scalp EEG may show phases.', 'Muscle artifact often obscures much of a bilateral tonic-clonic seizure.', 'story', [['Phase', 'one part of a sequence']]),
+        c('Visible activity can change.', 'Fast activity and jerk-locked discharges may be followed by slowing or attenuation.', 'story', [['Postictal', 'after the seizure']]),
+        c('The after-pattern is variable.', 'Postictal slowing or attenuation can support the sequence but does not prove epilepsy by itself.', 'line', [['Supportive', 'adds evidence without being decisive']])
       ],
       question: 'Watch the sequence, then reveal.',
-      verdict: 'Convulsive seizure sequence',
-      subtitle: 'Fast, rhythmic, then quiet.',
-      why: 'The phase sequence supports a true convulsive seizure pattern.',
-      mistake: 'Stopping the recording before the quiet after-phase appears.'
+      verdict: 'Compatible convulsive seizure sequence',
+      subtitle: 'Interpret EEG, artifact, video, and clinical phases together.',
+      why: 'This synthetic sequence is compatible with a bilateral tonic-clonic seizure, but no single postictal feature independently confirms epilepsy or excludes a functional event.',
+      mistake: 'Using a flat-looking postictal segment as stand-alone proof of epilepsy.'
     },
     27: {
-      shortTitle: 'Quiet body',
-      guide: 'The EEG may still be active.',
+      shortTitle: 'Possible NCSE',
+      guide: 'Apply formal electroclinical criteria.',
       cards: [
-        c('Movement can stop before EEG stops.', 'A patient may look still while the trace remains active.', 'report', [['Unresponsive', 'awake but not responding']]),
-        c('No shaking is not enough.', 'Seizure activity can continue without large movements.', 'spread', [['Nonconvulsive', 'without large convulsions']], { focusX: '52%' }),
-        c('Patient plus trace decides urgency.', 'Unresponsive patient plus continuous seizure waves is urgent.', 'report', [['Urgent', 'needs immediate attention']])
+        c('No convulsion does not exclude seizure.', 'An impaired patient may have ongoing electrographic or electroclinical seizure activity.', 'report', [['Nonconvulsive', 'without prominent convulsions']]),
+        c('Periodic is not automatically status.', 'Apply rate, duration, evolution, modifiers, and clinical-correlation criteria.', 'spread', [['NCSE', 'nonconvulsive status epilepticus']], { focusX: '52%' }),
+        c('Concern requires prompt review.', 'Urgent expert assessment and continuous EEG may be needed for possible NCSE.', 'report', [['Electroclinical', 'EEG interpreted with the patient examination']])
       ],
-      question: 'Unresponsive patient with continuous seizure waves:',
-      optionLabels: ['Wait and watch', 'Treat urgently'],
-      verdict: 'Treat urgently',
-      subtitle: 'The EEG is still active.',
-      why: 'Ongoing seizure activity with impaired responsiveness is urgent.',
-      mistake: 'Waiting for shaking before acting.'
+      question: 'Unresponsive patient with persistent epileptiform activity:',
+      optionLabels: ['Routine observation only', 'Urgent expert evaluation for possible NCSE'],
+      verdict: 'Urgent electroclinical evaluation',
+      subtitle: 'Possible NCSE is not diagnosed from periodicity alone.',
+      why: 'Impaired responsiveness plus persistent epileptiform activity warrants prompt specialist review and continuous EEG using ACNS or Salzburg criteria.',
+      mistake: 'Waiting for another convulsion—or declaring definite status from one pattern—without electroclinical assessment.'
     },
     28: {
-      shortTitle: 'Illness waves',
-      guide: 'Illness can imitate seizure.',
+      shortTitle: 'Triphasic morphology',
+      guide: 'Describe the pattern before assigning cause.',
       cards: [
-        c('Sick brains make look-alikes.', 'Whole-body illness can create seizure-like waves.', 'report', [['Look-alike', 'pattern that resembles danger']]),
-        c('Use the patient story.', 'A metabolic illness can change the meaning of the trace.', 'report', [['Metabolic', 'body chemistry related']]),
-        c('Front-heavy waves are a clue.', 'Broad waves strongest in front can fit illness-related brain stress.', 'spread', [['Front-heavy', 'largest near forehead sensors']], { focusX: '28%' })
+        c('Triphasic is a morphology modifier.', 'Use the ACNS description generalized periodic discharges with triphasic morphology when appropriate.', 'report', [['GPD', 'generalized periodic discharge']]),
+        c('The cause is nonspecific.', 'Toxic-metabolic, medication-related, infectious, and structural disorders can produce this pattern.', 'report', [['Nonspecific', 'not tied to one cause']]),
+        c('Frontal predominance and lag can occur.', 'These features help describe the field but do not independently exclude NCSE.', 'spread', [['Anterior-posterior lag', 'front and back peaks occur at slightly different times']], { focusX: '28%' })
       ],
-      question: 'Where are these waves strongest?',
-      verdict: 'Front strongest',
-      subtitle: 'The front leads the pattern.',
-      why: 'The broad front-heavy pattern fits illness-related brain stress in the right context.',
-      mistake: 'Treating every seizure look-alike as a seizure.'
+      question: 'Where are these GPDs most prominent?',
+      verdict: 'Frontally predominant',
+      subtitle: 'Triphasic morphology describes shape, not etiology.',
+      why: 'This synthetic pattern is frontally predominant, but morphology, lag, evolution, modifiers, and clinical context must be assessed before deciding whether NCSE is a concern.',
+      mistake: 'Using triphasic morphology or metabolic illness as a stand-alone exclusion of NCSE.'
     },
     29: {
       shortTitle: 'Over-call trap',
       guide: 'Do not rush the label.',
       cards: [
         c('Over-call means too much alarm.', 'It happens when a harmless pattern is called dangerous.', 'story', [['Over-call', 'calling harmless dangerous']]),
-        c('The wicket returns.', 'Temporal sharp-looking runs without a slow tail can be harmless.', 'story', [['Wicket', 'harmless temporal look-alike']]),
-        c('Repeat the safety check.', 'Shape, tail, state, and patient story all matter.', 'report', [['Safety check', 'clues before the label']])
+        c('The wicket returns.', 'Arciform temporal waves in drowsiness may be benign even when sharply contoured.', 'story', [['Wicket', 'benign temporal look-alike']]),
+        c('Repeat the safety check.', 'Morphology, field, state, background, and patient story all matter.', 'report', [['Safety check', 'combined clues before the label']])
       ],
       question: 'Temporal run with no slow tail:',
       optionLabels: ['Epilepsy spike', 'Wicket wave'],
       verdict: 'Wicket wave',
       subtitle: 'A harmless sharp-looking run.',
-      why: 'The run has the common harmless shape and no slow tail.',
+      why: 'The arciform morphology, temporal field, drowsy state, preserved background, and lack of a prominent slow after-wave together favor a wicket wave.',
       mistake: 'Creating a false epilepsy label from a benign pattern.'
     },
     30: {
@@ -1470,24 +1470,24 @@
         c('Same waveform, different person.', 'A child and a confused adult can need different conclusions.', 'compare', [['Context', 'patient story around the trace']]),
         c('Combine the clues.', 'Location, rhythm, change, artifact, and patient story all join here.', 'report', [['Impression', 'final meaning of the EEG']])
       ],
-      question: 'Choose the best final meaning.',
-      optionLabels: ['Childhood absence', 'Emergency seizure state'],
+      question: 'Choose the safest final impression.',
+      optionLabels: ['Childhood absence from waveform alone', 'Possible NCSE needing urgent electroclinical evaluation'],
       visual: {
         kind: 'report',
         report: {
           tabs: ['Patient', 'Trace', 'Meaning'],
           rows: [
             ['Patient', 'Adult, confused after a convulsion.'],
-            ['Trace', 'Both-side repeated seizure waves.'],
+            ['Trace', 'Persistent generalized spike-wave pattern.'],
             ['State', 'Awake but not responding.'],
-            ['Meaning', 'Treat as an emergency pattern.']
+            ['Meaning', 'Possible NCSE; correlate urgently.']
           ]
         }
       },
-      verdict: 'Emergency seizure state',
-      subtitle: 'The patient context changes the meaning.',
-      why: 'In a confused adult, continuous seizure waves are an emergency pattern.',
-      mistake: 'Naming the waveform without answering the clinical question.'
+      verdict: 'Possible NCSE — urgent evaluation',
+      subtitle: 'Context raises concern but does not make the diagnosis alone.',
+      why: 'Persistent generalized spike-wave with acute impaired responsiveness raises concern for NCSE. Apply formal criteria with examination, video, medications, and the recording course.',
+      mistake: 'Calling childhood absence or definite NCSE from waveform and age alone.'
     }
   };
 
@@ -1562,19 +1562,19 @@
     },
     35: {
       shortTitle: 'Near middle',
-      guide: 'Numbers also hint distance.',
+      guide: 'Use the measured map, not number size.',
       cards: [
         c('Numbers tell side first.', 'Odd is left. Even is right.', 'side', [['Odd', 'left'], ['Even', 'right']]),
-        c('Lower often means nearer middle.', 'C4 is closer to the middle than T8.', 'code', [['Lower number', 'nearer the midline']], { parts: ['C4', 'T8'], labels: ['nearer', 'farther'] }),
+        c('Names mark defined positions.', 'C4 is closer to the middle than T8 because of their measured locations, not because 4 is smaller than 8.', 'code', [['Position', 'standardized point on the scalp map']], { parts: ['C4', 'T8'], labels: ['nearer', 'farther'] }),
         c('Midline is the center path.', 'Use it as the middle of the map.', 'midline', [['Midline', 'center path of the head']])
       ],
       question: 'Which is closer to the middle?',
       optionLabels: ['T8', 'C4'],
       visual: { kind: 'head-diagram', config: { targets: ['C4', 'T4'] } },
       verdict: 'C4',
-      subtitle: 'Lower numbers tend to sit nearer the midline.',
-      why: 'T8 is farther out on the side of the head.',
-      mistake: 'Using number only for left-right.'
+      subtitle: 'C4 is nearer the midline on the standard map.',
+      why: 'T8 is a lateral temporal electrode; numeric magnitude is not a general distance code.',
+      mistake: 'Inferring distance from the number instead of checking the electrode map.'
     },
     36: {
       shortTitle: 'Z line',
@@ -1657,19 +1657,19 @@
     },
     41: {
       shortTitle: 'Average view',
-      guide: 'Another comparison style.',
+      guide: 'The reference is a computed mean.',
       cards: [
         c('Neighbor pairs are one view.', 'Bipolar display compares nearby sensors.', 'compare', [['Bipolar', 'neighbor-pair view']]),
-        c('Average view is different.', 'It compares one sensor with the head average.', 'sensor', [['Average reference', 'sensor compared with head average']]),
-        c('Both are montages.', 'A montage is a way to draw the same EEG data.', 'compare', [['Montage', 'display view']])
+        c('Average reference is computed.', 'Each electrode is compared with the instantaneous mean of the included usable EEG electrodes.', 'sensor', [['Average reference', 'comparison with a computed electrode mean']]),
+        c('The mean can be biased.', 'Bad channels, incomplete coverage, and large focal activity can affect it.', 'compare', [['Included electrodes', 'channels used to calculate the mean']])
       ],
-      question: 'Average reference compares a sensor with:',
-      optionLabels: ['Only the next sensor', 'The head average'],
-      visual: compare('focal_spike', 'focal_spike', 'neighbor pairs', 'head average'),
-      verdict: 'The head average',
-      subtitle: 'It is another montage view.',
-      why: 'Different views can reveal different parts of the same signal.',
-      mistake: 'Assuming one display view is the only truth.'
+      question: 'Average reference compares an electrode with:',
+      optionLabels: ['Only the next electrode', 'The mean of included usable electrodes'],
+      visual: compare('focal_spike', 'focal_spike', 'neighbor pairs', 'electrode mean'),
+      verdict: 'Mean of included usable electrodes',
+      subtitle: 'It is computed, not a silent whole-head point.',
+      why: 'The instantaneous arithmetic mean of the selected usable electrodes is subtracted from each electrode.',
+      mistake: 'Calling the computed mean neutral or including grossly artifactual channels without review.'
     },
     42: {
       shortTitle: 'Choose view',
@@ -1737,18 +1737,18 @@
     },
     46: {
       shortTitle: 'Left temporal',
-      guide: 'Find the maximum.',
+      guide: 'Find the local scalp maximum.',
       cards: [
-        c('Focal means one main area.', 'A focal abnormality has a strongest region.', 'spread', [['Focal', 'one main area']], { focusX: '38%' }),
+        c('A field can have a local maximum.', 'This is the strongest recorded scalp region, not a proven cortical source.', 'spread', [['Scalp maximum', 'strongest recorded location']], { focusX: '38%' }),
         c('Temporal means side head.', 'T sensors sit near the temples.', 'regions', [['Temporal', 'side of the head']], { region: 'side' }),
-        c('Name side and region.', 'Left temporal means left side-head area.', 'code', [['T3', 'left temporal sensor']], { parts: ['T', '3'], labels: ['temporal', 'left'] })
+        c('Use the modern name.', 'T7 is the left mid-temporal electrode; T3 is its legacy label.', 'code', [['T7 (legacy T3)', 'left mid-temporal electrode']], { parts: ['T', '7'], labels: ['temporal', 'left'] })
       ],
       question: 'Tap the left temporal maximum.',
       visual: multi('focal_spike', ['F3', 'C3', 'T3', 'O1', 'F4', 'T4'], ['T3']),
       verdict: 'Left temporal maximum',
-      subtitle: 'T3 sits in the left temporal region.',
-      why: 'The strongest abnormality is in the left temporal chain.',
-      mistake: 'Choosing later spread instead of the maximum field.'
+      subtitle: 'T7 (legacy T3) is the local scalp maximum.',
+      why: 'The strongest abnormality is in the left temporal chain, which localizes the scalp field approximately.',
+      mistake: 'Calling the scalp maximum a uniquely proven cortical source.'
     },
     47: {
       shortTitle: 'Right posterior',
@@ -1785,7 +1785,7 @@
       guide: 'Yield is probability.',
       cards: [
         c('EEG does not catch everything.', 'A person with epilepsy can have a normal routine EEG.', 'report', [['Yield', 'chance a test finds something']]),
-        c('Timing matters.', 'Within 24 hours of a first seizure, yield is about half.', 'story', [['About half', 'roughly 50%']]),
+        c('Yield varies.', 'Population, timing, sleep, activation, and recording duration all change sensitivity.', 'story', [['Sensitivity', 'chance the study detects the target finding']]),
         c('Normal does not end the story.', 'History still matters after a normal EEG.', 'report', [['Normal EEG', 'no abnormality seen in recording']])
       ],
       question: 'A normal routine EEG after a seizure means epilepsy is:',
@@ -1793,7 +1793,7 @@
       visual: { kind: 'report', report: { tabs: ['History', 'EEG', 'Meaning'], rows: [['History', 'First seizure.'], ['EEG', 'Routine study normal.'], ['Meaning', 'Epilepsy still possible.']] } },
       verdict: 'Still possible',
       subtitle: 'Routine EEG can miss it.',
-      why: 'A single routine EEG may find epileptiform activity only about half the time.',
+      why: 'Interictal discharges can be intermittent, and routine-EEG sensitivity varies across patient groups and protocols.',
       mistake: 'Using one normal EEG to rule out epilepsy.'
     },
     50: {
@@ -1801,7 +1801,7 @@
       guide: 'Longer recording helps.',
       cards: [
         c('Abnormalities come and go.', 'More time gives more chances to catch them.', 'story', [['Intermittent', 'appears only sometimes']]),
-        c('Twenty-four hours improves yield.', 'Longer EEG can catch many missed discharges.', 'report', [['80-90%', 'common prolonged EEG yield range']]),
+        c('Longer sampling often improves yield.', 'The size of the gain depends on the population, protocol, and target event.', 'report', [['Variable yield', 'no single percentage fits every setting']]),
         c('Still not perfect.', 'Even prolonged EEG can be normal in epilepsy.', 'report', [['Not perfect', 'cannot rule out every case']])
       ],
       question: 'A 24-hour EEG is more likely to catch discharges because it records:',
@@ -1845,19 +1845,19 @@
       mistake: 'Assuming scalp EEG sees every abnormal neuron group.'
     },
     53: {
-      shortTitle: 'Area threshold',
-      guide: 'A sizable area helps.',
+      shortTitle: 'Source visibility',
+      guide: 'Area helps; there is no universal cutoff.',
       cards: [
-        c('Detection needs enough area.', 'Small points may disappear before reaching the scalp.', 'spread', [['Detection', 'signal becoming visible']], { focusX: '50%' }),
-        c('Think ten to twenty.', 'Roughly 10-20 square centimeters may be needed consistently.', 'code', [['10-20 cm²', 'rough scalp visibility estimate']], { parts: ['10', '20'], labels: ['cm²', 'cm²'] }),
-        c('This is a limitation.', 'A normal scalp EEG can miss small sources.', 'report', [['Limitation', 'what a test may miss']])
+        c('Larger synchronized areas are often easier.', 'More aligned activity can create a stronger scalp field.', 'spread', [['Detection', 'signal becoming visible']], { focusX: '50%' }),
+        c('No fixed cm² rule applies.', 'Experimental estimates vary, and area is only one determinant.', 'code', [['Variable threshold', 'detectability changes with source and recording']], { parts: ['area', 'geometry'], labels: ['one factor', 'another factor'] }),
+        c('Orientation and depth matter too.', 'Montage, coverage, conductivity, background, and noise also affect visibility.', 'report', [['Limitation', 'what a test may miss']])
       ],
-      question: 'Consistent scalp detection usually needs a:',
+      question: 'All else equal, which source is generally easier to detect?',
       optionLabels: ['Tiny point source', 'Sizable cortical area'],
       visual: { kind: 'frequency-scope', config: { highlightBand: 1 } },
       verdict: 'Sizable cortical area',
-      subtitle: 'Area helps the signal reach the scalp.',
-      why: 'A larger synchronized area creates a stronger scalp field.',
+      subtitle: 'Area helps, but it is not a fixed threshold.',
+      why: 'A larger synchronized area often creates a stronger field, while orientation, depth, montage, conductivity, and noise can change detectability.',
       mistake: 'Expecting scalp EEG to detect every tiny source.'
     },
     54: {
@@ -1865,7 +1865,7 @@
       guide: 'Distance weakens signal.',
       cards: [
         c('Location matters too.', 'Surface sources are easier for scalp sensors.', 'sensor', [['Surface source', 'nearer the scalp']]),
-        c('Deep sources can hide.', 'Mesial temporal, insular, or singulate activity may be harder to see.', 'spread', [['Deep source', 'farther from scalp sensors']], { focusX: '50%' }),
+        c('Deep sources can hide.', 'Mesial temporal, insular, or cingulate activity may be harder to detect or localize.', 'spread', [['Deep source', 'farther from scalp sensors']], { focusX: '50%' }),
         c('Normal scalp EEG has limits.', 'Deep seizure sources can still exist.', 'report', [['Distance', 'space between source and sensor']])
       ],
       question: 'Deep brain activity is often:',
@@ -1873,7 +1873,7 @@
       visual: { kind: 'frequency-scope', config: { highlightBand: 2 } },
       verdict: 'Harder to see',
       subtitle: 'Distance weakens the scalp field.',
-      why: 'Scalp electrodes sit far from deep structures.',
+      why: 'Distance and intervening tissues can attenuate deep activity, while orientation and propagation shape the visible scalp field.',
       mistake: 'Assuming normal scalp EEG excludes deep sources.'
     },
     55: {
@@ -1926,18 +1926,18 @@
     },
     58: {
       shortTitle: 'Full cap field',
-      guide: 'Find the maximum.',
+      guide: 'Find the local scalp maximum.',
       cards: [
         c('Scan the full field.', 'Find the strongest region and its neighbors.', 'spread', [['Full field', 'spread across the cap']], { focusX: '38%' }),
         c('Name side and region.', 'Left temporal is different from right posterior.', 'regions', [['Side-region label', 'left/right plus head area']], { region: 'side' }),
-        c('Tap the maximum.', 'The maximum is the best first localization clue.', 'spread', [['Maximum', 'strongest point']], { focusX: '38%' })
+        c('Tap the scalp maximum.', 'It is a localization clue, not proof of one cortical generator.', 'spread', [['Scalp maximum', 'strongest recorded point']], { focusX: '38%' })
       ],
       question: 'Full cap case: tap the focal maximum.',
       visual: { kind: 'cap-trace', preset: 'focal_spike', config: { channels: [2, 4, 6, 8, 3, 5, 7, 9], highlight: [6], targets: ['T3'], header: 'field maximum', measure: 'strongest channel' } },
       verdict: 'Left temporal maximum',
-      subtitle: 'T3 is the center of the field.',
-      why: 'The strongest activity sits in the left temporal region with surrounding spread.',
-      mistake: 'Choosing a region that only shows later spread.'
+      subtitle: 'T7 (legacy T3) is the local scalp maximum.',
+      why: 'The strongest activity sits in the left temporal region with surrounding spread, providing approximate scalp localization.',
+      mistake: 'Calling the scalp maximum the proven cortical source or choosing only later spread.'
     },
     59: {
       shortTitle: 'Full cap broad',
@@ -1963,13 +1963,109 @@
         c('The patient changes urgency.', 'A confused adult is different from a well child.', 'report', [['Urgency', 'how quickly action is needed']]),
         c('Write the practical meaning.', 'The final answer should guide care.', 'report', [['Final impression', 'practical report answer']])
       ],
-      question: 'Measure the run, then use the story. Best final meaning:',
-      optionLabels: ['Normal awake rhythm', 'Emergency seizure state'],
+      question: 'Measure the run, then use the story. Safest final impression:',
+      optionLabels: ['Normal awake rhythm', 'Possible NCSE needing urgent expert evaluation'],
       visual: { kind: 'cap-trace', preset: 'generalized_sw', config: { channels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], highlight: [0, 1, 2, 3, 4, 5, 6, 7], targets: ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4', 'T3', 'T4'], header: 'confused adult', measure: 'continuous run' } },
-      verdict: 'Emergency seizure state',
-      subtitle: 'Trace plus patient story changes urgency.',
-      why: 'Continuous seizure waves in an unresponsive or confused adult are urgent.',
-      mistake: 'Naming only the waveform and ignoring the clinical question.'
+      verdict: 'Possible NCSE — urgent evaluation',
+      subtitle: 'Trace plus patient state raises concern.',
+      why: 'A persistent generalized epileptiform pattern with impaired responsiveness raises concern for NCSE, but formal electroclinical criteria determine the diagnosis.',
+      mistake: 'Naming definite status—or dismissing the pattern—without examination, video, medications, and recording course.'
+    },
+    61: {
+      shortTitle: 'Synaptic currents',
+      guide: 'Start with what can sum.',
+      cards: [
+        c('EEG begins between neurons.', 'Synaptic input moves charge across dendritic membranes.', 'story', [['Postsynaptic', 'after a signal reaches a synapse']]),
+        c('Slow fields can overlap.', 'Postsynaptic currents last longer than a brief axonal spike.', 'speed', [['Temporal summation', 'events overlapping in time']]),
+        c('The scalp sees a population.', 'Many small fields must add before an electrode can detect them.', 'spread', [['Population field', 'summed activity from many cells']], { focusX: '50%' })
+      ],
+      question: 'What contributes most to routine scalp EEG?',
+      optionLabels: ['Single axonal spikes', 'Summed postsynaptic currents'],
+      visual: { kind: 'biophysics', config: { mode: 'synapse' } },
+      verdict: 'Summed postsynaptic currents',
+      subtitle: 'EEG is a population field, not a single-neuron recording.',
+      why: 'Slower postsynaptic currents can overlap across many neurons; brief action potentials usually cancel at scalp distance.',
+      mistake: 'Treating an EEG trace as a direct view of individual neurons firing.'
+    },
+    62: {
+      shortTitle: 'Synchrony',
+      guide: 'Timing and alignment make fields add.',
+      cards: [
+        c('One cell is too small.', 'A single cortical neuron contributes a negligible scalp field.', 'spread', [['Scalp field', 'voltage pattern measured at the head']], { focusX: '30%' }),
+        c('Parallel cells can reinforce.', 'Cortical pyramidal cells are similarly oriented within a local patch.', 'regions', [['Pyramidal cell', 'aligned cortical neuron']], { region: 'center' }),
+        c('Shared timing matters.', 'Coordinated currents add; mismatched currents partly cancel.', 'compare', [['Synchrony', 'activity aligned in time']])
+      ],
+      question: 'Which cortical population is easier to detect at the scalp?',
+      optionLabels: ['Aligned and synchronous', 'Scattered and asynchronous'],
+      visual: { kind: 'biophysics', config: { mode: 'synchrony' } },
+      verdict: 'Aligned and synchronous',
+      subtitle: 'Geometry and timing let weak fields add.',
+      why: 'When similarly oriented pyramidal cells are active together, their extracellular fields reinforce instead of cancelling.',
+      mistake: 'Assuming that more active neurons always produce a stronger scalp signal regardless of orientation or timing.'
+    },
+    63: {
+      shortTitle: 'Orientation',
+      guide: 'Folded cortex changes the scalp projection.',
+      cards: [
+        c('The cortex is folded.', 'Gyri and sulci point local cell columns in different directions.', 'regions', [['Gyrus', 'outward cortical fold'], ['Sulcus', 'inward cortical groove']], { region: 'center' }),
+        c('Direction changes the field.', 'Position and orientation together shape the scalp voltage map.', 'spread', [['Orientation', 'direction of the source field']], { focusX: '58%' }),
+        c('A maximum is not a pin.', 'The largest electrode value does not prove a unique generator directly beneath it.', 'sensor', [['Scalp maximum', 'largest measured voltage difference']])
+      ],
+      question: 'Can two equally active cortical patches create different scalp patterns?',
+      optionLabels: ['No, activity alone decides', 'Yes, orientation matters'],
+      visual: { kind: 'biophysics', config: { mode: 'orientation' } },
+      verdict: 'Orientation matters',
+      subtitle: 'The cortical sheet is folded, so its fields point in different directions.',
+      why: 'A source’s position and orientation determine how its voltage field reaches each electrode.',
+      mistake: 'Assuming the largest scalp channel sits directly over a unique generator.'
+    },
+    64: {
+      shortTitle: 'Volume conduction',
+      guide: 'One field can reach many electrodes.',
+      cards: [
+        c('The field leaves cortex.', 'It spreads passively through brain, fluid, skull, and scalp.', 'story', [['Volume conduction', 'passive field spread through tissue']]),
+        c('Nearby channels share information.', 'Several electrodes can sample different parts of the same field.', 'spread', [['Shared source', 'one generator influencing many sensors']], { focusX: '46%' }),
+        c('Spread has no synaptic relay.', 'The field is measured across the head without traveling neuron to neuron.', 'speed', [['Passive', 'not carried by a new neural signal']])
+      ],
+      question: 'A waveform appears in several nearby channels at once. Is one shared source possible?',
+      optionLabels: ['No, each channel needs its own source', 'Yes, fields spread through tissue'],
+      visual: { kind: 'biophysics', config: { mode: 'conduction' } },
+      verdict: 'One source can reach many channels',
+      subtitle: 'Channels sample a shared volume-conducted field.',
+      why: 'Scalp electrodes measure voltage differences within a field that has spread through conductive tissue.',
+      mistake: 'Counting every affected channel as a separate brain generator.'
+    },
+    65: {
+      shortTitle: 'Skull filter',
+      guide: 'The scalp picture is weaker and broader.',
+      cards: [
+        c('Distance reduces amplitude.', 'The electrode sits beyond several tissue layers.', 'sensor', [['Attenuation', 'reduction in signal amplitude']]),
+        c('Conductive layers spread detail.', 'A focal cortical field becomes spatially smoother at the scalp.', 'spread', [['Spatial blur', 'loss of fine location detail']], { focusX: '50%' }),
+        c('Localization stays approximate.', 'Montage, head model, anatomy, and context all affect the conclusion.', 'report', [['Localization', 'estimating where activity arose']])
+      ],
+      question: 'Compared with a cortical-surface recording, scalp EEG is usually:',
+      optionLabels: ['Sharper and larger', 'Broader and smaller'],
+      visual: { kind: 'biophysics', config: { mode: 'skull-filter' } },
+      verdict: 'Broader and smaller',
+      subtitle: 'Tissue between cortex and electrode acts as a spatial filter.',
+      why: 'Skull resistance attenuates the field, while conductive layers spread it across the scalp.',
+      mistake: 'Reading a broad scalp maximum as the exact boundary of the active cortex.'
+    },
+    66: {
+      shortTitle: 'Inverse problem',
+      guide: 'A scalp map has more than one explanation.',
+      cards: [
+        c('Sensors give measurements.', 'They do not directly reveal the hidden generators.', 'sensor', [['Forward problem', 'predicting sensors from known sources']]),
+        c('Different sources can look alike.', 'More than one source arrangement may fit the same scalp voltages.', 'compare', [['Inverse problem', 'estimating sources from measurements']]),
+        c('Models add assumptions.', 'Anatomy, montage, timing, and clinical evidence narrow the possibilities.', 'report', [['Model', 'structured set of assumptions']])
+      ],
+      question: 'Does one scalp map prove one unique cortical source?',
+      optionLabels: ['Yes', 'No'],
+      visual: { kind: 'biophysics', config: { mode: 'inverse' } },
+      verdict: 'No unique source',
+      subtitle: 'Scalp measurements constrain possibilities; they do not solve location by themselves.',
+      why: 'This is the EEG inverse problem: multiple source configurations can explain the same electrode voltages.',
+      mistake: 'Presenting visual localization as certainty without a model, montage comparison, or other evidence.'
     }
   };
 

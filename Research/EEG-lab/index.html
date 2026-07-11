@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EEG Lab — Practice Series</title>
-  <meta name="description" content="A quiet 60-part course for learning EEG interpretation one signal at a time." />
+  <title>EEG Lab — Interactive Course</title>
+  <meta name="description" content="A quiet, interactive EEG course from cortical currents to full-cap interpretation." />
   <link rel="icon" href="data:," />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,700&family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650;7..72,720&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../../css/styles.css" />
   <link rel="stylesheet" href="css/eeg-lab.css" />
@@ -29,20 +29,28 @@
       </span>
       <span>EEG Lab</span>
     </a>
-    <button id="btn-theme" class="eeg-theme-btn" aria-label="Toggle dark/light mode">
-      <i class="fa-solid fa-moon" aria-hidden="true"></i>
-      <span>Dark</span>
-    </button>
+    <nav class="eeg-top-actions" aria-label="Course navigation">
+      <button id="btn-map" class="eeg-top-link" type="button">Modules</button>
+      <a class="eeg-top-link" href="sources.html">Sources</a>
+      <button id="btn-theme" class="eeg-theme-btn" aria-label="Toggle dark/light mode">
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        <span>Dark</span>
+      </button>
+    </nav>
   </header>
 
   <section id="screen-welcome" class="eeg-screen eeg-welcome-screen" aria-label="Welcome">
     <div class="eeg-welcome">
-      <p class="eeg-kicker">EEG Lab</p>
+      <p class="eeg-kicker">Interactive EEG course</p>
       <h1>Read one signal<br />at a time.</h1>
       <span class="eeg-title-rule" aria-hidden="true"></span>
-      <p class="eeg-lede">Sixty tiny interpretation passes.</p>
-      <button id="btn-begin" class="btn-primary">Begin</button>
-      <button id="btn-resume" class="btn-ghost is-hidden">Resume</button>
+      <p class="eeg-lede">Ten modules. Sixty-six guided observations. One defensible conclusion at a time.</p>
+      <div class="eeg-welcome-actions">
+        <button id="btn-begin" class="btn-primary">Start the course</button>
+        <button id="btn-resume" class="btn-ghost is-hidden">Resume</button>
+        <button id="btn-view-map" class="btn-text" type="button">Explore the modules <span aria-hidden="true">→</span></button>
+      </div>
+      <p class="eeg-boundary">Educational practice only — not a diagnostic tool.</p>
       <div class="eeg-dot-row" aria-hidden="true">
         <span class="is-active"></span><span></span><span></span>
       </div>
@@ -52,10 +60,38 @@
     </div>
   </section>
 
-  <section id="screen-stage-intro" class="eeg-screen is-hidden" aria-label="Stage introduction">
+  <section id="screen-map" class="eeg-screen eeg-map-screen is-hidden" aria-label="Course modules">
+    <div class="eeg-map">
+      <header class="eeg-map-intro">
+        <p class="eeg-kicker">Course map</p>
+        <h2>From cortical current<br />to clinical context.</h2>
+        <p class="eeg-lede">Build the signal chain first, then learn to read rhythms, artifacts, abnormal patterns, and full-cap cases.</p>
+      </header>
+
+      <div class="eeg-map-progress" aria-live="polite">
+        <div>
+          <span>Saved on this device</span>
+          <strong id="map-progress-copy">0 of 66 lessons</strong>
+        </div>
+        <div class="eeg-map-progress-track" aria-hidden="true"><span id="map-progress-fill"></span></div>
+      </div>
+
+      <div id="module-list" class="eeg-module-list" aria-label="Ten course modules"></div>
+
+      <div class="eeg-map-actions">
+        <button id="btn-map-begin" class="btn-primary">Start at module 1</button>
+        <button id="btn-map-resume" class="btn-ghost is-hidden">Resume saved lesson</button>
+        <button id="btn-map-home" class="btn-text" type="button">Back to welcome</button>
+      </div>
+
+      <p class="eeg-map-note">All teaching traces are synthetic unless a source is explicitly named. Read the <a href="sources.html">evidence, safety, and reuse notes</a>.</p>
+    </div>
+  </section>
+
+  <section id="screen-stage-intro" class="eeg-screen is-hidden" aria-label="Module introduction">
     <div class="eeg-stage">
       <div id="stage-stepbar" class="eeg-stepbar" aria-hidden="true"></div>
-      <p id="stage-intro-num" class="eeg-kicker">Stage 1 of 6</p>
+      <p id="stage-intro-num" class="eeg-kicker">Module 1 of 10</p>
       <h2 id="stage-intro-title">Foundations</h2>
       <span class="eeg-title-rule" aria-hidden="true"></span>
       <p id="stage-intro-desc" class="eeg-lede">Start with location.</p>
@@ -73,8 +109,12 @@
       <h2 id="primer-title">Every line has an address.</h2>
       <span class="eeg-title-rule" aria-hidden="true"></span>
       <p id="primer-copy" class="eeg-lede">An electrode is a listening spot.</p>
-      <div class="eeg-primer-viz" aria-hidden="true">
-        <div id="primer-graphic" class="primer-graphic"></div>
+      <div id="primer-visual-shell" class="eeg-primer-viz">
+        <canvas id="primer-viz-canvas" role="img" aria-label="Lesson concept diagram"></canvas>
+        <div id="primer-report-wrap" class="eeg-report-visual is-hidden">
+          <div id="primer-report-tabs" class="report-tabs"></div>
+          <div id="primer-report-rows" class="report-rows"></div>
+        </div>
       </div>
       <div id="primer-terms" class="look-terms"></div>
       <button id="btn-primer-continue" class="btn-primary">Continue</button>
@@ -105,7 +145,7 @@
       <p id="ex-concept" class="eeg-question">Location comes first.</p>
 
       <div id="ex-visual-shell" class="eeg-visual-shell">
-        <canvas id="ex-viz-canvas"></canvas>
+        <canvas id="ex-viz-canvas" role="img" aria-label="EEG exercise visualization"></canvas>
         <div id="ex-report-wrap" class="eeg-report-visual is-hidden">
           <div id="report-tabs" class="report-tabs"></div>
           <div id="report-rows" class="report-rows"></div>
@@ -171,9 +211,10 @@
       <p class="eeg-kicker">Complete</p>
       <h2>Now read with context.</h2>
       <span class="eeg-title-rule" aria-hidden="true"></span>
-      <p class="eeg-lede">Sixty interpretation passes finished.</p>
+      <p class="eeg-lede">Sixty-six guided observations finished. Keep the uncertainty with the signal.</p>
       <button id="btn-restart" class="btn-primary">Start again</button>
-      <button id="btn-home" class="btn-ghost">Welcome</button>
+      <button id="btn-home" class="btn-ghost">Course map</button>
+      <a class="btn-text" href="sources.html">Review sources and safety</a>
     </div>
   </section>
 </div>

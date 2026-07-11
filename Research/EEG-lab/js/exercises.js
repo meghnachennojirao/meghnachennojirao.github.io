@@ -5,8 +5,8 @@ var EEG_EXERCISES = [
     id:1, stage:1, stageTitle:"Foundations",
     title:"The 10–20 Electrode System",
     concept:"Electrode placement is the grammar of EEG.",
-    body:"The 10–20 system places electrodes at defined percentages of skull length. Labels encode location: F frontal, C central, P parietal, O occipital, T temporal, Fp frontopolar. Even numbers = right hemisphere, odd = left, z = midline.",
-    keyPoints:["Odd = left, even = right, z = midline","Letters encode lobe: F, C, P, O, T, Fp","Without knowing the electrode, a finding means nothing"],
+    body:"The 10–20 system places electrodes at defined percentages of head measurements. Labels identify standardized scalp regions: F frontal, C central, P parietal, O occipital, T temporal, and Fp frontopolar. Even numbers = right, odd = left, and z = midline. This course uses a reduced teaching display; modern T7/T8 correspond to the legacy labels T3/T4 used internally by the simulator.",
+    keyPoints:["Odd = left, even = right, z = midline","Letters identify standardized scalp regions, not a proven cortical source","T7/T8 are the modern names for legacy T3/T4"],
     imageNote:"Standard 10–20 electrode positions.",
     imageCredit:null,
     interaction:{
@@ -24,27 +24,27 @@ var EEG_EXERCISES = [
     id:2, stage:1, stageTitle:"Foundations",
     title:"Montages: Referential vs. Bipolar",
     concept:"How you wire the channels shapes what you see.",
-    body:"Referential: each electrode vs. a common reference — shows true waveform shape. Bipolar: adjacent electrodes compared in a chain — localises by phase reversal. The same brain activity looks completely different in each montage.",
-    keyPoints:["Phase reversal in bipolar = source location","Referential shows true morphology","Same EEG looks different in each montage"],
+    body:"A referential derivation compares each electrode with a selected reference, which is not electrically silent. A bipolar derivation compares adjacent electrodes in a chain. A phase reversal can mark a local scalp voltage maximum or minimum at the shared electrode, but it does not by itself identify the cortical generator.",
+    keyPoints:["Phase reversal can mark a local scalp maximum or minimum","A reference can contain brain or artifact signal","Confirm a field with other montages and technical checks"],
     imageNote:"Same focal spike looks different in referential vs. bipolar.",
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"In a bipolar chain, a phase reversal at T4 means:",
-      options:["T4 has a bad electrode","The discharge maximum is at T4"],
+      prompt:"In a bipolar chain, a phase reversal at T8 (legacy T4) most directly marks:",
+      options:["A proven cortical generator","A local scalp voltage maximum or minimum"],
       answer:1,
-      verdict:"Phase reversal = source",
+      verdict:"Local scalp maximum or minimum",
       subtitle:"The two channels flanking the maximum deflect in opposite directions.",
-      why:"In a bipolar montage, when adjacent channel pairs point away from each other, the electrode between them is closest to the generator. This is the phase reversal — and it localises the source.",
-      mistake:"Thinking phase reversal means artifact. A bad electrode causes a spike on ONE channel only, with no logical field.",
+      why:"Opposite deflections in adjacent bipolar derivations place a local scalp voltage maximum or minimum at their shared electrode. Montage, polarity, the full field, and electrode quality must be checked before drawing a source conclusion.",
+      mistake:"Calling a phase reversal the cortical source. A faulty shared electrode can affect every derivation that contains it and can imitate a reversal.",
     }
   },
   {
     id:3, stage:1, stageTitle:"Foundations",
     title:"EEG Frequency Bands",
     concept:"Frequency is the first axis of interpretation.",
-    body:"Delta <4 Hz · Theta 4–8 Hz · Alpha 8–13 Hz · Beta >13 Hz.\nAlpha is the dominant rhythm of a relaxed awake adult with eyes closed. Delta in an awake adult is always abnormal. Excess beta suggests benzodiazepines or barbiturates.",
-    keyPoints:["Delta in awake adults = always abnormal","Alpha blocks with eye opening","Excess beta = medications (benzodiazepines, barbiturates)"],
+    body:"Delta 0.1–<4 Hz · Theta 4–<8 Hz · Alpha 8–13 Hz · Beta >13–30 Hz.\nAlpha is commonly the dominant posterior rhythm of a relaxed awake adult with eyes closed. Persistent unexplained delta in a fully awake adult is generally abnormal after excluding drowsiness, activation, and artifact. Excess beta is nonspecific and may reflect medication or muscle artifact.",
+    keyPoints:["Persistent awake delta needs context and artifact checks","Posterior alpha attenuates with eye opening","Excess beta is nonspecific"],
     imageNote:"Live: normal awake EEG — alpha maximal at O1/O2.",
     imageCredit:"PhysioNet EEG Motor Movement/Imagery Dataset (open access)",
     interaction:{
@@ -113,18 +113,18 @@ var EEG_EXERCISES = [
     id:7, stage:1, stageTitle:"Foundations",
     title:"Sensitivity, Filters & Calibration",
     concept:"Your settings are part of your interpretation.",
-    body:"Standard gain: 7 µV/mm. Low-frequency filter (LFF) at 1 Hz removes drift. High-frequency filter (HFF) at 70 Hz removes muscle artifact. Notch filter removes 50/60 Hz line noise. Raising the LFF eliminates slow waves — always check settings before interpreting delta activity.",
-    keyPoints:["Standard sensitivity: 7 µV/mm","HFF at 70 Hz removes gamma and muscle","LFF at 1 Hz removes drift — but also cuts delta if set too high"],
+    body:"A common display sensitivity is 7 µV/mm. Routine review often begins near a 0.5 Hz high-pass (LFF) and 70 Hz low-pass (HFF), with settings adjusted for the question. Filters attenuate frequencies gradually rather than cutting them off completely, and aggressive settings can distort real waveforms. A notch filter attenuates 50/60 Hz line noise but should not replace correction of the source.",
+    keyPoints:["A common sensitivity is 7 µV/mm","Filters attenuate with roll-off and can distort morphology","Review slow activity with an appropriately low high-pass setting"],
     imageNote:"Same segment at different sensitivity settings.",
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"The LFF is set to 5 Hz. What activity has been removed?",
+      prompt:"The LFF is set to 5 Hz. What activity is most attenuated?",
       options:["Beta and gamma (fast activity)","Delta and theta (slow activity below 5 Hz)"],
       answer:1,
-      verdict:"Delta and theta removed",
-      subtitle:"The LFF cuts everything below its cutoff frequency.",
-      why:"Raising the low-frequency filter eliminates frequencies below its cutoff. At 5 Hz, all delta and most theta disappear — including any genuine pathological slowing.",
+      verdict:"Delta and lower theta attenuated",
+      subtitle:"A 5 Hz high-pass markedly attenuates slow activity.",
+      why:"Raising the high-pass setting to 5 Hz markedly attenuates delta and lower theta and can distort waveform shape; filters have roll-off rather than a brick-wall cutoff.",
       mistake:"Forgetting to check filter settings before interpreting slow activity. Always verify before calling delta 'encephalopathy.'",
     }
   },
@@ -153,37 +153,37 @@ var EEG_EXERCISES = [
     id:9, stage:2, stageTitle:"Normal Variants",
     title:"Wicket Waves",
     concept:"The most commonly over-read benign pattern.",
-    body:"Wicket waves: monophasic, arciform, 6–11 Hz, maximal mid-temporal, during drowsiness. Key: they are monophasic — no aftergoing slow wave — and appear in runs, not in isolation. Not epileptiform.",
-    keyPoints:["Monophasic = no afterdischarge (the critical distinction)","Appear in runs, temporal distribution","Common source of false epilepsy diagnoses"],
-    imageNote:"Live: wicket waves in temporal leads during drowsiness.",
+    body:"Wicket waves are arciform 6–11 Hz temporal transients seen mainly in drowsiness or light sleep. They may occur singly or in brief trains and usually lack a prominent slow after-wave. Their morphology, state dependence, temporal field, and preserved background together favor a benign variant; no single feature is decisive.",
+    keyPoints:["Arciform temporal transients in drowsiness or light sleep","May occur singly or in trains","Use morphology, field, state, and background together"],
+    imageNote:"Live: wicket waves in modern T7/T8 (legacy T3/T4) temporal leads during drowsiness.",
     imageCredit:null,
     interaction:{
       type:"channel-tap",
       prompt:"Tap the channel where wicket waves are maximal.",
       target:["T3","T4"],
       verdict:"Benign variant",
-      subtitle:"No after-going slow wave.",
-      why:"Wicket waves are a normal variant seen during drowsiness. They are monophasic — each arc ends cleanly without a following slow wave. That absence is what makes them benign.",
-      mistake:"Mistaking wicket waves for epileptiform discharges. The rule: monophasic + temporal + runs + drowsiness = wicket waves.",
+      subtitle:"Arciform temporal rhythm in drowsiness.",
+      why:"The arciform morphology, temporal distribution, drowsy state, preserved background, and lack of a prominent slow after-wave together favor wicket waves.",
+      mistake:"Using the absence of a slow after-wave as a stand-alone rule. Apply the full morphology, field, state, and background context.",
     }
   },
   {
     id:10, stage:2, stageTitle:"Normal Variants",
     title:"14 and 6 Hz Positive Spikes",
     concept:"Dramatic-looking. No clinical significance.",
-    body:"Comb-like bursts at 14 Hz and/or 6 Hz, posterior temporal, during drowsiness. Surface-positive polarity — unlike epileptiform discharges which are surface-negative. Found in 20–60% of normal adolescents.",
-    keyPoints:["Surface-positive polarity — key distinguishing feature","Maximal posterior temporal, drowsiness/early sleep","Found in up to 60% of normal adolescents"],
+    body:"The 14- and 6-Hz positive spike pattern consists of comb-like, surface-positive posterior temporal bursts during drowsiness or light sleep. Polarity is one clue, not a universal separator from IEDs; morphology, distribution, state, and background must agree. Prevalence varies with age, population, and recording method.",
+    keyPoints:["Surface-positive comb-like posterior temporal bursts","Usually seen in drowsiness or light sleep","Polarity must be interpreted with morphology, field, and state"],
     imageNote:"14 and 6 Hz positive bursts during drowsiness.",
     imageCredit:null,
     interaction:{
       type:"binary",
       prompt:"14 and 6 Hz positive spikes are surface-positive. Why does polarity matter?",
-      options:["It doesn't — polarity is irrelevant","Most epileptiform discharges are surface-negative, so positivity argues against pathology"],
+      options:["Polarity alone proves the diagnosis","Polarity is one clue that must fit morphology, field, and state"],
       answer:1,
-      verdict:"Polarity is diagnostic",
-      subtitle:"Surface-positive = almost always benign.",
-      why:"True epileptiform IEDs are surface-negative by convention. Surface-positive sharp transients in the right context — temporal, during drowsiness, comb-like — are almost invariably benign.",
-      mistake:"Reporting 14+6 spikes as epileptiform. Their surface-positive polarity, comb morphology, and drowsy state should prevent this.",
+      verdict:"Polarity is one useful clue",
+      subtitle:"Interpret direction with morphology, field, and state.",
+      why:"For this named benign variant, surface-positive polarity supports the interpretation when the comb morphology, posterior temporal distribution, and sleep-wake state also fit.",
+      mistake:"Using polarity alone to declare a transient benign or epileptiform.",
     }
   },
   {
@@ -196,11 +196,11 @@ var EEG_EXERCISES = [
     imageCredit:null,
     interaction:{
       type:"observe",
-      prompt:"Watch T3/T4. Notice theta bursts that appear and stop without changing frequency or spreading.",
-      verdict:"No evolution = not a seizure",
-      subtitle:"RMTD starts and stops at a fixed frequency.",
-      why:"A temporal lobe seizure starts fast, builds in amplitude, shifts in frequency, and spreads. RMTD just appears and disappears at the same frequency. The absence of evolution is the critical differentiator.",
-      mistake:"Treating RMTD as NCSE. Unnecessary IV benzodiazepines have been given because of this mistake.",
+      prompt:"Watch T7/T8 (legacy T3/T4). Notice theta bursts that remain stereotyped without progressive evolution.",
+      verdict:"Stereotyped, non-evolving rhythm",
+      subtitle:"The drowsy temporal pattern favors RMTD.",
+      why:"RMTD remains relatively stereotyped in frequency, morphology, and field and occurs in drowsiness without a clinical correlate. Lack of evolution supports RMTD but is not, by itself, a universal seizure exclusion rule.",
+      mistake:"Calling any rhythmic temporal pattern ictal without assessing evolution, state, field, artifact, and clinical correlation.",
     }
   },
   {
@@ -232,13 +232,13 @@ var EEG_EXERCISES = [
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"Sustained bilateral 6 Hz theta in an awake, asymptomatic patient with no post-ictal slowing — treat for NCSE?",
-      options:["Yes — bilateral rhythmic activity requires treatment","No — this is SREDA, a benign normal variant"],
+      prompt:"Sustained bilateral 6 Hz theta in an awake, asymptomatic patient with no post-event slowing — which interpretation is favored?",
+      options:["NCSE based on rhythm alone","SREDA, after confirming the characteristic pattern and context"],
       answer:1,
       verdict:"SREDA — benign",
-      subtitle:"Asymptomatic + no post-ictal slowing = not a seizure.",
-      why:"SREDA is one of the most important normal variants to know. The patient is asymptomatic during it and there is no post-ictal change — both are incompatible with NCSE.",
-      mistake:"Treating SREDA as NCSE exposes the patient to unnecessary IV benzodiazepines and ICU admission.",
+      subtitle:"Characteristic morphology and unchanged clinical state favor SREDA.",
+      why:"SREDA is a rare benign variant whose characteristic distribution, relatively monomorphic course, preserved background, and lack of a clinical correlate favor the diagnosis. No single negative feature excludes NCSE in every case.",
+      mistake:"Classifying a sustained rhythm from waveform appearance alone without the recording state, evolution, background, and patient correlation.",
     }
   },
 
@@ -257,34 +257,34 @@ var EEG_EXERCISES = [
       target:["Fp1","Fp2"],
       verdict:"Frontopolar artifact",
       subtitle:"The corneoretinal dipole projects most strongly to Fp1/Fp2.",
-      why:"Blink artifacts are maximal at the frontal poles, closest to the eyes. The large bifrontal deflections attenuate rapidly posteriorly — confirming they are not cerebral.",
-      mistake:"Calling blinks 'frontal slow waves' or 'frontal IEDs.' Ask the patient to close their eyes: blinks stop; cerebral activity continues.",
+      why:"A large, stereotyped bifrontal field that coincides with blinking or eye movement strongly supports ocular artifact. Review EOG channels or video and the posterior attenuation before deciding.",
+      mistake:"Calling a bifrontal transient cerebral or ocular from field shape alone without checking eye channels, video, timing, and montage.",
     }
   },
   {
     id:15, stage:3, stageTitle:"Artifacts",
     title:"Muscle (EMG) Artifact",
     concept:"The brain's noisiest impostor.",
-    body:"Muscle artifact: high-frequency (>30 Hz), irregular, low amplitude per wave. Lateral/temporal predominance — the temporalis muscle. Worsens with anxiety, jaw clenching. Ask the patient to relax the jaw to confirm.",
-    keyPoints:["High frequency (>30 Hz), irregular, low amplitude","Lateral/temporal predominance (temporalis muscle)","Jaw relaxation resolves it immediately"],
-    imageNote:"Live: muscle burst at temporal electrodes — watch T3/T4.",
+    body:"Muscle artifact is usually irregular, high-frequency activity, often prominent over frontotemporal or lateral electrodes near cranial muscles. Jaw clenching or tension may increase it, while relaxation may reduce it. Video, examination maneuvers, field, and response to relaxation support—but do not alone prove—the interpretation.",
+    keyPoints:["Irregular high-frequency activity is typical","Frontotemporal or lateral predominance is common","Correlate with jaw activity, video, field, and relaxation"],
+    imageNote:"Live: muscle burst at temporal electrodes — watch T7/T8 (legacy T3/T4).",
     imageCredit:null,
     interaction:{
       type:"channel-tap",
       prompt:"Tap the channel most contaminated by muscle artifact.",
       target:["T3","T4"],
       verdict:"Temporalis EMG",
-      subtitle:"T3 and T4 overlie the temporalis muscle.",
-      why:"The high-frequency irregular burst at T3/T4 is EMG from the temporalis muscle, not cerebral activity. A jaw clench creates it; jaw relaxation resolves it immediately.",
-      mistake:"Calling temporal muscle burst 'fast ictal activity.' Ictal activity evolves and has a field; muscle artifact stops abruptly with jaw relaxation.",
+      subtitle:"T7 and T8 (legacy T3/T4) lie near the temporalis muscle.",
+      why:"The high-frequency irregular burst at T7/T8 (legacy T3/T4) is consistent with temporalis EMG. Correlation with jaw activity and improvement with relaxation support the artifact interpretation.",
+      mistake:"Calling temporal fast activity ictal or artifactual from frequency alone; check evolution, field, video, and response to a reproducible maneuver.",
     }
   },
   {
     id:16, stage:3, stageTitle:"Artifacts",
     title:"Cardiac (EKG) Artifact",
     concept:"A regular rhythm that isn't cerebral.",
-    body:"Cardiac artifact: regular, periodic sharp deflections time-locked to QRS. Maximal where the heart's electrical vector intersects the scalp — typically temporal or vertex. Its completely regular interval distinguishes it from epileptiform activity.",
-    keyPoints:["Regular rhythm = cardiac — not epileptiform","Check against simultaneously recorded EKG channel","Temporal or vertex — correlates with electrode-vessel proximity"],
+    body:"Cardiac artifact produces deflections with a consistent temporal relationship to the QRS complex. Its scalp distribution varies with the reference, electrode contacts, body habitus, and pulse transmission. Regularity raises suspicion, but QRS time-locking and montage review are the stronger checks.",
+    keyPoints:["Confirm a consistent relationship to the ECG QRS","Distribution depends on reference and electrode contacts","Regularity alone does not exclude cerebral periodic activity"],
     imageNote:"Live: cardiac artifact — regular sharp spikes at 75 bpm.",
     imageCredit:null,
     interaction:{
@@ -292,47 +292,47 @@ var EEG_EXERCISES = [
       prompt:"Tap the channel where cardiac artifact is most prominent.",
       target:["T3","T4"],
       verdict:"Cardiac artifact",
-      subtitle:"Mechanically regular — no cerebral discharge is this precise.",
-      why:"Cardiac artifact is most prominent near neck vessels — typically T3 or T4. Its perfectly regular interval matching the heart rate is diagnostic. No epileptiform discharge fires this predictably.",
-      mistake:"Calling the regular sharp deflections 'LPDs.' LPDs have variable morphology and slightly irregular periodicity; cardiac artifact is metronomic.",
+      subtitle:"Time-locking to the ECG supports cardiac artifact.",
+      why:"Cardiac artifact is identified by a consistent relationship to the QRS complexes on the ECG channel. Its distribution depends on the reference and electrode contacts; regularity alone is not diagnostic.",
+      mistake:"Using regularity alone to separate cardiac artifact from cerebral periodic activity. Confirm QRS time-locking and review another montage.",
     }
   },
   {
     id:17, stage:3, stageTitle:"Artifacts",
     title:"Sweat & Slow Artifacts",
     concept:"Very slow waves that aren't delta.",
-    body:"Sweat artifact: <0.5 Hz, undulating, high-amplitude, diffuse — from galvanic skin response at electrode sites. Glossokinetic artifact: frontal, rhythmic, linked to tongue movement. Raising the LFF (e.g., to 1–2 Hz) reveals underlying activity.",
-    keyPoints:["Sweat: <0.5 Hz, undulating, diffuse, resolves with drying","Glossokinetic: frontal, linked to tongue/speech movements","Raising LFF reveals what's underneath"],
+    body:"Sweat can produce very slow, high-amplitude baseline drift through changing electrode-skin potentials; its distribution may be diffuse or electrode-dependent. Glossokinetic artifact is often frontally prominent and linked to tongue movement. A higher high-pass setting may attenuate the drift but can also remove or distort cerebral slow activity, so technical and physiologic correlation remains essential.",
+    keyPoints:["Very slow drift can arise from changing electrode-skin potentials","Glossokinetic activity correlates with tongue movement","Filter changes can attenuate artifact and cerebral slow activity"],
     imageNote:"Sweat artifact: wide sinusoidal baseline drift across multiple channels.",
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"Diffuse very slow (<0.5 Hz) undulating baseline across all channels — is this encephalopathy?",
-      options:["Yes — report as diffuse delta slowing","No — this is sweat artifact"],
+      prompt:"Very slow undulating drift appears with sweating and unstable electrode baselines. What is favored?",
+      options:["Diffuse cerebral slowing from rate alone","Sweat/electrode-skin artifact, after technical confirmation"],
       answer:1,
       verdict:"Sweat artifact",
-      subtitle:"Too slow to be delta — this is galvanic skin response.",
-      why:"Sweat artifact is too slow (<0.5 Hz) to be delta (0.5–4 Hz). It affects all channels diffusely and resolves by drying the scalp or cooling the room. Never interpret it as pathological slowing.",
-      mistake:"Reporting sweat artifact as 'diffuse delta' — a finding that would prompt urgent clinical workup unnecessarily.",
+      subtitle:"Context and electrode behavior favor sweat-related drift.",
+      why:"The very slow baseline shifts, sweating, and unstable electrode behavior favor a noncerebral source. Frequency alone cannot prove artifact; inspect electrodes, montage, video, and the underlying background.",
+      mistake:"Calling very slow drift cerebral or artifactual from frequency alone without technical correlation.",
     }
   },
   {
     id:18, stage:3, stageTitle:"Artifacts",
     title:"60 Hz Noise & Electrode Pops",
     concept:"The environment intrudes on your recording.",
-    body:"60 Hz noise: constant, perfectly regular, high-frequency. Single-channel = high-impedance electrode. Widespread = environmental. Electrode pop: single-channel high-amplitude fast transient from momentary contact loss. True cerebral discharges always spread to neighbours.",
-    keyPoints:["60 Hz noise: single-channel = electrode; widespread = environment","Electrode pop: single channel, asymmetric rise-fall","True discharges spread to adjacent channels"],
+    body:"Line noise is a regular high-frequency artifact that may be focal with poor electrode contact or widespread with environmental interference. An electrode pop is a transient caused by abrupt contact change. A cerebral discharge usually has a physiologically plausible field, but a limited field can appear in very few channels and one faulty electrode can contaminate every derivation that contains it.",
+    keyPoints:["Line noise may be focal or widespread","A faulty electrode affects every derivation that contains it","A limited field raises uncertainty rather than proving artifact"],
     imageNote:"60 Hz artifact on single channel (impedance) vs. diffuse (environmental).",
     imageCredit:null,
     interaction:{
       type:"binary",
       prompt:"A sharp transient appears only at F8, with nothing on any adjacent electrode. This is:",
-      options:["A focal F8 epileptiform discharge","An electrode artifact — true discharges always spread"],
+      options:["Definitely a focal F8 discharge","Suspect electrode artifact and verify"],
       answer:1,
-      verdict:"Electrode artifact",
-      subtitle:"True discharges always have a field.",
-      why:"Any single-channel transient with no neighbouring projection is an artifact until proven otherwise. True cerebral discharges cannot be confined to one electrode — they always project to adjacent channels.",
-      mistake:"Reporting a single-channel transient as a 'right frontotemporal spike.' Checking the field (adjacent channels) must come before any epileptiform call.",
+      verdict:"Suspect artifact; verify",
+      subtitle:"An isolated transient needs technical and field checks.",
+      why:"The absence of a clear neighboring field makes electrode artifact more likely, but it is not proof. Check contact and impedance, inspect every derivation containing F8, change montage, and correlate with video, EOG, and ECG.",
+      mistake:"Making a definite artifact or epileptiform call from one display channel without technical checks and montage review.",
     }
   },
 
@@ -341,35 +341,35 @@ var EEG_EXERCISES = [
     id:19, stage:4, stageTitle:"Pathological Patterns",
     title:"Spikes and Sharp Waves: Criteria",
     concept:"Knowing the criteria prevents both over- and under-diagnosis.",
-    body:"Spike: 20–70 ms, surface-negative, disrupts background, has aftergoing slow wave. Sharp wave: same but 70–200 ms. Both must have a plausible field (spread to neighbours). An isolated sharp transient without these features is not epileptiform.",
-    keyPoints:["Spike: 20–70 ms; sharp wave: 70–200 ms","Must have aftergoing slow wave and disrupt background","Must have a plausible field across adjacent electrodes"],
-    imageNote:"Live: focal temporal spike — watch T3.",
+    body:"Spike and sharp wave are descriptive duration terms: a spike lasts 20 to <70 ms and a sharp wave 70–200 ms. IFCN assessment considers six features: pointed multiphasic morphology, duration distinct from background, waveform asymmetry, a possible slow after-wave, background disruption, and a plausible scalp field. No single feature establishes epileptiformity.",
+    keyPoints:["Spike: 20 to <70 ms; sharp wave: 70–200 ms","Assess the six IFCN morphology and field features","No slow after-wave or other single feature is mandatory"],
+    imageNote:"Live: focal temporal spike — watch T7 (legacy T3).",
     imageCredit:"Temple University EEG Corpus (TUAB) — open access",
     interaction:{
       type:"observe",
-      prompt:"Watch T3. Each time a spike fires, look for the slow wave that follows it.",
-      verdict:"Aftergoing slow wave = epileptiform",
-      subtitle:"The slow wave is the defining criterion.",
-      why:"The aftergoing slow wave is what separates an epileptiform discharge from any sharp transient. No slow wave = not a spike, no matter how pointed or prominent.",
-      mistake:"Calling any sharp transient a 'spike' without checking for the afterdischarge. This single mistake is responsible for most over-diagnoses.",
+      prompt:"Watch T7 (legacy T3). Compare the pointed waveform, asymmetry, background disruption, possible slow after-wave, and scalp field.",
+      verdict:"Use the full IFCN feature set",
+      subtitle:"A slow after-wave is helpful, not mandatory.",
+      why:"Epileptiform interpretation depends on the combination of morphology, duration, asymmetry, possible slow after-wave, background disruption, and a plausible scalp field.",
+      mistake:"Using one feature—such as pointedness or a slow tail—as a stand-alone diagnostic rule.",
     }
   },
   {
     id:20, stage:4, stageTitle:"Pathological Patterns",
     title:"Focal Interictal Epileptiform Discharges",
     concept:"Where is it? How often? What context?",
-    body:"Focal IEDs indicate focal cortical irritability. Localisation guides surgical planning. Common syndromes: temporal (TLE), frontal (FLE), centrotemporal (Rolandic). Frequency correlates loosely but imperfectly with seizure burden.",
-    keyPoints:["Temporal IEDs: most common focal epilepsy pattern","Centrotemporal (Rolandic) spikes: benign childhood epilepsy","Always report lateralisation, localisation, and frequency"],
-    imageNote:"Live: left temporal spike with T3 phase reversal.",
+    body:"Focal IEDs support a propensity for focal seizures in the appropriate clinical context and can provide approximate scalp localization. Report distribution, field, state, frequency, and uncertainty. Use the current syndrome term self-limited epilepsy with centrotemporal spikes (SeLECTS) when the full electroclinical criteria are met.",
+    keyPoints:["IEDs support—but do not independently diagnose—epilepsy","Scalp localization is approximate","Report distribution, field, state, frequency, and uncertainty"],
+    imageNote:"Live: left temporal spike with a T7 (legacy T3) scalp maximum.",
     imageCredit:"Temple University EEG Corpus (TUAB) — open access",
     interaction:{
       type:"channel-tap",
-      prompt:"Tap the channel at the centre of the discharge (phase reversal point).",
+      prompt:"Tap the electrode at the local scalp maximum (the phase-reversal point in this bipolar chain).",
       target:["T3"],
       verdict:"Left temporal IED",
-      subtitle:"T3 is the epicentre of this discharge.",
-      why:"T3 is the source of this left temporal IED. In a bipolar montage, the channels above and below T3 would point away from each other — the classic phase reversal confirming the source location.",
-      mistake:"Calling the whole left hemisphere abnormal because multiple channels show the discharge. The focus is T3 — the others show field spread.",
+      subtitle:"T7 (legacy T3) is the local scalp maximum.",
+      why:"The phase reversal places a local scalp voltage maximum or minimum at T7 (legacy T3) in this synthetic bipolar chain. It helps describe the field but does not prove a unique cortical generator.",
+      mistake:"Calling the scalp maximum the cortical source. Confirm the field across montages and state localization as approximate.",
     }
   },
   {
@@ -393,8 +393,8 @@ var EEG_EXERCISES = [
     id:22, stage:4, stageTitle:"Pathological Patterns",
     title:"Focal Delta Slowing",
     concept:"Slow waves tell you where the problem is.",
-    body:"Focal polymorphic delta over one region = structural lesion until proven otherwise. Rhythmic focal delta can be ictal — look for evolution. Correlate with imaging. Focal theta may indicate subcortical white matter dysfunction.",
-    keyPoints:["Focal polymorphic delta = structural lesion until proven otherwise","Rhythmic focal delta can be ictal — look for evolution","Get imaging when focal slowing is unexplained"],
+    body:"Persistent focal slowing indicates focal cerebral dysfunction but is etiologically nonspecific. It can accompany structural lesions, postictal or peri-ictal states, migraine, inflammation, or other focal disturbances. Rhythmic focal delta may increase concern for seizures in some contexts, but ictal classification requires evolution, rate-duration criteria, or an electroclinical correlate.",
+    keyPoints:["Focal slowing indicates focal dysfunction, not a specific lesion","Polymorphic and rhythmic slowing have different implications","Correlate with history, examination, imaging, and the recording course"],
     imageNote:"Live: continuous left temporal polymorphic delta.",
     imageCredit:null,
     interaction:{
@@ -402,17 +402,17 @@ var EEG_EXERCISES = [
       prompt:"Tap the channel with the most prominent slow activity.",
       target:["T3","F3","C3"],
       verdict:"Left temporal focal delta",
-      subtitle:"Structural lesion until proven otherwise.",
-      why:"The slow activity is maximal over the left hemisphere (T3, F3, C3). Focal polymorphic delta means there is a structural problem in the underlying cortex — imaging is mandatory.",
-      mistake:"Attributing focal delta to 'postictal slowing' without evidence of a preceding seizure. Always get imaging for unexplained focal slowing.",
+      subtitle:"Focal cerebral dysfunction; cause remains open.",
+      why:"The slow activity is maximal over the left temporal-central region, including T7 (legacy T3), F3, and C3. This localizes the scalp abnormality but does not determine whether the cause is structural, postictal, inflammatory, or another focal process.",
+      mistake:"Equating focal slowing with one diagnosis. Report its distribution and persistence, then correlate with the clinical history and appropriate investigations.",
     }
   },
   {
     id:23, stage:4, stageTitle:"Pathological Patterns",
     title:"Periodic Discharges",
     concept:"Repetition with a rhythm — a dangerous sign.",
-    body:"Lateralised periodic discharges (LPDs): one hemisphere, regular ~1 Hz, acute focal injury + high seizure risk. Generalised periodic discharges (GPDs): bilateral — anoxic injury, metabolic, prion disease. LPDs = ictal-interictal continuum.",
-    keyPoints:["LPDs = acute focal injury + high seizure risk","GPDs = anoxic injury, metabolic, prion disease","Ictal-interictal continuum — correlate clinically"],
+    body:"Lateralized periodic discharges (LPDs) are unilateral periodic patterns associated with focal cerebral dysfunction and increased seizure risk. They meet ACNS ictal-interictal continuum (IIC) criteria when periodic discharges average >1 to ≤2.5 Hz, or when a 0.5–1 Hz pattern has a plus modifier or fluctuation. IIC is an EEG descriptor, not a diagnosis or automatic treatment indication.",
+    keyPoints:["LPDs are associated with increased seizure risk","Frequency and modifiers determine whether ACNS IIC criteria are met","IIC requires electroclinical interpretation"],
     imageNote:"Live: LPDs — regular 1 Hz sharp-slow over right hemisphere.",
     imageCredit:null,
     interaction:{
@@ -420,9 +420,9 @@ var EEG_EXERCISES = [
       prompt:"Tap the hemisphere where the periodic discharges are maximal.",
       target:["Fp2","F4","C4","T4","O2"],
       verdict:"Right hemisphere LPDs",
-      subtitle:"Ictal-interictal continuum — urgent evaluation needed.",
-      why:"All the periodic activity is on the right (even-numbered channels). The combination of lateralisation and 1 Hz periodicity places this firmly in the ictal-interictal continuum. Continuous EEG monitoring is needed.",
-      mistake:"Dismissing LPDs as 'just artifact' because they're too regular. Regularity is the point — it means periodically recurring discharge from a focal injury.",
+      subtitle:"Right-sided LPDs carry increased seizure risk.",
+      why:"The periodic activity is maximal over the right hemisphere. A 1 Hz pattern alone does not automatically meet IIC criteria; plus modifiers, fluctuation, clinical context, and the recording course matter.",
+      mistake:"Calling every LPD ictal—or benign—from frequency alone. Describe the pattern and apply the full ACNS criteria.",
     }
   },
 
@@ -430,72 +430,72 @@ var EEG_EXERCISES = [
   {
     id:24, stage:5, stageTitle:"Seizure Recognition",
     title:"What Makes a Seizure on EEG",
-    concept:"Evolution is the hallmark.",
-    body:"A seizure: rhythmic activity that evolves in frequency, amplitude, and spatial distribution. Has a clear onset and offset. Post-ictal slowing (delta) confirms and lateralises. Without evolution, a pattern is not a seizure.",
-    keyPoints:["Evolution in frequency, amplitude, and field = ictal","Post-ictal slowing confirms seizure onset zone","No evolution = not a seizure (RMTD? SREDA?)"],
+    concept:"Evolution strongly supports a seizure, but criteria and context decide.",
+    body:"Evolution in frequency, morphology, or location strongly supports ictal activity, but it is not the only route to an electrographic seizure. In ACNS critical-care terminology, an electrographic seizure is epileptiform discharges averaging >2.5 Hz for at least 10 seconds, or a definitely evolving pattern lasting at least 10 seconds. A time-locked clinical correlate can establish an electroclinical seizure. Postictal slowing is supportive, not confirmatory.",
+    keyPoints:["Evolution may involve frequency, morphology, or location","ACNS electrographic seizure criteria use rate and duration thresholds","Clinical correlation and postictal context matter"],
     imageNote:"Live: temporal lobe seizure — theta onset evolving to alpha then slowing.",
     imageCredit:"CHB-MIT Scalp EEG Database (PhysioNet, open access)",
     interaction:{
       type:"observe",
-      prompt:"Watch for the seizure beginning at T3 (~4 s in). Notice how the activity changes frequency and amplitude over time.",
-      verdict:"Ictal — evolution confirmed",
-      subtitle:"Frequency, amplitude, and field all change over time.",
-      why:"The seizure starts as low-amplitude theta at T3, builds in amplitude, shifts frequency, then slows into post-ictal delta. Evolution across all three dimensions — frequency, amplitude, field — is what makes it ictal.",
-      mistake:"Calling RMTD a seizure because it looks like an ictal onset. RMTD starts and stops without any evolution — that is the critical distinction.",
+      prompt:"Watch T7 (legacy T3) for the earliest visible scalp change and follow how frequency, morphology, and distribution change over time.",
+      verdict:"Definitely evolving pattern",
+      subtitle:"Sequential change strongly supports ictal activity.",
+      why:"The synthetic pattern begins with low-amplitude temporal theta, changes morphology and frequency, spreads, and then slows. Duration, evolution, and clinical correlation determine seizure classification.",
+      mistake:"Using evolution as an all-or-none shortcut. Some seizures meet rate-and-duration criteria without clear evolution, while some evolving-looking artifacts are not cerebral.",
     }
   },
   {
     id:25, stage:5, stageTitle:"Seizure Recognition",
     title:"Temporal Lobe Seizure",
     concept:"The most common focal seizure in adults.",
-    body:"TLE: focal onset at anterior temporal electrode, rhythmic theta → alpha build, spread to ipsilateral hemisphere, possible secondary generalisation. Post-ictal unilateral slowing helps lateralise the seizure onset zone.",
-    keyPoints:["Onset: focal rhythmic theta at anterior temporal","Builds, slows, spreads — classic evolution","Post-ictal unilateral slowing helps lateralise"],
-    imageNote:"Live: left temporal lobe seizure evolving from T3.",
+    body:"A temporal seizure may show rhythmic temporal theta or alpha activity with evolving morphology, frequency, or distribution. The earliest visible scalp maximum gives approximate lateralizing information; postictal unilateral slowing can support that interpretation but does not prove the cortical seizure-onset zone.",
+    keyPoints:["Track the earliest visible scalp change","Evolution and spread provide supporting evidence","Scalp and postictal localization remain approximate"],
+    imageNote:"Live: synthetic left temporal seizure pattern evolving from T7 (legacy T3).",
     imageCredit:"CHB-MIT Scalp EEG Database (PhysioNet, open access)",
     interaction:{
       type:"channel-tap",
-      prompt:"Tap the channel where the seizure originates.",
+      prompt:"Tap the electrode with the earliest visible scalp change.",
       target:["T3"],
-      verdict:"Left temporal onset",
-      subtitle:"T3 — left anterior temporal.",
-      why:"The seizure starts at T3 and spreads to C3, then F3, then contralateral T4. This propagation pattern is the canonical left TLE signature. Post-ictal slowing at T3 confirms the onset zone.",
-      mistake:"Tapping T4 because the right side eventually shows activity. Secondary spread does not mean bilateral onset — track where the activity starts, not where it ends up.",
+      verdict:"Earliest left temporal scalp change",
+      subtitle:"T7 (legacy T3) — left mid-temporal scalp electrode.",
+      why:"In this synthetic example, the first visible change is maximal at T7 (legacy T3) before appearing more broadly. This supports approximate left temporal lateralization but does not prove the cortical onset zone.",
+      mistake:"Equating the largest late wave—or the earliest scalp electrode—with a uniquely proven cortical generator.",
     }
   },
   {
     id:26, stage:5, stageTitle:"Seizure Recognition",
     title:"Generalised Tonic-Clonic Seizure",
     concept:"The full storm — from background to cessation.",
-    body:"GTC on EEG: tonic phase → high-amplitude diffuse fast activity. Clonic phase → rhythmic spike-wave slowing from 5 Hz → 2.5 Hz. Post-ictal suppression → diffuse flat trace for seconds to minutes. Post-ictal suppression is highly specific for a true GTC.",
-    keyPoints:["Tonic: high-amplitude fast (>10 Hz)","Clonic: spike-wave bursts that progressively slow","Post-ictal suppression: specific for true GTC"],
+    body:"During a bilateral tonic-clonic seizure, scalp EEG is often substantially obscured by muscle artifact. Generalized fast activity and jerk-locked spike or polyspike-wave may be visible, followed variably by postictal slowing or attenuation. No single postictal feature independently confirms epilepsy or excludes a functional seizure.",
+    keyPoints:["Muscle artifact often obscures the tonic and clonic phases","Visible cerebral activity may evolve with the clinical phases","Postictal slowing or attenuation is variable and not diagnostic alone"],
     imageNote:"Live: GTC — tonic fast → clonic spike-wave → post-ictal suppression.",
     imageCredit:null,
     interaction:{
       type:"observe",
-      prompt:"Watch the full cycle: tonic (fast), then clonic (slowing spike-wave), then suppression (flat trace).",
+      prompt:"Watch the synthetic phase sequence and note where muscle artifact limits scalp interpretation.",
       verdict:"Generalised tonic-clonic seizure",
-      subtitle:"Post-ictal suppression is the diagnostic key.",
-      why:"A genuinely flat trace for 20–30 seconds after convulsive activity confirms a true GTC. This pattern never occurs in psychogenic non-epileptic events.",
-      mistake:"Missing the post-ictal suppression because the recording ends too early. Always continue recording for several minutes after clinical activity stops.",
+      subtitle:"Interpret the full electroclinical sequence.",
+      why:"A compatible evolving EEG pattern followed by postictal slowing or attenuation may support a convulsive epileptic seizure, but video, artifact review, and the full clinical course are required.",
+      mistake:"Using a flat-looking postictal segment as proof of epilepsy or as a stand-alone way to exclude a functional seizure.",
     }
   },
   {
     id:27, stage:5, stageTitle:"Seizure Recognition",
     title:"Non-Convulsive Status Epilepticus",
     concept:"The seizure you miss without EEG.",
-    body:"NCSE: sustained seizure activity without prominent motor signs. Patterns: continuous spike-wave, rhythmic delta/theta with evolution, or periodic discharges. Patient may be confused, unresponsive, or show only subtle twitching. Medical emergency.",
-    keyPoints:["Altered consciousness + no convulsions = do EEG urgently","Continuous or near-continuous epileptiform patterns","Response to IV benzodiazepine — clinical + EEG change — is diagnostic"],
-    imageNote:"Live: generalised encephalopathy — recognise what needs urgent treatment.",
+    body:"Nonconvulsive status epilepticus is sustained seizure activity without prominent convulsions. Continuous spike-wave, a definitely evolving rhythmic pattern, or some periodic patterns may raise concern, but periodic discharges are not automatically NCSE. Apply ACNS/Salzburg criteria with the examination, video, medications, and recording course.",
+    keyPoints:["Persistent altered responsiveness warrants urgent EEG assessment","Apply formal electrographic and electroclinical criteria","Periodic or IIC patterns are not automatically status"],
+    imageNote:"Live: generalized periodic activity — recognize when urgent expert correlation is needed.",
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"Continuous spike-wave in an unresponsive patient post-convulsion — immediate action?",
-      options:["Wait and observe — this may resolve","Treat as NCSE — IV benzodiazepine + urgent neurology"],
+      prompt:"Continuous spike-wave in an unresponsive patient after a convulsion — best next step?",
+      options:["Routine observation only","Urgent expert assessment and continuous EEG for possible NCSE"],
       answer:1,
-      verdict:"Treat immediately",
-      subtitle:"NCSE is a neurological emergency.",
-      why:"Every minute of ongoing seizure activity causes neuronal injury. IV benzodiazepine, continuous EEG monitoring, and urgent neurology consultation are the standard response.",
-      mistake:"Waiting for more convulsive activity before treating. The whole point of NCSE is that the seizure has already lost its motor component — EEG is the only window.",
+      verdict:"Urgent expert assessment",
+      subtitle:"Possible NCSE requires prompt electroclinical evaluation.",
+      why:"Persistent epileptiform activity with impaired responsiveness warrants urgent specialist review and continuous EEG. Diagnosis and treatment follow formal criteria, patient factors, and local emergency protocols.",
+      mistake:"Waiting for another convulsion—or prescribing from one pattern alone—without urgent electroclinical assessment.",
     }
   },
 
@@ -504,18 +504,18 @@ var EEG_EXERCISES = [
     id:28, stage:6, stageTitle:"Clinical Integration",
     title:"Diffuse Encephalopathy Patterns",
     concept:"The whole brain speaks when it is diffusely disturbed.",
-    body:"Diffuse encephalopathy: generalised slowing (alpha → theta → delta), loss of normal architecture, triphasic waves in hepatic/uremic encephalopathy, suppression-burst in severe anoxia. Triphasic waves can mimic NCSE — clinical context is essential.",
-    keyPoints:["Background slowing = severity of encephalopathy","Triphasic waves: bifrontal, phase-lag, metabolic context","Suppression-burst: severe — anoxia, barbiturates, hypothermia"],
-    imageNote:"Live: triphasic waves — bifrontal, 1.8 Hz, on a slow background.",
+    body:"Diffuse cerebral dysfunction often produces generalized slowing and loss of normal organization, but EEG severity and etiology require clinical correlation. Generalized periodic discharges may have triphasic morphology and occur with toxic-metabolic, infectious, structural, medication-related, and other encephalopathies. Triphasic morphology is descriptive and does not by itself distinguish encephalopathy from NCSE.",
+    keyPoints:["Generalized slowing is nonspecific and must be interpreted in context","Use the ACNS description GPDs with triphasic morphology when appropriate","Morphology and anterior-posterior lag do not independently exclude NCSE"],
+    imageNote:"Live: frontally predominant GPDs with triphasic morphology on a slow background.",
     imageCredit:null,
     interaction:{
       type:"channel-tap",
-      prompt:"Tap the region where triphasic waves are most prominent.",
+      prompt:"Tap the region where these GPDs with triphasic morphology are most prominent.",
       target:["Fp1","Fp2","F3","F4"],
-      verdict:"Frontal triphasic waves",
-      subtitle:"Bifrontal, 1.8 Hz, anterior-to-posterior phase lag.",
-      why:"Triphasic waves have frontal predominance with an anterior-to-posterior phase lag — the frontal deflection leads the posterior by milliseconds. This spatial pattern, in a metabolic context, distinguishes them from NCSE.",
-      mistake:"Treating triphasic waves as NCSE without clinical context. Metabolic encephalopathy + bifrontal phase-lag = triphasics; treat the metabolic cause.",
+      verdict:"Frontally predominant GPDs",
+      subtitle:"Triphasic morphology is a descriptor, not an etiology.",
+      why:"This synthetic pattern is frontally predominant and shows an anterior-posterior lag. Those features support the description of GPDs with triphasic morphology, but clinical state, evolution, modifiers, and formal seizure criteria determine whether NCSE remains a concern.",
+      mistake:"Using triphasic morphology, frontal predominance, or metabolic illness as a stand-alone exclusion of NCSE.",
     }
   },
   {
@@ -533,8 +533,8 @@ var EEG_EXERCISES = [
       answer:1,
       verdict:"Benign variant — not epileptiform",
       subtitle:"Monophasic + temporal + runs + no afterdischarge = wicket waves.",
-      why:"This is the most consequential over-read in EEG. Wicket waves cause unnecessary epilepsy diagnoses, driving-licence loss, and antiseizure medication exposure. The criteria are strict — apply them.",
-      mistake:"The mistake is the first option. This error has real consequences for patients. Monophasic + runs + temporal + drowsiness = wicket waves, every time.",
+      why:"The arciform temporal morphology, drowsy state, preserved background, and lack of a prominent slow after-wave together favor wicket waves rather than an IED.",
+      mistake:"Using a single shortcut. Wicket identification depends on the combined morphology, field, state, and background.",
     }
   },
   {
@@ -547,13 +547,13 @@ var EEG_EXERCISES = [
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"3 Hz generalised spike-wave in a 60-year-old with acute confusion — childhood absence epilepsy?",
-      options:["Yes — the pattern is classic for absence","No — in a confused adult, this is NCSE until proven otherwise"],
+      prompt:"A confused 60-year-old has persistent 3 Hz generalized spike-wave. What is the safer impression?",
+      options:["Childhood absence syndrome from waveform alone","Possible NCSE requiring urgent electroclinical evaluation"],
       answer:1,
-      verdict:"NCSE in an adult",
-      subtitle:"Context transforms interpretation completely.",
-      why:"Absence epilepsy is a childhood syndrome. The same 3 Hz pattern in a confused adult is NCSE — a medical emergency requiring immediate treatment. The waveform is identical; the diagnosis is opposite.",
-      mistake:"Diagnosing absence epilepsy in an adult based on the waveform alone, without considering age and clinical state.",
+      verdict:"Possible NCSE — correlate urgently",
+      subtitle:"Age and impaired responsiveness change the differential.",
+      why:"Persistent generalized spike-wave with acute confusion raises concern for NCSE, but age and waveform alone do not establish it. Apply electrographic and electroclinical criteria with examination, video, medication history, and the recording course.",
+      mistake:"Diagnosing either childhood absence epilepsy or NCSE from waveform and age alone.",
     }
   },
   {
@@ -633,9 +633,9 @@ var EEG_EXERCISES = [
   {
     id:35, stage:6, stageTitle:"Full Cap Foundations",
     title:"Near the Middle",
-    concept:"Lower numbers tend to sit closer to the midline.",
-    body:"C4 is closer to the middle than T8 because the number is lower.",
-    keyPoints:["Numbers give side","Lower often means nearer middle","Far lateral names have higher numbers"],
+    concept:"Electrode distance comes from the measured map, not number size.",
+    body:"C4 is closer to the midline than T8 because those are their standardized scalp positions. Odd and even numbers reliably indicate side, but numeric magnitude is not a general medial-to-lateral distance code.",
+    keyPoints:["Odd and even indicate left and right","Use the electrode map for distance from midline","T8 is a lateral temporal position"],
     imageNote:null,
     imageCredit:null,
     interaction:{
@@ -644,9 +644,9 @@ var EEG_EXERCISES = [
       options:["T8","C4"],
       answer:1,
       verdict:"C4",
-      subtitle:"Lower numbers tend to sit nearer the midline.",
-      why:"T8 is farther out on the side of the head.",
-      mistake:"Using number only for left-right and missing distance from middle.",
+      subtitle:"C4 is nearer the midline on the standard map.",
+      why:"T8 is a lateral temporal electrode; this relationship comes from the standardized positions, not because 8 is larger than 4.",
+      mistake:"Inferring electrode distance from numeric magnitude instead of checking the map.",
     }
   },
   {
@@ -745,20 +745,20 @@ var EEG_EXERCISES = [
   {
     id:41, stage:6, stageTitle:"Display Basics",
     title:"Average Reference",
-    concept:"Another view compares one sensor with the head average.",
-    body:"Average reference is different from neighbor-pair display.",
-    keyPoints:["Bipolar compares neighbors","Average reference compares to the head average","Both are views, not raw truth"],
+    concept:"Average reference subtracts the instantaneous mean of selected electrodes.",
+    body:"In an average-reference montage, each electrode is compared with the instantaneous arithmetic mean of the included, usable EEG electrodes. The reference is not a physical 'whole-head' voltage and can be distorted by bad channels, incomplete coverage, or large focal activity. Bipolar and average-reference montages are complementary views of the same recorded potentials.",
+    keyPoints:["Bipolar derivations compare electrode pairs","Average reference uses the mean of included usable electrodes","Channel selection and artifacts can bias the computed reference"],
     imageNote:null,
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"Average reference compares a sensor with:",
-      options:["Only the next sensor","The head average"],
+      prompt:"Average reference compares an electrode with:",
+      options:["Only the next electrode","The mean of the included usable EEG electrodes"],
       answer:1,
-      verdict:"The head average",
-      subtitle:"It is another montage view.",
-      why:"Different views can reveal different parts of the same signal.",
-      mistake:"Assuming one display view is the only truth.",
+      verdict:"Mean of included usable electrodes",
+      subtitle:"It is a computed reference, not a silent point.",
+      why:"The instantaneous mean of the selected usable electrodes is subtracted from each channel. Bad or excluded channels and uneven scalp coverage can change that mean.",
+      mistake:"Calling the computed mean a neutral whole-head truth or including grossly artifactual channels without review.",
     }
   },
   {
@@ -850,9 +850,9 @@ var EEG_EXERCISES = [
       prompt:"Tap the left temporal maximum.",
       target:["T3"],
       verdict:"Left temporal maximum",
-      subtitle:"T3 sits in the left temporal region.",
-      why:"The strongest abnormality is in the left temporal chain.",
-      mistake:"Choosing a later spread instead of the maximum field.",
+      subtitle:"T7 (legacy T3) is the left mid-temporal electrode.",
+      why:"The synthetic abnormality has its local scalp maximum in the left temporal chain. This describes the recorded field without proving a unique cortical source.",
+      mistake:"Equating the scalp maximum with a uniquely localized cortical generator.",
     }
   },
   {
@@ -894,8 +894,8 @@ var EEG_EXERCISES = [
     id:49, stage:6, stageTitle:"Clinical Yield",
     title:"First EEG Yield",
     concept:"A routine EEG can be normal in epilepsy.",
-    body:"Within 24 hours of a first seizure, a routine EEG finds epileptiform activity only about half the time.",
-    keyPoints:["A normal EEG does not rule out epilepsy","Timing matters","Yield is about probability"],
+    body:"A single routine EEG has limited sensitivity for interictal epileptiform discharges, and published yield varies substantially with population, timing, sleep capture, activation procedures, and recording duration. A normal result therefore does not rule out epilepsy.",
+    keyPoints:["A normal routine EEG does not rule out epilepsy","Yield varies by protocol and patient population","Timing, sleep, activation, and duration matter"],
     imageNote:null,
     imageCredit:null,
     interaction:{
@@ -905,7 +905,7 @@ var EEG_EXERCISES = [
       answer:1,
       verdict:"Still possible",
       subtitle:"Routine EEG can miss it.",
-      why:"A single routine EEG may find epileptiform activity only about half the time.",
+      why:"Interictal discharges can be intermittent, and routine-EEG sensitivity varies across settings. The result must be integrated with the clinical history.",
       mistake:"Using one normal EEG to rule out epilepsy.",
     }
   },
@@ -913,8 +913,8 @@ var EEG_EXERCISES = [
     id:50, stage:6, stageTitle:"Clinical Yield",
     title:"Longer Recording",
     concept:"Longer EEG raises the chance of seeing events.",
-    body:"A 24-hour recording can detect epileptiform discharges in roughly 80-90% of patients with epilepsy.",
-    keyPoints:["Longer time improves yield","Still not perfect","Normal prolonged EEG can still happen"],
+    body:"Longer recordings often increase the chance of capturing interictal discharges or events because abnormalities may be intermittent and sleep may be sampled. The gain is not a universal percentage: it depends on epilepsy type, referral population, timing, recording method, and whether the target is an IED or a typical clinical event.",
+    keyPoints:["Longer sampling often improves yield","The size of the gain varies by population and protocol","A normal prolonged EEG still does not exclude epilepsy"],
     imageNote:null,
     imageCredit:null,
     interaction:{
@@ -968,20 +968,20 @@ var EEG_EXERCISES = [
   },
   {
     id:53, stage:6, stageTitle:"Scalp Limits",
-    title:"Ten to Twenty cm²",
-    concept:"Scalp EEG usually needs a sizable source.",
-    body:"Roughly 10-20 square centimeters of cortex may be needed for consistent scalp detection.",
-    keyPoints:["Surface area matters","Small areas can hide","This is a limitation of scalp EEG"],
+    title:"Source Visibility Has No Fixed Cutoff",
+    concept:"Area matters, but geometry and signal quality matter too.",
+    body:"There is no universal cortical-area threshold for scalp detection. Experimental estimates vary, and visibility also depends on synchrony, source orientation and depth, amplitude, skull and scalp conductivity, electrode coverage, montage, background activity, and noise.",
+    keyPoints:["Larger synchronized areas are generally easier to detect","No single cm² cutoff applies to every source","Orientation, depth, montage, and noise also shape visibility"],
     imageNote:null,
     imageCredit:null,
     interaction:{
       type:"binary",
-      prompt:"Consistent scalp detection usually needs a:",
+      prompt:"All else equal, which source is generally easier to detect at the scalp?",
       options:["Tiny point source","Sizable cortical area"],
       answer:1,
       verdict:"Sizable cortical area",
-      subtitle:"Area helps the signal reach the scalp.",
-      why:"A larger synchronized area creates a stronger scalp field.",
+      subtitle:"Area helps, but it is not a fixed threshold.",
+      why:"A larger synchronized area often produces a stronger field, while orientation, depth, montage, conductivity, and noise can still change detectability.",
       mistake:"Expecting scalp EEG to detect every tiny source.",
     }
   },
@@ -989,8 +989,8 @@ var EEG_EXERCISES = [
     id:54, stage:6, stageTitle:"Scalp Limits",
     title:"Depth Matters",
     concept:"Deep sources can be harder to see.",
-    body:"Mesial temporal, insular, or singulate sources may be too deep for scalp electrodes.",
-    keyPoints:["Surface sources are easier","Deep sources can be missed","Distance weakens scalp signal"],
+    body:"Mesial temporal, insular, or cingulate activity can be difficult to detect or localize with scalp EEG. Depth contributes, but orientation, synchrony, intervening tissues, electrode coverage, and propagation also influence the visible scalp field.",
+    keyPoints:["Deep sources can be difficult to detect or localize","Depth is only one determinant of visibility","Orientation, synchrony, coverage, and propagation matter"],
     imageNote:null,
     imageCredit:null,
     interaction:{
@@ -1000,7 +1000,7 @@ var EEG_EXERCISES = [
       answer:1,
       verdict:"Harder to see",
       subtitle:"Distance weakens the scalp field.",
-      why:"Scalp electrodes sit far from deep structures.",
+      why:"Distance and intervening tissues can attenuate deep activity, while orientation and propagation determine whether a recognizable scalp field appears.",
       mistake:"Assuming a normal scalp EEG excludes deep seizure sources.",
     }
   },
@@ -1074,9 +1074,9 @@ var EEG_EXERCISES = [
       prompt:"Full cap case: tap the focal maximum.",
       target:["T3"],
       verdict:"Left temporal maximum",
-      subtitle:"T3 is the center of the field.",
-      why:"The strongest activity sits in the left temporal region with surrounding spread.",
-      mistake:"Choosing a region that only shows later spread.",
+      subtitle:"T7 (legacy T3) is the local scalp maximum.",
+      why:"The strongest recorded activity sits in the left temporal region with surrounding spread. This localizes the scalp field approximately, not a unique cortical generator.",
+      mistake:"Calling the scalp maximum the proven cortical source or choosing only a later area of spread.",
     }
   },
   {
@@ -1109,62 +1109,168 @@ var EEG_EXERCISES = [
     interaction:{
       type:"binary",
       prompt:"Measure the run, then use the story. Best final meaning:",
-      options:["Normal awake rhythm","Emergency seizure state"],
+      options:["Normal awake rhythm","Possible NCSE requiring urgent expert assessment"],
       answer:1,
-      verdict:"Emergency seizure state",
-      subtitle:"Trace plus patient story changes urgency.",
-      why:"Continuous seizure waves in an unresponsive or confused adult are urgent.",
-      mistake:"Naming only the waveform and ignoring the clinical question.",
+      verdict:"Possible NCSE — urgent assessment",
+      subtitle:"The trace and patient state require electroclinical correlation.",
+      why:"A persistent generalized epileptiform pattern with impaired responsiveness raises concern for NCSE. Formal criteria, examination, video, medications, and the recording course determine the final diagnosis.",
+      mistake:"Naming the waveform as definite status—or dismissing it—without electroclinical criteria and context.",
+    }
+  },
+  {
+    id:61, stage:1, stageTitle:"From Cortex to Scalp",
+    title:"Synaptic Currents",
+    concept:"Scalp EEG reflects summed postsynaptic currents more than individual action potentials.",
+    body:"Postsynaptic currents last long enough for many aligned cortical neurons to add together into a measurable field.",
+    keyPoints:["Population signal","Postsynaptic currents","Temporal summation"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"What contributes most to routine scalp EEG?",
+      options:["Single axonal spikes","Summed postsynaptic currents"],
+      answer:1,
+      verdict:"Summed postsynaptic currents",
+      subtitle:"EEG is a population field, not a single-neuron recording.",
+      why:"Slower postsynaptic currents can overlap across many neurons; brief action potentials usually cancel at scalp distance.",
+      mistake:"Treating an EEG trace as a direct view of individual neurons firing.",
+    }
+  },
+  {
+    id:62, stage:1, stageTitle:"From Cortex to Scalp",
+    title:"Population Synchrony",
+    concept:"Alignment and timing determine whether tiny fields reinforce or cancel.",
+    body:"Parallel pyramidal cells firing with coordinated timing produce a stronger summed field than scattered, asynchronous cells.",
+    keyPoints:["Aligned cells","Coordinated timing","Constructive summation"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Which cortical population is easier to detect at the scalp?",
+      options:["Aligned and synchronous","Scattered and asynchronous"],
+      answer:0,
+      verdict:"Aligned and synchronous",
+      subtitle:"Geometry and timing let weak fields add.",
+      why:"When similarly oriented pyramidal cells are active together, their extracellular fields reinforce instead of cancelling.",
+      mistake:"Assuming that more active neurons always produce a stronger scalp signal regardless of orientation or timing.",
+    }
+  },
+  {
+    id:63, stage:1, stageTitle:"From Cortex to Scalp",
+    title:"Dipole Orientation",
+    concept:"Source orientation changes how a cortical field projects to scalp electrodes.",
+    body:"Folded cortex creates differently oriented generators, so equally active patches can produce very different scalp maps.",
+    keyPoints:["Cortical folding","Source orientation","Scalp projection"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Can two equally active cortical patches create different scalp patterns?",
+      options:["No, activity alone decides","Yes, orientation matters"],
+      answer:1,
+      verdict:"Orientation matters",
+      subtitle:"The cortical sheet is folded, so its fields point in different directions.",
+      why:"A source's position and orientation determine how its voltage field reaches each electrode.",
+      mistake:"Assuming the largest scalp channel sits directly over a unique generator.",
+    }
+  },
+  {
+    id:64, stage:1, stageTitle:"From Cortex to Scalp",
+    title:"Volume Conduction",
+    concept:"Electrical fields spread passively through brain, fluid, skull, and scalp.",
+    body:"One cortical generator can influence many electrodes at essentially the same moment, with different amplitudes and polarities.",
+    keyPoints:["Passive spread","Shared source","Broad scalp field"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"A waveform appears in several nearby channels at once. Is one shared source possible?",
+      options:["No, each channel needs its own source","Yes, fields spread through tissue"],
+      answer:1,
+      verdict:"One source can reach many channels",
+      subtitle:"Channels sample a shared volume-conducted field.",
+      why:"Scalp electrodes measure voltage differences within a field that has spread through conductive tissue.",
+      mistake:"Counting every affected channel as a separate brain generator.",
+    }
+  },
+  {
+    id:65, stage:1, stageTitle:"From Cortex to Scalp",
+    title:"The Skull as a Filter",
+    concept:"The skull reduces amplitude and blurs fine spatial detail.",
+    body:"By the time a field reaches the scalp, it is weaker and broader than it was at the cortical surface.",
+    keyPoints:["Attenuation","Spatial blur","Limited localization"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Compared with a cortical-surface recording, scalp EEG is usually:",
+      options:["Sharper and larger","Broader and smaller"],
+      answer:1,
+      verdict:"Broader and smaller",
+      subtitle:"Tissue between cortex and electrode acts as a spatial filter.",
+      why:"Skull resistance attenuates the field, while conductive layers spread it across the scalp.",
+      mistake:"Reading a broad scalp maximum as the exact boundary of the active cortex.",
+    }
+  },
+  {
+    id:66, stage:1, stageTitle:"From Cortex to Scalp",
+    title:"The Inverse Problem",
+    concept:"A scalp voltage map does not identify one unique brain source.",
+    body:"Different combinations of sources can produce similar scalp measurements, so localization needs models and clinical context.",
+    keyPoints:["Non-unique solution","Model assumptions","Clinical context"],
+    imageNote:null,
+    imageCredit:null,
+    interaction:{
+      type:"binary",
+      prompt:"Does one scalp map prove one unique cortical source?",
+      options:["Yes","No"],
+      answer:1,
+      verdict:"No unique source",
+      subtitle:"Scalp measurements constrain possibilities; they do not solve location by themselves.",
+      why:"This is the EEG inverse problem: multiple source configurations can explain the same electrode voltages.",
+      mistake:"Presenting visual localization as certainty without a model, montage comparison, or other evidence.",
     }
   },
 ];
 
 (function reorderForBeginnerPath() {
   var groups = [
-    {
-      stage: 1,
-      title: 'Map Science',
-      ids: [31, 32, 33, 34, 35, 36, 1]
-    },
-    {
-      stage: 2,
-      title: 'Page Science',
-      ids: [37, 38, 39, 41, 42, 2, 40, 3, 43, 44, 45]
-    },
-    {
-      stage: 3,
-      title: 'Normal and Limits',
-      ids: [4, 5, 6, 7, 8, 49, 50, 51, 52, 53, 54, 55]
-    },
-    {
-      stage: 4,
-      title: 'Artifacts and Look-alikes',
-      ids: [14, 15, 16, 17, 18, 9, 10, 11, 12, 13, 29]
-    },
-    {
-      stage: 5,
-      title: 'Abnormal Patterns',
-      ids: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 46, 47, 48, 30]
-    },
-    {
-      stage: 6,
-      title: 'Full Cap Training',
-      ids: [56, 57, 58, 59, 60]
-    }
+    { stage: 1, title: 'From Cortex to Scalp', ids: [61, 62, 63, 64, 65, 66, 52, 53, 54, 55] },
+    { stage: 2, title: 'The Electrode Map', ids: [31, 32, 33, 34, 35, 36, 1] },
+    { stage: 3, title: 'Channels and Montages', ids: [37, 38, 39, 40, 41, 42, 2, 7] },
+    { stage: 4, title: 'Rhythms, Wake, and Sleep', ids: [3, 4, 5, 6, 8, 45] },
+    { stage: 5, title: 'Artifacts', ids: [43, 44, 14, 15, 16, 17, 18] },
+    { stage: 6, title: 'Benign Look-alikes', ids: [9, 10, 11, 12, 13, 29] },
+    { stage: 7, title: 'Abnormal Backgrounds', ids: [19, 20, 21, 22, 23] },
+    { stage: 8, title: 'Seizures and Status', ids: [24, 25, 26, 27, 28, 30, 46, 47, 48] },
+    { stage: 9, title: 'Yield and Clinical Context', ids: [49, 50, 51] },
+    { stage: 10, title: 'Full Cap Synthesis', ids: [56, 57, 58, 59, 60] }
   ];
   var byId = {};
   EEG_EXERCISES.forEach(function (exercise) {
     byId[exercise.id] = exercise;
   });
+  var expectedCount = Object.keys(byId).length;
+  var seen = {};
 
   EEG_EXERCISES = [];
   groups.forEach(function (group) {
     group.ids.forEach(function (id) {
       var exercise = byId[id];
-      if (!exercise) return;
+      if (!exercise) throw new Error('Unknown EEG lesson id in module map: ' + id);
+      if (seen[id]) throw new Error('Duplicate EEG lesson id in module map: ' + id);
+      seen[id] = true;
       exercise.stage = group.stage;
       exercise.stageTitle = group.title;
       EEG_EXERCISES.push(exercise);
     });
+  });
+
+  if (EEG_EXERCISES.length !== expectedCount) {
+    throw new Error('EEG module map does not include every lesson.');
+  }
+
+  window.EEG_MODULES = groups.map(function (group) {
+    return { id: group.stage, title: group.title, lessonIds: group.ids.slice() };
   });
 }());

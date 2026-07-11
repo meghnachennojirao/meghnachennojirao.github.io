@@ -54,6 +54,12 @@
       desc:'High-frequency EMG bursts at temporal electrodes from temporalis tension.',
       alpha:25, alphaFreq:10, beta:8, theta:5, delta:4, noise:6, events:'muscle_burst'
     },
+    sweat_drift: {
+      label:'Sweat Artifact (Slow Drift)', group:'Artifact',
+      desc:'Synthetic very-slow, irregular electrode drift, strongest frontotemporally. This nonphysiologic pattern is shown for artifact recognition.',
+      alpha:18, alphaFreq:9.5, beta:5, theta:5, delta:2, noise:3,
+      events:'sweat_drift', seed:1101
+    },
     cardiac: {
       label:'Cardiac Artifact', group:'Artifact',
       desc:'Regular QRS-locked sharp deflections at temporal electrodes (75 bpm).',
@@ -68,6 +74,12 @@
       label:'Focal Temporal Spike', group:'Epileptiform',
       desc:'Left temporal interictal spike-wave (T3 phase reversal). Classic TLE interictal pattern.',
       alpha:32, alphaFreq:10, beta:8, theta:7, delta:6, noise:6, events:'focal_spike_left'
+    },
+    right_posterior_spike: {
+      label:'Right Posterior Spike (Teaching Pattern)', group:'Epileptiform',
+      desc:'Synthetic recurrent sharp transients with a following slow wave, maximal at O2 with a field toward T4 and C4. A waveform alone is not a diagnosis.',
+      alpha:28, alphaFreq:9.5, beta:6, theta:7, delta:5, noise:4,
+      events:'right_posterior_spike', seed:1202
     },
     generalized_sw: {
       label:'3 Hz Generalized Spike-Wave', group:'Epileptiform',
@@ -94,6 +106,12 @@
       desc:'Bifrontal triphasic waves at 1.8 Hz. Hepatic/uremic encephalopathy — can mimic NCSE.',
       alpha:5, alphaFreq:6.5, beta:3, theta:14, delta:10, noise:8, events:'triphasic'
     },
+    ncse_continuous: {
+      label:'Continuous Rhythmic Sharp-Slow Pattern', group:'Ictal-Continuum Teaching Pattern',
+      desc:'Synthetic continuous 2.4 Hz anterior-predominant sharp-slow activity with superimposed fast components. Clinical context and formal criteria are required; this display is not diagnostic of NCSE.',
+      alpha:0, alphaFreq:10, beta:0, theta:5, delta:5, noise:3,
+      events:'ncse_continuous', seed:1303
+    },
     temporal_seizure: {
       label:'Temporal Lobe Seizure (Ictal)', group:'Seizure',
       desc:'Left temporal focal seizure: theta onset → alpha build → slowing → post-ictal delta.',
@@ -104,6 +122,36 @@
       desc:'GTC seizure: tonic fast → clonic spike-wave → post-ictal suppression.',
       alpha:20, alphaFreq:10, beta:8, theta:5, delta:4, noise:6, events:'gtc_seizure'
     },
+    gtc_seizure_emg: {
+      label:'Generalized Convulsive Event with EMG (Simulation)', group:'Seizure Teaching Pattern',
+      desc:'Synthetic sequence of generalized tonic fast activity, slowing clonic complexes, and low-amplitude recovery, with prominent frontotemporal muscle artifact. It is an educational simulation, not a diagnostic recording.',
+      alpha:4, alphaFreq:9, beta:3, theta:2, delta:2, noise:3,
+      events:'gtc_seizure_emg', seed:1404
+    },
+    rmt_drowsy: {
+      label:'Rhythmic Mid-Temporal Theta of Drowsiness', group:'Normal Variant',
+      desc:'Non-evolving 5-7 Hz sharply contoured temporal runs that alternate sides on a drowsy background. This synthetic RMTD pattern illustrates a benign normal variant.',
+      alpha:14, alphaFreq:8, beta:4, theta:13, delta:8, noise:4,
+      events:'rmt_drowsy', seed:1505
+    },
+    bsss_sleep: {
+      label:'Benign Sporadic Sleep Spikes', group:'Normal Variant',
+      desc:'Brief, low-amplitude, isolated temporal sharp transients on a light-sleep background, with alternating sides and no rhythmic afterdischarge. Also called small sharp spikes.',
+      alpha:0, alphaFreq:8, beta:3, theta:13, delta:15, noise:4,
+      events:'bsss_sleep', seed:1606
+    },
+    sreda: {
+      label:'SREDA (Normal Variant)', group:'Normal Variant',
+      desc:'A monomorphic 6 Hz sharply contoured run over both posterior temporal regions without frequency evolution. This synthetic pattern illustrates subclinical rhythmic EEG discharge of adults.',
+      alpha:12, alphaFreq:9, beta:4, theta:8, delta:5, noise:4,
+      events:'sreda', seed:1707
+    },
+    positive_14_6: {
+      label:'14-and-6 Hz Positive Bursts', group:'Normal Variant',
+      desc:'Short trains of positive 14 Hz and 6 Hz sharp activity, maximal over alternating posterior temporal regions during drowsiness. This is a synthetic normal-variant example.',
+      alpha:8, alphaFreq:8, beta:3, theta:10, delta:10, noise:4,
+      events:'positive_14_6', seed:1808
+    },
   };
 
   // ── EEGSimulator ──────────────────────────────────────────────────────────
@@ -113,15 +161,33 @@
     this.noise = new Float32Array(N_CH);   // smooth noise state per channel
     this.phases = [];
     this.ev = {};   // event state
+    this._rngState = 0;
     for (var i = 0; i < N_CH; i++) this.phases.push(Math.random() * Math.PI * 2);
     this.setPreset(presetName || 'normal_awake');
   }
+
+  // Presets with a seed are reproducible across resets; legacy presets retain
+  // their original Math.random-backed behavior.
+  EEGSimulator.prototype._random = function () {
+    if (!this._rngState) return Math.random();
+    var x = this._rngState;
+    x ^= x << 13;
+    x ^= x >>> 17;
+    x ^= x << 5;
+    this._rngState = x >>> 0;
+    return this._rngState / 4294967296;
+  };
 
   EEGSimulator.prototype.setPreset = function (name) {
     this.p = PRESETS[name] || PRESETS.normal_awake;
     this.presetName = name;
     this.t = 0;
-    this.ev = { next: 2.5 + Math.random() };
+    this._rngState = this.p.seed || 0;
+    this.noise.fill(0);
+    if (this.p.seed) {
+      for (var i = 0; i < N_CH; i++) this.phases[i] = this._random() * Math.PI * 2;
+    }
+    this.ev = { next: 2.5 + this._random() };
   };
 
   EEGSimulator.prototype.generate = function (n) {
@@ -137,8 +203,8 @@
         var ph = this.phases[c], sig = 0;
 
         // Smooth (pink-ish) noise: EMA of randoms
-        this.noise[c] = this.noise[c] * 0.82 + (Math.random() - 0.5) * p.noise * 0.36;
-        sig += this.noise[c] + (Math.random() - 0.5) * p.noise * 0.14;
+        this.noise[c] = this.noise[c] * 0.82 + (this._random() - 0.5) * p.noise * 0.36;
+        sig += this.noise[c] + (this._random() - 0.5) * p.noise * 0.14;
 
         // Alpha (waxing-waning envelope at 0.07 Hz)
         if (p.alpha) {
@@ -178,6 +244,22 @@
     var out = new Float32Array(N_CH);
 
     switch (p.events) {
+
+      case 'sweat_drift':
+        // Very slow, electrode-specific baseline wander rather than cerebral rhythm.
+        var sdLeft = 108 * Math.sin(2 * Math.PI * 0.085 * t + 0.35)
+          + 34 * Math.sin(2 * Math.PI * 0.21 * t + 1.1);
+        var sdRight = 76 * Math.sin(2 * Math.PI * 0.065 * t + 2.0)
+          + 29 * Math.sin(2 * Math.PI * 0.17 * t + 0.2);
+        out[0] += sdLeft;
+        out[2] += sdLeft * 0.56;
+        out[6] += sdLeft * 0.72;
+        out[1] += sdRight;
+        out[3] += sdRight * 0.48;
+        out[7] += sdRight * 0.64;
+        out[4] += (sdLeft - sdRight) * 0.18;
+        out[5] += (sdRight - sdLeft) * 0.15;
+        break;
 
       case 'eye_blinks':
         if (t >= ev.next) {
@@ -253,6 +335,24 @@
         }
         break;
 
+      case 'right_posterior_spike':
+        // Fixed recurrence keeps the teaching example reproducible. O2 is maximal,
+        // with a plausible ipsilateral posterior-temporal field.
+        var rpCycle = t % 2.8;
+        if (rpCycle >= 0.9 && rpCycle < 1.5) {
+          var rpAge = rpCycle - 0.9;
+          var rpSharp = -205 * Math.exp(-Math.pow((rpAge - 0.035) / 0.015, 2));
+          var rpSlow = (rpAge > 0.065 && rpAge < 0.54)
+            ? 92 * Math.sin(Math.PI * (rpAge - 0.065) / 0.475) : 0;
+          var rp = rpSharp + rpSlow;
+          out[9] += rp;
+          out[7] += rp * 0.62;
+          out[5] += rp * 0.30;
+          out[3] += rp * 0.14;
+          out[8] += rp * 0.12;
+        }
+        break;
+
       case 'gen_spike_wave':
         if (!ev.burstStart) { ev.burstStart = 1.8; ev.inB = false; }
         if (!ev.inB && t >= ev.burstStart) {
@@ -268,6 +368,22 @@
           } else {
             ev.inB = false; ev.burstStart = t + 4.5 + Math.random() * 4;
           }
+        }
+        break;
+
+      case 'ncse_continuous':
+        // Continuous anterior-predominant sharp-slow morphology. It deliberately
+        // differs from the finite 3 Hz bursts and from the slower triphasic preset.
+        var ncCycle = (t * 2.4) % 1;
+        var ncSharp = -168 * Math.exp(-Math.pow((ncCycle - 0.055) / 0.024, 2));
+        var ncSlow = (ncCycle > 0.10 && ncCycle < 0.68)
+          ? 104 * Math.sin(Math.PI * (ncCycle - 0.10) / 0.58) : 0;
+        var ncFast = 20 * Math.sin(2 * Math.PI * 12 * t)
+          * (0.72 + 0.28 * Math.cos(2 * Math.PI * 2.4 * t));
+        var ncAmp = 0.88 + 0.12 * Math.sin(2 * Math.PI * 0.075 * t);
+        var nc = (ncSharp + ncSlow + ncFast) * ncAmp;
+        for (var cc = 0; cc < N_CH; cc++) {
+          out[cc] += nc * (0.28 + SP.frontal[cc] * 0.72);
         }
         break;
 
@@ -326,6 +442,49 @@
         }
         break;
 
+      case 'gtc_seizure_emg':
+        if (!ev.convStart) ev.convStart = 3.5;
+        if (t >= ev.convStart && !ev.inConv) { ev.inConv = true; ev.convT = t; }
+        if (ev.inConv) {
+          var convAge = t - ev.convT;
+          var convBrain = 0;
+          var convEmg = 0;
+          if (convAge < 5.5) {
+            // Generalized tonic fast activity plus sustained high-frequency muscle.
+            var tonicRamp = 0.72 + 0.28 * Math.min(1, convAge / 1.4);
+            convBrain = tonicRamp * (112 * Math.sin(2 * Math.PI * 17 * t)
+              + 46 * Math.sin(2 * Math.PI * 27 * t));
+            convEmg = (74 + convAge * 7) * (0.56 * Math.sin(2 * Math.PI * 47 * t)
+              + 0.29 * Math.sin(2 * Math.PI * 73 * t + 0.6)
+              + 0.15 * Math.sin(2 * Math.PI * 101 * t + 1.2));
+          } else if (convAge < 15.5) {
+            // Discrete clonic complexes progressively slow from about 5 to 2.6 Hz.
+            var clonicAge = convAge - 5.5;
+            var clonicCycles = 5 * clonicAge - 0.12 * clonicAge * clonicAge;
+            var clonicPhase = clonicCycles % 1;
+            convBrain = clonicPhase < 0.11
+              ? -218 * Math.exp(-Math.pow((clonicPhase - 0.055) / 0.027, 2))
+              : clonicPhase < 0.53
+                ? 116 * Math.sin(Math.PI * (clonicPhase - 0.11) / 0.42) : 0;
+            var clonicMuscleEnv = Math.exp(-Math.pow((clonicPhase - 0.10) / 0.13, 2));
+            convEmg = 112 * clonicMuscleEnv * (0.62 * Math.sin(2 * Math.PI * 52 * t)
+              + 0.38 * Math.sin(2 * Math.PI * 89 * t + 0.8));
+          } else if (convAge < 21.5) {
+            // Low-amplitude synthetic recovery interval; the preset background is quiet.
+            convBrain = 3.5 * Math.sin(2 * Math.PI * 1.1 * t);
+          } else {
+            ev.inConv = false;
+            ev.convStart = t + 14;
+          }
+          for (var cc = 0; cc < N_CH; cc++) {
+            var convMuscleW = cc < 2 ? 1.0 : cc < 4 ? 0.50
+              : cc < 6 ? 0.24 : cc < 8 ? 0.88 : 0.14;
+            out[cc] += convBrain * (0.72 + 0.28 * SP.frontal[cc])
+              + convEmg * convMuscleW;
+          }
+        }
+        break;
+
       case 'triphasic':
         var ph_tw = (t * 1.85) % 1;
         if (ph_tw < 0.32) {
@@ -351,6 +510,127 @@
             out[6] += wk; out[7] += wk * 0.55;
           } else {
             ev.inWk = false; ev.wkNext = t + 2.8 + Math.random() * 2.8;
+          }
+        }
+        break;
+
+      case 'rmt_drowsy':
+        // Separate non-evolving temporal runs make laterality and lack of spread clear.
+        var rmtCycle = t % 10.5;
+        var rmtAge = -1;
+        var rmtLeft = true;
+        var rmtFreq = 6.2;
+        if (rmtCycle >= 1.0 && rmtCycle < 3.7) {
+          rmtAge = rmtCycle - 1.0;
+        } else if (rmtCycle >= 5.2 && rmtCycle < 7.9) {
+          rmtAge = rmtCycle - 5.2;
+          rmtLeft = false;
+          rmtFreq = 5.8;
+        }
+        if (rmtAge >= 0) {
+          var rmtEnv = Math.min(1, rmtAge / 0.28, (2.7 - rmtAge) / 0.28);
+          var rmt = 58 * rmtEnv * (Math.sin(2 * Math.PI * rmtFreq * t)
+            + 0.27 * Math.sin(2 * Math.PI * rmtFreq * 2 * t + 0.45));
+          if (rmtLeft) {
+            out[6] += rmt;
+            out[4] += rmt * 0.48;
+            out[2] += rmt * 0.27;
+            out[8] += rmt * 0.17;
+            out[7] += rmt * 0.08;
+          } else {
+            out[7] += rmt;
+            out[5] += rmt * 0.48;
+            out[3] += rmt * 0.27;
+            out[9] += rmt * 0.17;
+            out[6] += rmt * 0.08;
+          }
+        }
+        break;
+
+      case 'bsss_sleep':
+        // Brief, isolated, alternating small sharp spikes without an afterdischarge.
+        var bsCycle = t % 10.4;
+        var bsAge = -1;
+        var bsRight = false;
+        if (bsCycle >= 1.25 && bsCycle < 1.37) {
+          bsAge = bsCycle - 1.25;
+        } else if (bsCycle >= 3.72 && bsCycle < 3.84) {
+          bsAge = bsCycle - 3.72;
+          bsRight = true;
+        } else if (bsCycle >= 6.18 && bsCycle < 6.30) {
+          bsAge = bsCycle - 6.18;
+        } else if (bsCycle >= 8.62 && bsCycle < 8.74) {
+          bsAge = bsCycle - 8.62;
+          bsRight = true;
+        }
+        if (bsAge >= 0) {
+          var bs = -58 * Math.exp(-Math.pow((bsAge - 0.024) / 0.010, 2))
+            + 18 * Math.exp(-Math.pow((bsAge - 0.066) / 0.022, 2));
+          if (bsRight) {
+            out[7] += bs;
+            out[5] += bs * 0.38;
+            out[9] += bs * 0.28;
+            out[3] += bs * 0.16;
+          } else {
+            out[6] += bs;
+            out[4] += bs * 0.38;
+            out[8] += bs * 0.28;
+            out[2] += bs * 0.16;
+          }
+        }
+        break;
+
+      case 'sreda':
+        // Bilateral posterior-temporal, monomorphic 6 Hz run with no evolution.
+        var srCycle = t % 13;
+        if (srCycle >= 1.5 && srCycle < 7.0) {
+          var srAge = srCycle - 1.5;
+          var srEnv = Math.min(1, srAge / 0.35, (5.5 - srAge) / 0.35);
+          var sr = 66 * srEnv * (Math.sin(2 * Math.PI * 6 * t)
+            + 0.34 * Math.sin(2 * Math.PI * 12 * t + 0.55));
+          out[6] += sr;
+          out[7] += sr * 0.96;
+          out[8] += sr * 0.78;
+          out[9] += sr * 0.76;
+          out[4] += sr * 0.36;
+          out[5] += sr * 0.35;
+        }
+        break;
+
+      case 'positive_14_6':
+        // Positive-polarity narrow transients in short posterior-temporal trains.
+        var psCycle = t % 10.2;
+        var psAge = -1;
+        var psDur = 0;
+        var psFreq = 14;
+        var psRight = true;
+        if (psCycle >= 1.0 && psCycle < 1.9) {
+          psAge = psCycle - 1.0;
+          psDur = 0.9;
+        } else if (psCycle >= 4.0 && psCycle < 5.15) {
+          psAge = psCycle - 4.0;
+          psDur = 1.15;
+          psFreq = 6;
+          psRight = false;
+        } else if (psCycle >= 7.1 && psCycle < 7.95) {
+          psAge = psCycle - 7.1;
+          psDur = 0.85;
+          psRight = false;
+        }
+        if (psAge >= 0) {
+          var psEnv = Math.sin(Math.PI * psAge / psDur);
+          var psHalf = Math.max(0, Math.sin(2 * Math.PI * psFreq * psAge));
+          var ps = 72 * psEnv * (Math.pow(psHalf, 5) - 0.11);
+          if (psRight) {
+            out[7] += ps;
+            out[9] += ps * 0.58;
+            out[5] += ps * 0.25;
+            out[6] += ps * 0.10;
+          } else {
+            out[6] += ps;
+            out[8] += ps * 0.58;
+            out[4] += ps * 0.25;
+            out[7] += ps * 0.10;
           }
         }
         break;

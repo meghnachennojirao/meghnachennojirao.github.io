@@ -1,16 +1,18 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'eeg-lab-progress';
+  var STORAGE_KEY = 'eeg-lab-progress-v2';
   var TOTAL = EEG_EXERCISES.length;
-  var CHANNEL_NAMES = ['Fp1','Fp2','F3','F4','C3','C4','T3','T4','O1','O2'];
+  var MODULE_COUNT = (window.EEG_MODULES && window.EEG_MODULES.length) || 10;
+  var CHANNEL_NAMES = ['Fp1','Fp2','F3','F4','C3','C4','T7','T8','O1','O2'];
 
   var state = {
     screen: 'welcome',
     exerciseIdx: 0,
     cardIdx: 0,
     interacted: false,
-    currentMeta: null
+    currentMeta: null,
+    completedIds: []
   };
 
   var $ = function (sel) { return document.querySelector(sel); };
@@ -18,6 +20,7 @@
 
   var screens = {
     welcome: $('#screen-welcome'),
+    map: $('#screen-map'),
     stageIntro: $('#screen-stage-intro'),
     primer: $('#screen-primer'),
     look: $('#screen-look'),
@@ -28,6 +31,7 @@
 
   var progressBar = $('#eeg-progress-bar');
   var exViz = null;
+  var primerViz = null;
   var stageViz = null;
   var stageLine = null;
   var answerLine = null;
@@ -36,34 +40,44 @@
 
   var STAGE_META = {
     1: {
-      title: 'Map Science',
-      desc: 'Build the cap before reading it.',
-      visual: { kind: 'head-diagram', config: { targets: ['Fp1', 'Fp2', 'Cz', 'O1', 'O2'] } }
+      title: 'From Cortex to Scalp',
+      desc: 'Follow the field from synaptic current to scalp voltage.'
     },
     2: {
-      title: 'Page Science',
-      desc: 'Learn what each line means.',
-      visual: { kind: 'cap-trace', preset: 'normal_awake', config: { targets: ['Fp1', 'Fp2', 'O1', 'O2'], highlight: [0, 1] } }
+      title: 'The Electrode Map',
+      desc: 'Build the measured head map before reading a trace.'
     },
     3: {
-      title: 'Normal Signals',
-      desc: 'Know the baseline first.',
-      visual: { kind: 'frequency-scope', config: { highlightBand: 2 } }
+      title: 'Channels and Montages',
+      desc: 'Learn what each line measures and how the view changes it.'
     },
     4: {
-      title: 'Look-alikes',
-      desc: 'Separate noise from brain.',
-      visual: { kind: 'eeg-multi', preset: 'eye_blink', config: { channels: [0, 1, 8, 9], highlight: [0, 1] } }
+      title: 'Rhythms, Wake, and Sleep',
+      desc: 'Recognize normal organization before naming abnormality.'
     },
     5: {
-      title: 'Abnormal Patterns',
-      desc: 'Localize, then name.',
-      visual: { kind: 'eeg-single', preset: 'focal_spike', config: { channel: 6, label: 'T3' } }
+      title: 'Artifacts',
+      desc: 'Separate patient, electrode, and environment from brain.'
     },
     6: {
-      title: 'Full Cap Training',
-      desc: 'Read cap and traces together.',
-      visual: { kind: 'cap-trace', preset: 'generalized_sw', config: { targets: ['Fp1', 'Fp2', 'F3', 'F4'], highlight: [0, 1, 2, 3], measure: '1 second · count the waves' } }
+      title: 'Benign Look-alikes',
+      desc: 'Meet sharp-looking patterns that invite overcalling.'
+    },
+    7: {
+      title: 'Abnormal Backgrounds',
+      desc: 'Describe slowing, asymmetry, and epileptiform candidates carefully.'
+    },
+    8: {
+      title: 'Seizures and Status',
+      desc: 'Use evolution, field, duration, and context together.'
+    },
+    9: {
+      title: 'Yield and Clinical Context',
+      desc: 'Understand what a normal recording can and cannot exclude.'
+    },
+    10: {
+      title: 'Full Cap Synthesis',
+      desc: 'Bring montage, field, pattern, artifact, and patient together.'
     }
   };
 
@@ -71,18 +85,106 @@
     return META[ex.id] || {};
   }
 
+  function getModuleIndices(moduleNum) {
+    var indices = [];
+    EEG_EXERCISES.forEach(function (exercise, index) {
+      if (exercise.stage === moduleNum) indices.push(index);
+    });
+    return indices;
+  }
+
+  function getModuleProgress(moduleNum) {
+    var indices = getModuleIndices(moduleNum);
+    var complete = indices.filter(function (index) {
+      return state.completedIds.indexOf(EEG_EXERCISES[index].id) !== -1;
+    }).length;
+    return { complete: complete, total: indices.length, indices: indices };
+  }
+
+  function openModule(moduleNum) {
+    var progress = getModuleProgress(moduleNum);
+    if (!progress.indices.length) return;
+    var target = progress.indices.find(function (index) {
+      return state.completedIds.indexOf(EEG_EXERCISES[index].id) === -1;
+    });
+    state.exerciseIdx = typeof target === 'number' ? target : progress.indices[0];
+    state.cardIdx = 0;
+    state.interacted = false;
+    saveProgress();
+    renderStageIntro(moduleNum);
+  }
+
+  function renderCourseMap() {
+    var list = $('#module-list');
+    list.innerHTML = '';
+
+    for (var moduleNum = 1; moduleNum <= MODULE_COUNT; moduleNum++) {
+      (function (number) {
+        var meta = STAGE_META[number];
+        var progress = getModuleProgress(number);
+        var isCurrent = EEG_EXERCISES[state.exerciseIdx].stage === number;
+        var row = document.createElement('button');
+        var numberEl = document.createElement('span');
+        var copy = document.createElement('span');
+        var title = document.createElement('strong');
+        var description = document.createElement('small');
+        var status = document.createElement('span');
+
+        row.type = 'button';
+        row.className = 'eeg-module-row';
+        if (isCurrent) row.setAttribute('aria-current', 'step');
+        row.setAttribute('aria-label', 'Module ' + number + ': ' + meta.title + '. ' + progress.complete + ' of ' + progress.total + ' lessons complete.');
+
+        numberEl.className = 'eeg-module-number';
+        numberEl.textContent = String(number).padStart(2, '0');
+        copy.className = 'eeg-module-copy';
+        title.textContent = meta.title;
+        description.textContent = meta.desc;
+        copy.appendChild(title);
+        copy.appendChild(description);
+
+        status.className = 'eeg-module-status';
+        status.textContent = progress.complete === progress.total ? 'Review' : (progress.complete ? 'Continue' : 'Start');
+        status.setAttribute('data-progress', progress.complete + '/' + progress.total);
+
+        row.appendChild(numberEl);
+        row.appendChild(copy);
+        row.appendChild(status);
+        row.addEventListener('click', function () { openModule(number); });
+        list.appendChild(row);
+      }(moduleNum));
+    }
+
+    $('#map-progress-copy').textContent = state.completedIds.length + ' of ' + TOTAL + ' lessons';
+    $('#map-progress-fill').style.width = (TOTAL ? (state.completedIds.length / TOTAL) * 100 : 0) + '%';
+    $('#btn-map-resume').classList.toggle('is-hidden', state.completedIds.length === 0 && state.exerciseIdx === 0);
+    showScreen('map');
+  }
+
   function loadProgress() {
     try {
       var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      if (typeof saved.exerciseIdx === 'number') {
-        state.exerciseIdx = Math.min(saved.exerciseIdx, TOTAL - 1);
+      if (typeof saved.currentExerciseId === 'number') {
+        var savedIdx = EEG_EXERCISES.findIndex(function (exercise) {
+          return exercise.id === saved.currentExerciseId;
+        });
+        if (savedIdx >= 0) state.exerciseIdx = savedIdx;
+      }
+      if (Array.isArray(saved.completedIds)) {
+        state.completedIds = saved.completedIds.filter(function (id) {
+          return EEG_EXERCISES.some(function (exercise) { return exercise.id === id; });
+        });
       }
     } catch (e) {}
   }
 
   function saveProgress() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ exerciseIdx: state.exerciseIdx }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        version: 2,
+        currentExerciseId: EEG_EXERCISES[state.exerciseIdx].id,
+        completedIds: state.completedIds
+      }));
     } catch (e) {}
   }
 
@@ -91,6 +193,9 @@
     state.exerciseIdx = 0;
     state.cardIdx = 0;
     state.interacted = false;
+    state.completedIds = [];
+    if ($('#btn-resume')) $('#btn-resume').classList.add('is-hidden');
+    if ($('#btn-map-resume')) $('#btn-map-resume').classList.add('is-hidden');
   }
 
   function renderStepbar(el, active, total) {
@@ -104,10 +209,10 @@
   }
 
   function updateProgressBar() {
-    var pct = TOTAL === 1 ? 100 : (state.exerciseIdx / (TOTAL - 1)) * 100;
+    var pct = TOTAL ? (state.completedIds.length / TOTAL) * 100 : 0;
     if (state.screen === 'complete') pct = 100;
     progressBar.style.width = pct + '%';
-    progressBar.style.opacity = state.screen === 'welcome' ? '0' : '1';
+    progressBar.style.opacity = state.screen === 'welcome' || state.screen === 'map' ? '0' : '1';
   }
 
   function showScreen(name) {
@@ -119,6 +224,7 @@
     window.scrollTo(0, 0);
 
     stopExerciseVisual();
+    stopPrimerVisual();
     stopStageVisual();
     if (stageLine) stageLine.stop();
     if (answerLine) answerLine.stop();
@@ -164,6 +270,13 @@
     }
   }
 
+  function stopPrimerVisual() {
+    if (primerViz) {
+      primerViz.stop();
+      primerViz = null;
+    }
+  }
+
   function stopStageVisual() {
     if (stageViz) {
       stageViz.stop();
@@ -173,10 +286,10 @@
 
   function renderStageIntro(stageNum) {
     var meta = STAGE_META[stageNum];
-    $('#stage-intro-num').textContent = 'Stage ' + stageNum + ' of 6';
+    $('#stage-intro-num').textContent = 'Module ' + stageNum + ' of ' + MODULE_COUNT;
     $('#stage-intro-title').textContent = meta.title;
     $('#stage-intro-desc').textContent = meta.desc;
-    renderStepbar($('#stage-stepbar'), stageNum, 6);
+    renderStepbar($('#stage-stepbar'), stageNum, MODULE_COUNT);
 
     showScreen('stageIntro');
 
@@ -185,32 +298,94 @@
     stageLine.start();
   }
 
-  function getCards(meta) {
-    if (meta.cards && meta.cards.length) return meta.cards;
+  function getCards(ex, meta) {
+    var sentences = [];
+    var seen = {};
+    var sourceCards = meta.cards || [];
+    var terms = [];
+    var termKeys = {};
+
+    function addText(value) {
+      if (!value || sentences.length >= 4) return;
+      var sentence = String(value).trim();
+      if (!sentence) return;
+      if (!/[.!?]$/.test(sentence)) sentence += '.';
+      var key = sentence.toLowerCase();
+      if (seen[key]) return;
+      seen[key] = true;
+      sentences.push(sentence);
+    }
+
+    addText(meta.lessonCopy);
+    sourceCards.forEach(function (card) { addText(card.copy); });
+    if (sentences.length < 2) addText(ex.body);
+    addText(meta.why);
+    addText(ex.concept);
+    addText(meta.guide);
+
+    sourceCards.forEach(function (card) {
+      (card.terms || []).forEach(function (term) {
+        var key = term.join('|').toLowerCase();
+        if (termKeys[key]) return;
+        termKeys[key] = true;
+        terms.push(term);
+      });
+    });
+    (meta.terms || []).forEach(function (term) {
+      var key = term.join('|').toLowerCase();
+      if (termKeys[key]) return;
+      termKeys[key] = true;
+      terms.push(term);
+    });
+
     return [{
-      title: (meta.explain && meta.explain.title) || meta.shortTitle || 'One clue',
-      copy: (meta.explain && meta.explain.copy) || meta.guide || 'Look at one clue before you answer.',
-      kind: meta.lookKind || 'spread',
-      terms: meta.terms || []
+      title: (meta.explain && meta.explain.title) || meta.shortTitle || ex.title || 'Lesson briefing',
+      copy: sentences.slice(0, 4).join(' '),
+      terms: terms.slice(0, 4)
     }];
   }
 
   function renderPrimer(idx, cardIdx) {
     var ex = EEG_EXERCISES[idx];
     var meta = getMeta(ex);
-    var cards = getCards(meta);
+    var cards = getCards(ex, meta);
     state.cardIdx = Math.max(0, Math.min(cardIdx || 0, cards.length - 1));
     var card = cards[state.cardIdx] || {};
-    $('#primer-count').textContent = 'Clue ' + String(idx + 1).padStart(2, '0') + ' · ' + (state.cardIdx + 1) + '/' + cards.length;
+    var moduleProgress = getModuleProgress(ex.stage);
+    var lessonInModule = moduleProgress.indices.indexOf(idx) + 1;
+    $('#primer-count').textContent = 'Module ' + ex.stage + ' · Lesson ' + lessonInModule + ' of ' + moduleProgress.total;
     $('#primer-title').textContent = card.title || meta.shortTitle || ex.title;
     $('#primer-copy').textContent = card.copy || meta.guide || ex.concept;
-    $('#btn-primer-continue').textContent = state.cardIdx === cards.length - 1 ? 'Practice' : 'Continue';
-    renderStepbar($('#primer-stepbar'), ex.stage, 6);
+    $('#btn-primer-continue').textContent = 'Practice';
+    renderStepbar($('#primer-stepbar'), ex.stage, MODULE_COUNT);
     renderTermList($('#primer-terms'), card.terms || []);
 
     showScreen('primer');
+    renderPrimerVisual(ex, meta);
+  }
 
-    renderPrimerGraphic(ex, meta, card);
+  function renderPrimerVisual(ex, meta) {
+    var visual = (meta && meta.visual) || { kind: 'eeg-multi', preset: 'normal_awake' };
+    var canvas = $('#primer-viz-canvas');
+    var report = $('#primer-report-wrap');
+
+    stopPrimerVisual();
+    canvas.setAttribute('aria-label', (meta.shortTitle || ex.title || 'Lesson') + ' concept diagram');
+
+    if (visual.kind === 'report') {
+      canvas.classList.add('is-hidden');
+      report.classList.remove('is-hidden');
+      renderReportInto(visual.report || {}, $('#primer-report-tabs'), $('#primer-report-rows'));
+      return;
+    }
+
+    report.classList.add('is-hidden');
+    canvas.classList.remove('is-hidden');
+    var heights = { 'biophysics': 260, 'montage': 260, 'cap-trace': 240, 'eeg-multi': 235, 'frequency-scope': 235 };
+    var height = heights[visual.kind] || 220;
+    if (window.innerHeight < 760) height = Math.min(height, 195);
+    sizeCanvas(canvas, height);
+    primerViz = createViz(canvas, visual);
   }
 
   function renderLook(idx) {
@@ -219,7 +394,7 @@
     $('#look-count').textContent = 'Look ' + String(ex.id).padStart(2, '0');
     $('#look-title').textContent = meta.lookTitle || 'Look for one thing.';
     $('#look-copy').textContent = meta.notice || 'Notice one clear clue before you answer.';
-    renderStepbar($('#look-stepbar'), ex.stage, 6);
+    renderStepbar($('#look-stepbar'), ex.stage, MODULE_COUNT);
     renderTermList($('#look-terms'), meta.terms || []);
 
     showScreen('look');
@@ -475,10 +650,13 @@
     state.currentMeta = meta;
     state.interacted = false;
 
-    $('#ex-count').textContent = 'Exercise ' + String(idx + 1).padStart(2, '0');
+    var moduleProgress = getModuleProgress(ex.stage);
+    var lessonInModule = moduleProgress.indices.indexOf(idx) + 1;
+    $('#ex-count').textContent = 'Module ' + ex.stage + ' · Lesson ' + lessonInModule + ' of ' + moduleProgress.total;
     $('#ex-title').textContent = meta.shortTitle || ex.title;
     $('#ex-concept').textContent = meta.guide || ex.concept || ix.prompt;
-    renderStepbar($('#ex-stepbar'), ex.stage, 6);
+    $('#ex-viz-canvas').setAttribute('aria-label', (meta.shortTitle || ex.title || 'EEG') + ' exercise visualization');
+    renderStepbar($('#ex-stepbar'), ex.stage, MODULE_COUNT);
 
     var source = $('#ex-source');
     if (ex.imageCredit) {
@@ -539,7 +717,7 @@
 
     var h = 248;
     if (window.VizEngine) {
-      var probe = { 'head-diagram': 220, 'frequency-scope': 268, 'eeg-single': 220, 'compare-panel': 240, 'eeg-multi': 260, 'cap-trace': 270 };
+      var probe = { 'head-diagram': 220, 'frequency-scope': 268, 'eeg-single': 220, 'compare-panel': 240, 'eeg-multi': 260, 'cap-trace': 270, 'biophysics': 250 };
       if (visual.kind === 'cap-trace' && window.innerHeight < 760) h = 210;
       else if (visual.kind === 'eeg-multi' && window.innerHeight < 760) h = 220;
       else if (visual.kind === 'compare-panel' && window.innerHeight < 760) h = 210;
@@ -550,8 +728,10 @@
   }
 
   function renderReportVisual(report) {
-    var tabs = $('#report-tabs');
-    var rows = $('#report-rows');
+    renderReportInto(report, $('#report-tabs'), $('#report-rows'));
+  }
+
+  function renderReportInto(report, tabs, rows) {
     tabs.innerHTML = '';
     rows.innerHTML = '';
 
@@ -639,7 +819,12 @@
         var usableHeight = rect.height - 18;
         var localIdx = Math.max(0, Math.min(Math.floor(y / (usableHeight / shownNames.length)), shownNames.length - 1));
         var tapped = shownNames[localIdx];
-        var targets = Array.isArray(ix.target) ? ix.target : [ix.target];
+        var targets = Array.isArray(ix.target) ? ix.target.slice() : [ix.target];
+        targets = targets.map(function (name) {
+          if (name === 'T3') return 'T7';
+          if (name === 'T4') return 'T8';
+          return name;
+        });
         var correct = targets.indexOf(tapped) !== -1;
         removeTapListener();
         resolveAnswer(correct, ix);
@@ -700,6 +885,9 @@
 
   function goNext() {
     var currentEx = EEG_EXERCISES[state.exerciseIdx];
+    if (state.completedIds.indexOf(currentEx.id) === -1) {
+      state.completedIds.push(currentEx.id);
+    }
     var nextIdx = state.exerciseIdx + 1;
     if (nextIdx >= TOTAL) {
       saveProgress();
@@ -715,7 +903,8 @@
 
   function goPrev() {
     if (state.screen === 'exercise') {
-      var cards = getCards(getMeta(EEG_EXERCISES[state.exerciseIdx]));
+      var currentExercise = EEG_EXERCISES[state.exerciseIdx];
+      var cards = getCards(currentExercise, getMeta(currentExercise));
       renderPrimer(state.exerciseIdx, cards.length - 1);
       return;
     }
@@ -726,8 +915,9 @@
   }
 
   function advancePrimer() {
-    var meta = getMeta(EEG_EXERCISES[state.exerciseIdx]);
-    var cards = getCards(meta);
+    var exercise = EEG_EXERCISES[state.exerciseIdx];
+    var meta = getMeta(exercise);
+    var cards = getCards(exercise, meta);
     if (state.cardIdx < cards.length - 1) renderPrimer(state.exerciseIdx, state.cardIdx + 1);
     else renderExercise(state.exerciseIdx);
   }
@@ -738,6 +928,7 @@
       var dark = document.documentElement.dataset.theme === 'dark';
       btn.innerHTML = '<i class="fa-solid ' + (dark ? 'fa-sun' : 'fa-moon') + '" aria-hidden="true"></i><span>' + (dark ? 'Light' : 'Dark') + '</span>';
       if (exViz) exViz.setDark(dark);
+      if (primerViz) primerViz.setDark(dark);
       if (stageViz) stageViz.setDark(dark);
       if (welcomeLine) welcomeLine.draw();
       if (stageLine) stageLine.draw();
@@ -778,9 +969,12 @@
     welcomeLine = new AmbientLine($('#deco-canvas'), { welcome: true });
     welcomeLine.start();
 
-    if (state.exerciseIdx > 0) {
+    if (state.completedIds.length > 0 || state.exerciseIdx > 0) {
+      var savedExercise = EEG_EXERCISES[state.exerciseIdx];
+      var savedModule = getModuleProgress(savedExercise.stage);
+      var savedLesson = savedModule.indices.indexOf(state.exerciseIdx) + 1;
       $('#btn-resume').classList.remove('is-hidden');
-      $('#btn-resume').textContent = 'Resume ' + String(state.exerciseIdx + 1).padStart(2, '0');
+      $('#btn-resume').textContent = 'Resume module ' + savedExercise.stage + ' · lesson ' + savedLesson;
     }
 
     $('#btn-begin').addEventListener('click', function () {
@@ -789,6 +983,18 @@
     });
     $('#btn-resume').addEventListener('click', function () {
       renderPrimer(state.exerciseIdx, 0);
+    });
+    $('#btn-map').addEventListener('click', renderCourseMap);
+    $('#btn-view-map').addEventListener('click', renderCourseMap);
+    $('#btn-map-begin').addEventListener('click', function () {
+      resetProgress();
+      renderStageIntro(1);
+    });
+    $('#btn-map-resume').addEventListener('click', function () {
+      renderPrimer(state.exerciseIdx, 0);
+    });
+    $('#btn-map-home').addEventListener('click', function () {
+      showScreen('welcome');
     });
     $('#btn-stage-continue').addEventListener('click', function () {
       renderPrimer(state.exerciseIdx, 0);
@@ -806,9 +1012,7 @@
       renderStageIntro(1);
     });
     $('#btn-home').addEventListener('click', function () {
-      resetProgress();
-      showScreen('welcome');
-      $('#btn-resume').classList.add('is-hidden');
+      renderCourseMap();
     });
 
     updateProgressBar();
