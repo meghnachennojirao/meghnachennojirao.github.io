@@ -11,14 +11,135 @@
     C: "Analysis and application"
   };
 
-  const contexts = [
-    "a previous-year style problem",
-    "a mock test item",
-    "an experimental observation",
-    "a concept check",
-    "a data-interpretation question",
-    "a revision drill"
-  ];
+  const explanationGuides = {
+    "serial dilution": {
+      formula: "Final dilution = D1 x D2 x ... x Dn",
+      components: "D values are the denominator values in each 1:D dilution step.",
+      use: "Use this when a diluted sample is diluted again; sequential dilution factors multiply."
+    },
+    "buffer calculation": {
+      formula: "C1V1 = C2V2",
+      components: "C1 is stock concentration, V1 is stock volume, C2 is final concentration, and V2 is final volume.",
+      use: "Use this for preparing a lower-concentration working solution from a concentrated stock."
+    },
+    "standard curve": {
+      formula: "signal = slope x concentration + intercept",
+      components: "If the intercept is zero, concentration = signal / slope.",
+      use: "Use this when absorbance or fluorescence is calibrated against known standards."
+    },
+    "cell doubling": {
+      formula: "N = N0 x 2^n",
+      components: "N0 is starting cell number and n is the number of doublings.",
+      use: "Use this for ideal exponential growth when each cycle doubles the population."
+    },
+    "probability multiplication": {
+      formula: "P(A and B and C) = P(A) x P(B) x P(C)",
+      components: "The multiplication rule applies only when the events are independent.",
+      use: "Use this for independent biological outcomes such as independent seed germination events."
+    },
+    "percentage w/v": {
+      formula: "percent w/v = grams solute per 100 mL solution",
+      components: "1 percent w/v means 1 g in 100 mL; scale grams in direct proportion to volume.",
+      use: "Use this for agarose, salts, and other mass-per-volume solution recipes."
+    },
+    "pH scale": {
+      formula: "pH = -log10[H+]",
+      components: "A decrease of 1 pH unit means a 10-fold increase in hydrogen ion concentration.",
+      use: "Use this for comparing acidity when pH values differ by whole units."
+    },
+    "B-DNA turns": {
+      formula: "turns = base pairs / 10",
+      components: "B-DNA has about 10 base pairs per helical turn.",
+      use: "Use this for approximate helical-turn estimates in standard B-form DNA."
+    },
+    "protein stock": {
+      formula: "volume = mass / concentration",
+      components: "Mass is the protein amount needed and concentration is mass per volume.",
+      use: "Use this when taking a measured amount of protein from a stock solution."
+    },
+    "percent increase": {
+      formula: "percent increase = (new value - original value) / original value x 100",
+      components: "The denominator is always the starting value, not the final value.",
+      use: "Use this when comparing a biological measurement before and after a change."
+    },
+    "z-score": {
+      formula: "z = (x - mean) / standard deviation",
+      components: "x is the observed value; the z-score tells how many standard deviations x is from the mean.",
+      use: "Use this to standardize measurements drawn from a normal-like distribution."
+    },
+    "microscope magnification": {
+      formula: "total magnification = objective magnification x eyepiece magnification",
+      components: "The objective and eyepiece magnifications compound multiplicatively.",
+      use: "Use this for light microscope magnification questions."
+    },
+    "od doubling": {
+      formula: "OD after n doublings = starting OD x 2^n",
+      components: "OD is used as a proxy for cell density in the linear measuring range.",
+      use: "Use this only while OD is proportional to cell number; saturated cultures do not follow it well."
+    },
+    "odds": {
+      formula: "odds against = P(not event) : P(event)",
+      components: "P(not event) equals 1 - P(event).",
+      use: "Use this when probability must be converted into an odds ratio."
+    },
+    "competitive inhibition": {
+      formula: "v = Vmax[S] / (Km + [S])",
+      components: "Competitive inhibitors increase apparent Km because more substrate is needed; Vmax is unchanged at saturating substrate.",
+      use: "Use this when inhibitor and substrate compete for the active site."
+    },
+    "enzyme inhibition": {
+      formula: "v = Vmax[S] / (Km + [S])",
+      components: "Km reflects the substrate concentration giving half-maximal velocity; Vmax is the maximum velocity at saturating substrate.",
+      use: "Use Km/Vmax changes to identify competitive, noncompetitive, uncompetitive, or mixed inhibition."
+    },
+    "Hardy-Weinberg heterozygotes": {
+      formula: "p + q = 1; genotype frequencies are p^2, 2pq, q^2",
+      components: "p and q are allele frequencies; 2pq is the heterozygote frequency.",
+      use: "Use this under Hardy-Weinberg assumptions: random mating, no selection, no migration, no mutation, and large population size."
+    },
+    "recessive phenotype calculation": {
+      formula: "q = sqrt(q^2); carriers = 2pq",
+      components: "For a recessive phenotype, affected frequency equals q^2, not q.",
+      use: "Use this when a rare recessive trait frequency is given and carrier frequency is requested."
+    },
+    "linkage mapping": {
+      formula: "recombination frequency = recombinant offspring / total offspring x 100",
+      components: "One percent recombination is approximately one map unit or centimorgan.",
+      use: "Use this when progeny classes from a test cross are counted."
+    },
+    "mark recapture": {
+      formula: "N = M x C / R",
+      components: "M is first marked, C is captured later, and R is marked individuals recaptured.",
+      use: "Use this when marked individuals mix randomly before a second capture."
+    },
+    "X-linked recessive": {
+      formula: "Father gives X to daughters and Y to sons",
+      components: "An affected male passes his X-linked allele to every daughter but to no sons.",
+      use: "Use this for pedigree questions involving affected fathers and X-linked recessive alleles."
+    },
+    "G alpha s": {
+      pathway: "GPCR activation can load G alpha s with GTP; active G alpha s stimulates adenylyl cyclase, increasing cAMP and PKA signaling.",
+      use: "Use this when a question locks G alpha s in an active GTP-bound state or asks about cAMP output."
+    },
+    "kinase-dead RTK": {
+      pathway: "Ligand-bound RTKs normally dimerize and autophosphorylate tyrosines, creating docking sites for SH2/PTB-domain proteins such as Ras/MAPK pathway adaptors.",
+      use: "Use this when ligand binding occurs but receptor kinase activity is lost."
+    },
+    "JAK-STAT": {
+      pathway: "Cytokine receptors activate JAKs, phosphorylated receptor tails recruit STATs, and STAT dimers enter the nucleus to regulate transcription.",
+      use: "Use this when receptor phosphorylation or STAT docking is altered."
+    },
+    "Na/K ATPase": {
+      formula: "3 Na+ out, 2 K+ in, 1 ATP hydrolyzed",
+      components: "The unequal ion exchange makes the pump electrogenic and helps maintain resting membrane potential.",
+      use: "Use this for membrane potential, ion gradient, and epithelial transport questions."
+    },
+    "normal distribution": {
+      formula: "Empirical rule: 68 percent, 95 percent, 99.7 percent within 1, 2, 3 standard deviations",
+      components: "The percentages apply to an approximately normal distribution.",
+      use: "Use this for quick probability estimates around a mean."
+    }
+  };
 
   const partAGenerators = [
     {
@@ -343,15 +464,8 @@
     return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
 
-  function conceptStem(topic, variant) {
-    const context = contexts[variant % contexts.length];
-    const forms = [
-      `${topic.prompt}`,
-      `In ${context}, ${topic.prompt.charAt(0).toLowerCase()}${topic.prompt.slice(1)}`,
-      `Which option best answers this CSIR-style concept: ${topic.prompt.charAt(0).toLowerCase()}${topic.prompt.slice(1)}`,
-      `A question tests ${topic.concept}. ${topic.prompt}`
-    ];
-    return forms[variant % forms.length];
+  function conceptStem(topic) {
+    return topic.prompt;
   }
 
   function buildConceptQuestions(raw, section, offset) {
@@ -402,6 +516,7 @@
       options: options.map((option) => option.text),
       answer,
       explanation: topic.explanation,
+      guide: explanationGuides[topic.concept] || null,
       feedback: options.map((option) => option.why)
     };
   }

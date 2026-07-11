@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CSIR Life Sciences Mock Practice</title>
+    <title>Life Sciences Questionnaire</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <header class="topbar">
-      <div>
+      <div class="title-block">
         <p class="eyebrow">CSIR-UGC NET Life Sciences</p>
-        <h1>Mock Practice</h1>
+        <h1>Questionnaire</h1>
+        <nav class="top-links" aria-label="Study pages">
+          <a aria-current="page" href="./">Questionnaire</a>
+          <a href="concepts.html">Concept map</a>
+          <a href="https://www.csirhrdg.res.in/Home/Index/1/Default/3456/81">Official papers</a>
+        </nav>
       </div>
       <div class="top-actions">
         <button id="new-paper-top" class="secondary" type="button">New paper</button>
-        <button id="submit-top" class="primary" type="button">Submit</button>
       </div>
     </header>
 
@@ -42,6 +46,7 @@
             <div id="progress-fill"></div>
           </div>
           <p id="progress-text" class="muted">0 answered</p>
+          <p id="attempt-notice" class="attempt-notice" aria-live="polite"></p>
         </section>
 
         <section class="palette-wrap">
@@ -51,8 +56,20 @@
       </aside>
 
       <section class="content">
+        <section class="source-note">
+          <strong>Source status</strong>
+          <p>The current options are authored practice options, not verified verbatim previous-paper options. Use the official CSIR-HRDG archive for exact papers and keys while the interactive bank is kept source-tagged and honest.</p>
+        </section>
         <section id="result-panel" class="result-panel hidden"></section>
         <section id="question-list" class="question-list" aria-live="polite"></section>
+        <section class="paper-actions" aria-label="Submit questionnaire">
+          <div>
+            <strong>Ready to score?</strong>
+            <span id="submit-context">Answer up to the allowed limit in each section.</span>
+          </div>
+          <button id="submit-bottom" class="primary" type="button">Submit answers</button>
+        </section>
+        <a class="concept-strip" href="concepts.html">Review the concept map after scoring</a>
       </section>
     </main>
 
