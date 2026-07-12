@@ -742,3 +742,144 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+.paper-reader-shell {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.paper-control-surface,
+.paper-viewer-surface {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.paper-control-surface {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(280px, 1.1fr);
+  gap: 20px 28px;
+  align-items: end;
+  padding: 22px;
+}
+
+.paper-heading h2 {
+  margin: 4px 0 8px;
+  font-size: 27px;
+}
+
+.paper-heading p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.paper-picker {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.paper-picker select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  padding: 9px 12px;
+}
+
+.paper-metadata {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.paper-metadata div {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfcfe;
+}
+
+.paper-metadata dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.paper-metadata dd {
+  margin: 5px 0 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.paper-links {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.link-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.paper-viewer-surface {
+  min-height: 760px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.paper-viewer-surface iframe {
+  display: block;
+  width: 100%;
+  height: max(760px, calc(100vh - 170px));
+  border: 0;
+  background: #f4f6f8;
+}
+
+@media (max-width: 760px) {
+  .paper-reader-shell {
+    padding: 12px;
+  }
+
+  .paper-control-surface {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .paper-metadata {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .paper-links {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .paper-viewer-surface {
+    min-height: 620px;
+  }
+
+  .paper-viewer-surface iframe {
+    height: 620px;
+  }
+}
