@@ -3,77 +3,63 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Life Sciences Questionnaire</title>
+    <title>CSIR-UGC NET Life Sciences Papers</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <header class="topbar">
       <div class="title-block">
         <p class="eyebrow">CSIR-UGC NET Life Sciences</p>
-        <h1>Questionnaire</h1>
+        <h1>Question Papers</h1>
         <nav class="top-links" aria-label="Study pages">
-          <a aria-current="page" href="./">Questionnaire</a>
+          <a aria-current="page" href="./">Question papers</a>
           <a href="concepts.html">Concept map</a>
-          <a href="https://www.csirhrdg.res.in/Home/Index/1/Default/3456/81">Official papers</a>
+          <a id="official-archive" href="https://www.csirhrdg.res.in/Home/Index/1/Default/3456/81" target="_blank" rel="noopener">Official archive</a>
         </nav>
-      </div>
-      <div class="top-actions">
-        <button id="new-paper-top" class="secondary" type="button">New paper</button>
       </div>
     </header>
 
-    <main class="shell">
-      <aside class="panel">
-        <section class="score-card">
-          <span class="label">Pool</span>
-          <strong id="pool-count">Loading...</strong>
-          <span class="muted">100 questions per paper</span>
-        </section>
-
-        <section class="rules">
-          <h2>Scoring</h2>
-          <div class="rule-grid">
-            <span>Part A</span><strong>+2 / -0.5</strong><em>15 scored</em>
-            <span>Part B</span><strong>+2 / -0.5</strong><em>35 scored</em>
-            <span>Part C</span><strong>+4 / -1</strong><em>25 scored</em>
-          </div>
-        </section>
-
-        <section class="progress-panel">
-          <h2>Progress</h2>
-          <div id="section-progress" class="section-progress"></div>
-          <div class="bar">
-            <div id="progress-fill"></div>
-          </div>
-          <p id="progress-text" class="muted">0 answered</p>
-          <p id="attempt-notice" class="attempt-notice" aria-live="polite"></p>
-        </section>
-
-        <section class="palette-wrap">
-          <h2>Questions</h2>
-          <div id="question-palette" class="palette"></div>
-        </section>
-      </aside>
-
-      <section class="content">
-        <section class="source-note">
-          <strong>Source status</strong>
-          <p>The current options are authored practice options, not verified verbatim previous-paper options. Repeat-frequency tags are shown from the current study metadata, and new papers rotate through unseen questions in each section before restarting the pool.</p>
-        </section>
-        <section id="result-panel" class="result-panel hidden"></section>
-        <section id="question-list" class="question-list" aria-live="polite"></section>
-        <section class="paper-actions" aria-label="Submit questionnaire">
+    <main class="paper-reader-shell">
+      <section class="paper-control-surface" aria-labelledby="paper-reader-title">
+        <div class="paper-heading">
+          <p class="eyebrow">Original official paper</p>
+          <h2 id="paper-reader-title">CSIR-UGC NET Life Sciences</h2>
+          <p>Question wording, options, and order are the original official document.</p>
+        </div>
+        <label class="paper-picker" for="paper-select">
+          <span>Select a session</span>
+          <select id="paper-select" name="paper"></select>
+        </label>
+        <dl class="paper-metadata">
           <div>
-            <strong>Ready to score?</strong>
-            <span id="submit-context">Answer up to the allowed limit in each section.</span>
+            <dt>Session</dt>
+            <dd id="paper-session"></dd>
           </div>
-          <button id="submit-bottom" class="primary" type="button">Submit answers</button>
-        </section>
-        <a class="concept-strip" href="concepts.html">Review the concept map after scoring</a>
+          <div>
+            <dt>Exam date</dt>
+            <dd id="paper-date"></dd>
+          </div>
+          <div>
+            <dt>Document</dt>
+            <dd id="paper-format"></dd>
+          </div>
+          <div>
+            <dt>Source</dt>
+            <dd id="paper-source"></dd>
+          </div>
+        </dl>
+        <div class="paper-links">
+          <a id="open-paper" class="primary link-button" href="#" target="_blank" rel="noopener">Open original paper</a>
+          <a id="open-key" class="secondary link-button" href="#" target="_blank" rel="noopener">Open official answer key</a>
+        </div>
+      </section>
+
+      <section class="paper-viewer-surface" aria-label="Official question paper viewer">
+        <iframe id="paper-frame" title="Official question paper" loading="eager"></iframe>
       </section>
     </main>
 
-    <script src="question-bank.js"></script>
+    <script src="official-papers.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
