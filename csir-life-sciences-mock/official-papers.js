@@ -17,7 +17,7 @@
     };
   }
 
-  function shiftedPaper(id, label, session, examDate, shift, driveId, answerKeyPath) {
+  function shiftedPaper(id, label, session, examDate, shift, driveId, answerKeyPath, answerKeyPage) {
     return {
       id,
       label,
@@ -27,7 +27,8 @@
       sourceLabel: "CSIR-HRDG official question paper",
       paperUrl: driveView(driveId),
       previewUrl: drivePreview(driveId),
-      answerKeyUrl: `${archive}${answerKeyPath}`
+      answerKeyUrl: `official-answer-keys/${id}.pdf`,
+      officialAnswerKeyUrl: `${archive}${answerKeyPath}#page=${answerKeyPage}`
     };
   }
 
@@ -39,7 +40,8 @@
       "Exam held 1 March 2025",
       "Life Sciences Shift 1",
       "1q-pwTmINJX0uvuMgdTObh5phAi5NC3aT",
-      "20251007153254514Final_Answer_Keys_All_Subjects_Dec-2024_07Oct2025.pdf"
+      "20251007153254514Final_Answer_Keys_All_Subjects_Dec-2024_07Oct2025.pdf",
+      4
     ),
     shiftedPaper(
       "december-2024-shift-2",
@@ -48,7 +50,8 @@
       "Exam held 1 March 2025",
       "Life Sciences Shift 2",
       "1AycPmSFeGJWTtnKF2ZE9Oahf9_17xiGY",
-      "20251007153254514Final_Answer_Keys_All_Subjects_Dec-2024_07Oct2025.pdf"
+      "20251007153254514Final_Answer_Keys_All_Subjects_Dec-2024_07Oct2025.pdf",
+      5
     ),
     shiftedPaper(
       "june-2024-shift-1",
@@ -57,7 +60,8 @@
       "Exam held 26 July 2024",
       "Life Sciences Shift 1",
       "1tVxTLanuPnenvIVIZHMn0fcCXzRxlO_m",
-      "20251007135218286Final_Answer_Keys_All_Subjects_June-2024_07Oct2025.pdf"
+      "20251007135218286Final_Answer_Keys_All_Subjects_June-2024_07Oct2025.pdf",
+      5
     ),
     shiftedPaper(
       "june-2024-shift-2",
@@ -66,7 +70,8 @@
       "Exam held 26 July 2024",
       "Life Sciences Shift 2",
       "1h-2z0dtrkap_-kv1UIcMTft5RP_l4PRi",
-      "20251007135218286Final_Answer_Keys_All_Subjects_June-2024_07Oct2025.pdf"
+      "20251007135218286Final_Answer_Keys_All_Subjects_June-2024_07Oct2025.pdf",
+      6
     ),
     shiftedPaper(
       "december-2023-shift-1",
@@ -75,7 +80,8 @@
       "Exam held 26 December 2023",
       "Life Sciences Shift 1",
       "1JB6sJUXp0T4T09MkBHx5UViVDPx4K9Sz",
-      "20251007153221671Final_Answer_Keys_All_Subjects_Dec-2023_07Oct2025.pdf"
+      "20251007153221671Final_Answer_Keys_All_Subjects_Dec-2023_07Oct2025.pdf",
+      3
     ),
     shiftedPaper(
       "december-2023-shift-2",
@@ -84,7 +90,8 @@
       "Exam held 26 December 2023",
       "Life Sciences Shift 2",
       "1ku_7VST4O1WiXnNUcCsUiLDoYatWvLSE",
-      "20251007153221671Final_Answer_Keys_All_Subjects_Dec-2023_07Oct2025.pdf"
+      "20251007153221671Final_Answer_Keys_All_Subjects_Dec-2023_07Oct2025.pdf",
+      4
     ),
     shiftedPaper(
       "december-2022-june-2023-shift-1",
@@ -93,7 +100,8 @@
       "Exam held 6 June 2023",
       "Life Sciences Shift 1",
       "1fIT9y5BEOjNBQ1H0BTa2KXg_G2n_vROO",
-      "20251007135952022Final_Answer_Keys_All_Subjects_Dec-2022_June-2023_07Oct2025.pdf"
+      "20251007135952022Final_Answer_Keys_All_Subjects_Dec-2022_June-2023_07Oct2025.pdf",
+      3
     ),
     shiftedPaper(
       "december-2022-june-2023-shift-2",
@@ -102,7 +110,8 @@
       "Exam held 6 June 2023",
       "Life Sciences Shift 2",
       "17JWaywnDwCB2m7BFd5DkZVFcU4HmqDop",
-      "20251007135952022Final_Answer_Keys_All_Subjects_Dec-2022_June-2023_07Oct2025.pdf"
+      "20251007135952022Final_Answer_Keys_All_Subjects_Dec-2022_June-2023_07Oct2025.pdf",
+      4
     ),
     shiftedPaper(
       "june-2022-shift-1",
@@ -111,7 +120,8 @@
       "Exam held 17 September 2022",
       "Life Sciences Shift 1",
       "1u2Sc_K666lF7Ce1M0AIrmuVrzunpx9aO",
-      "20251007134531584Final_Answer_Keys_All_Subjects_June-2022_07Oct2025.pdf"
+      "20251007134531584Final_Answer_Keys_All_Subjects_June-2022_07Oct2025.pdf",
+      4
     ),
     shiftedPaper(
       "june-2022-shift-2",
@@ -120,7 +130,8 @@
       "Exam held 17 September 2022",
       "Life Sciences Shift 2",
       "1_CTVZDr-z_T2JM1H0XhqWtS0j1a1xyyJ",
-      "20251007134531584Final_Answer_Keys_All_Subjects_June-2022_07Oct2025.pdf"
+      "20251007134531584Final_Answer_Keys_All_Subjects_June-2022_07Oct2025.pdf",
+      5
     ),
     shiftedPaper(
       "june-2021-shift-1",
@@ -129,7 +140,8 @@
       "Exam held 17 February 2022",
       "Life Sciences Shift 1",
       "1zw5Gasw5soineUsZoEyFzRCZo8Ew_MmF",
-      "20251007132201193Final_Answer_Keys_All_Subjects_June-2021_07Oct2025.pdf"
+      "20251007132201193Final_Answer_Keys_All_Subjects_June-2021_07Oct2025.pdf",
+      5
     ),
     shiftedPaper(
       "june-2021-shift-2",
@@ -138,7 +150,8 @@
       "Exam held 17 February 2022",
       "Life Sciences Shift 2",
       "1vvDvV9oeHSPk4bSCClP3SLCZDvD5vjkI",
-      "20251007132201193Final_Answer_Keys_All_Subjects_June-2021_07Oct2025.pdf"
+      "20251007132201193Final_Answer_Keys_All_Subjects_June-2021_07Oct2025.pdf",
+      6
     ),
     shiftedPaper(
       "june-2020-shift-1",
@@ -147,7 +160,8 @@
       "Exam held 21 November 2020",
       "Life Sciences Shift 1",
       "1jpPH779TN2OOovFTY8oizR81OPNNFeH4",
-      "20251007131754959Final_Answer_Keys_All_Subjects_June-2020_07Oct2025.pdf"
+      "20251007131754959Final_Answer_Keys_All_Subjects_June-2020_07Oct2025.pdf",
+      3
     ),
     shiftedPaper(
       "june-2020-shift-2",
@@ -156,7 +170,8 @@
       "Exam held 21 November 2020",
       "Life Sciences Shift 2",
       "1UXpHO6du6NzooZDqzX-Sp7BsGpDS3Zpk",
-      "20251007131754959Final_Answer_Keys_All_Subjects_June-2020_07Oct2025.pdf"
+      "20251007131754959Final_Answer_Keys_All_Subjects_June-2020_07Oct2025.pdf",
+      4
     ),
     legacyPaper(
       "june-2019-set-a",
