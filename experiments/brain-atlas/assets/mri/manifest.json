@@ -1,0 +1,1854 @@
+{
+  "schemaVersion": 1,
+  "title": "MNI-ICBM 2009c × CerebrA coronal MRI explorer",
+  "disclaimer": "Educational population-average atlas; not a diagnostic image or a substitute for clinical anatomy training.",
+  "source": {
+    "archive": "TemplateFlow",
+    "template": "MNI152NLin2009cSym",
+    "templateName": "ICBM 152 Nonlinear Symmetrical template version 2009c",
+    "atlas": "CerebrA",
+    "atlasDescription": "102 cortical and subcortical labels registered to the symmetric MNI-ICBM 2009c template and manually corrected.",
+    "whiteMatterSegmentation": "Matching MNI152NLin2009cSym label-WM probability map, thresholded at 0.5 for the derived cerebral-white-matter group.",
+    "templateCitation": "Fonov et al. (2011), NeuroImage 54(1), doi:10.1016/j.neuroimage.2010.07.033",
+    "atlasCitation": "Manera et al. (2020), Scientific Data 7:237, doi:10.1038/s41597-020-0557-9",
+    "templateFlowCitation": "Ciric et al. (2022), Nature Methods 19, doi:10.1038/s41592-022-01681-2",
+    "license": "MNI permissive notice; preserve raw/LICENSE and attribution when redistributing derivatives.",
+    "licenseFile": "LICENSE-MNI.txt"
+  },
+  "volume": {
+    "shape": [
+      193,
+      229,
+      193
+    ],
+    "voxelSizeMm": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "orientation": [
+      "R",
+      "A",
+      "S"
+    ],
+    "affine": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        -96.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        -132.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        -78.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "display": {
+    "plane": "coronal",
+    "traversal": "anterior-to-posterior",
+    "view": "from in front of the subject",
+    "imageLeft": "anatomical right",
+    "imageRight": "anatomical left",
+    "imageTop": "superior",
+    "imageBottom": "inferior",
+    "pixelSize": [
+      384,
+      384
+    ],
+    "intensityWindow": {
+      "low": 1.0,
+      "high": 90.0,
+      "gamma": 0.88
+    }
+  },
+  "landmarks": [
+    {
+      "id": "cerebral-cortex",
+      "name": "Cerebral cortex",
+      "ids": [
+        1,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        22,
+        23,
+        24,
+        28,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        38,
+        42,
+        43,
+        44,
+        45,
+        47,
+        51,
+        52,
+        54,
+        57,
+        58,
+        59,
+        60,
+        61,
+        63,
+        64,
+        65,
+        66,
+        67,
+        69,
+        73,
+        74,
+        75,
+        79,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        89,
+        93,
+        94,
+        95,
+        96,
+        98,
+        102
+      ],
+      "color": "#F19C79",
+      "description": "Aggregate cortical ribbon from all 62 CerebrA gyral labels.",
+      "sourceMethod": "Union of CerebrA labels whose Mindboggle mapping is 2000 or greater.",
+      "sourceLabels": [
+        {
+          "id": 1,
+          "name": "Rostral Middle Frontal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 3,
+          "name": "Inferior temporal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 6,
+          "name": "Pericalcarine",
+          "hemisphere": "R"
+        },
+        {
+          "id": 7,
+          "name": "Lateral Orbitofrontal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 8,
+          "name": "Rostral Anterior Cingulate",
+          "hemisphere": "R"
+        },
+        {
+          "id": 9,
+          "name": "Superior Parietal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 10,
+          "name": "Inferior Parietal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 12,
+          "name": "Lingual",
+          "hemisphere": "R"
+        },
+        {
+          "id": 13,
+          "name": "Postcentral",
+          "hemisphere": "R"
+        },
+        {
+          "id": 14,
+          "name": "Transverse Temporal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 15,
+          "name": "Medial Orbitofrontal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 16,
+          "name": "Paracentral",
+          "hemisphere": "R"
+        },
+        {
+          "id": 18,
+          "name": "Parahippocampal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 22,
+          "name": "Pars Triangularis",
+          "hemisphere": "R"
+        },
+        {
+          "id": 23,
+          "name": "Insula",
+          "hemisphere": "R"
+        },
+        {
+          "id": 24,
+          "name": "Fusiform",
+          "hemisphere": "R"
+        },
+        {
+          "id": 28,
+          "name": "Middle Temporal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 30,
+          "name": "Caudal Anterior Cingulate",
+          "hemisphere": "R"
+        },
+        {
+          "id": 31,
+          "name": "Precuneus",
+          "hemisphere": "R"
+        },
+        {
+          "id": 32,
+          "name": "Pars Opercularis",
+          "hemisphere": "R"
+        },
+        {
+          "id": 33,
+          "name": "Isthmus Cingulate",
+          "hemisphere": "R"
+        },
+        {
+          "id": 34,
+          "name": "Lateral Occipital",
+          "hemisphere": "R"
+        },
+        {
+          "id": 35,
+          "name": "Precentral",
+          "hemisphere": "R"
+        },
+        {
+          "id": 36,
+          "name": "Entorhinal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 38,
+          "name": "Superior Frontal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 42,
+          "name": "Caudal Middle Frontal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 43,
+          "name": "Cuneus",
+          "hemisphere": "R"
+        },
+        {
+          "id": 44,
+          "name": "Pars Orbitalis",
+          "hemisphere": "R"
+        },
+        {
+          "id": 45,
+          "name": "Superior Temporal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 47,
+          "name": "Posterior Cingulate",
+          "hemisphere": "R"
+        },
+        {
+          "id": 51,
+          "name": "Supramarginal",
+          "hemisphere": "R"
+        },
+        {
+          "id": 52,
+          "name": "Rostral Middle Frontal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 54,
+          "name": "Inferior temporal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 57,
+          "name": "Pericalcarine",
+          "hemisphere": "L"
+        },
+        {
+          "id": 58,
+          "name": "Lateral Orbitofrontal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 59,
+          "name": "Rostral Anterior Cingulate",
+          "hemisphere": "L"
+        },
+        {
+          "id": 60,
+          "name": "Superior Parietal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 61,
+          "name": "Inferior Parietal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 63,
+          "name": "Lingual",
+          "hemisphere": "L"
+        },
+        {
+          "id": 64,
+          "name": "Postcentral",
+          "hemisphere": "L"
+        },
+        {
+          "id": 65,
+          "name": "Transverse Temporal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 66,
+          "name": "Medial Orbitofrontal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 67,
+          "name": "Paracentral",
+          "hemisphere": "L"
+        },
+        {
+          "id": 69,
+          "name": "Parahippocampal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 73,
+          "name": "Pars Triangularis",
+          "hemisphere": "L"
+        },
+        {
+          "id": 74,
+          "name": "Insula",
+          "hemisphere": "L"
+        },
+        {
+          "id": 75,
+          "name": "Fusiform",
+          "hemisphere": "L"
+        },
+        {
+          "id": 79,
+          "name": "Middle Temporal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 81,
+          "name": "Caudal Anterior Cingulate",
+          "hemisphere": "L"
+        },
+        {
+          "id": 82,
+          "name": "Precuneus",
+          "hemisphere": "L"
+        },
+        {
+          "id": 83,
+          "name": "Pars Opercularis",
+          "hemisphere": "L"
+        },
+        {
+          "id": 84,
+          "name": "Isthmus Cingulate",
+          "hemisphere": "L"
+        },
+        {
+          "id": 85,
+          "name": "Lateral Occipital",
+          "hemisphere": "L"
+        },
+        {
+          "id": 86,
+          "name": "Precentral",
+          "hemisphere": "L"
+        },
+        {
+          "id": 87,
+          "name": "Entorhinal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 89,
+          "name": "Superior Frontal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 93,
+          "name": "Caudal Middle Frontal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 94,
+          "name": "Cuneus",
+          "hemisphere": "L"
+        },
+        {
+          "id": 95,
+          "name": "Pars Orbitalis",
+          "hemisphere": "L"
+        },
+        {
+          "id": 96,
+          "name": "Superior Temporal",
+          "hemisphere": "L"
+        },
+        {
+          "id": 98,
+          "name": "Posterior Cingulate",
+          "hemisphere": "L"
+        },
+        {
+          "id": 102,
+          "name": "Supramarginal",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "id": "cerebral-white-matter",
+      "name": "Cerebral white matter",
+      "ids": [],
+      "color": "#B8C5D6",
+      "description": "Paired cerebral white-matter cores derived at probability ≥ 0.5.",
+      "sourceMethod": "MNI152NLin2009cSym white-matter probability ≥ 0.5; CerebrA cerebellum and brainstem excluded; divided at MNI x=0.",
+      "sourceLabels": [
+        {
+          "id": "derived-wm-left",
+          "name": "Cerebral White Matter",
+          "hemisphere": "L"
+        },
+        {
+          "id": "derived-wm-right",
+          "name": "Cerebral White Matter",
+          "hemisphere": "R"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ]
+    },
+    {
+      "id": "ventricular-system",
+      "name": "Ventricular system",
+      "ids": [
+        5,
+        29,
+        37,
+        41,
+        56,
+        80,
+        88,
+        92
+      ],
+      "color": "#56B4E9",
+      "description": "CSF-filled lateral, inferior lateral, third, and fourth ventricles.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 5,
+          "name": "Inferior Lateral Ventricle",
+          "hemisphere": "R"
+        },
+        {
+          "id": 29,
+          "name": "Third Ventricle",
+          "hemisphere": "R"
+        },
+        {
+          "id": 37,
+          "name": "Fourth Ventricle",
+          "hemisphere": "R"
+        },
+        {
+          "id": 41,
+          "name": "Lateral Ventricle",
+          "hemisphere": "R"
+        },
+        {
+          "id": 56,
+          "name": "Inferior Lateral Ventricle",
+          "hemisphere": "L"
+        },
+        {
+          "id": 80,
+          "name": "Third Ventricle",
+          "hemisphere": "L"
+        },
+        {
+          "id": 88,
+          "name": "Fourth Ventricle",
+          "hemisphere": "L"
+        },
+        {
+          "id": 92,
+          "name": "Lateral Ventricle",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ]
+    },
+    {
+      "id": "thalamus",
+      "name": "Thalamus",
+      "ids": [
+        40,
+        91
+      ],
+      "color": "#CC79A7",
+      "description": "Paired deep-gray relay structures flanking the third ventricle.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 40,
+          "name": "Thalamus",
+          "hemisphere": "R"
+        },
+        {
+          "id": 91,
+          "name": "Thalamus",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ]
+    },
+    {
+      "id": "hippocampus",
+      "name": "Hippocampus",
+      "ids": [
+        48,
+        99
+      ],
+      "color": "#E69F00",
+      "description": "Paired medial temporal structures central to memory.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 48,
+          "name": "Hippocampus",
+          "hemisphere": "R"
+        },
+        {
+          "id": 99,
+          "name": "Hippocampus",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ]
+    },
+    {
+      "id": "amygdala",
+      "name": "Amygdala",
+      "ids": [
+        19,
+        70
+      ],
+      "color": "#D55E00",
+      "description": "Paired anterior medial temporal nuclei.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 19,
+          "name": "Amygdala",
+          "hemisphere": "R"
+        },
+        {
+          "id": 70,
+          "name": "Amygdala",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        23,
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "id": "caudate",
+      "name": "Caudate",
+      "ids": [
+        49,
+        100
+      ],
+      "color": "#009E73",
+      "description": "Paired basal-ganglia nuclei following the lateral ventricles.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 49,
+          "name": "Caudate",
+          "hemisphere": "R"
+        },
+        {
+          "id": 100,
+          "name": "Caudate",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "id": "putamen",
+      "name": "Putamen",
+      "ids": [
+        21,
+        72
+      ],
+      "color": "#F0E442",
+      "description": "Paired lateral basal-ganglia nuclei.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 21,
+          "name": "Putamen",
+          "hemisphere": "R"
+        },
+        {
+          "id": 72,
+          "name": "Putamen",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ]
+    },
+    {
+      "id": "brainstem",
+      "name": "Brainstem",
+      "ids": [
+        11,
+        62
+      ],
+      "color": "#0072B2",
+      "description": "Midbrain, pons, and medulla represented by the CerebrA brainstem label.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 11,
+          "name": "Brainstem",
+          "hemisphere": "R"
+        },
+        {
+          "id": 62,
+          "name": "Brainstem",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38
+      ]
+    },
+    {
+      "id": "cerebellum",
+      "name": "Cerebellum",
+      "ids": [
+        2,
+        20,
+        39,
+        46,
+        50,
+        53,
+        71,
+        90,
+        97,
+        101
+      ],
+      "color": "#9A7FD1",
+      "description": "Cerebellar gray matter, white matter, and vermal lobules.",
+      "sourceMethod": "Union of the listed CerebrA label IDs.",
+      "sourceLabels": [
+        {
+          "id": 2,
+          "name": "Vermal lobules VI-VII",
+          "hemisphere": "R"
+        },
+        {
+          "id": 20,
+          "name": "Vermal lobules VIII-X",
+          "hemisphere": "R"
+        },
+        {
+          "id": 39,
+          "name": "Cerebellum White Matter",
+          "hemisphere": "R"
+        },
+        {
+          "id": 46,
+          "name": "Cerebellum Gray Matter",
+          "hemisphere": "R"
+        },
+        {
+          "id": 50,
+          "name": "Vermal lobules I-V",
+          "hemisphere": "R"
+        },
+        {
+          "id": 53,
+          "name": "Vermal lobules VI-VII",
+          "hemisphere": "L"
+        },
+        {
+          "id": 71,
+          "name": "Vermal lobules VIII-X",
+          "hemisphere": "L"
+        },
+        {
+          "id": 90,
+          "name": "Cerebellum White Matter",
+          "hemisphere": "L"
+        },
+        {
+          "id": 97,
+          "name": "Cerebellum Gray Matter",
+          "hemisphere": "L"
+        },
+        {
+          "id": 101,
+          "name": "Vermal lobules I-V",
+          "hemisphere": "L"
+        }
+      ],
+      "visibleOnSliceOrders": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    }
+  ],
+  "slices": [
+    {
+      "id": "coronal-00",
+      "order": 0,
+      "progress": 0.0,
+      "sourceYIndex": 205,
+      "yMm": 73.0,
+      "image": "slices/coronal-00.webp",
+      "overlay": "overlays/coronal-00.json",
+      "visibleLandmarks": [
+        "cerebral-cortex"
+      ]
+    },
+    {
+      "id": "coronal-01",
+      "order": 1,
+      "progress": 0.01818,
+      "sourceYIndex": 202,
+      "yMm": 70.0,
+      "image": "slices/coronal-01.webp",
+      "overlay": "overlays/coronal-01.json",
+      "visibleLandmarks": [
+        "cerebral-cortex"
+      ]
+    },
+    {
+      "id": "coronal-02",
+      "order": 2,
+      "progress": 0.03636,
+      "sourceYIndex": 198,
+      "yMm": 66.0,
+      "image": "slices/coronal-02.webp",
+      "overlay": "overlays/coronal-02.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-03",
+      "order": 3,
+      "progress": 0.05455,
+      "sourceYIndex": 195,
+      "yMm": 63.0,
+      "image": "slices/coronal-03.webp",
+      "overlay": "overlays/coronal-03.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-04",
+      "order": 4,
+      "progress": 0.07273,
+      "sourceYIndex": 192,
+      "yMm": 60.0,
+      "image": "slices/coronal-04.webp",
+      "overlay": "overlays/coronal-04.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-05",
+      "order": 5,
+      "progress": 0.09091,
+      "sourceYIndex": 189,
+      "yMm": 57.0,
+      "image": "slices/coronal-05.webp",
+      "overlay": "overlays/coronal-05.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-06",
+      "order": 6,
+      "progress": 0.10909,
+      "sourceYIndex": 185,
+      "yMm": 53.0,
+      "image": "slices/coronal-06.webp",
+      "overlay": "overlays/coronal-06.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-07",
+      "order": 7,
+      "progress": 0.12727,
+      "sourceYIndex": 182,
+      "yMm": 50.0,
+      "image": "slices/coronal-07.webp",
+      "overlay": "overlays/coronal-07.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-08",
+      "order": 8,
+      "progress": 0.14545,
+      "sourceYIndex": 179,
+      "yMm": 47.0,
+      "image": "slices/coronal-08.webp",
+      "overlay": "overlays/coronal-08.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-09",
+      "order": 9,
+      "progress": 0.16364,
+      "sourceYIndex": 176,
+      "yMm": 44.0,
+      "image": "slices/coronal-09.webp",
+      "overlay": "overlays/coronal-09.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-10",
+      "order": 10,
+      "progress": 0.18182,
+      "sourceYIndex": 172,
+      "yMm": 40.0,
+      "image": "slices/coronal-10.webp",
+      "overlay": "overlays/coronal-10.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-11",
+      "order": 11,
+      "progress": 0.2,
+      "sourceYIndex": 169,
+      "yMm": 37.0,
+      "image": "slices/coronal-11.webp",
+      "overlay": "overlays/coronal-11.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-12",
+      "order": 12,
+      "progress": 0.21818,
+      "sourceYIndex": 166,
+      "yMm": 34.0,
+      "image": "slices/coronal-12.webp",
+      "overlay": "overlays/coronal-12.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-13",
+      "order": 13,
+      "progress": 0.23636,
+      "sourceYIndex": 163,
+      "yMm": 31.0,
+      "image": "slices/coronal-13.webp",
+      "overlay": "overlays/coronal-13.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-14",
+      "order": 14,
+      "progress": 0.25455,
+      "sourceYIndex": 159,
+      "yMm": 27.0,
+      "image": "slices/coronal-14.webp",
+      "overlay": "overlays/coronal-14.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system"
+      ]
+    },
+    {
+      "id": "coronal-15",
+      "order": 15,
+      "progress": 0.27273,
+      "sourceYIndex": 156,
+      "yMm": 24.0,
+      "image": "slices/coronal-15.webp",
+      "overlay": "overlays/coronal-15.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate"
+      ]
+    },
+    {
+      "id": "coronal-16",
+      "order": 16,
+      "progress": 0.29091,
+      "sourceYIndex": 153,
+      "yMm": 21.0,
+      "image": "slices/coronal-16.webp",
+      "overlay": "overlays/coronal-16.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate"
+      ]
+    },
+    {
+      "id": "coronal-17",
+      "order": 17,
+      "progress": 0.30909,
+      "sourceYIndex": 150,
+      "yMm": 18.0,
+      "image": "slices/coronal-17.webp",
+      "overlay": "overlays/coronal-17.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-18",
+      "order": 18,
+      "progress": 0.32727,
+      "sourceYIndex": 146,
+      "yMm": 14.0,
+      "image": "slices/coronal-18.webp",
+      "overlay": "overlays/coronal-18.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-19",
+      "order": 19,
+      "progress": 0.34545,
+      "sourceYIndex": 143,
+      "yMm": 11.0,
+      "image": "slices/coronal-19.webp",
+      "overlay": "overlays/coronal-19.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-20",
+      "order": 20,
+      "progress": 0.36364,
+      "sourceYIndex": 140,
+      "yMm": 8.0,
+      "image": "slices/coronal-20.webp",
+      "overlay": "overlays/coronal-20.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-21",
+      "order": 21,
+      "progress": 0.38182,
+      "sourceYIndex": 137,
+      "yMm": 5.0,
+      "image": "slices/coronal-21.webp",
+      "overlay": "overlays/coronal-21.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-22",
+      "order": 22,
+      "progress": 0.4,
+      "sourceYIndex": 133,
+      "yMm": 1.0,
+      "image": "slices/coronal-22.webp",
+      "overlay": "overlays/coronal-22.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-23",
+      "order": 23,
+      "progress": 0.41818,
+      "sourceYIndex": 130,
+      "yMm": -2.0,
+      "image": "slices/coronal-23.webp",
+      "overlay": "overlays/coronal-23.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "amygdala",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-24",
+      "order": 24,
+      "progress": 0.43636,
+      "sourceYIndex": 127,
+      "yMm": -5.0,
+      "image": "slices/coronal-24.webp",
+      "overlay": "overlays/coronal-24.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "amygdala",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-25",
+      "order": 25,
+      "progress": 0.45455,
+      "sourceYIndex": 124,
+      "yMm": -8.0,
+      "image": "slices/coronal-25.webp",
+      "overlay": "overlays/coronal-25.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "amygdala",
+        "caudate",
+        "putamen"
+      ]
+    },
+    {
+      "id": "coronal-26",
+      "order": 26,
+      "progress": 0.47273,
+      "sourceYIndex": 120,
+      "yMm": -12.0,
+      "image": "slices/coronal-26.webp",
+      "overlay": "overlays/coronal-26.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "amygdala",
+        "caudate",
+        "putamen",
+        "brainstem"
+      ]
+    },
+    {
+      "id": "coronal-27",
+      "order": 27,
+      "progress": 0.49091,
+      "sourceYIndex": 117,
+      "yMm": -15.0,
+      "image": "slices/coronal-27.webp",
+      "overlay": "overlays/coronal-27.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "caudate",
+        "putamen",
+        "brainstem"
+      ]
+    },
+    {
+      "id": "coronal-28",
+      "order": 28,
+      "progress": 0.50909,
+      "sourceYIndex": 114,
+      "yMm": -18.0,
+      "image": "slices/coronal-28.webp",
+      "overlay": "overlays/coronal-28.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "caudate",
+        "putamen",
+        "brainstem"
+      ]
+    },
+    {
+      "id": "coronal-29",
+      "order": 29,
+      "progress": 0.52727,
+      "sourceYIndex": 111,
+      "yMm": -21.0,
+      "image": "slices/coronal-29.webp",
+      "overlay": "overlays/coronal-29.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "caudate",
+        "putamen",
+        "brainstem"
+      ]
+    },
+    {
+      "id": "coronal-30",
+      "order": 30,
+      "progress": 0.54545,
+      "sourceYIndex": 107,
+      "yMm": -25.0,
+      "image": "slices/coronal-30.webp",
+      "overlay": "overlays/coronal-30.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "caudate",
+        "brainstem"
+      ]
+    },
+    {
+      "id": "coronal-31",
+      "order": 31,
+      "progress": 0.56364,
+      "sourceYIndex": 104,
+      "yMm": -28.0,
+      "image": "slices/coronal-31.webp",
+      "overlay": "overlays/coronal-31.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-32",
+      "order": 32,
+      "progress": 0.58182,
+      "sourceYIndex": 101,
+      "yMm": -31.0,
+      "image": "slices/coronal-32.webp",
+      "overlay": "overlays/coronal-32.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-33",
+      "order": 33,
+      "progress": 0.6,
+      "sourceYIndex": 98,
+      "yMm": -34.0,
+      "image": "slices/coronal-33.webp",
+      "overlay": "overlays/coronal-33.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "thalamus",
+        "hippocampus",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-34",
+      "order": 34,
+      "progress": 0.61818,
+      "sourceYIndex": 94,
+      "yMm": -38.0,
+      "image": "slices/coronal-34.webp",
+      "overlay": "overlays/coronal-34.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "hippocampus",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-35",
+      "order": 35,
+      "progress": 0.63636,
+      "sourceYIndex": 91,
+      "yMm": -41.0,
+      "image": "slices/coronal-35.webp",
+      "overlay": "overlays/coronal-35.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "hippocampus",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-36",
+      "order": 36,
+      "progress": 0.65455,
+      "sourceYIndex": 88,
+      "yMm": -44.0,
+      "image": "slices/coronal-36.webp",
+      "overlay": "overlays/coronal-36.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-37",
+      "order": 37,
+      "progress": 0.67273,
+      "sourceYIndex": 85,
+      "yMm": -47.0,
+      "image": "slices/coronal-37.webp",
+      "overlay": "overlays/coronal-37.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-38",
+      "order": 38,
+      "progress": 0.69091,
+      "sourceYIndex": 81,
+      "yMm": -51.0,
+      "image": "slices/coronal-38.webp",
+      "overlay": "overlays/coronal-38.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "brainstem",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-39",
+      "order": 39,
+      "progress": 0.70909,
+      "sourceYIndex": 78,
+      "yMm": -54.0,
+      "image": "slices/coronal-39.webp",
+      "overlay": "overlays/coronal-39.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-40",
+      "order": 40,
+      "progress": 0.72727,
+      "sourceYIndex": 75,
+      "yMm": -57.0,
+      "image": "slices/coronal-40.webp",
+      "overlay": "overlays/coronal-40.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-41",
+      "order": 41,
+      "progress": 0.74545,
+      "sourceYIndex": 72,
+      "yMm": -60.0,
+      "image": "slices/coronal-41.webp",
+      "overlay": "overlays/coronal-41.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-42",
+      "order": 42,
+      "progress": 0.76364,
+      "sourceYIndex": 68,
+      "yMm": -64.0,
+      "image": "slices/coronal-42.webp",
+      "overlay": "overlays/coronal-42.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-43",
+      "order": 43,
+      "progress": 0.78182,
+      "sourceYIndex": 65,
+      "yMm": -67.0,
+      "image": "slices/coronal-43.webp",
+      "overlay": "overlays/coronal-43.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-44",
+      "order": 44,
+      "progress": 0.8,
+      "sourceYIndex": 62,
+      "yMm": -70.0,
+      "image": "slices/coronal-44.webp",
+      "overlay": "overlays/coronal-44.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-45",
+      "order": 45,
+      "progress": 0.81818,
+      "sourceYIndex": 59,
+      "yMm": -73.0,
+      "image": "slices/coronal-45.webp",
+      "overlay": "overlays/coronal-45.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-46",
+      "order": 46,
+      "progress": 0.83636,
+      "sourceYIndex": 55,
+      "yMm": -77.0,
+      "image": "slices/coronal-46.webp",
+      "overlay": "overlays/coronal-46.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "ventricular-system",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-47",
+      "order": 47,
+      "progress": 0.85455,
+      "sourceYIndex": 52,
+      "yMm": -80.0,
+      "image": "slices/coronal-47.webp",
+      "overlay": "overlays/coronal-47.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-48",
+      "order": 48,
+      "progress": 0.87273,
+      "sourceYIndex": 49,
+      "yMm": -83.0,
+      "image": "slices/coronal-48.webp",
+      "overlay": "overlays/coronal-48.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-49",
+      "order": 49,
+      "progress": 0.89091,
+      "sourceYIndex": 46,
+      "yMm": -86.0,
+      "image": "slices/coronal-49.webp",
+      "overlay": "overlays/coronal-49.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-50",
+      "order": 50,
+      "progress": 0.90909,
+      "sourceYIndex": 42,
+      "yMm": -90.0,
+      "image": "slices/coronal-50.webp",
+      "overlay": "overlays/coronal-50.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-51",
+      "order": 51,
+      "progress": 0.92727,
+      "sourceYIndex": 39,
+      "yMm": -93.0,
+      "image": "slices/coronal-51.webp",
+      "overlay": "overlays/coronal-51.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter",
+        "cerebellum"
+      ]
+    },
+    {
+      "id": "coronal-52",
+      "order": 52,
+      "progress": 0.94545,
+      "sourceYIndex": 36,
+      "yMm": -96.0,
+      "image": "slices/coronal-52.webp",
+      "overlay": "overlays/coronal-52.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-53",
+      "order": 53,
+      "progress": 0.96364,
+      "sourceYIndex": 33,
+      "yMm": -99.0,
+      "image": "slices/coronal-53.webp",
+      "overlay": "overlays/coronal-53.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-54",
+      "order": 54,
+      "progress": 0.98182,
+      "sourceYIndex": 29,
+      "yMm": -103.0,
+      "image": "slices/coronal-54.webp",
+      "overlay": "overlays/coronal-54.json",
+      "visibleLandmarks": [
+        "cerebral-cortex",
+        "cerebral-white-matter"
+      ]
+    },
+    {
+      "id": "coronal-55",
+      "order": 55,
+      "progress": 1.0,
+      "sourceYIndex": 26,
+      "yMm": -106.0,
+      "image": "slices/coronal-55.webp",
+      "overlay": "overlays/coronal-55.json",
+      "visibleLandmarks": [
+        "cerebral-cortex"
+      ]
+    }
+  ]
+}

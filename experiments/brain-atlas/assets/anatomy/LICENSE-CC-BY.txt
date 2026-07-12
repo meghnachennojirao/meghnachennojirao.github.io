@@ -1,0 +1,20 @@
+Human Reference Atlas brain, male v1.3
+NIH 3D accession: 3DPX-020960
+Source: https://3d.nih.gov/entries/20960
+HRA object: https://purl.humanatlas.io/ref-organ/brain-male/v1.3
+
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+Source attribution supplied by NIH 3D:
+Kristen Browne; Heidi Schlehlein. 2023. 3D Reference Organ for Brain,
+Male v1.3. https://doi.org/10.48539/HBM929.XKCL.339.
+
+Scientific source:
+Ding S-L, Royall JJ, Sunkin SM, Facer BAC, Lesnar P, Bernard A, Ng L,
+Lein ES. Allen Human Reference Atlas – 3D, 2020. RRID:SCR_017764,
+version 1.0.0.
+
+This website's derivatives preserve the 283 independently named source
+meshes. They are Meshopt-compressed; the mobile tier is also simplified.
+The meshes are regrouped and recolored for educational web interaction.
