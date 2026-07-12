@@ -8,58 +8,58 @@
   </head>
   <body>
     <header class="topbar">
-      <div class="title-block">
+      <div>
         <p class="eyebrow">CSIR-UGC NET Life Sciences</p>
-        <h1>Question Papers</h1>
-        <nav class="top-links" aria-label="Study pages">
-          <a aria-current="page" href="./">Question papers</a>
-          <a href="concepts.html">Concept map</a>
-          <a id="official-archive" href="https://www.csirhrdg.res.in/Home/Index/1/Default/3456/81" target="_blank" rel="noopener">Official archive</a>
-        </nav>
+        <h1>Previous Question Papers</h1>
       </div>
+      <button id="reset-paper" class="secondary" type="button">Reset answers</button>
     </header>
 
-    <main class="paper-reader-shell">
-      <section class="paper-control-surface" aria-labelledby="paper-reader-title">
-        <div class="paper-heading">
-          <p class="eyebrow">Original official paper</p>
-          <h2 id="paper-reader-title">CSIR-UGC NET Life Sciences</h2>
-          <p>Question wording, options, and order are the original official document.</p>
-        </div>
+    <main class="app-shell">
+      <aside class="sidebar">
         <label class="paper-picker" for="paper-select">
-          <span>Select a session</span>
-          <select id="paper-select" name="paper"></select>
+          <span>Question paper</span>
+          <select id="paper-select"></select>
         </label>
-        <dl class="paper-metadata">
-          <div>
-            <dt>Session</dt>
-            <dd id="paper-session"></dd>
-          </div>
-          <div>
-            <dt>Exam date</dt>
-            <dd id="paper-date"></dd>
-          </div>
-          <div>
-            <dt>Document</dt>
-            <dd id="paper-format"></dd>
-          </div>
-          <div>
-            <dt>Source</dt>
-            <dd id="paper-source"></dd>
-          </div>
-        </dl>
-        <div class="paper-links">
-          <a id="open-paper" class="primary link-button" href="#" target="_blank" rel="noopener">Open original paper</a>
-          <a id="open-key" class="secondary link-button" href="#" target="_blank" rel="noopener">Open official answer key</a>
-        </div>
-      </section>
+        <p class="release-note">June 2026 is not listed because the examination is scheduled for 17-18 July 2026 and no official paper or final key has been released yet.</p>
 
-      <section class="paper-viewer-surface" aria-label="Official question paper viewer">
-        <iframe id="paper-frame" title="Official question paper" loading="eager"></iframe>
+        <dl class="paper-meta">
+          <div><dt>Session</dt><dd id="paper-session">Loading...</dd></div>
+          <div><dt>Exam date</dt><dd id="paper-date">Loading...</dd></div>
+          <div><dt>Coverage</dt><dd id="paper-coverage">145 questions</dd></div>
+        </dl>
+
+        <div class="source-links">
+          <a id="paper-source" href="#" target="_blank" rel="noopener">Official question paper</a>
+          <a id="key-source" href="#" target="_blank" rel="noopener">Official final answer key</a>
+        </div>
+
+        <section class="progress-panel" aria-labelledby="progress-title">
+          <h2 id="progress-title">Attempts</h2>
+          <div id="section-progress"></div>
+          <p id="attempt-total">0 of 75 permitted answers selected</p>
+        </section>
+
+        <nav class="palette-wrap" aria-label="Question navigation">
+          <div id="question-palette" class="palette"></div>
+        </nav>
+      </aside>
+
+      <section class="paper-column">
+        <div id="loading" class="notice">Loading the verified paper...</div>
+        <div id="error" class="notice error hidden" role="alert"></div>
+        <section id="result-summary" class="result-summary hidden" aria-live="polite"></section>
+        <div id="question-list" class="question-list"></div>
+        <section id="submit-panel" class="submit-panel hidden">
+          <div>
+            <strong>End of paper</strong>
+            <span>Your selections can still be changed or deselected before submission.</span>
+          </div>
+          <button id="submit-paper" class="primary" type="button">Submit answers</button>
+        </section>
       </section>
     </main>
 
-    <script src="official-papers.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

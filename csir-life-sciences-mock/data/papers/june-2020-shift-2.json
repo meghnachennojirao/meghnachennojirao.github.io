@@ -1,0 +1,2910 @@
+{
+  "schemaVersion": 1,
+  "id": "june-2020-shift-2",
+  "label": "June 2020 - Shift 2",
+  "session": "June 2020 session",
+  "examDate": "21 November 2020",
+  "subject": "Life Sciences",
+  "questionCount": 145,
+  "source": {
+    "paperUrl": "https://drive.google.com/file/d/1UXpHO6du6NzooZDqzX-Sp7BsGpDS3Zpk/view?usp=drive_link",
+    "answerKeyUrl": "official-answer-keys/june-2020-shift-2.pdf",
+    "answerKeyPage": 1
+  },
+  "attemptLimits": {
+    "A": 15,
+    "B": 35,
+    "C": 25
+  },
+  "questions": [
+    {
+      "number": 1,
+      "questionId": "802437901",
+      "section": "A",
+      "sourcePage": 2,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q001-1.webp",
+        "assets/questions/june-2020-shift-2/q001-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 2,
+      "questionId": "802437902",
+      "section": "A",
+      "sourcePage": 3,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q002-1.webp",
+        "assets/questions/june-2020-shift-2/q002-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 3,
+      "questionId": "802437903",
+      "section": "A",
+      "sourcePage": 5,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q003-1.webp",
+        "assets/questions/june-2020-shift-2/q003-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 4,
+      "questionId": "802437904",
+      "section": "A",
+      "sourcePage": 7,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q004-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 5,
+      "questionId": "802437905",
+      "section": "A",
+      "sourcePage": 8,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q005-1.webp",
+        "assets/questions/june-2020-shift-2/q005-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 6,
+      "questionId": "802437906",
+      "section": "A",
+      "sourcePage": 10,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q006-1.webp",
+        "assets/questions/june-2020-shift-2/q006-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 7,
+      "questionId": "802437907",
+      "section": "A",
+      "sourcePage": 11,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q007-1.webp",
+        "assets/questions/june-2020-shift-2/q007-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 8,
+      "questionId": "802437908",
+      "section": "A",
+      "sourcePage": 13,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q008-1.webp",
+        "assets/questions/june-2020-shift-2/q008-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 9,
+      "questionId": "802437909",
+      "section": "A",
+      "sourcePage": 15,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q009-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 10,
+      "questionId": "802437910",
+      "section": "A",
+      "sourcePage": 16,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q010-1.webp",
+        "assets/questions/june-2020-shift-2/q010-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 11,
+      "questionId": "802437911",
+      "section": "A",
+      "sourcePage": 18,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q011-1.webp",
+        "assets/questions/june-2020-shift-2/q011-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 12,
+      "questionId": "802437912",
+      "section": "A",
+      "sourcePage": 19,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q012-1.webp",
+        "assets/questions/june-2020-shift-2/q012-2.webp",
+        "assets/questions/june-2020-shift-2/q012-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 13,
+      "questionId": "802437913",
+      "section": "A",
+      "sourcePage": 22,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q013-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 14,
+      "questionId": "802437914",
+      "section": "A",
+      "sourcePage": 23,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q014-1.webp",
+        "assets/questions/june-2020-shift-2/q014-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 15,
+      "questionId": "802437915",
+      "section": "A",
+      "sourcePage": 25,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q015-1.webp",
+        "assets/questions/june-2020-shift-2/q015-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 16,
+      "questionId": "802437916",
+      "section": "A",
+      "sourcePage": 27,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q016-1.webp",
+        "assets/questions/june-2020-shift-2/q016-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 17,
+      "questionId": "802437917",
+      "section": "A",
+      "sourcePage": 29,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q017-1.webp",
+        "assets/questions/june-2020-shift-2/q017-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 18,
+      "questionId": "802437918",
+      "section": "A",
+      "sourcePage": 31,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q018-1.webp",
+        "assets/questions/june-2020-shift-2/q018-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 19,
+      "questionId": "802437919",
+      "section": "A",
+      "sourcePage": 32,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q019-1.webp",
+        "assets/questions/june-2020-shift-2/q019-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 20,
+      "questionId": "802437920",
+      "section": "A",
+      "sourcePage": 34,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q020-1.webp",
+        "assets/questions/june-2020-shift-2/q020-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 21,
+      "questionId": "802437921",
+      "section": "B",
+      "sourcePage": 37,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q021-1.webp",
+        "assets/questions/june-2020-shift-2/q021-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 22,
+      "questionId": "802437922",
+      "section": "B",
+      "sourcePage": 38,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q022-1.webp",
+        "assets/questions/june-2020-shift-2/q022-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 23,
+      "questionId": "802437923",
+      "section": "B",
+      "sourcePage": 40,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q023-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 24,
+      "questionId": "802437924",
+      "section": "B",
+      "sourcePage": 41,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q024-1.webp",
+        "assets/questions/june-2020-shift-2/q024-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 25,
+      "questionId": "802437925",
+      "section": "B",
+      "sourcePage": 44,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q025-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 26,
+      "questionId": "802437926",
+      "section": "B",
+      "sourcePage": 45,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q026-1.webp",
+        "assets/questions/june-2020-shift-2/q026-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 27,
+      "questionId": "802437927",
+      "section": "B",
+      "sourcePage": 46,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q027-1.webp",
+        "assets/questions/june-2020-shift-2/q027-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 28,
+      "questionId": "802437928",
+      "section": "B",
+      "sourcePage": 48,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q028-1.webp",
+        "assets/questions/june-2020-shift-2/q028-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 29,
+      "questionId": "802437929",
+      "section": "B",
+      "sourcePage": 49,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q029-1.webp",
+        "assets/questions/june-2020-shift-2/q029-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 30,
+      "questionId": "802437930",
+      "section": "B",
+      "sourcePage": 51,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q030-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 31,
+      "questionId": "802437931",
+      "section": "B",
+      "sourcePage": 52,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q031-1.webp",
+        "assets/questions/june-2020-shift-2/q031-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 32,
+      "questionId": "802437932",
+      "section": "B",
+      "sourcePage": 54,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q032-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 33,
+      "questionId": "802437933",
+      "section": "B",
+      "sourcePage": 55,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q033-1.webp",
+        "assets/questions/june-2020-shift-2/q033-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 34,
+      "questionId": "802437934",
+      "section": "B",
+      "sourcePage": 56,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q034-1.webp",
+        "assets/questions/june-2020-shift-2/q034-2.webp",
+        "assets/questions/june-2020-shift-2/q034-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 35,
+      "questionId": "802437935",
+      "section": "B",
+      "sourcePage": 59,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q035-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 36,
+      "questionId": "802437936",
+      "section": "B",
+      "sourcePage": 60,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q036-1.webp",
+        "assets/questions/june-2020-shift-2/q036-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 37,
+      "questionId": "802437937",
+      "section": "B",
+      "sourcePage": 61,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q037-1.webp",
+        "assets/questions/june-2020-shift-2/q037-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 38,
+      "questionId": "802437938",
+      "section": "B",
+      "sourcePage": 63,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q038-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 39,
+      "questionId": "802437939",
+      "section": "B",
+      "sourcePage": 64,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q039-1.webp",
+        "assets/questions/june-2020-shift-2/q039-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 40,
+      "questionId": "802437940",
+      "section": "B",
+      "sourcePage": 66,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q040-1.webp",
+        "assets/questions/june-2020-shift-2/q040-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 41,
+      "questionId": "802437941",
+      "section": "B",
+      "sourcePage": 68,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q041-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 42,
+      "questionId": "802437942",
+      "section": "B",
+      "sourcePage": 69,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q042-1.webp",
+        "assets/questions/june-2020-shift-2/q042-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 43,
+      "questionId": "802437943",
+      "section": "B",
+      "sourcePage": 70,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q043-1.webp",
+        "assets/questions/june-2020-shift-2/q043-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 44,
+      "questionId": "802437944",
+      "section": "B",
+      "sourcePage": 72,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q044-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 45,
+      "questionId": "802437945",
+      "section": "B",
+      "sourcePage": 73,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q045-1.webp",
+        "assets/questions/june-2020-shift-2/q045-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 46,
+      "questionId": "802437946",
+      "section": "B",
+      "sourcePage": 74,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q046-1.webp",
+        "assets/questions/june-2020-shift-2/q046-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 47,
+      "questionId": "802437947",
+      "section": "B",
+      "sourcePage": 76,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q047-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 48,
+      "questionId": "802437948",
+      "section": "B",
+      "sourcePage": 77,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q048-1.webp",
+        "assets/questions/june-2020-shift-2/q048-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 49,
+      "questionId": "802437949",
+      "section": "B",
+      "sourcePage": 78,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q049-1.webp",
+        "assets/questions/june-2020-shift-2/q049-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 50,
+      "questionId": "802437950",
+      "section": "B",
+      "sourcePage": 80,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q050-1.webp",
+        "assets/questions/june-2020-shift-2/q050-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 51,
+      "questionId": "802437951",
+      "section": "B",
+      "sourcePage": 82,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q051-1.webp",
+        "assets/questions/june-2020-shift-2/q051-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 52,
+      "questionId": "802437952",
+      "section": "B",
+      "sourcePage": 84,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q052-1.webp",
+        "assets/questions/june-2020-shift-2/q052-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 53,
+      "questionId": "802437953",
+      "section": "B",
+      "sourcePage": 87,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q053-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 54,
+      "questionId": "802437954",
+      "section": "B",
+      "sourcePage": 88,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q054-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 55,
+      "questionId": "802437955",
+      "section": "B",
+      "sourcePage": 89,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q055-1.webp",
+        "assets/questions/june-2020-shift-2/q055-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 56,
+      "questionId": "802437956",
+      "section": "B",
+      "sourcePage": 90,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q056-1.webp",
+        "assets/questions/june-2020-shift-2/q056-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 57,
+      "questionId": "802437957",
+      "section": "B",
+      "sourcePage": 92,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q057-1.webp",
+        "assets/questions/june-2020-shift-2/q057-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 58,
+      "questionId": "802437958",
+      "section": "B",
+      "sourcePage": 93,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q058-1.webp",
+        "assets/questions/june-2020-shift-2/q058-2.webp",
+        "assets/questions/june-2020-shift-2/q058-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 59,
+      "questionId": "802437959",
+      "section": "B",
+      "sourcePage": 96,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q059-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 60,
+      "questionId": "802437960",
+      "section": "B",
+      "sourcePage": 97,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q060-1.webp",
+        "assets/questions/june-2020-shift-2/q060-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 61,
+      "questionId": "802437961",
+      "section": "B",
+      "sourcePage": 99,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q061-1.webp",
+        "assets/questions/june-2020-shift-2/q061-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 62,
+      "questionId": "802437962",
+      "section": "B",
+      "sourcePage": 100,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q062-1.webp",
+        "assets/questions/june-2020-shift-2/q062-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 63,
+      "questionId": "802437963",
+      "section": "B",
+      "sourcePage": 102,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q063-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 64,
+      "questionId": "802437964",
+      "section": "B",
+      "sourcePage": 103,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q064-1.webp",
+        "assets/questions/june-2020-shift-2/q064-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 65,
+      "questionId": "802437965",
+      "section": "B",
+      "sourcePage": 105,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q065-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 66,
+      "questionId": "802437966",
+      "section": "B",
+      "sourcePage": 106,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q066-1.webp",
+        "assets/questions/june-2020-shift-2/q066-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 67,
+      "questionId": "802437967",
+      "section": "B",
+      "sourcePage": 108,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q067-1.webp",
+        "assets/questions/june-2020-shift-2/q067-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 68,
+      "questionId": "802437968",
+      "section": "B",
+      "sourcePage": 109,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q068-1.webp",
+        "assets/questions/june-2020-shift-2/q068-2.webp",
+        "assets/questions/june-2020-shift-2/q068-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 69,
+      "questionId": "802437969",
+      "section": "B",
+      "sourcePage": 112,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q069-1.webp",
+        "assets/questions/june-2020-shift-2/q069-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 70,
+      "questionId": "802437970",
+      "section": "B",
+      "sourcePage": 113,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q070-1.webp",
+        "assets/questions/june-2020-shift-2/q070-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 2,
+        "incorrect": -0.5
+      },
+      "explanation": ""
+    },
+    {
+      "number": 71,
+      "questionId": "802437971",
+      "section": "C",
+      "sourcePage": 115,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q071-1.webp",
+        "assets/questions/june-2020-shift-2/q071-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 72,
+      "questionId": "802437972",
+      "section": "C",
+      "sourcePage": 117,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q072-1.webp",
+        "assets/questions/june-2020-shift-2/q072-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 73,
+      "questionId": "802437973",
+      "section": "C",
+      "sourcePage": 119,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q073-1.webp",
+        "assets/questions/june-2020-shift-2/q073-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 74,
+      "questionId": "802437974",
+      "section": "C",
+      "sourcePage": 121,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q074-1.webp",
+        "assets/questions/june-2020-shift-2/q074-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 75,
+      "questionId": "802437975",
+      "section": "C",
+      "sourcePage": 123,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q075-1.webp",
+        "assets/questions/june-2020-shift-2/q075-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 76,
+      "questionId": "802437976",
+      "section": "C",
+      "sourcePage": 125,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q076-1.webp",
+        "assets/questions/june-2020-shift-2/q076-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 77,
+      "questionId": "802437977",
+      "section": "C",
+      "sourcePage": 127,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q077-1.webp",
+        "assets/questions/june-2020-shift-2/q077-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 78,
+      "questionId": "802437978",
+      "section": "C",
+      "sourcePage": 129,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q078-1.webp",
+        "assets/questions/june-2020-shift-2/q078-2.webp",
+        "assets/questions/june-2020-shift-2/q078-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 79,
+      "questionId": "802437979",
+      "section": "C",
+      "sourcePage": 132,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q079-1.webp",
+        "assets/questions/june-2020-shift-2/q079-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 80,
+      "questionId": "802437980",
+      "section": "C",
+      "sourcePage": 134,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q080-1.webp",
+        "assets/questions/june-2020-shift-2/q080-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 81,
+      "questionId": "802437981",
+      "section": "C",
+      "sourcePage": 136,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q081-1.webp",
+        "assets/questions/june-2020-shift-2/q081-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 82,
+      "questionId": "802437982",
+      "section": "C",
+      "sourcePage": 139,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q082-1.webp",
+        "assets/questions/june-2020-shift-2/q082-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 83,
+      "questionId": "802437983",
+      "section": "C",
+      "sourcePage": 142,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q083-1.webp",
+        "assets/questions/june-2020-shift-2/q083-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 84,
+      "questionId": "802437984",
+      "section": "C",
+      "sourcePage": 144,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q084-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 85,
+      "questionId": "802437985",
+      "section": "C",
+      "sourcePage": 145,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q085-1.webp",
+        "assets/questions/june-2020-shift-2/q085-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 86,
+      "questionId": "802437986",
+      "section": "C",
+      "sourcePage": 147,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q086-1.webp",
+        "assets/questions/june-2020-shift-2/q086-2.webp",
+        "assets/questions/june-2020-shift-2/q086-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 87,
+      "questionId": "802437987",
+      "section": "C",
+      "sourcePage": 151,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q087-1.webp",
+        "assets/questions/june-2020-shift-2/q087-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 88,
+      "questionId": "802437988",
+      "section": "C",
+      "sourcePage": 153,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q088-1.webp",
+        "assets/questions/june-2020-shift-2/q088-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 89,
+      "questionId": "802437989",
+      "section": "C",
+      "sourcePage": 156,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q089-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 90,
+      "questionId": "802437990",
+      "section": "C",
+      "sourcePage": 157,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q090-1.webp",
+        "assets/questions/june-2020-shift-2/q090-2.webp",
+        "assets/questions/june-2020-shift-2/q090-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 91,
+      "questionId": "802437991",
+      "section": "C",
+      "sourcePage": 160,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q091-1.webp",
+        "assets/questions/june-2020-shift-2/q091-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 92,
+      "questionId": "802437992",
+      "section": "C",
+      "sourcePage": 162,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q092-1.webp",
+        "assets/questions/june-2020-shift-2/q092-2.webp",
+        "assets/questions/june-2020-shift-2/q092-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 93,
+      "questionId": "802437993",
+      "section": "C",
+      "sourcePage": 166,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q093-1.webp",
+        "assets/questions/june-2020-shift-2/q093-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 94,
+      "questionId": "802437994",
+      "section": "C",
+      "sourcePage": 168,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q094-1.webp",
+        "assets/questions/june-2020-shift-2/q094-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 95,
+      "questionId": "802437995",
+      "section": "C",
+      "sourcePage": 170,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q095-1.webp",
+        "assets/questions/june-2020-shift-2/q095-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 96,
+      "questionId": "802437996",
+      "section": "C",
+      "sourcePage": 172,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q096-1.webp",
+        "assets/questions/june-2020-shift-2/q096-2.webp",
+        "assets/questions/june-2020-shift-2/q096-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 97,
+      "questionId": "802437997",
+      "section": "C",
+      "sourcePage": 175,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q097-1.webp",
+        "assets/questions/june-2020-shift-2/q097-2.webp",
+        "assets/questions/june-2020-shift-2/q097-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 98,
+      "questionId": "802437998",
+      "section": "C",
+      "sourcePage": 180,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q098-1.webp",
+        "assets/questions/june-2020-shift-2/q098-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 99,
+      "questionId": "802437999",
+      "section": "C",
+      "sourcePage": 182,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q099-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 100,
+      "questionId": "8024371000",
+      "section": "C",
+      "sourcePage": 183,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q100-1.webp",
+        "assets/questions/june-2020-shift-2/q100-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 101,
+      "questionId": "8024371001",
+      "section": "C",
+      "sourcePage": 185,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q101-1.webp",
+        "assets/questions/june-2020-shift-2/q101-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 102,
+      "questionId": "8024371002",
+      "section": "C",
+      "sourcePage": 187,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q102-1.webp",
+        "assets/questions/june-2020-shift-2/q102-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 103,
+      "questionId": "8024371003",
+      "section": "C",
+      "sourcePage": 190,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q103-1.webp",
+        "assets/questions/june-2020-shift-2/q103-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 104,
+      "questionId": "8024371004",
+      "section": "C",
+      "sourcePage": 192,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q104-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 105,
+      "questionId": "8024371005",
+      "section": "C",
+      "sourcePage": 193,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q105-1.webp",
+        "assets/questions/june-2020-shift-2/q105-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 106,
+      "questionId": "8024371006",
+      "section": "C",
+      "sourcePage": 196,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q106-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 107,
+      "questionId": "8024371007",
+      "section": "C",
+      "sourcePage": 197,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q107-1.webp",
+        "assets/questions/june-2020-shift-2/q107-2.webp",
+        "assets/questions/june-2020-shift-2/q107-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 108,
+      "questionId": "8024371008",
+      "section": "C",
+      "sourcePage": 200,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q108-1.webp",
+        "assets/questions/june-2020-shift-2/q108-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 109,
+      "questionId": "8024371009",
+      "section": "C",
+      "sourcePage": 202,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q109-1.webp",
+        "assets/questions/june-2020-shift-2/q109-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 110,
+      "questionId": "8024371010",
+      "section": "C",
+      "sourcePage": 204,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q110-1.webp",
+        "assets/questions/june-2020-shift-2/q110-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 111,
+      "questionId": "8024371011",
+      "section": "C",
+      "sourcePage": 206,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q111-1.webp",
+        "assets/questions/june-2020-shift-2/q111-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 112,
+      "questionId": "8024371012",
+      "section": "C",
+      "sourcePage": 208,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q112-1.webp",
+        "assets/questions/june-2020-shift-2/q112-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 113,
+      "questionId": "8024371013",
+      "section": "C",
+      "sourcePage": 211,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q113-1.webp",
+        "assets/questions/june-2020-shift-2/q113-2.webp",
+        "assets/questions/june-2020-shift-2/q113-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 114,
+      "questionId": "8024371014",
+      "section": "C",
+      "sourcePage": 215,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q114-1.webp",
+        "assets/questions/june-2020-shift-2/q114-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 115,
+      "questionId": "8024371015",
+      "section": "C",
+      "sourcePage": 217,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q115-1.webp",
+        "assets/questions/june-2020-shift-2/q115-2.webp",
+        "assets/questions/june-2020-shift-2/q115-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 116,
+      "questionId": "8024371016",
+      "section": "C",
+      "sourcePage": 221,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q116-1.webp",
+        "assets/questions/june-2020-shift-2/q116-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 117,
+      "questionId": "8024371017",
+      "section": "C",
+      "sourcePage": 223,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q117-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 118,
+      "questionId": "8024371018",
+      "section": "C",
+      "sourcePage": 224,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q118-1.webp",
+        "assets/questions/june-2020-shift-2/q118-2.webp",
+        "assets/questions/june-2020-shift-2/q118-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 119,
+      "questionId": "8024371019",
+      "section": "C",
+      "sourcePage": 228,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q119-1.webp",
+        "assets/questions/june-2020-shift-2/q119-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 120,
+      "questionId": "8024371020",
+      "section": "C",
+      "sourcePage": 229,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q120-1.webp",
+        "assets/questions/june-2020-shift-2/q120-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 121,
+      "questionId": "8024371021",
+      "section": "C",
+      "sourcePage": 230,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q121-1.webp",
+        "assets/questions/june-2020-shift-2/q121-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 122,
+      "questionId": "8024371022",
+      "section": "C",
+      "sourcePage": 232,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q122-1.webp",
+        "assets/questions/june-2020-shift-2/q122-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3,
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 123,
+      "questionId": "8024371023",
+      "section": "C",
+      "sourcePage": 234,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q123-1.webp",
+        "assets/questions/june-2020-shift-2/q123-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 124,
+      "questionId": "8024371024",
+      "section": "C",
+      "sourcePage": 236,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q124-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 125,
+      "questionId": "8024371025",
+      "section": "C",
+      "sourcePage": 237,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q125-1.webp",
+        "assets/questions/june-2020-shift-2/q125-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 126,
+      "questionId": "8024371026",
+      "section": "C",
+      "sourcePage": 239,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q126-1.webp",
+        "assets/questions/june-2020-shift-2/q126-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 127,
+      "questionId": "8024371027",
+      "section": "C",
+      "sourcePage": 241,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q127-1.webp",
+        "assets/questions/june-2020-shift-2/q127-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 128,
+      "questionId": "8024371028",
+      "section": "C",
+      "sourcePage": 242,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q128-1.webp",
+        "assets/questions/june-2020-shift-2/q128-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 129,
+      "questionId": "8024371029",
+      "section": "C",
+      "sourcePage": 244,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q129-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 130,
+      "questionId": "8024371030",
+      "section": "C",
+      "sourcePage": 246,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q130-1.webp",
+        "assets/questions/june-2020-shift-2/q130-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 131,
+      "questionId": "8024371031",
+      "section": "C",
+      "sourcePage": 249,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q131-1.webp",
+        "assets/questions/june-2020-shift-2/q131-2.webp",
+        "assets/questions/june-2020-shift-2/q131-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 132,
+      "questionId": "8024371032",
+      "section": "C",
+      "sourcePage": 252,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q132-1.webp",
+        "assets/questions/june-2020-shift-2/q132-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 133,
+      "questionId": "8024371033",
+      "section": "C",
+      "sourcePage": 253,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q133-1.webp",
+        "assets/questions/june-2020-shift-2/q133-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 134,
+      "questionId": "8024371034",
+      "section": "C",
+      "sourcePage": 254,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q134-1.webp",
+        "assets/questions/june-2020-shift-2/q134-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 135,
+      "questionId": "8024371035",
+      "section": "C",
+      "sourcePage": 256,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q135-1.webp",
+        "assets/questions/june-2020-shift-2/q135-2.webp",
+        "assets/questions/june-2020-shift-2/q135-3.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 136,
+      "questionId": "8024371036",
+      "section": "C",
+      "sourcePage": 259,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q136-1.webp",
+        "assets/questions/june-2020-shift-2/q136-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 137,
+      "questionId": "8024371037",
+      "section": "C",
+      "sourcePage": 262,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q137-1.webp",
+        "assets/questions/june-2020-shift-2/q137-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 138,
+      "questionId": "8024371038",
+      "section": "C",
+      "sourcePage": 264,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q138-1.webp",
+        "assets/questions/june-2020-shift-2/q138-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        1
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 139,
+      "questionId": "8024371039",
+      "section": "C",
+      "sourcePage": 266,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q139-1.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 140,
+      "questionId": "8024371040",
+      "section": "C",
+      "sourcePage": 267,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q140-1.webp",
+        "assets/questions/june-2020-shift-2/q140-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 141,
+      "questionId": "8024371041",
+      "section": "C",
+      "sourcePage": 270,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q141-1.webp",
+        "assets/questions/june-2020-shift-2/q141-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [],
+      "status": "dropped",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 142,
+      "questionId": "8024371042",
+      "section": "C",
+      "sourcePage": 272,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q142-1.webp",
+        "assets/questions/june-2020-shift-2/q142-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        4
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 143,
+      "questionId": "8024371043",
+      "section": "C",
+      "sourcePage": 275,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q143-1.webp",
+        "assets/questions/june-2020-shift-2/q143-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 144,
+      "questionId": "8024371044",
+      "section": "C",
+      "sourcePage": 276,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q144-1.webp",
+        "assets/questions/june-2020-shift-2/q144-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        2
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    },
+    {
+      "number": 145,
+      "questionId": "8024371045",
+      "section": "C",
+      "sourcePage": 279,
+      "sourceImages": [
+        "assets/questions/june-2020-shift-2/q145-1.webp",
+        "assets/questions/june-2020-shift-2/q145-2.webp"
+      ],
+      "ocrText": "",
+      "correctOptions": [
+        3
+      ],
+      "status": "scored",
+      "marks": {
+        "correct": 4,
+        "incorrect": -1
+      },
+      "explanation": ""
+    }
+  ]
+}
