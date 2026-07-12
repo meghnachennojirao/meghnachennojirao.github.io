@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#102023">
+    <meta name="color-scheme" content="dark">
+    <title>Brain, Layer by Layer — MRI Anatomy Explorer</title>
+    <meta name="description" content="Travel through a labeled coronal MRI volume, then take apart a 3D human brain built from open anatomical atlas data.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&amp;family=Onest:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three/three.module.min.js",
+          "three/addons/": "./vendor/three/addons/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#atlas-workspace">Skip to atlas</a>
+
+    <div class="ambient-field" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+
+    <header class="topbar">
+      <a class="site-return" href="../../index.html" aria-label="Back to Dr Meghna C Rao home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg>
+        <span>Meghna C Rao</span>
+      </a>
+      <div class="atlas-mark" aria-label="Brain, Layer by Layer">
+        <span class="atlas-mark__index">MRI / 01</span>
+        <span class="atlas-mark__name">Brain, Layer by Layer</span>
+      </div>
+      <button class="icon-button" id="settings-button" type="button" aria-label="Open performance settings" aria-expanded="false" aria-controls="settings-panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.25A3.25 3.25 0 1 0 12 8.75a3.25 3.25 0 0 0 0 6.5Z"/><path d="m19.4 15 .1.1a2 2 0 0 1-2.8 2.8l-.1-.1a2 2 0 0 0-2.2-.4 2 2 0 0 0-1.2 1.8v.3a2 2 0 0 1-4 0v-.2A2 2 0 0 0 8 17.5a2 2 0 0 0-2.2.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a2 2 0 0 0 .4-2.2A2 2 0 0 0 1.6 12h-.1a2 2 0 0 1 0-4h.2a2 2 0 0 0 1.8-1.2 2 2 0 0 0-.4-2.2L3 4.5a2 2 0 1 1 2.8-2.8l.1.1a2 2 0 0 0 2.2.4A2 2 0 0 0 9.3.4V.3a2 2 0 0 1 4 0v.2a2 2 0 0 0 1.2 1.8 2 2 0 0 0 2.2-.4l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a2 2 0 0 0-.4 2.2 2 2 0 0 0 1.8 1.2h.3a2 2 0 0 1 0 4H21a2 2 0 0 0-1.8 1.2 2 2 0 0 0 .2 1.7Z"/></svg>
+      </button>
+
+      <aside class="settings-panel" id="settings-panel" hidden>
+        <div class="panel-heading">
+          <div>
+            <span class="micro-label">Renderer</span>
+            <h2>Performance</h2>
+          </div>
+          <button class="text-button" id="settings-close" type="button">Done</button>
+        </div>
+        <fieldset class="quality-picker">
+          <legend>Visual quality</legend>
+          <label><input type="radio" name="quality" value="auto" checked><span>Auto</span><small>Adapts to this device</small></label>
+          <label><input type="radio" name="quality" value="quality"><span>Quality</span><small>Crisper edges, higher detail</small></label>
+          <label><input type="radio" name="quality" value="performance"><span>Performance</span><small>Fewer layers, 1× pixels</small></label>
+        </fieldset>
+        <label class="switch-row">
+          <span><strong>Motion</strong><small>Animate spatial transitions</small></span>
+          <input id="motion-toggle" type="checkbox" checked>
+          <i aria-hidden="true"></i>
+        </label>
+        <p class="settings-note" id="device-profile">Detecting device…</p>
+      </aside>
+    </header>
+
+    <main id="atlas-workspace">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro__index" aria-hidden="true">01—02</div>
+        <div class="intro__copy">
+          <p class="eyebrow">An open-data neuroanatomy study</p>
+          <h1 id="page-title">See a brain as a radiologist does. Then take it apart.</h1>
+          <p>Move a coronal plane from the face toward the back of the head. Read real atlas labels in place. Then switch from slices to a removable anatomical model and uncover what sits beneath the cortex.</p>
+        </div>
+        <div class="intro__orientation" aria-label="Orientation key">
+          <span><b>A</b> Anterior</span>
+          <span class="orientation-line" aria-hidden="true"></span>
+          <span><b>P</b> Posterior</span>
+        </div>
+      </section>
+
+      <nav class="mode-switch" aria-label="Atlas views">
+        <button class="mode-switch__button is-active" type="button" role="tab" id="mode-mri" aria-selected="true" aria-controls="mri-view" data-mode="mri">
+          <span>01</span>
+          <strong>Coronal passage</strong>
+          <small>MRI + atlas labels</small>
+        </button>
+        <button class="mode-switch__button" type="button" role="tab" id="mode-anatomy" aria-selected="false" aria-controls="anatomy-view" data-mode="anatomy">
+          <span>02</span>
+          <strong>Removable anatomy</strong>
+          <small>141-source structure model</small>
+        </button>
+      </nav>
+
+      <section class="atlas-view is-active" id="mri-view" role="tabpanel" aria-labelledby="mode-mri">
+        <div class="viewer-grid viewer-grid--mri">
+          <aside class="story-rail" aria-label="Guided MRI passage">
+            <div class="rail-heading">
+              <span class="micro-label">Guided passage</span>
+              <span id="tour-count">1 / 5</span>
+            </div>
+            <ol class="tour-list" id="tour-list">
+              <li class="is-current"><button type="button" data-tour="0"><span>01</span><strong>Face &amp; frontal pole</strong><small>Find the first cortical folds</small></button></li>
+              <li><button type="button" data-tour="1"><span>02</span><strong>Frontal lobes</strong><small>White matter gathers</small></button></li>
+              <li><button type="button" data-tour="2"><span>03</span><strong>Deep nuclei</strong><small>Thalamus and basal ganglia</small></button></li>
+              <li><button type="button" data-tour="3"><span>04</span><strong>Temporal memory</strong><small>Hippocampal formation</small></button></li>
+              <li><button type="button" data-tour="4"><span>05</span><strong>Posterior fossa</strong><small>Cerebellum comes forward</small></button></li>
+            </ol>
+            <button class="pill-button" id="tour-next" type="button">
+              Next landmark
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
+            </button>
+          </aside>
+
+          <div class="stage-shell" id="mri-stage-shell">
+            <div class="stage-meta stage-meta--top">
+              <span><i class="live-dot" aria-hidden="true"></i> CORONAL · T1W TEMPLATE</span>
+              <span id="slice-coordinate">Y +58 mm</span>
+            </div>
+            <canvas id="mri-canvas" aria-label="Interactive 3D stack of coronal MRI slices"></canvas>
+            <div class="orientation-marker orientation-marker--left" aria-hidden="true">R</div>
+            <div class="orientation-marker orientation-marker--right" aria-hidden="true">L</div>
+            <div class="stage-loader" id="mri-loader" role="status">
+              <span class="loader-orbit" aria-hidden="true"></span>
+              Preparing open MRI volume…
+            </div>
+            <div class="gesture-hint" id="mri-gesture-hint">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V7a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v3-1a2 2 0 0 1 4 0v3c0 4-2.7 7-7 7h-1.2a7 7 0 0 1-5.5-2.7L3.4 14a2 2 0 0 1 3-2.6L8 13"/></svg>
+              Drag to angle the stack · pinch or scroll to zoom
+            </div>
+            <div class="stage-controls stage-controls--mri">
+              <button class="round-control" id="mri-reset" type="button" aria-label="Reset MRI camera">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6M20 20v-6h-6"/><path d="M5.5 15a7.5 7.5 0 0 0 12.2 2.7L20 15M4 9l2.3-2.7A7.5 7.5 0 0 1 18.5 9"/></svg>
+              </button>
+              <button class="round-control is-active" id="stack-toggle" type="button" aria-label="Toggle 3D slice stack" aria-pressed="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <aside class="reading-panel" aria-live="polite">
+            <div class="panel-heading">
+              <div>
+                <span class="micro-label">On this plane</span>
+                <h2 id="slice-title">Face &amp; frontal pole</h2>
+              </div>
+              <button class="overlay-toggle is-active" id="overlay-toggle" type="button" aria-pressed="true">
+                <span aria-hidden="true"></span> Labels
+              </button>
+            </div>
+            <p class="slice-note" id="slice-note">At the most anterior edge, the frontal cortex appears as separated islands before the hemispheres widen.</p>
+            <div class="region-legend" id="slice-region-list" aria-label="Structures visible on this slice"></div>
+            <div class="readout-note">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="M12 10v7M12 7h.01"/></svg>
+              <p>Color is an atlas overlay, not MRI signal. Turn labels off to inspect the underlying grayscale anatomy.</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="slice-scrubber">
+          <span class="scrubber-end"><b>A</b><small>front</small></span>
+          <label class="range-wrap" for="slice-range">
+            <span class="sr-only">Coronal slice position from front to back</span>
+            <input id="slice-range" type="range" min="0" max="55" value="8" step="1">
+            <span class="range-progress" aria-hidden="true"></span>
+            <span class="slice-ticks" aria-hidden="true"></span>
+          </label>
+          <span class="scrubber-end scrubber-end--right"><b>P</b><small>back</small></span>
+          <output id="slice-output" for="slice-range">09 / 56</output>
+          <button class="play-button" id="slice-play" type="button" aria-label="Play through coronal slices" aria-pressed="false">
+            <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
+            <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="atlas-view" id="anatomy-view" role="tabpanel" aria-labelledby="mode-anatomy" hidden>
+        <div class="viewer-grid viewer-grid--anatomy">
+          <aside class="anatomy-intro">
+            <span class="micro-label">Disassembly table</span>
+            <h2>Remove the familiar. Reveal the hidden.</h2>
+            <p>Tap a structure to identify it. Hide, isolate, or separate systems to understand how deep anatomy nests inside the cerebral shell.</p>
+            <div class="action-cluster">
+              <button class="pill-button" id="explode-toggle" type="button" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-5-5m13 5 5-5M8 16l-5 5m13-5 5 5"/><path d="M9 9h6v6H9z"/></svg>
+                Separate parts
+              </button>
+              <button class="text-button" id="show-all" type="button">Show all</button>
+            </div>
+            <div class="assembly-scale" aria-hidden="true">
+              <span>Assembled</span><i></i><span>Exploded</span>
+            </div>
+          </aside>
+
+          <div class="stage-shell" id="anatomy-stage-shell">
+            <div class="stage-meta stage-meta--top">
+              <span><i class="live-dot" aria-hidden="true"></i> ALLEN REFERENCE ORGAN</span>
+              <span id="visible-count">Loading structures</span>
+            </div>
+            <canvas id="anatomy-canvas" aria-label="Interactive removable 3D human brain anatomy"></canvas>
+            <div class="stage-loader" id="anatomy-loader" role="status">
+              <span class="loader-orbit" aria-hidden="true"></span>
+              Loading anatomical structures…
+            </div>
+            <div class="gesture-hint" id="anatomy-gesture-hint">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V7a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v3-1a2 2 0 0 1 4 0v3c0 4-2.7 7-7 7h-1.2a7 7 0 0 1-5.5-2.7L3.4 14a2 2 0 0 1 3-2.6L8 13"/></svg>
+              Drag to rotate · tap a structure · pinch or scroll to zoom
+            </div>
+            <div class="stage-controls">
+              <button class="round-control" id="anatomy-reset" type="button" aria-label="Reset anatomy camera">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6M20 20v-6h-6"/><path d="M5.5 15a7.5 7.5 0 0 0 12.2 2.7L20 15M4 9l2.3-2.7A7.5 7.5 0 0 1 18.5 9"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <aside class="structure-panel">
+            <div class="selected-structure" id="selected-structure">
+              <div class="selection-empty">
+                <span class="selection-orbit" aria-hidden="true"></span>
+                <div><span class="micro-label">Selection</span><h2>Choose a structure</h2></div>
+              </div>
+              <p>Tap the brain or choose a system below. The selected part stays in context while neighboring anatomy recedes.</p>
+              <div class="selection-actions" hidden>
+                <button class="pill-button pill-button--compact" id="hide-selected" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7M9.9 4.2A10.7 10.7 0 0 1 12 4c5.5 0 9 6 9 6a17 17 0 0 1-2.1 2.8M6.6 6.6C4.2 8.2 3 10 3 10s3.5 6 9 6c1 0 2-.2 2.9-.5"/></svg>
+                  Hide part
+                </button>
+                <button class="text-button" id="isolate-selected" type="button">Isolate</button>
+              </div>
+            </div>
+            <div class="system-list" id="system-list" aria-label="Anatomical systems"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="methods" aria-labelledby="methods-title">
+        <div>
+          <span class="micro-label">Data &amp; method</span>
+          <h2 id="methods-title">A reference atlas, not a diagnosis.</h2>
+        </div>
+        <div class="methods__copy">
+          <p>The MRI passage pairs the population-averaged MNI-ICBM152 2009c symmetric T1 template with CerebrA’s manually corrected 102-label atlas in the same 1 mm coordinate space. The removable model is the NIH 3D Human Reference Atlas brain, derived from the Allen Human Reference Atlas—3D, 2020.</p>
+          <p>Templates describe shared anatomy, not every person’s brain. Boundaries are atlas estimates; image contrast is educational and must not be used for clinical interpretation.</p>
+        </div>
+        <details>
+          <summary>Sources, license &amp; processing <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="source-grid">
+            <article>
+              <span>01 · Slices</span>
+              <h3>MNI-ICBM 2009c / CerebrA</h3>
+              <p>Symmetric T1 template and registered 102-label atlas. Displayed from in front of the subject, sampled into 56 coronal planes, with vector landmark contours.</p>
+              <a href="https://nist.mni.mcgill.ca/cerebra/" target="_blank" rel="noreferrer">Read the CerebrA documentation</a>
+            </article>
+            <article>
+              <span>02 · Anatomy</span>
+              <h3>Human Reference Atlas brain</h3>
+              <p>Whole-brain reference organ derived from 141 annotated structures. CC BY 4.0; geometry simplified for interactive delivery.</p>
+              <a href="https://3d.nih.gov/entries/20960" target="_blank" rel="noreferrer">View the NIH 3D source</a>
+            </article>
+            <article>
+              <span>03 · Rendering</span>
+              <h3>Three.js r185</h3>
+              <p>Demand-rendered WebGL, capped pixel density, lazy model loading, reduced-motion support, and device-aware quality presets.</p>
+              <a href="DATA_SOURCES.md">Full provenance &amp; transformation notes</a>
+            </article>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <div class="status-toast" id="status-toast" role="status" aria-live="polite"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

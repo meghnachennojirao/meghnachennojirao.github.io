@@ -1,0 +1,86 @@
+{
+  "sourceAlignmentVerified": true,
+  "t1Shape": [
+    193,
+    229,
+    193
+  ],
+  "atlasShape": [
+    193,
+    229,
+    193
+  ],
+  "whiteMatterProbabilityShape": [
+    193,
+    229,
+    193
+  ],
+  "orientation": [
+    "R",
+    "A",
+    "S"
+  ],
+  "voxelSizeMm": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "atlasLabelCountExcludingBackground": 102,
+  "corticalLabelCount": 62,
+  "whiteMatterProbabilityThreshold": 0.5,
+  "sourceIntensityRange": [
+    0.0,
+    98.0
+  ],
+  "displayIntensityWindow": [
+    1.0,
+    90.0
+  ],
+  "brainCoronalExtent": {
+    "anteriorVoxelIndex": 205,
+    "posteriorVoxelIndex": 26,
+    "anteriorMm": 73.0,
+    "posteriorMm": -106.0
+  },
+  "sliceCount": 56,
+  "rawBytes": 10588734,
+  "distBytes": 819396,
+  "sources": {
+    "t1": {
+      "filename": "tpl-MNI152NLin2009cSym_res-1_T1w.nii.gz",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cSym/tpl-MNI152NLin2009cSym_res-1_T1w.nii.gz",
+      "sha256": "317e112c49d086b971e4a26cba853b041ee210faf750a6fe02e04f15909b6b6b",
+      "bytes": 4589929
+    },
+    "atlas": {
+      "filename": "tpl-MNI152NLin2009cSym_res-1_atlas-CerebrA_dseg.nii.gz",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cSym/tpl-MNI152NLin2009cSym_res-1_atlas-CerebrA_dseg.nii.gz",
+      "sha256": "c05df93e85b8f1c1446e56f45f0b6a28fdf6e5c8263ea8f365617254bf79ecbf",
+      "bytes": 564070
+    },
+    "labels": {
+      "filename": "tpl-MNI152NLin2009cSym_atlas-CerebA_dseg.tsv",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cSym/tpl-MNI152NLin2009cSym_atlas-CerebA_dseg.tsv",
+      "sha256": "cf0332a1c2601b5dd97b2f70423b064c762630d02052629f7112789f2fb6d2f7",
+      "bytes": 5614
+    },
+    "license": {
+      "filename": "LICENSE",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cSym/LICENSE",
+      "sha256": "5915d16f84d99c3cedc8290b09da72f6f92e5dde1ba1c9859ee186aa952b66a4",
+      "bytes": 676
+    },
+    "metadata": {
+      "filename": "template_description.json",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cSym/template_description.json",
+      "sha256": "1e97535eb573febc53639beb8a71b6dcfd9c8d50e7c54df947f9c74d19e1a8d8",
+      "bytes": 1109
+    },
+    "wm_probseg": {
+      "filename": "tpl-MNI152NLin2009cSym_res-1_label-WM_probseg.nii.gz",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cSym/tpl-MNI152NLin2009cSym_res-1_label-WM_probseg.nii.gz",
+      "sha256": "1708aba3e70980f27f10bb78b080dcbac553dc13dca47abe946126bb47464cf2",
+      "bytes": 5427336
+    }
+  }
+}
