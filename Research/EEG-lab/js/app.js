@@ -237,8 +237,12 @@
   function sizeCanvas(canvas, height) {
     if (!canvas) return;
     var width = Math.max(280, canvas.parentElement.clientWidth || 360);
-    canvas.width = width;
-    canvas.height = height;
+    var pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas._eegLogicalWidth = width;
+    canvas._eegLogicalHeight = height;
+    canvas._eegPixelRatio = pixelRatio;
+    canvas.width = Math.round(width * pixelRatio);
+    canvas.height = Math.round(height * pixelRatio);
   }
 
   function makeSimulator(name) {
@@ -1054,11 +1058,15 @@
     var parent = this.canvas.parentElement;
     var width = Math.max(280, parent.clientWidth || window.innerWidth);
     var height = Math.max(64, parent.clientHeight || 96);
-    if (this.canvas.width !== width || this.canvas.height !== height) {
-      this.canvas.width = width;
-      this.canvas.height = height;
+    var pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    var pixelWidth = Math.round(width * pixelRatio);
+    var pixelHeight = Math.round(height * pixelRatio);
+    if (this.canvas.width !== pixelWidth || this.canvas.height !== pixelHeight) {
+      this.canvas.width = pixelWidth;
+      this.canvas.height = pixelHeight;
     }
     var ctx = this.ctx;
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     var dark = document.documentElement.dataset.theme === 'dark';
     var trace = dark ? 'rgba(95,208,191,0.72)' : 'rgba(18,120,110,0.56)';
     var grid = dark ? 'rgba(255,255,255,0.07)' : 'rgba(18,24,23,0.07)';

@@ -18,6 +18,19 @@
   var WIN_N = SR * WIN_S;
   var CH    = ['Fp1','Fp2','F3','F4','C3','C4','T3','T4','O1','O2'];
 
+  function logicalWidth(canvas) {
+    return canvas._eegLogicalWidth || canvas.width;
+  }
+
+  function logicalHeight(canvas) {
+    return canvas._eegLogicalHeight || canvas.height;
+  }
+
+  function prepareCanvas(ctx, canvas) {
+    var pixelRatio = canvas._eegPixelRatio || 1;
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  }
+
   // Keep legacy keys for engine/data compatibility while displaying current
   // IFCN labels. Explanatory labels can retain the legacy name in parentheses.
   function displayChannel(name, includeLegacy) {
@@ -221,7 +234,8 @@
 
   VizEngine.prototype._drawMulti = function () {
     var cv = this.cv, ctx = this.ctx;
-    var W = cv.width, H = cv.height;
+    var W = logicalWidth(cv), H = logicalHeight(cv);
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var cfg = this.cfg;
 
@@ -311,7 +325,8 @@
 
   VizEngine.prototype._drawSingle = function () {
     var cv = this.cv, ctx = this.ctx;
-    var W = cv.width, H = cv.height;
+    var W = logicalWidth(cv), H = logicalHeight(cv);
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var cfg = this.cfg;
     var ci  = typeof cfg.channel === 'number' ? cfg.channel : 6; // default T3
@@ -418,7 +433,8 @@
 
   VizEngine.prototype._drawFreqScope = function () {
     var cv = this.cv, ctx = this.ctx;
-    var W = cv.width, H = cv.height;
+    var W = logicalWidth(cv), H = logicalHeight(cv);
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var t = this._t;
     var cfg = this.cfg;
@@ -525,13 +541,15 @@
 
   VizEngine.prototype._hdHitTest = function (e) {
     var rect = this.cv.getBoundingClientRect();
-    var mx   = e.clientX - rect.left;
-    var my   = e.clientY - rect.top;
-    var cx   = this.cv.width  * 0.5;
-    var cy   = this.cv.height * 0.46;
-    var rx   = this.cv.width  * 0.44;
-    var ry   = this.cv.height * 0.44;
-    var R    = this.cv.width  * 0.046;  // hit radius
+    var W    = logicalWidth(this.cv);
+    var H    = logicalHeight(this.cv);
+    var mx   = (e.clientX - rect.left) * (W / rect.width);
+    var my   = (e.clientY - rect.top) * (H / rect.height);
+    var cx   = W * 0.5;
+    var cy   = H * 0.46;
+    var rx   = W * 0.44;
+    var ry   = H * 0.44;
+    var R    = W * 0.046;  // hit radius
 
     for (var name in ELEC_POS) {
       var pos = ELEC_POS[name];
@@ -545,7 +563,8 @@
 
   VizEngine.prototype._drawHead = function () {
     var cv = this.cv, ctx = this.ctx;
-    var W = cv.width, H = cv.height;
+    var W = logicalWidth(cv), H = logicalHeight(cv);
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var cfg = this.cfg;
     var targets  = cfg.targets  || [];
@@ -694,7 +713,8 @@
 
   VizEngine.prototype._drawCompare = function () {
     var cv = this.cv, ctx = this.ctx;
-    var W = cv.width, H = cv.height;
+    var W = logicalWidth(cv), H = logicalHeight(cv);
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var cfg = this.cfg;
 
@@ -790,7 +810,8 @@
 
   VizEngine.prototype._drawCapTrace = function () {
     var cv = this.cv, ctx = this.ctx;
-    var W = cv.width, H = cv.height;
+    var W = logicalWidth(cv), H = logicalHeight(cv);
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var cfg = this.cfg;
     var chs = cfg.channels || [0,1,2,3,4,5,6,7,8,9];
@@ -956,8 +977,9 @@
     var cv = this.cv, ctx = this.ctx;
     if (!cv || !ctx) return;
 
-    var W = Math.max(1, cv.width);
-    var H = Math.max(1, cv.height);
+    var W = Math.max(1, logicalWidth(cv));
+    var H = Math.max(1, logicalHeight(cv));
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var compact = W < 520;
     var vw = compact ? 360 : 680;
@@ -1597,8 +1619,9 @@
     var cv = this.cv, ctx = this.ctx;
     if (!cv || !ctx) return;
 
-    var W = Math.max(1, cv.width);
-    var H = Math.max(1, cv.height);
+    var W = Math.max(1, logicalWidth(cv));
+    var H = Math.max(1, logicalHeight(cv));
+    prepareCanvas(ctx, cv);
     var p = pal(this.dark);
     var compact = W < 520;
     var vw = compact ? 360 : 680;
