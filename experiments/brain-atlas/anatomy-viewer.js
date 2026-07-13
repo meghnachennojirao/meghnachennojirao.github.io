@@ -102,8 +102,9 @@ export async function createAnatomyViewer({
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = false;
   controls.enablePan = false;
+  controls.zoomSpeed = mobileTouchLayout.matches ? 1.65 : 1;
   controls.minDistance = 0.22;
-  controls.maxDistance = 0.72;
+  controls.maxDistance = mobileTouchLayout.matches ? 0.95 : 0.72;
   controls.minPolarAngle = Math.PI * 0.08;
   controls.maxPolarAngle = Math.PI * 0.92;
   controls.target.set(0, 0, 0);
