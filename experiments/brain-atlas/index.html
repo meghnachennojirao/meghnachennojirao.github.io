@@ -137,7 +137,12 @@
             </div>
           </div>
 
-          <aside class="reading-panel" aria-live="polite">
+          <aside class="reading-panel is-collapsed" id="mri-reading-panel" aria-live="polite">
+            <button class="mobile-sheet-toggle" type="button" data-mobile-sheet-toggle data-sheet-target="#mri-reading-panel" data-sheet-label="slice details" aria-expanded="false" aria-controls="slice-title slice-region-list" aria-label="Open slice details">
+              <span class="mobile-sheet-toggle__handle" aria-hidden="true"></span>
+              <span>Slice details</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
             <div class="panel-heading">
               <div>
                 <span class="micro-label">On this plane</span>
@@ -212,7 +217,12 @@
             </div>
           </div>
 
-          <aside class="structure-panel">
+          <aside class="structure-panel is-collapsed" id="anatomy-structure-panel">
+            <button class="mobile-sheet-toggle" type="button" data-mobile-sheet-toggle data-sheet-target="#anatomy-structure-panel" data-sheet-label="structures and layers" aria-expanded="false" aria-controls="selected-structure system-list" aria-label="Open structures and layers">
+              <span class="mobile-sheet-toggle__handle" aria-hidden="true"></span>
+              <span>Structures &amp; layers</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
             <div class="selected-structure" id="selected-structure">
               <div class="selection-empty">
                 <span class="selection-orbit" aria-hidden="true"></span>

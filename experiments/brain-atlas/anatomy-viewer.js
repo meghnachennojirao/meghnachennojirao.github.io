@@ -59,6 +59,7 @@ export async function createAnatomyViewer({
   const modelStage = new THREE.Group();
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
+  const mobileTouchLayout = window.matchMedia("(max-width: 47.99rem), (max-height: 32rem) and (orientation: landscape) and (pointer: coarse)");
   const meshes = [];
   const meshByName = new Map();
   const meshesBySystem = new Map(ANATOMY_SYSTEMS.map((system) => [system.id, []]));
@@ -303,7 +304,8 @@ export async function createAnatomyViewer({
     if (!pointerStart || !modelRoot) return;
     const distance = Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y);
     pointerStart = null;
-    if (distance > 7) return;
+    const tapTolerance = event.pointerType === "touch" && mobileTouchLayout.matches ? 15 : 7;
+    if (distance > tapTolerance) return;
     pointerPosition(event);
     raycaster.setFromCamera(pointer, camera);
     const clickable = meshes.filter((mesh) => mesh.visible && !mesh.userData.atlas.hidden);

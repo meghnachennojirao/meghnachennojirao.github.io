@@ -45,9 +45,11 @@ const elements = {
   hideSelected: document.querySelector("#hide-selected"),
   isolateSelected: document.querySelector("#isolate-selected"),
   visibleCount: document.querySelector("#visible-count"),
+  mobileSheetToggles: [...document.querySelectorAll("[data-mobile-sheet-toggle]")],
   toast: document.querySelector("#status-toast")
 };
 
+const mobileLayoutQuery = window.matchMedia("(max-width: 47.99rem), (max-height: 32rem) and (orientation: landscape) and (pointer: coarse)");
 let activeMode = "mri";
 let mriViewer = null;
 let anatomyViewer = null;
@@ -74,6 +76,19 @@ function setSettingsOpen(open) {
   elements.settingsButton.setAttribute("aria-expanded", String(open));
   if (open) elements.settingsClose.focus({ preventScroll: true });
   else elements.settingsButton.focus({ preventScroll: true });
+}
+
+function setMobileSheet(button, expanded) {
+  const panel = document.querySelector(button.dataset.sheetTarget);
+  if (!panel) return;
+  panel.classList.toggle("is-collapsed", !expanded);
+  button.setAttribute("aria-expanded", String(expanded));
+  button.setAttribute("aria-label", `${expanded ? "Close" : "Open"} ${button.dataset.sheetLabel}`);
+}
+
+function collapseMobileSheets() {
+  if (!mobileLayoutQuery.matches) return;
+  elements.mobileSheetToggles.forEach((button) => setMobileSheet(button, false));
 }
 
 function syncSettingsUI(settings) {
@@ -265,6 +280,10 @@ function updateSelection(selection) {
     ? `${visibilityIcon(true)} Show part`
     : `${visibilityIcon(false)} Hide part`;
   elements.hideSelected.dataset.action = selection.hidden ? "show" : "hide";
+  if (mobileLayoutQuery.matches) {
+    const anatomySheetToggle = elements.mobileSheetToggles.find((button) => button.dataset.sheetTarget === "#anatomy-structure-panel");
+    if (anatomySheetToggle) setMobileSheet(anatomySheetToggle, true);
+  }
 }
 
 function handleVisibilityChange({ visible, total }) {
@@ -316,6 +335,7 @@ async function initializeAnatomy() {
 async function setMode(mode) {
   if (mode === activeMode) return;
   stopPlayback();
+  collapseMobileSheets();
   activeMode = mode;
   elements.modeButtons.forEach((button) => {
     const active = button.dataset.mode === mode;
@@ -349,7 +369,21 @@ document.addEventListener("pointerdown", (event) => {
   }
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !elements.settingsPanel.hidden) setSettingsOpen(false);
+  if (event.key !== "Escape") return;
+  if (!elements.settingsPanel.hidden) setSettingsOpen(false);
+  else collapseMobileSheets();
+});
+
+elements.mobileSheetToggles.forEach((button) => {
+  button.addEventListener("click", () => {
+    const expanded = button.getAttribute("aria-expanded") !== "true";
+    if (expanded) {
+      elements.mobileSheetToggles
+        .filter((otherButton) => otherButton !== button)
+        .forEach((otherButton) => setMobileSheet(otherButton, false));
+    }
+    setMobileSheet(button, expanded);
+  });
 });
 
 document.querySelectorAll('input[name="quality"]').forEach((input) => {
