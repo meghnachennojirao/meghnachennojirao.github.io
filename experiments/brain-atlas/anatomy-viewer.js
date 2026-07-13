@@ -4,10 +4,14 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import {
   ANATOMY_SYSTEMS,
+  anatomyDisplayLabel,
+  anatomyLogicalKey,
   anatomySide,
+  anatomyStructureNote,
   classifyAnatomyMesh,
   cleanAnatomyName,
-  getSystem
+  getSystem,
+  isMirroredMidlineMesh
 } from "./data/atlas.js";
 
 function clamp(value, min, max) {
@@ -16,6 +20,10 @@ function clamp(value, min, max) {
 
 function easeOutQuint(value) {
   return 1 - Math.pow(1 - value, 5);
+}
+
+function metadataValue(...values) {
+  return values.find((value) => typeof value === "string" && value.trim() && value.trim() !== "-") || null;
 }
 
 function materialForSystem(system) {
@@ -61,7 +69,7 @@ export async function createAnatomyViewer({
   const pointer = new THREE.Vector2();
   const mobileTouchLayout = window.matchMedia("(max-width: 47.99rem), (max-height: 32rem) and (orientation: landscape) and (pointer: coarse)");
   const meshes = [];
-  const meshByName = new Map();
+  const logicalMeshes = new Map();
   const meshesBySystem = new Map(ANATOMY_SYSTEMS.map((system) => [system.id, []]));
   const materialTemplates = new Map(ANATOMY_SYSTEMS.map((system) => [system.id, materialForSystem(system)]));
   const outlineMaterial = new THREE.MeshBasicMaterial({
@@ -74,14 +82,19 @@ export async function createAnatomyViewer({
   let metadata = new Map();
   let modelRoot = null;
   let selected = null;
-  let outline = null;
-  let exploded = false;
+  let outlines = [];
+  let explodeAmount = 0;
+  let targetExplodeAmount = 0;
   let destroyed = false;
   let visible = !document.hidden;
   let renderQueued = false;
-  let transitionFrame = 0;
+  let animationFrame = 0;
+  let animationTicking = false;
   let pointerStart = null;
-  let userHasInteracted = false;
+  const animations = new Map();
+  const EXPLODE_ANIMATION = Symbol("explode");
+  const CAMERA_ANIMATION = Symbol("camera");
+  const REVEAL_ANIMATION = Symbol("reveal");
 
   renderer.setPixelRatio(settings.render.pixelRatio);
   renderer.setClearColor(0x000000, 0);
@@ -109,8 +122,12 @@ export async function createAnatomyViewer({
   controls.maxPolarAngle = Math.PI * 0.92;
   controls.target.set(0, 0, 0);
   controls.update();
+  function handleControlsStart() {
+    cancelAnimation(CAMERA_ANIMATION);
+    finishAnimation(REVEAL_ANIMATION);
+  }
   controls.addEventListener("change", requestRender);
-  controls.addEventListener("start", () => { userHasInteracted = true; });
+  controls.addEventListener("start", handleControlsStart);
 
   function render() {
     renderQueued = false;
@@ -118,9 +135,91 @@ export async function createAnatomyViewer({
   }
 
   function requestRender() {
-    if (renderQueued || destroyed || !visible) return;
+    if (renderQueued || animationFrame || animationTicking || destroyed || !visible) return;
     renderQueued = true;
     requestAnimationFrame(render);
+  }
+
+  function runAnimations(time) {
+    animationFrame = 0;
+    if (destroyed) return;
+    animationTicking = true;
+    try {
+      const active = [...animations.entries()];
+      active.forEach(([key, job]) => {
+        if (animations.get(key) !== job) return;
+        const linearProgress = clamp((time - job.startTime) / job.duration, 0, 1);
+        job.update(easeOutQuint(linearProgress));
+        if (linearProgress >= 1) {
+          animations.delete(key);
+          job.complete();
+        }
+      });
+      render();
+    } finally {
+      animationTicking = false;
+    }
+    if (animations.size && !destroyed) animationFrame = requestAnimationFrame(runAnimations);
+  }
+
+  function ensureAnimationFrame() {
+    if (!animationFrame && animations.size && !destroyed) {
+      animationFrame = requestAnimationFrame(runAnimations);
+    }
+  }
+
+  function animate(key, { duration, update, complete = () => {} }) {
+    cancelAnimation(key);
+    animationTicking = true;
+    try {
+      update(0);
+    } finally {
+      animationTicking = false;
+    }
+    if (!settings.motion || duration <= 0) {
+      update(1);
+      complete();
+      requestRender();
+      return;
+    }
+    animations.set(key, {
+      startTime: performance.now(),
+      duration,
+      update,
+      complete
+    });
+    ensureAnimationFrame();
+  }
+
+  function cancelAnimation(key) {
+    animations.delete(key);
+    if (!animations.size && animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+  }
+
+  function finishAnimation(key) {
+    const job = animations.get(key);
+    if (!job) return;
+    animations.delete(key);
+    job.update(1);
+    job.complete();
+    if (!animations.size && animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+    requestRender();
+  }
+
+  function finishAllAnimations() {
+    [...animations.keys()].forEach(finishAnimation);
+  }
+
+  function cancelAllAnimations() {
+    animations.clear();
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
   }
 
   function resize() {
@@ -169,10 +268,16 @@ export async function createAnatomyViewer({
 
   function setupMesh(mesh) {
     const record = metadata.get(mesh.name) || {};
-    const systemId = record.system || classifyAnatomyMesh(mesh.name, { ...mesh.userData, ...record });
+    const systemId = classifyAnatomyMesh(mesh.name, { ...mesh.userData, ...record });
     const system = getSystem(systemId);
-    const side = record.side || anatomySide(mesh.name);
-    const displayName = record.displayName || cleanAnatomyName(mesh.name, mesh.userData.label || record.label);
+    const mirroredMidline = isMirroredMidlineMesh(mesh.name);
+    const side = mirroredMidline ? "midline" : (record.side || anatomySide(mesh.name));
+    const sourceDisplayName = mirroredMidline
+      ? (record.displayLabel || cleanAnatomyName(mesh.name, mesh.userData.label || record.label))
+      : (record.displayName || cleanAnatomyName(mesh.name, mesh.userData.label || record.label));
+    const displayName = anatomyDisplayLabel(mesh.name, sourceDisplayName);
+    const logicalKey = anatomyLogicalKey(mesh.name);
+    const defaultVisible = record.defaultVisible !== false;
     const originalMaterial = mesh.material;
     mesh.material = materialTemplates.get(system.id).clone();
     if (originalMaterial?.dispose) originalMaterial.dispose();
@@ -185,17 +290,24 @@ export async function createAnatomyViewer({
       systemId: system.id,
       systemName: system.name,
       side,
-      ontologyId: mesh.userData.ontologyid || record.ontologyId || null,
-      representationOf: mesh.userData.representation_of || record.representationOf || null,
-      displayLevel: record.displayLevel || "detail",
-      defaultVisible: record.defaultVisible !== false,
-      hidden: record.defaultVisible === false,
+      logicalKey,
+      structureNote: anatomyStructureNote(mesh.name),
+      ontologyId: metadataValue(mesh.userData.ontologyid, record.ontologyId),
+      representationOf: metadataValue(mesh.userData.representation_of, record.representationOf),
+      displayLevel: record.displayLevel ?? "detail",
+      defaultVisible,
+      targetVisible: defaultVisible,
+      visibilityAmount: defaultVisible ? 1 : 0,
+      hidden: !defaultVisible,
       originalPosition: mesh.position.clone(),
+      originalQuaternion: mesh.quaternion.clone(),
+      originalScale: mesh.scale.clone(),
       explodeOffset: new THREE.Vector3()
     };
-    mesh.visible = mesh.userData.atlas.defaultVisible;
+    mesh.visible = defaultVisible;
     meshes.push(mesh);
-    meshByName.set(mesh.name, mesh);
+    if (!logicalMeshes.has(logicalKey)) logicalMeshes.set(logicalKey, []);
+    logicalMeshes.get(logicalKey).push(mesh);
     if (!meshesBySystem.has(system.id)) meshesBySystem.set(system.id, []);
     meshesBySystem.get(system.id).push(mesh);
   }
@@ -219,14 +331,14 @@ export async function createAnatomyViewer({
   }
 
   function updateVisibilityCount() {
-    const shown = meshes.filter((mesh) => mesh.visible && !mesh.userData.atlas.hidden).length;
-    onVisibilityChange({ visible: shown, total: meshes.length });
+    const groups = [...logicalMeshes.values()];
+    const shown = groups.filter((group) => group.some((mesh) => mesh.userData.atlas.targetVisible)).length;
+    onVisibilityChange({ visible: shown, total: groups.length });
   }
 
   function clearOutline() {
-    if (!outline) return;
-    outline.parent?.remove(outline);
-    outline = null;
+    outlines.forEach((outline) => outline.parent?.remove(outline));
+    outlines = [];
   }
 
   function resetHighlights() {
@@ -238,37 +350,55 @@ export async function createAnatomyViewer({
     clearOutline();
   }
 
+  function selectionTargets() {
+    if (!selected) return [];
+    return selected.type === "system"
+      ? meshesBySystem.get(selected.systemId) || []
+      : selected.meshes || [selected.mesh];
+  }
+
   function applySelectionHighlight() {
     resetHighlights();
     if (!selected) return;
-    const targets = selected.type === "system" ? meshesBySystem.get(selected.systemId) || [] : [selected.mesh];
+    const targets = selectionTargets();
     targets.forEach((mesh) => {
       mesh.material.emissive.set(0x403725);
       mesh.material.emissiveIntensity = 0.95;
     });
-    if (selected.type === "mesh" && selected.mesh.visible) {
-      outline = new THREE.Mesh(selected.mesh.geometry, outlineMaterial);
-      outline.name = "selection-outline";
-      outline.scale.setScalar(1.018);
-      outline.raycast = () => {};
-      selected.mesh.add(outline);
+    if (selected.type === "mesh") {
+      targets
+        .filter((mesh) => mesh.visible && mesh.userData.atlas.targetVisible)
+        .forEach((mesh) => {
+          const outline = new THREE.Mesh(mesh.geometry, outlineMaterial);
+          outline.name = "selection-outline";
+          outline.scale.setScalar(1.018);
+          outline.raycast = () => {};
+          mesh.add(outline);
+          outlines.push(outline);
+        });
     }
     requestRender();
   }
 
   function selectMesh(mesh) {
     if (!mesh?.userData?.atlas) return;
+    const targets = logicalMeshes.get(mesh.userData.atlas.logicalKey) || [mesh];
+    const primary = targets.find((target) => target.userData.atlas.targetVisible) || mesh;
+    const ontologyId = targets.map((target) => target.userData.atlas.ontologyId).find(Boolean) || null;
     selected = {
       type: "mesh",
-      mesh,
-      rawName: mesh.name,
-      displayName: mesh.userData.atlas.displayName,
-      systemId: mesh.userData.atlas.systemId,
-      systemName: mesh.userData.atlas.systemName,
-      side: mesh.userData.atlas.side,
-      color: getSystem(mesh.userData.atlas.systemId).color,
-      ontologyId: mesh.userData.atlas.ontologyId,
-      hidden: mesh.userData.atlas.hidden
+      mesh: primary,
+      meshes: targets,
+      rawName: primary.name,
+      displayName: primary.userData.atlas.displayName,
+      systemId: primary.userData.atlas.systemId,
+      systemName: primary.userData.atlas.systemName,
+      side: primary.userData.atlas.side,
+      color: getSystem(primary.userData.atlas.systemId).color,
+      ontologyId,
+      structureNote: primary.userData.atlas.structureNote,
+      sourceMeshCount: targets.length,
+      hidden: targets.every((target) => !target.userData.atlas.targetVisible)
     };
     applySelectionHighlight();
     onSelectionChange(selected);
@@ -277,6 +407,7 @@ export async function createAnatomyViewer({
   function selectSystem(systemId) {
     const system = getSystem(systemId);
     const targets = meshesBySystem.get(systemId) || [];
+    const logicalCount = new Set(targets.map((mesh) => mesh.userData.atlas.logicalKey)).size;
     selected = {
       type: "system",
       systemId,
@@ -284,8 +415,9 @@ export async function createAnatomyViewer({
       displayName: system.name,
       color: system.color,
       side: "bilateral",
-      hidden: targets.every((mesh) => mesh.userData.atlas.hidden),
-      count: targets.length
+      hidden: targets.every((mesh) => !mesh.userData.atlas.targetVisible),
+      count: logicalCount,
+      structureNote: null
     };
     applySelectionHighlight();
     onSelectionChange(selected);
@@ -314,77 +446,76 @@ export async function createAnatomyViewer({
     if (hit) selectMesh(hit.object);
   }
 
-  function tweenMeshes(targets, update, duration = 260, complete = () => {}) {
-    cancelAnimationFrame(transitionFrame);
-    if (!settings.motion) {
-      update(1);
-      complete();
-      render();
-      return;
-    }
-    const startTime = performance.now();
-    function tick(time) {
-      const progress = easeOutQuint(clamp((time - startTime) / duration, 0, 1));
-      update(progress, targets);
-      render();
-      if (progress < 1 && !destroyed) transitionFrame = requestAnimationFrame(tick);
-      else complete();
-    }
-    transitionFrame = requestAnimationFrame(tick);
+  function syncSelectedState() {
+    if (!selected) return;
+    selected.hidden = selectionTargets().every((mesh) => !mesh.userData.atlas.targetVisible);
+    onSelectionChange(selected);
+  }
+
+  function applyVisibilityFrame(mesh, amount) {
+    const atlas = mesh.userData.atlas;
+    atlas.visibilityAmount = clamp(amount, 0, 1);
+    mesh.visible = true;
+    mesh.material.transparent = true;
+    mesh.material.depthWrite = false;
+    mesh.material.opacity = atlas.visibilityAmount;
+    mesh.scale
+      .copy(atlas.originalScale)
+      .multiplyScalar(THREE.MathUtils.lerp(0.965, 1, atlas.visibilityAmount));
+  }
+
+  function settleVisibility(mesh) {
+    const atlas = mesh.userData.atlas;
+    atlas.visibilityAmount = atlas.targetVisible ? 1 : 0;
+    atlas.hidden = !atlas.targetVisible;
+    mesh.visible = atlas.targetVisible;
+    mesh.material.opacity = 1;
+    mesh.material.transparent = false;
+    mesh.material.depthWrite = true;
+    mesh.quaternion.copy(atlas.originalQuaternion);
+    mesh.scale.copy(atlas.originalScale);
+  }
+
+  function applyVisibilityPlan(plan) {
+    const actionable = [...plan.entries()].filter(
+      ([mesh, shouldShow]) => mesh.userData.atlas.targetVisible !== shouldShow
+    );
+    if (!actionable.length) return;
+    clearOutline();
+    actionable.forEach(([mesh, shouldShow]) => {
+      mesh.userData.atlas.targetVisible = shouldShow;
+      mesh.userData.atlas.hidden = !shouldShow;
+      if (shouldShow) mesh.visible = true;
+    });
+    updateVisibilityCount();
+    syncSelectedState();
+    applySelectionHighlight();
+
+    let remaining = actionable.length;
+    actionable.forEach(([mesh, shouldShow]) => {
+      const startAmount = mesh.userData.atlas.visibilityAmount;
+      const targetAmount = shouldShow ? 1 : 0;
+      const distance = Math.abs(targetAmount - startAmount);
+      const baseDuration = shouldShow ? 300 : 220;
+      animate(mesh, {
+        duration: baseDuration * distance,
+        update(progress) {
+          applyVisibilityFrame(mesh, THREE.MathUtils.lerp(startAmount, targetAmount, progress));
+        },
+        complete() {
+          settleVisibility(mesh);
+          remaining -= 1;
+          if (remaining === 0) {
+            applySelectionHighlight();
+            requestRender();
+          }
+        }
+      });
+    });
   }
 
   function setMeshesVisible(targets, shouldShow) {
-    const actionable = targets.filter((mesh) => mesh.userData.atlas.hidden === shouldShow);
-    if (!actionable.length) return;
-    const starts = actionable.map((mesh) => ({
-      mesh,
-      opacity: mesh.material.opacity,
-      scale: mesh.scale.clone()
-    }));
-    if (shouldShow) {
-      actionable.forEach((mesh) => {
-        mesh.visible = true;
-        mesh.material.transparent = true;
-        mesh.material.depthWrite = false;
-        mesh.material.opacity = 0;
-        mesh.scale.setScalar(0.965);
-      });
-    } else {
-      clearOutline();
-      actionable.forEach((mesh) => {
-        mesh.material.transparent = true;
-        mesh.material.depthWrite = false;
-      });
-    }
-    tweenMeshes(actionable, (progress) => {
-      starts.forEach(({ mesh, opacity, scale }) => {
-        mesh.material.opacity = shouldShow
-          ? progress
-          : THREE.MathUtils.lerp(opacity, 0, progress);
-        const scaleFactor = shouldShow
-          ? THREE.MathUtils.lerp(0.965, 1, progress)
-          : THREE.MathUtils.lerp(1, 0.965, progress);
-        mesh.scale.copy(scale).multiplyScalar(scaleFactor);
-      });
-    }, shouldShow ? 300 : 220, () => {
-      actionable.forEach((mesh) => {
-        mesh.userData.atlas.hidden = !shouldShow;
-        mesh.visible = shouldShow;
-        mesh.material.opacity = 1;
-        mesh.material.transparent = false;
-        mesh.material.depthWrite = true;
-        mesh.scale.setScalar(1);
-      });
-      applySelectionHighlight();
-      updateVisibilityCount();
-      if (selected) {
-        selected.hidden = selected.type === "mesh"
-          ? selected.mesh.userData.atlas.hidden
-          : (meshesBySystem.get(selected.systemId) || []).every((mesh) => mesh.userData.atlas.hidden);
-        onSelectionChange(selected);
-      }
-      requestRender();
-    });
+    applyVisibilityPlan(new Map(targets.map((mesh) => [mesh, shouldShow])));
   }
 
   function setSystemVisible(systemId, shouldShow) {
@@ -393,43 +524,48 @@ export async function createAnatomyViewer({
 
   function hideSelected() {
     if (!selected) return;
-    const targets = selected.type === "system" ? meshesBySystem.get(selected.systemId) || [] : [selected.mesh];
-    setMeshesVisible(targets, false);
+    setMeshesVisible(selectionTargets(), false);
   }
 
   function showSelected() {
     if (!selected) return;
-    const targets = selected.type === "system" ? meshesBySystem.get(selected.systemId) || [] : [selected.mesh];
-    setMeshesVisible(targets, true);
+    setMeshesVisible(selectionTargets(), true);
   }
 
   function isolateSelected() {
     if (!selected) return;
-    const targets = new Set(selected.type === "system" ? meshesBySystem.get(selected.systemId) || [] : [selected.mesh]);
-    const hideTargets = meshes.filter((mesh) => !targets.has(mesh) && !mesh.userData.atlas.hidden);
-    const showTargets = [...targets].filter((mesh) => mesh.userData.atlas.hidden);
-    if (showTargets.length) setMeshesVisible(showTargets, true);
-    if (hideTargets.length) setMeshesVisible(hideTargets, false);
+    const keep = new Set(selectionTargets());
+    applyVisibilityPlan(new Map(meshes.map((mesh) => [mesh, keep.has(mesh)])));
   }
 
   function showAll() {
-    setMeshesVisible(meshes.filter((mesh) => mesh.userData.atlas.hidden), true);
+    setMeshesVisible(meshes, true);
   }
 
   function setExploded(nextExploded) {
-    exploded = Boolean(nextExploded);
-    const starts = meshes.map((mesh) => mesh.position.clone());
-    tweenMeshes(meshes, (progress) => {
-      meshes.forEach((mesh, index) => {
-        const atlas = mesh.userData.atlas;
-        const target = atlas.originalPosition.clone();
-        if (exploded) target.add(atlas.explodeOffset);
-        mesh.position.lerpVectors(starts[index], target, progress);
-      });
-    }, exploded ? 620 : 480, requestRender);
+    targetExplodeAmount = nextExploded ? 1 : 0;
+    const startAmount = explodeAmount;
+    const targetAmount = targetExplodeAmount;
+    const distance = Math.abs(targetAmount - startAmount);
+    animate(EXPLODE_ANIMATION, {
+      duration: (targetAmount ? 620 : 480) * distance,
+      update(progress) {
+        explodeAmount = THREE.MathUtils.lerp(startAmount, targetAmount, progress);
+        meshes.forEach((mesh) => {
+          const atlas = mesh.userData.atlas;
+          mesh.position
+            .copy(atlas.originalPosition)
+            .addScaledVector(atlas.explodeOffset, explodeAmount);
+        });
+      },
+      complete() {
+        explodeAmount = targetAmount;
+      }
+    });
   }
 
   function resetCamera({ animated = true } = {}) {
+    cancelAnimation(CAMERA_ANIMATION);
     const destination = new THREE.Vector3(0.02, 0.015, 0.39);
     const start = camera.position.clone();
     const startTarget = controls.target.clone();
@@ -441,15 +577,20 @@ export async function createAnatomyViewer({
       requestRender();
       return;
     }
-    tweenMeshes([], (progress) => {
-      camera.position.lerpVectors(start, destination, progress);
-      controls.target.lerpVectors(startTarget, endTarget, progress);
-      controls.update();
-    }, 520, requestRender);
+    animate(CAMERA_ANIMATION, {
+      duration: 520,
+      update(progress) {
+        camera.position.lerpVectors(start, destination, progress);
+        controls.target.lerpVectors(startTarget, endTarget, progress);
+        controls.update();
+      }
+    });
   }
 
   function applySettings(nextSettings) {
+    const motionWasEnabled = settings.motion;
     settings = nextSettings;
+    if (motionWasEnabled && !nextSettings.motion) finishAllAnimations();
     renderer.setPixelRatio(nextSettings.render.pixelRatio);
     resize();
   }
@@ -465,75 +606,157 @@ export async function createAnatomyViewer({
     visible = !document.hidden && canvas.offsetParent !== null;
     if (visible) requestRender();
   };
+  const handleContextLost = (event) => {
+    event.preventDefault();
+    onError(new Error("The anatomy WebGL context was interrupted. It will resume when the browser restores it."));
+  };
+  const handleContextRestored = () => requestRender();
   document.addEventListener("visibilitychange", handleVisibility);
   canvas.addEventListener("pointerdown", handlePointerDown);
   canvas.addEventListener("pointerup", handlePointerUp);
-  canvas.addEventListener("webglcontextlost", (event) => {
-    event.preventDefault();
-    onError(new Error("The anatomy WebGL context was interrupted. It will resume when the browser restores it."));
-  });
-  canvas.addEventListener("webglcontextrestored", requestRender);
+  canvas.addEventListener("webglcontextlost", handleContextLost);
+  canvas.addEventListener("webglcontextrestored", handleContextRestored);
+
+  function cleanup() {
+    if (destroyed) return;
+    destroyed = true;
+    cancelAllAnimations();
+    resizeObserver.disconnect();
+    document.removeEventListener("visibilitychange", handleVisibility);
+    canvas.removeEventListener("pointerdown", handlePointerDown);
+    canvas.removeEventListener("pointerup", handlePointerUp);
+    canvas.removeEventListener("webglcontextlost", handleContextLost);
+    canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+    controls.removeEventListener("change", requestRender);
+    controls.removeEventListener("start", handleControlsStart);
+    controls.dispose();
+    clearOutline();
+    const geometries = new Set();
+    const materials = new Set();
+    modelRoot?.traverse((object) => {
+      if (!object.isMesh) return;
+      if (object.geometry) geometries.add(object.geometry);
+      const objectMaterials = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+      objectMaterials.filter(Boolean).forEach((material) => materials.add(material));
+    });
+    geometries.forEach((geometry) => geometry.dispose());
+    materials.forEach((material) => material.dispose());
+    materialTemplates.forEach((material) => material.dispose());
+    outlineMaterial.dispose();
+    renderer.dispose();
+  }
 
   resize();
   await loadMetadata();
 
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
-  const gltf = await new Promise((resolve, reject) => {
-    loader.load(
-      modelUrl,
-      resolve,
-      (event) => {
-        if (event.total) onProgress(event.loaded / event.total);
-        else onProgress(null);
-      },
-      reject
-    );
-  }).catch((error) => {
+  let gltf;
+  try {
+    gltf = await new Promise((resolve, reject) => {
+      loader.load(
+        modelUrl,
+        resolve,
+        (event) => {
+          if (event.total) onProgress(event.loaded / event.total);
+          else onProgress(null);
+        },
+        reject
+      );
+    });
+  } catch (error) {
+    cleanup();
     onError(error);
     throw error;
-  });
-
-  modelRoot = gltf.scene;
-  modelRoot.traverse((object) => {
-    if (object.isMesh) setupMesh(object);
-  });
-  modelStage.add(modelRoot);
-
-  const bounds = new THREE.Box3().setFromObject(modelRoot);
-  const center = bounds.getCenter(new THREE.Vector3());
-  modelRoot.position.sub(center);
-  modelRoot.updateMatrixWorld(true);
-  prepareExplodeOffsets();
-  updateVisibilityCount();
-
-  if (settings.motion) {
-    modelStage.scale.setScalar(0.91);
-    modelStage.rotation.y = -0.18;
-    const startTime = performance.now();
-    const duration = 760;
-    function reveal(time) {
-      const progress = easeOutQuint(clamp((time - startTime) / duration, 0, 1));
-      modelStage.scale.setScalar(THREE.MathUtils.lerp(0.91, 1, progress));
-      modelStage.rotation.y = THREE.MathUtils.lerp(-0.18, 0, progress);
-      render();
-      if (progress < 1 && !destroyed && !userHasInteracted) transitionFrame = requestAnimationFrame(reveal);
-    }
-    transitionFrame = requestAnimationFrame(reveal);
-  } else {
-    requestRender();
   }
 
-  onReady({
-    meshCount: meshes.length,
-    systems: ANATOMY_SYSTEMS.map((system) => ({
-      ...system,
-      count: (meshesBySystem.get(system.id) || []).length
-    }))
-  });
+  try {
+    modelRoot = gltf.scene;
+    modelRoot.traverse((object) => {
+      if (object.isMesh) setupMesh(object);
+    });
+    modelStage.add(modelRoot);
+
+    const bounds = new THREE.Box3().setFromObject(modelRoot);
+    const center = bounds.getCenter(new THREE.Vector3());
+    modelRoot.position.sub(center);
+    modelRoot.updateMatrixWorld(true);
+    prepareExplodeOffsets();
+    updateVisibilityCount();
+
+    modelStage.scale.setScalar(0.91);
+    modelStage.rotation.y = -0.18;
+    animate(REVEAL_ANIMATION, {
+      duration: 760,
+      update(progress) {
+        modelStage.scale.setScalar(THREE.MathUtils.lerp(0.91, 1, progress));
+        modelStage.rotation.y = THREE.MathUtils.lerp(-0.18, 0, progress);
+      },
+      complete() {
+        modelStage.scale.setScalar(1);
+        modelStage.rotation.y = 0;
+      }
+    });
+
+    onReady({
+      meshCount: meshes.length,
+      structureCount: logicalMeshes.size,
+      systems: ANATOMY_SYSTEMS.map((system) => ({
+        ...system,
+        count: new Set(
+          (meshesBySystem.get(system.id) || []).map((mesh) => mesh.userData.atlas.logicalKey)
+        ).size
+      }))
+    });
+  } catch (error) {
+    cleanup();
+    onError(error);
+    throw error;
+  }
+
+  function validateState(epsilon = 1e-7) {
+    const issues = [];
+    const expectedPosition = new THREE.Vector3();
+    meshes.forEach((mesh) => {
+      const atlas = mesh.userData.atlas;
+      expectedPosition
+        .copy(atlas.originalPosition)
+        .addScaledVector(atlas.explodeOffset, explodeAmount);
+      if (mesh.position.distanceTo(expectedPosition) > epsilon) issues.push(`${mesh.name}:position`);
+      if (mesh.quaternion.angleTo(atlas.originalQuaternion) > epsilon) issues.push(`${mesh.name}:rotation`);
+      if (mesh.scale.distanceTo(atlas.originalScale) > epsilon) issues.push(`${mesh.name}:scale`);
+      if (mesh.visible !== atlas.targetVisible) issues.push(`${mesh.name}:visibility`);
+      if (atlas.hidden === atlas.targetVisible) issues.push(`${mesh.name}:hidden-state`);
+      if (Math.abs(mesh.material.opacity - 1) > epsilon) issues.push(`${mesh.name}:opacity`);
+      if (mesh.material.transparent) issues.push(`${mesh.name}:transparent`);
+      if (!mesh.material.depthWrite) issues.push(`${mesh.name}:depth-write`);
+    });
+    if (modelStage.scale.distanceTo(new THREE.Vector3(1, 1, 1)) > epsilon) issues.push("model-stage:scale");
+    if (Math.abs(modelStage.rotation.y) > epsilon) issues.push("model-stage:rotation");
+    return {
+      valid: issues.length === 0 && animations.size === 0,
+      issues,
+      activeAnimations: animations.size,
+      meshCount: meshes.length,
+      structureCount: logicalMeshes.size,
+      visibleStructures: [...logicalMeshes.values()].filter(
+        (group) => group.some((mesh) => mesh.userData.atlas.targetVisible)
+      ).length,
+      explodeAmount,
+      cameraDistance: camera.position.distanceTo(controls.target)
+    };
+  }
 
   return {
     selectSystem,
+    selectStructure(rawName) {
+      const mesh = meshes.find((candidate) => candidate.name === rawName);
+      if (!mesh) return false;
+      selectMesh(mesh);
+      return true;
+    },
     setSystemVisible,
     hideSelected,
     showSelected,
@@ -543,27 +766,13 @@ export async function createAnatomyViewer({
     resetCamera,
     applySettings,
     setActive,
+    finishAnimations: finishAllAnimations,
+    validateState,
     getSelection: () => selected,
     getSystemVisibility(systemId) {
       const targets = meshesBySystem.get(systemId) || [];
-      return targets.some((mesh) => !mesh.userData.atlas.hidden);
+      return targets.some((mesh) => mesh.userData.atlas.targetVisible);
     },
-    destroy() {
-      destroyed = true;
-      cancelAnimationFrame(transitionFrame);
-      resizeObserver.disconnect();
-      document.removeEventListener("visibilitychange", handleVisibility);
-      canvas.removeEventListener("pointerdown", handlePointerDown);
-      canvas.removeEventListener("pointerup", handlePointerUp);
-      controls.dispose();
-      clearOutline();
-      meshes.forEach((mesh) => {
-        mesh.geometry.dispose();
-        mesh.material.dispose();
-      });
-      materialTemplates.forEach((material) => material.dispose());
-      outlineMaterial.dispose();
-      renderer.dispose();
-    }
+    destroy: cleanup
   };
 }

@@ -37,12 +37,32 @@ The assembly view is adapted from the **Human Reference Atlas brain, male v1.3**
 
 ### Web derivative
 
-The original GLB contains 283 independently named meshes (141 left/right pairs plus the optic chiasm), 324,855 vertices, and 656,268 triangles. Two local derivatives preserve every named mesh and source node metadata:
+The [official NIH 3D download](https://3d.nih.gov/entries/download/20960/1) contains 283 independently named meshes (141 left/right pairs plus the optic chiasm), 324,855 vertices, and 656,268 triangles. The audited source file is `3d-vh-m-allen-brain.glb`, 11,977,312 bytes, SHA-256 `2B9AD5B53E40E9F0936DA74F7BE38D2EED15604E26358C3870A0EA13499B9A35`. Two local derivatives preserve every mesh name and source node metadata:
 
 - `brain-hq.glb`: Meshopt-compressed, 656,268 triangles, approximately 3.5 MB;
-- `brain-mobile.glb`: Meshopt-compressed and simplified, 384,036 triangles, approximately 2.3 MB.
+- `brain-mobile.glb`: Meshopt-compressed and selectively simplified, 384,174 triangles, 2,302,672 bytes, SHA-256 `7EE3C071F4D8D1A8FFE51663D5F1569838CB013B002F1AB66F1AA0358E0C7547`.
 
-The browser chooses a tier from viewport, pointer, reported memory, and logical core hints; the user can override it in Performance settings. Geometry is regrouped into an educational eight-system color taxonomy without replacing or modifying the source names. Every source mesh remains independently selectable and hideable. `assets/anatomy/nodes.json` records source names, side, triangle count, visualization group, classification rationale, and review flags.
+The browser chooses a tier from viewport, pointer, reported memory, and logical core hints; the user can override it in Performance settings. Geometry is regrouped into an educational eight-system color taxonomy without replacing or modifying the source names. The interface exposes 276 logical structures: genuinely midline structures that the source stores as mirrored left/right facets are selected, hidden, and restored together. The underlying 283 meshes remain intact. `assets/anatomy/nodes.json` records source names, side, triangle count, visualization group, classification rationale, and review flags.
+
+### Anatomical interpretation
+
+- Paracingulate gyrus is grouped with cerebral cortex. It is a variable medial-frontal gyrus between the cingulate and paracingulate sulci and may be asymmetric or absent in an individual brain, consistent with the MRI morphology study by [Paus et al. (1996)](https://doi.org/10.1093/cercor/6.2.207). Its bilateral symmetry here is a property of the mirrored Allen/HRA reference model, not a population claim.
+- “Rostral gyrus” is displayed as **Rostral gyrus (Allen atlas parcel)**. The [HRA-subset UBERON term UBERON:0019280](https://amigo.geneontology.org/amigo/term/UBERON%3A0019280?relation=isa_partof) places it in frontal cortex and relates the inferior and superior rostral gyri as its component terms. It is not the rostral part of the cingulate gyrus.
+- Hypothalamic and pretectal regions are grouped with diencephalon. The preoptic region keeps a review flag because formal developmental terminology commonly places it in telencephalic subpallium even though the Allen source hierarchy presents it with the hypothalamic parcels.
+- Corpus callosum, pineal body, third and fourth ventricles, cerebral aqueduct, central canal, and cerebellar vermis are presented as midline logical structures. Their left/right source facets are never shown as two independent anatomical organs.
+
+### Reproducible mobile build
+
+The pinned rebuild and verification programs live in `tools/`. From that directory, run `npm ci`, then:
+
+```text
+node build-mobile-anatomy.mjs SOURCE.glb OUTPUT.glb
+node verify-mobile-anatomy.mjs SOURCE.glb OUTPUT.glb
+```
+
+The build uses glTF-Transform 4.4.1 and meshoptimizer 1.0.1. It simplifies to a 0.55 ratio with a 0.005 error target, then applies high-level Meshopt compression with 14-bit per-mesh position quantization. A one-ring lock protects the extrema of both forebrain-white-matter and amygdaloid-complex meshes, correcting the multi-millimetre extent loss in the previous mobile derivative.
+
+Verification requires all 286 named nodes, all 283 mesh nodes, every node `extras` object, and valid primitives to remain unchanged in identity; at most 385,000 triangles and 2,310,000 bytes; no bounding-box face more than 0.25 mm from source; and no protected face more than 0.01 mm from source. This build passes with a 0.22671 mm worst-case face difference overall and 0.00604 mm across the protected meshes. Khronos glTF Validator reports zero errors and zero warnings (apart from informational notices for Meshopt compression and its fallback buffer).
 
 Suggested attribution: “Brain model adapted from the Allen Human Reference Atlas–3D 2020 / HRA brain v1.3, NIH 3D accession 3DPX-020960, licensed CC BY 4.0. Geometry simplified, regrouped, and recolored for interactive web display.”
 

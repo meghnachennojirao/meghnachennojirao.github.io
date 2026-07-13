@@ -112,14 +112,14 @@ export const ANATOMY_SYSTEMS = [
   {
     id: "thalamus",
     name: "Diencephalon",
-    detail: "Thalamic and hypothalamic nuclei",
+    detail: "Thalamic, hypothalamic, epithalamic and pretectal regions",
     color: ATLAS_GROUPS.thalamus.color,
     keywords: ["thalam", "hypothalam", "geniculate", "habenula", "mammillary", "epithalam"]
   },
   {
     id: "limbic",
     name: "Limbic structures",
-    detail: "Hippocampus and amygdala",
+    detail: "Cingulate, hippocampal, amygdaloid and olfactory structures",
     color: ATLAS_GROUPS.limbic.color,
     keywords: ["hippocamp", "amygdal", "subiculum", "entorhinal", "parahippocamp", "septal", "cingulate", "dentate"]
   },
@@ -156,7 +156,73 @@ const ANATOMY_OVERRIDES = new Map([
   ["VH_M_hindbrain_R", "brainstem"]
 ]);
 
+const ANATOMY_SYSTEM_PATTERNS = [
+  {
+    pattern: /^paracingulate_gyrus$/,
+    system: "cortex"
+  },
+  {
+    pattern: /(?:hypothalam|_of_hth$|^pretectal_region$)/,
+    system: "thalamus"
+  }
+];
+
+const MIRRORED_MIDLINE_STEMS = new Set([
+  "cerebellar_vermis",
+  "cerebral_aqueduct",
+  "central_canal_of_medulla_oblongata",
+  "corpus_callosum",
+  "fourth_ventricle",
+  "pineal_body",
+  "third_ventricle"
+]);
+
+const ANATOMY_DISPLAY_LABELS = new Map([
+  ["central_canal_of_medulla_oblongata", "Central canal of medulla"],
+  ["pineal_body", "Pineal gland"],
+  ["rostral_gyrus", "Rostral gyrus (Allen atlas parcel)"]
+]);
+
+const ANATOMY_STRUCTURE_NOTES = new Map([
+  [
+    "paracingulate_gyrus",
+    "Variable medial-frontal gyrus above the cingulate gyrus, between the cingulate and paracingulate sulci. It may be asymmetric or absent. This model mirrors one Allen half-brain, so its bilateral symmetry is atlas-specific."
+  ],
+  [
+    "rostral_gyrus",
+    "Allen atlas aggregate on the anteroinferior medial frontal surface. Its annotated parent combines the superior and inferior rostral gyri and is distinct from the rostral part of the cingulate gyrus."
+  ]
+]);
+
+export function anatomyStem(rawName) {
+  return rawName
+    .replace(/^(?:Allen_|VH_M_)/, "")
+    .replace(/_[LR]$/, "");
+}
+
+export function isMirroredMidlineMesh(rawName) {
+  return MIRRORED_MIDLINE_STEMS.has(anatomyStem(rawName));
+}
+
+export function anatomyLogicalKey(rawName) {
+  return isMirroredMidlineMesh(rawName) ? `midline:${anatomyStem(rawName)}` : rawName;
+}
+
+export function anatomyStructureNote(rawName) {
+  if (isMirroredMidlineMesh(rawName)) {
+    return "A single midline structure assembled from the source model's mirrored left and right mesh halves. Both halves are selected and removed together.";
+  }
+  return ANATOMY_STRUCTURE_NOTES.get(anatomyStem(rawName)) || null;
+}
+
+export function anatomyDisplayLabel(rawName, fallback) {
+  return ANATOMY_DISPLAY_LABELS.get(anatomyStem(rawName)) || fallback;
+}
+
 export function classifyAnatomyMesh(name, metadata = {}) {
+  const stem = anatomyStem(name).toLowerCase();
+  const patternOverride = ANATOMY_SYSTEM_PATTERNS.find(({ pattern }) => pattern.test(stem));
+  if (patternOverride) return patternOverride.system;
   if (metadata.system && ANATOMY_SYSTEMS.some((system) => system.id === metadata.system)) return metadata.system;
   if (ANATOMY_OVERRIDES.has(name)) return ANATOMY_OVERRIDES.get(name);
   const value = `${name} ${metadata.label || ""}`.toLowerCase();
@@ -164,15 +230,16 @@ export function classifyAnatomyMesh(name, metadata = {}) {
 }
 
 export function cleanAnatomyName(rawName, explicitLabel) {
-  if (explicitLabel && typeof explicitLabel === "string") return explicitLabel;
+  if (explicitLabel && typeof explicitLabel === "string" && explicitLabel !== "-") return explicitLabel;
   return rawName
-    .replace(/^VH_M_/, "")
+    .replace(/^(?:Allen_|VH_M_)/, "")
     .replace(/_([LR])$/, (_, side) => ` · ${side === "L" ? "left" : "right"}`)
     .replace(/_/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 export function anatomySide(rawName) {
+  if (isMirroredMidlineMesh(rawName)) return "midline";
   if (/_L$/.test(rawName)) return "left";
   if (/_R$/.test(rawName)) return "right";
   return "midline";

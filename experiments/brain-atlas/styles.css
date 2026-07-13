@@ -1197,6 +1197,18 @@ main {
   font-size: 0.74rem;
 }
 
+.selected-structure > .selection-caveat {
+  padding: 0.65rem 0.72rem;
+  border-inline-start: 2px solid var(--selected-color, var(--accent));
+  border-inline-start: 2px solid color-mix(in srgb, var(--selected-color, var(--accent)) 72%, white);
+  border-radius: 0 0.65rem 0.65rem 0;
+  background: rgba(217, 120, 106, 0.1);
+  background: color-mix(in srgb, var(--selected-color, var(--accent)) 10%, transparent);
+  color: var(--paper);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 .selection-actions {
   display: flex;
   align-items: center;

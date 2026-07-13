@@ -228,7 +228,8 @@
                 <span class="selection-orbit" aria-hidden="true"></span>
                 <div><span class="micro-label">Selection</span><h2>Choose a structure</h2></div>
               </div>
-              <p>Tap the brain or choose a system below. The selected part stays in context while neighboring anatomy recedes.</p>
+              <p class="selection-context">Tap the brain or choose a system below. The selected part stays in context while neighboring anatomy recedes.</p>
+              <p class="selection-caveat" hidden></p>
               <div class="selection-actions" hidden>
                 <button class="pill-button pill-button--compact" id="hide-selected" type="button">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7M9.9 4.2A10.7 10.7 0 0 1 12 4c5.5 0 9 6 9 6a17 17 0 0 1-2.1 2.8M6.6 6.6C4.2 8.2 3 10 3 10s3.5 6 9 6c1 0 2-.2 2.9-.5"/></svg>
@@ -249,7 +250,7 @@
         </div>
         <div class="methods__copy">
           <p>The MRI passage pairs the population-averaged MNI-ICBM152 2009c symmetric T1 template with CerebrA’s manually corrected 102-label atlas in the same 1 mm coordinate space. The removable model is the NIH 3D Human Reference Atlas brain, derived from the Allen Human Reference Atlas—3D, 2020.</p>
-          <p>Templates describe shared anatomy, not every person’s brain. Boundaries are atlas estimates; image contrast is educational and must not be used for clinical interpretation.</p>
+          <p>Templates describe shared anatomy, not every person’s brain. The removable model mirrors one annotated hemisphere, so variable folds—including the paracingulate gyrus—appear bilaterally. Boundaries are atlas estimates; image contrast is educational and must not be used for clinical interpretation.</p>
         </div>
         <details>
           <summary>Sources, license &amp; processing <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>

@@ -35,7 +35,7 @@
       "brainstem-other",
       "cortex fallback"
     ],
-    "note": "This is a visualization taxonomy, not a replacement for the Allen ontology. Ambiguous assignments are explicitly marked in node extras."
+    "note": "This is a visualization taxonomy, not a replacement for the Allen ontology. Reviewed overrides place paracingulate cortex with cortex and hypothalamic/pretectal regions with diencephalon. Remaining ambiguous assignments are explicitly marked in node extras."
   },
   "coverage": {
     "meshCount": 283,
@@ -46,17 +46,17 @@
       "right": 141
     },
     "majorSystemCounts": {
-      "cortex": 82,
+      "cortex": 84,
       "white-matter": 27,
       "basal-ganglia": 22,
-      "thalamus": 38,
-      "limbic": 68,
+      "thalamus": 50,
+      "limbic": 56,
       "ventricles": 18,
       "cerebellum": 8,
-      "brainstem-other": 20
+      "brainstem-other": 18
     },
     "classifiedPercent": 100.0,
-    "questionableCount": 52,
+    "questionableCount": 40,
     "apparentHierarchyFlagCount": 102
   },
   "nodes": [
@@ -1216,7 +1216,7 @@
       "displayLabelWithSide": "Supraoptic region of hypothalamus — Left",
       "side": "left",
       "triangleCount": 340,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -1233,9 +1233,9 @@
         "sourceStem": "supraoptic_region_of_HTH",
         "originalMeshIndex": 44,
         "originalNodeIndex": 46,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -1244,7 +1244,7 @@
       "displayLabelWithSide": "Preoptic region of hypothalamus — Left",
       "side": "left",
       "triangleCount": 222,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -1261,9 +1261,9 @@
         "sourceStem": "preoptic_region_of_HTH",
         "originalMeshIndex": 45,
         "originalNodeIndex": 47,
-        "classificationRule": "limbic/olfactory keyword",
+        "classificationRule": "reviewed diencephalon grouping",
         "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "questionableNote": "Grouped with diencephalon to match the Allen source hierarchy; formal developmental terminology places the preoptic area in telencephalic subpallium."
       }
     },
     {
@@ -1272,7 +1272,7 @@
       "displayLabelWithSide": "Tuberal region of hypothalamus — Left",
       "side": "left",
       "triangleCount": 642,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -1289,9 +1289,9 @@
         "sourceStem": "tuberal_region_of_HTH",
         "originalMeshIndex": 46,
         "originalNodeIndex": 48,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -2624,7 +2624,7 @@
       "displayLabelWithSide": "Pretectal region — Left",
       "side": "left",
       "triangleCount": 56,
-      "majorSystem": "brainstem-other",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": false,
@@ -2634,9 +2634,9 @@
         "sourceStem": "pretectal_region",
         "originalMeshIndex": 107,
         "originalNodeIndex": 109,
-        "classificationRule": "brainstem keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to brainstem-other; it lies at the midbrain–diencephalon boundary."
+        "classificationRule": "reviewed diencephalon correction",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -3128,7 +3128,7 @@
       "displayLabelWithSide": "Paracingulate gyrus — Left",
       "side": "left",
       "triangleCount": 824,
-      "majorSystem": "limbic",
+      "majorSystem": "cortex",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": false,
@@ -3138,9 +3138,9 @@
         "sourceStem": "paracingulate_gyrus",
         "originalMeshIndex": 129,
         "originalNodeIndex": 131,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic; it is also cerebral cortex."
+        "classificationRule": "reviewed cortical correction",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -4411,7 +4411,7 @@
       "displayLabelWithSide": "Supraoptic region of hypothalamus — Right",
       "side": "right",
       "triangleCount": 340,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -4428,9 +4428,9 @@
         "sourceStem": "supraoptic_region_of_HTH",
         "originalMeshIndex": 179,
         "originalNodeIndex": 182,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -5763,7 +5763,7 @@
       "displayLabelWithSide": "Pretectal region — Right",
       "side": "right",
       "triangleCount": 56,
-      "majorSystem": "brainstem-other",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": false,
@@ -5773,9 +5773,9 @@
         "sourceStem": "pretectal_region",
         "originalMeshIndex": 240,
         "originalNodeIndex": 243,
-        "classificationRule": "brainstem keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to brainstem-other; it lies at the midbrain–diencephalon boundary."
+        "classificationRule": "reviewed diencephalon correction",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -6344,7 +6344,7 @@
       "displayLabelWithSide": "Paracingulate gyrus — Right",
       "side": "right",
       "triangleCount": 824,
-      "majorSystem": "limbic",
+      "majorSystem": "cortex",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": false,
@@ -6354,9 +6354,9 @@
         "sourceStem": "paracingulate_gyrus",
         "originalMeshIndex": 265,
         "originalNodeIndex": 268,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic; it is also cerebral cortex."
+        "classificationRule": "reviewed cortical correction",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -6449,7 +6449,7 @@
       "displayLabelWithSide": "Hypothalamus — Left",
       "side": "left",
       "triangleCount": 150,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -6469,9 +6469,9 @@
         "sourceStem": "hypothalamus",
         "originalMeshIndex": 270,
         "originalNodeIndex": 273,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -6480,7 +6480,7 @@
       "displayLabelWithSide": "Hypothalamus — Right",
       "side": "right",
       "triangleCount": 150,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -6500,9 +6500,9 @@
         "sourceStem": "hypothalamus",
         "originalMeshIndex": 271,
         "originalNodeIndex": 274,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -6532,7 +6532,7 @@
       "displayLabelWithSide": "Mammillary region of hypothalamus — Right",
       "side": "right",
       "triangleCount": 462,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -6549,9 +6549,9 @@
         "sourceStem": "mammillary_region_of_HTH",
         "originalMeshIndex": 273,
         "originalNodeIndex": 276,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -6589,7 +6589,7 @@
       "displayLabelWithSide": "Tuberal region of hypothalamus — Right",
       "side": "right",
       "triangleCount": 642,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -6606,9 +6606,9 @@
         "sourceStem": "tuberal_region_of_HTH",
         "originalMeshIndex": 275,
         "originalNodeIndex": 278,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {
@@ -6617,7 +6617,7 @@
       "displayLabelWithSide": "Preoptic region of hypothalamus — Right",
       "side": "right",
       "triangleCount": 222,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -6634,9 +6634,9 @@
         "sourceStem": "preoptic_region_of_HTH",
         "originalMeshIndex": 276,
         "originalNodeIndex": 279,
-        "classificationRule": "limbic/olfactory keyword",
+        "classificationRule": "reviewed diencephalon grouping",
         "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "questionableNote": "Grouped with diencephalon to match the Allen source hierarchy; formal developmental terminology places the preoptic area in telencephalic subpallium."
       }
     },
     {
@@ -6723,7 +6723,7 @@
       "displayLabelWithSide": "Mammillary region of hypothalamus — Left",
       "side": "left",
       "triangleCount": 462,
-      "majorSystem": "limbic",
+      "majorSystem": "thalamus",
       "displayLevel": 0,
       "defaultVisible": true,
       "potentialOverlap": true,
@@ -6740,9 +6740,9 @@
         "sourceStem": "mammillary_region_of_HTH",
         "originalMeshIndex": 280,
         "originalNodeIndex": 283,
-        "classificationRule": "limbic/olfactory keyword",
-        "questionableClassification": true,
-        "questionableNote": "Assigned to limbic because no hypothalamus/diencephalon category was requested."
+        "classificationRule": "reviewed diencephalon grouping",
+        "questionableClassification": false,
+        "questionableNote": null
       }
     },
     {

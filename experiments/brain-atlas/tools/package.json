@@ -1,0 +1,15 @@
+{
+  "name": "brain-atlas-asset-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:mobile": "node build-mobile-anatomy.mjs",
+    "verify:mobile": "node verify-mobile-anatomy.mjs"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "4.4.1",
+    "@gltf-transform/extensions": "4.4.1",
+    "@gltf-transform/functions": "4.4.1",
+    "meshoptimizer": "1.0.1"
+  }
+}

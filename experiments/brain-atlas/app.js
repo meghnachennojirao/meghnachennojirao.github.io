@@ -42,6 +42,8 @@ const elements = {
   showAll: document.querySelector("#show-all"),
   systemList: document.querySelector("#system-list"),
   selectedStructure: document.querySelector("#selected-structure"),
+  selectionContext: document.querySelector(".selection-context"),
+  selectionCaveat: document.querySelector(".selection-caveat"),
   hideSelected: document.querySelector("#hide-selected"),
   isolateSelected: document.querySelector("#isolate-selected"),
   visibleCount: document.querySelector("#visible-count"),
@@ -261,20 +263,22 @@ function syncSystemRow(systemId, visible) {
 
 function updateSelection(selection) {
   const header = elements.selectedStructure.querySelector(".selection-empty");
-  const text = elements.selectedStructure.querySelector(":scope > p");
   const actions = elements.selectedStructure.querySelector(".selection-actions");
   const title = header.querySelector("h2");
   const label = header.querySelector(".micro-label");
   const system = getSystem(selection.systemId);
 
   elements.selectedStructure.style.setProperty("--selected-color", selection.color);
-  label.textContent = selection.type === "system" ? "Selected system" : `${selection.side} · ${selection.systemName}`;
+  const side = selection.side ? `${selection.side[0].toUpperCase()}${selection.side.slice(1)}` : "Atlas";
+  label.textContent = selection.type === "system" ? "Selected system" : `${side} · ${selection.systemName}`;
   title.textContent = selection.displayName;
-  text.textContent = selection.type === "system"
+  elements.selectionContext.textContent = selection.type === "system"
     ? `${selection.count} separable atlas structures grouped for this view. ${system.detail}.`
     : selection.ontologyId
       ? `${system.detail}. Ontology reference: ${selection.ontologyId}.`
       : `${system.detail}. Select Hide part to reveal structures beneath it.`;
+  elements.selectionCaveat.textContent = selection.structureNote || "";
+  elements.selectionCaveat.hidden = !selection.structureNote;
   actions.hidden = false;
   elements.hideSelected.innerHTML = selection.hidden
     ? `${visibilityIcon(true)} Show part`
@@ -287,7 +291,7 @@ function updateSelection(selection) {
 }
 
 function handleVisibilityChange({ visible, total }) {
-  elements.visibleCount.textContent = `${visible} / ${total} parts visible`;
+  elements.visibleCount.textContent = `${visible} / ${total} structures visible`;
   ANATOMY_SYSTEMS.forEach((system) => {
     if (!anatomyViewer) return;
     syncSystemRow(system.id, anatomyViewer.getSystemVisibility(system.id));
@@ -319,6 +323,50 @@ async function initializeAnatomy() {
         onVisibilityChange: handleVisibilityChange,
         onError: handleViewerError
       });
+      if (new URLSearchParams(location.search).has("debug-anatomy")) {
+        globalThis.__brainAtlasAnatomyDebug = anatomyViewer;
+        const selectionInput = document.createElement("input");
+        selectionInput.type = "text";
+        selectionInput.tabIndex = -1;
+        selectionInput.setAttribute("aria-label", "Anatomy structure test input");
+        Object.assign(selectionInput.style, {
+          position: "fixed",
+          inset: "2px auto auto 0",
+          width: "2px",
+          height: "2px",
+          padding: "0",
+          border: "0",
+          opacity: "0.01",
+          zIndex: "2147483647"
+        });
+        const validationTrigger = document.createElement("button");
+        validationTrigger.id = "anatomy-debug-validate";
+        validationTrigger.type = "button";
+        validationTrigger.tabIndex = -1;
+        validationTrigger.setAttribute("aria-label", "Validate anatomy state");
+        Object.assign(validationTrigger.style, {
+          position: "fixed",
+          inset: "0 auto auto 0",
+          width: "2px",
+          height: "2px",
+          padding: "0",
+          border: "0",
+          opacity: "0.01",
+          zIndex: "2147483647"
+        });
+        validationTrigger.addEventListener("click", () => {
+          const requestedStructure = selectionInput.value;
+          if (requestedStructure) {
+            anatomyViewer.selectStructure(requestedStructure);
+            selectionInput.value = "";
+          }
+          anatomyViewer.finishAnimations();
+          document.documentElement.dataset.anatomyValidation = JSON.stringify(
+            anatomyViewer.validateState()
+          );
+        });
+        document.body.append(selectionInput, validationTrigger);
+      }
       anatomyViewer.setActive(activeMode === "anatomy");
       return anatomyViewer;
     } catch (error) {
@@ -351,6 +399,7 @@ async function setMode(mode) {
   mriViewer?.setActive(showMRI);
   if (!showMRI) {
     const viewer = await initializeAnatomy();
+    if (activeMode !== "anatomy") return;
     viewer.setActive(true);
   } else {
     anatomyViewer?.setActive(false);
