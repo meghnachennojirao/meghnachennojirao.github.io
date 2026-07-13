@@ -1469,8 +1469,6 @@ viewX.divSlider = function(holder, divslidername, minval, maxval, currvalue, ste
 	viewX.addSliderToDiv(holder, divslidername, options)
 }
 
-// GPT 3.5
-
 viewX.generateSliderStyles = function(sliderProperties, elementId) {
 	var css = "";
 
