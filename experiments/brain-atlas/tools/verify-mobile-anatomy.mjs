@@ -6,6 +6,7 @@ import { NodeIO } from "@gltf-transform/core";
 import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 import { getGLPrimitiveCount } from "@gltf-transform/functions";
 import { MeshoptDecoder } from "meshoptimizer";
+import { EXPECTED_CORRECTED_SOURCE_SHA256 } from "./anatomy-identity-correction.mjs";
 
 const [sourcePath, candidatePath] = process.argv.slice(2);
 if (!sourcePath || !candidatePath) {
@@ -24,8 +25,6 @@ const ALL_BBOX_LIMIT_MM = 0.25;
 const PROTECTED_BBOX_LIMIT_MM = 0.01;
 const MAX_BYTES = 2_310_000;
 const MAX_TRIANGLES = 385_000;
-const EXPECTED_SOURCE_SHA256 = "2B9AD5B53E40E9F0936DA74F7BE38D2EED15604E26358C3870A0EA13499B9A35";
-
 await MeshoptDecoder.ready;
 const io = new NodeIO()
   .registerExtensions(ALL_EXTENSIONS)
@@ -162,7 +161,7 @@ const countsPass = candidate.nodeCount === 286
   && candidate.meshCount === 283
   && candidate.primitiveCount === 283;
 const pass = countsPass
-  && sourceSha256 === EXPECTED_SOURCE_SHA256
+  && sourceSha256 === EXPECTED_CORRECTED_SOURCE_SHA256
   && candidate.triangles <= MAX_TRIANGLES
   && bytes <= MAX_BYTES
   && missingNames.length === 0

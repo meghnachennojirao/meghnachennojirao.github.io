@@ -1,12 +1,12 @@
 import { createMRIViewer } from "./mri-viewer.js";
-import { createSettingsController, describeDevice } from "./settings.js";
+import { createSettingsController, describeDevice } from "./settings.js?v=20260713-anatomy-identities";
 import {
   ANATOMY_SYSTEMS,
   ATLAS_GROUPS,
   MRI_LANDMARK_STYLES,
   MRI_TOUR_STOPS,
   getSystem
-} from "./data/atlas.js";
+} from "./data/atlas.js?v=20260713-anatomy-identities";
 
 const settingsController = createSettingsController();
 const elements = {
@@ -303,13 +303,13 @@ async function initializeAnatomy() {
   if (anatomyLoading) return anatomyLoading;
   anatomyLoading = (async () => {
     try {
-      const { createAnatomyViewer } = await import("./anatomy-viewer.js");
+      const { createAnatomyViewer } = await import("./anatomy-viewer.js?v=20260713-anatomy-identities");
       const currentSettings = settingsController.get();
       loadedModelAsset = currentSettings.render.modelAsset;
       anatomyViewer = await createAnatomyViewer({
         canvas: elements.anatomyCanvas,
         modelUrl: currentSettings.render.modelAsset,
-        metadataUrl: "assets/anatomy/nodes.json",
+        metadataUrl: "assets/anatomy/nodes.json?v=20260713-anatomy-identities",
         settings: currentSettings,
         onProgress: (progress) => {
           if (progress == null) return;

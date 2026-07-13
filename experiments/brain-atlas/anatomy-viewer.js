@@ -12,7 +12,7 @@ import {
   cleanAnatomyName,
   getSystem,
   isMirroredMidlineMesh
-} from "./data/atlas.js";
+} from "./data/atlas.js?v=20260713-anatomy-identities";
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));

@@ -180,17 +180,17 @@ const MIRRORED_MIDLINE_STEMS = new Set([
 const ANATOMY_DISPLAY_LABELS = new Map([
   ["central_canal_of_medulla_oblongata", "Central canal of medulla"],
   ["pineal_body", "Pineal gland"],
-  ["rostral_gyrus", "Rostral gyrus (Allen atlas parcel)"]
+  ["rostral_gyrus", "Rostral gyrus — Allen combined medial frontal parcel"]
 ]);
 
 const ANATOMY_STRUCTURE_NOTES = new Map([
   [
     "paracingulate_gyrus",
-    "Variable medial-frontal gyrus above the cingulate gyrus, between the cingulate and paracingulate sulci. It may be asymmetric or absent. This model mirrors one Allen half-brain, so its bilateral symmetry is atlas-specific."
+    "Variable gyrus on the medial frontal wall above the cingulate gyrus, between the cingulate and paracingulate sulci. From a straight anterior view it should appear only near the midline, not as a broad frontal-pole patch. It may be asymmetric or absent; this model mirrors one Allen half-brain."
   ],
   [
     "rostral_gyrus",
-    "Allen atlas aggregate on the anteroinferior medial frontal surface. Its annotated parent combines the superior and inferior rostral gyri and is distinct from the rostral part of the cingulate gyrus."
+    "Legacy Allen aggregate on the anteroinferior medial frontal wall, combining the superior and inferior rostral gyri. It should appear only as a narrow midline sliver from straight anterior and is distinct from the rostral part of the cingulate gyrus."
   ]
 ]);
 

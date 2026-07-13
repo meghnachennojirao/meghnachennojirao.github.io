@@ -29,8 +29,8 @@ function resolveQuality(choice, hints = getDeviceHints()) {
     antialias: effective === "quality",
     stackLayers: effective === "quality" ? 9 : 5,
     modelAsset: effective === "quality"
-      ? "assets/anatomy/brain-hq.glb"
-      : "assets/anatomy/brain-mobile.glb"
+      ? "assets/anatomy/brain-hq.glb?v=20260713-anatomy-identities"
+      : "assets/anatomy/brain-mobile.glb?v=20260713-anatomy-identities"
   };
 }
 

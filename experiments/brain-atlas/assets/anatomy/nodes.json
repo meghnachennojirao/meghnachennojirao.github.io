@@ -6,7 +6,22 @@
     "atlas": "Allen Human Reference Atlas – 3D, 2020",
     "atlasVersion": "1.0.0",
     "rrid": "SCR_017764",
-    "license": "CC BY 4.0"
+    "license": "CC BY 4.0",
+    "identityCorrection": {
+      "reason": "NIH/HRA GLB node-name permutation checked against the Allen 2020 annotation volume",
+      "allenAnnotation": "annotation_full.nii.gz, version 1.0.0",
+      "correctedMeshCount": 16,
+      "correctionMap": {
+        "optic_radiation": "posteroventral_putamen",
+        "posteroventral_putamen": "paracingulate_gyrus",
+        "atrium_of_lateral_ventricle": "rostral_gyrus",
+        "paracingulate_gyrus": "frontomarginal_gyrus",
+        "rostral_gyrus": "frontal_pole",
+        "frontomarginal_gyrus": "perirhinal_gyrus_rostral_part_of_FuGt",
+        "frontal_pole": "optic_radiation",
+        "perirhinal_gyrus_rostral_part_of_FuGt": "atrium_of_lateral_ventricle"
+      }
+    }
   },
   "displayLevelPolicy": {
     "defaultLevel": 0,
@@ -3050,7 +3065,7 @@
       "displayLabel": "Optic radiation",
       "displayLabelWithSide": "Optic radiation — Left",
       "side": "left",
-      "triangleCount": 84,
+      "triangleCount": 2116,
       "majorSystem": "white-matter",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -3066,11 +3081,13 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "optic_radiation",
-        "originalMeshIndex": 126,
-        "originalNodeIndex": 128,
+        "originalMeshIndex": 132,
+        "originalNodeIndex": 134,
         "classificationRule": "fiber/white-matter keyword",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_frontal_pole_L",
+        "allenAnnotationId": 266441621
       }
     },
     {
@@ -3078,7 +3095,7 @@
       "displayLabel": "Posteroventral putamen",
       "displayLabelWithSide": "Posteroventral putamen — Left",
       "side": "left",
-      "triangleCount": 2100,
+      "triangleCount": 84,
       "majorSystem": "basal-ganglia",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -3094,11 +3111,13 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "posteroventral_putamen",
-        "originalMeshIndex": 127,
-        "originalNodeIndex": 129,
+        "originalMeshIndex": 126,
+        "originalNodeIndex": 128,
         "classificationRule": "basal-ganglia circuit keyword",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_optic_radiation_L",
+        "allenAnnotationId": 146034754
       }
     },
     {
@@ -3106,7 +3125,7 @@
       "displayLabel": "Atrium of lateral ventricle",
       "displayLabelWithSide": "Atrium of lateral ventricle — Left",
       "side": "left",
-      "triangleCount": 622,
+      "triangleCount": 90,
       "majorSystem": "ventricles",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -3115,17 +3134,65 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "atrium_of_lateral_ventricle",
-        "originalMeshIndex": 128,
-        "originalNodeIndex": 130,
+        "originalMeshIndex": 134,
+        "originalNodeIndex": 136,
         "classificationRule": "fluid-space keyword",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_perirhinal_gyrus_rostral_part_of_FuGt_L",
+        "allenAnnotationId": 266441657
       }
     },
     {
       "meshName": "Allen_paracingulate_gyrus_L",
       "displayLabel": "Paracingulate gyrus",
       "displayLabelWithSide": "Paracingulate gyrus — Left",
+      "side": "left",
+      "triangleCount": 2100,
+      "majorSystem": "cortex",
+      "displayLevel": 0,
+      "defaultVisible": true,
+      "potentialOverlap": false,
+      "overlap": null,
+      "extras": {
+        "sourcePrefix": "Allen",
+        "sourceStem": "paracingulate_gyrus",
+        "originalMeshIndex": 127,
+        "originalNodeIndex": 129,
+        "classificationRule": "reviewed cortical correction",
+        "questionableClassification": false,
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_posteroventral_putamen_L",
+        "allenAnnotationId": 146034872
+      }
+    },
+    {
+      "meshName": "Allen_rostral_gyrus_L",
+      "displayLabel": "Rostral gyrus",
+      "displayLabelWithSide": "Rostral gyrus — Left",
+      "side": "left",
+      "triangleCount": 622,
+      "majorSystem": "cortex",
+      "displayLevel": 0,
+      "defaultVisible": true,
+      "potentialOverlap": false,
+      "overlap": null,
+      "extras": {
+        "sourcePrefix": "Allen",
+        "sourceStem": "rostral_gyrus",
+        "originalMeshIndex": 128,
+        "originalNodeIndex": 130,
+        "classificationRule": "cortical-parcel fallback",
+        "questionableClassification": false,
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_atrium_of_lateral_ventricle_L",
+        "allenAnnotationId": 146034876
+      }
+    },
+    {
+      "meshName": "Allen_frontomarginal_gyrus_L",
+      "displayLabel": "Frontomarginal gyrus",
+      "displayLabelWithSide": "Frontomarginal gyrus — Left",
       "side": "left",
       "triangleCount": 824,
       "majorSystem": "cortex",
@@ -3135,18 +3202,20 @@
       "overlap": null,
       "extras": {
         "sourcePrefix": "Allen",
-        "sourceStem": "paracingulate_gyrus",
+        "sourceStem": "frontomarginal_gyrus",
         "originalMeshIndex": 129,
         "originalNodeIndex": 131,
-        "classificationRule": "reviewed cortical correction",
+        "classificationRule": "cortical-parcel fallback",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_paracingulate_gyrus_L",
+        "allenAnnotationId": 146034884
       }
     },
     {
-      "meshName": "Allen_rostral_gyrus_L",
-      "displayLabel": "Rostral gyrus",
-      "displayLabelWithSide": "Rostral gyrus — Left",
+      "meshName": "Allen_frontal_pole_L",
+      "displayLabel": "Frontal pole",
+      "displayLabelWithSide": "Frontal pole — Left",
       "side": "left",
       "triangleCount": 1160,
       "majorSystem": "cortex",
@@ -3156,54 +3225,14 @@
       "overlap": null,
       "extras": {
         "sourcePrefix": "Allen",
-        "sourceStem": "rostral_gyrus",
+        "sourceStem": "frontal_pole",
         "originalMeshIndex": 130,
         "originalNodeIndex": 132,
         "classificationRule": "cortical-parcel fallback",
         "questionableClassification": false,
-        "questionableNote": null
-      }
-    },
-    {
-      "meshName": "Allen_frontomarginal_gyrus_L",
-      "displayLabel": "Frontomarginal gyrus",
-      "displayLabelWithSide": "Frontomarginal gyrus — Left",
-      "side": "left",
-      "triangleCount": 1084,
-      "majorSystem": "cortex",
-      "displayLevel": 0,
-      "defaultVisible": true,
-      "potentialOverlap": false,
-      "overlap": null,
-      "extras": {
-        "sourcePrefix": "Allen",
-        "sourceStem": "frontomarginal_gyrus",
-        "originalMeshIndex": 131,
-        "originalNodeIndex": 133,
-        "classificationRule": "cortical-parcel fallback",
-        "questionableClassification": false,
-        "questionableNote": null
-      }
-    },
-    {
-      "meshName": "Allen_frontal_pole_L",
-      "displayLabel": "Frontal pole",
-      "displayLabelWithSide": "Frontal pole — Left",
-      "side": "left",
-      "triangleCount": 2116,
-      "majorSystem": "cortex",
-      "displayLevel": 0,
-      "defaultVisible": true,
-      "potentialOverlap": false,
-      "overlap": null,
-      "extras": {
-        "sourcePrefix": "Allen",
-        "sourceStem": "frontal_pole",
-        "originalMeshIndex": 132,
-        "originalNodeIndex": 134,
-        "classificationRule": "cortical-parcel fallback",
-        "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_rostral_gyrus_L",
+        "allenAnnotationId": 146034888
       }
     },
     {
@@ -3239,7 +3268,7 @@
       "displayLabel": "Perirhinal gyrus (rostral part of temporal fusiform gyrus)",
       "displayLabelWithSide": "Perirhinal gyrus (rostral part of temporal fusiform gyrus) — Left",
       "side": "left",
-      "triangleCount": 90,
+      "triangleCount": 1084,
       "majorSystem": "limbic",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -3248,11 +3277,13 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "perirhinal_gyrus_rostral_part_of_FuGt",
-        "originalMeshIndex": 134,
-        "originalNodeIndex": 136,
+        "originalMeshIndex": 131,
+        "originalNodeIndex": 133,
         "classificationRule": "limbic/olfactory keyword",
         "questionableClassification": true,
-        "questionableNote": "Assigned to limbic; it is also temporal cortex."
+        "questionableNote": "Assigned to limbic; it is also temporal cortex.",
+        "identityCorrectedFrom": "Allen_frontomarginal_gyrus_L",
+        "allenAnnotationId": 146034892
       }
     },
     {
@@ -6266,7 +6297,7 @@
       "displayLabel": "Optic radiation",
       "displayLabelWithSide": "Optic radiation — Right",
       "side": "right",
-      "triangleCount": 84,
+      "triangleCount": 2116,
       "majorSystem": "white-matter",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -6282,11 +6313,13 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "optic_radiation",
-        "originalMeshIndex": 262,
-        "originalNodeIndex": 265,
+        "originalMeshIndex": 268,
+        "originalNodeIndex": 271,
         "classificationRule": "fiber/white-matter keyword",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_frontal_pole_R",
+        "allenAnnotationId": 266441621
       }
     },
     {
@@ -6294,7 +6327,7 @@
       "displayLabel": "Posteroventral putamen",
       "displayLabelWithSide": "Posteroventral putamen — Right",
       "side": "right",
-      "triangleCount": 2100,
+      "triangleCount": 84,
       "majorSystem": "basal-ganglia",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -6310,11 +6343,13 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "posteroventral_putamen",
-        "originalMeshIndex": 263,
-        "originalNodeIndex": 266,
+        "originalMeshIndex": 262,
+        "originalNodeIndex": 265,
         "classificationRule": "basal-ganglia circuit keyword",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_optic_radiation_R",
+        "allenAnnotationId": 146034754
       }
     },
     {
@@ -6322,7 +6357,7 @@
       "displayLabel": "Atrium of lateral ventricle",
       "displayLabelWithSide": "Atrium of lateral ventricle — Right",
       "side": "right",
-      "triangleCount": 622,
+      "triangleCount": 90,
       "majorSystem": "ventricles",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -6331,17 +6366,65 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "atrium_of_lateral_ventricle",
-        "originalMeshIndex": 264,
-        "originalNodeIndex": 267,
+        "originalMeshIndex": 269,
+        "originalNodeIndex": 272,
         "classificationRule": "fluid-space keyword",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_perirhinal_gyrus_rostral_part_of_FuGt_R",
+        "allenAnnotationId": 266441657
       }
     },
     {
       "meshName": "Allen_paracingulate_gyrus_R",
       "displayLabel": "Paracingulate gyrus",
       "displayLabelWithSide": "Paracingulate gyrus — Right",
+      "side": "right",
+      "triangleCount": 2100,
+      "majorSystem": "cortex",
+      "displayLevel": 0,
+      "defaultVisible": true,
+      "potentialOverlap": false,
+      "overlap": null,
+      "extras": {
+        "sourcePrefix": "Allen",
+        "sourceStem": "paracingulate_gyrus",
+        "originalMeshIndex": 263,
+        "originalNodeIndex": 266,
+        "classificationRule": "reviewed cortical correction",
+        "questionableClassification": false,
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_posteroventral_putamen_R",
+        "allenAnnotationId": 146034872
+      }
+    },
+    {
+      "meshName": "Allen_rostral_gyrus_R",
+      "displayLabel": "Rostral gyrus",
+      "displayLabelWithSide": "Rostral gyrus — Right",
+      "side": "right",
+      "triangleCount": 622,
+      "majorSystem": "cortex",
+      "displayLevel": 0,
+      "defaultVisible": true,
+      "potentialOverlap": false,
+      "overlap": null,
+      "extras": {
+        "sourcePrefix": "Allen",
+        "sourceStem": "rostral_gyrus",
+        "originalMeshIndex": 264,
+        "originalNodeIndex": 267,
+        "classificationRule": "cortical-parcel fallback",
+        "questionableClassification": false,
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_atrium_of_lateral_ventricle_R",
+        "allenAnnotationId": 146034876
+      }
+    },
+    {
+      "meshName": "Allen_frontomarginal_gyrus_R",
+      "displayLabel": "Frontomarginal gyrus",
+      "displayLabelWithSide": "Frontomarginal gyrus — Right",
       "side": "right",
       "triangleCount": 824,
       "majorSystem": "cortex",
@@ -6351,18 +6434,20 @@
       "overlap": null,
       "extras": {
         "sourcePrefix": "Allen",
-        "sourceStem": "paracingulate_gyrus",
+        "sourceStem": "frontomarginal_gyrus",
         "originalMeshIndex": 265,
         "originalNodeIndex": 268,
-        "classificationRule": "reviewed cortical correction",
+        "classificationRule": "cortical-parcel fallback",
         "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_paracingulate_gyrus_R",
+        "allenAnnotationId": 146034884
       }
     },
     {
-      "meshName": "Allen_rostral_gyrus_R",
-      "displayLabel": "Rostral gyrus",
-      "displayLabelWithSide": "Rostral gyrus — Right",
+      "meshName": "Allen_frontal_pole_R",
+      "displayLabel": "Frontal pole",
+      "displayLabelWithSide": "Frontal pole — Right",
       "side": "right",
       "triangleCount": 1160,
       "majorSystem": "cortex",
@@ -6372,54 +6457,14 @@
       "overlap": null,
       "extras": {
         "sourcePrefix": "Allen",
-        "sourceStem": "rostral_gyrus",
+        "sourceStem": "frontal_pole",
         "originalMeshIndex": 266,
         "originalNodeIndex": 269,
         "classificationRule": "cortical-parcel fallback",
         "questionableClassification": false,
-        "questionableNote": null
-      }
-    },
-    {
-      "meshName": "Allen_frontomarginal_gyrus_R",
-      "displayLabel": "Frontomarginal gyrus",
-      "displayLabelWithSide": "Frontomarginal gyrus — Right",
-      "side": "right",
-      "triangleCount": 1084,
-      "majorSystem": "cortex",
-      "displayLevel": 0,
-      "defaultVisible": true,
-      "potentialOverlap": false,
-      "overlap": null,
-      "extras": {
-        "sourcePrefix": "Allen",
-        "sourceStem": "frontomarginal_gyrus",
-        "originalMeshIndex": 267,
-        "originalNodeIndex": 270,
-        "classificationRule": "cortical-parcel fallback",
-        "questionableClassification": false,
-        "questionableNote": null
-      }
-    },
-    {
-      "meshName": "Allen_frontal_pole_R",
-      "displayLabel": "Frontal pole",
-      "displayLabelWithSide": "Frontal pole — Right",
-      "side": "right",
-      "triangleCount": 2116,
-      "majorSystem": "cortex",
-      "displayLevel": 0,
-      "defaultVisible": true,
-      "potentialOverlap": false,
-      "overlap": null,
-      "extras": {
-        "sourcePrefix": "Allen",
-        "sourceStem": "frontal_pole",
-        "originalMeshIndex": 268,
-        "originalNodeIndex": 271,
-        "classificationRule": "cortical-parcel fallback",
-        "questionableClassification": false,
-        "questionableNote": null
+        "questionableNote": null,
+        "identityCorrectedFrom": "Allen_rostral_gyrus_R",
+        "allenAnnotationId": 146034888
       }
     },
     {
@@ -6427,7 +6472,7 @@
       "displayLabel": "Perirhinal gyrus (rostral part of temporal fusiform gyrus)",
       "displayLabelWithSide": "Perirhinal gyrus (rostral part of temporal fusiform gyrus) — Right",
       "side": "right",
-      "triangleCount": 90,
+      "triangleCount": 1084,
       "majorSystem": "limbic",
       "displayLevel": 0,
       "defaultVisible": true,
@@ -6436,11 +6481,13 @@
       "extras": {
         "sourcePrefix": "Allen",
         "sourceStem": "perirhinal_gyrus_rostral_part_of_FuGt",
-        "originalMeshIndex": 269,
-        "originalNodeIndex": 272,
+        "originalMeshIndex": 267,
+        "originalNodeIndex": 270,
         "classificationRule": "limbic/olfactory keyword",
         "questionableClassification": true,
-        "questionableNote": "Assigned to limbic; it is also temporal cortex."
+        "questionableNote": "Assigned to limbic; it is also temporal cortex.",
+        "identityCorrectedFrom": "Allen_frontomarginal_gyrus_R",
+        "allenAnnotationId": 146034892
       }
     },
     {

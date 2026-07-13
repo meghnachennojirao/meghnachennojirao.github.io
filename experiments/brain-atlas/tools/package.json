@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "repair:identities": "node repair-anatomy-identities.mjs",
+    "verify:identities": "node verify-anatomy-identities.mjs",
+    "build:hq": "node build-hq-anatomy.mjs",
     "build:mobile": "node build-mobile-anatomy.mjs",
     "verify:mobile": "node verify-mobile-anatomy.mjs"
   },

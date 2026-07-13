@@ -249,7 +249,7 @@
           <h2 id="methods-title">A reference atlas, not a diagnosis.</h2>
         </div>
         <div class="methods__copy">
-          <p>The MRI passage pairs the population-averaged MNI-ICBM152 2009c symmetric T1 template with CerebrA’s manually corrected 102-label atlas in the same 1 mm coordinate space. The removable model is the NIH 3D Human Reference Atlas brain, derived from the Allen Human Reference Atlas—3D, 2020.</p>
+          <p>The MRI passage pairs the population-averaged MNI-ICBM152 2009c symmetric T1 template with CerebrA’s manually corrected 102-label atlas in the same 1 mm coordinate space. The removable model is the NIH 3D Human Reference Atlas brain, derived from the Allen Human Reference Atlas—3D, 2020. Its mesh identities are cross-checked against the original Allen 0.5 mm annotation volume.</p>
           <p>Templates describe shared anatomy, not every person’s brain. The removable model mirrors one annotated hemisphere, so variable folds—including the paracingulate gyrus—appear bilaterally. Boundaries are atlas estimates; image contrast is educational and must not be used for clinical interpretation.</p>
         </div>
         <details>
@@ -264,7 +264,7 @@
             <article>
               <span>02 · Anatomy</span>
               <h3>Human Reference Atlas brain</h3>
-              <p>Whole-brain reference organ derived from 141 annotated structures. CC BY 4.0; geometry simplified for interactive delivery.</p>
+              <p>Whole-brain reference organ derived from 141 annotated structures. CC BY 4.0; identities checked against the Allen label volume and geometry simplified for interactive delivery.</p>
               <a href="https://3d.nih.gov/entries/20960" target="_blank" rel="noreferrer">View the NIH 3D source</a>
             </article>
             <article>
@@ -279,6 +279,6 @@
     </main>
 
     <div class="status-toast" id="status-toast" role="status" aria-live="polite"></div>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="app.js?v=20260713-anatomy-identities"></script>
   </body>
 </html>
