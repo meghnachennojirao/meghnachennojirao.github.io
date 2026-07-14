@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#102023">
     <meta name="color-scheme" content="dark">
-    <title>Brain, Layer by Layer — MRI Anatomy Explorer</title>
+    <title>Visualising Brain — MRI Anatomy Explorer</title>
     <meta name="description" content="Travel through a labeled coronal MRI volume, then take apart a 3D human brain built from open anatomical atlas data.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&amp;family=Onest:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260715-mobile-selection">
     <script type="importmap">
       {
         "imports": {
@@ -32,9 +32,9 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg>
         <span>Meghna C Rao</span>
       </a>
-      <div class="atlas-mark" aria-label="Brain, Layer by Layer">
+      <div class="atlas-mark" aria-label="Visualising Brain">
         <span class="atlas-mark__index">MRI / 01</span>
-        <span class="atlas-mark__name">Brain, Layer by Layer</span>
+        <span class="atlas-mark__name">Visualising Brain</span>
       </div>
       <button class="icon-button" id="settings-button" type="button" aria-label="Open performance settings" aria-expanded="false" aria-controls="settings-panel">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.25A3.25 3.25 0 1 0 12 8.75a3.25 3.25 0 0 0 0 6.5Z"/><path d="m19.4 15 .1.1a2 2 0 0 1-2.8 2.8l-.1-.1a2 2 0 0 0-2.2-.4 2 2 0 0 0-1.2 1.8v.3a2 2 0 0 1-4 0v-.2A2 2 0 0 0 8 17.5a2 2 0 0 0-2.2.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a2 2 0 0 0 .4-2.2A2 2 0 0 0 1.6 12h-.1a2 2 0 0 1 0-4h.2a2 2 0 0 0 1.8-1.2 2 2 0 0 0-.4-2.2L3 4.5a2 2 0 1 1 2.8-2.8l.1.1a2 2 0 0 0 2.2.4A2 2 0 0 0 9.3.4V.3a2 2 0 0 1 4 0v.2a2 2 0 0 0 1.2 1.8 2 2 0 0 0 2.2-.4l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a2 2 0 0 0-.4 2.2 2 2 0 0 0 1.8 1.2h.3a2 2 0 0 1 0 4H21a2 2 0 0 0-1.8 1.2 2 2 0 0 0 .2 1.7Z"/></svg>
@@ -202,6 +202,13 @@
               <span id="visible-count">Loading structures</span>
             </div>
             <canvas id="anatomy-canvas" aria-label="Interactive removable 3D human brain anatomy"></canvas>
+            <div class="mobile-selection-readout" id="mobile-selection-readout" role="status" aria-live="polite" aria-atomic="true">
+              <span class="mobile-selection-readout__marker" aria-hidden="true"></span>
+              <span class="mobile-selection-readout__copy">
+                <small id="mobile-selection-meta"></small>
+                <strong id="mobile-selection-name"></strong>
+              </span>
+            </div>
             <div class="stage-loader" id="anatomy-loader" role="status">
               <span class="loader-orbit" aria-hidden="true"></span>
               Loading anatomical structures…
@@ -235,7 +242,7 @@
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7M9.9 4.2A10.7 10.7 0 0 1 12 4c5.5 0 9 6 9 6a17 17 0 0 1-2.1 2.8M6.6 6.6C4.2 8.2 3 10 3 10s3.5 6 9 6c1 0 2-.2 2.9-.5"/></svg>
                   Hide part
                 </button>
-                <button class="text-button" id="isolate-selected" type="button">Isolate</button>
+                <button class="text-button" id="isolate-selected" type="button" aria-pressed="false" aria-label="Isolate selected structure">Isolate</button>
               </div>
             </div>
             <div class="system-list" id="system-list" aria-label="Anatomical systems"></div>
@@ -279,6 +286,6 @@
     </main>
 
     <div class="status-toast" id="status-toast" role="status" aria-live="polite"></div>
-    <script type="module" src="app.js?v=20260713-anatomy-identities"></script>
+    <script type="module" src="app.js?v=20260715-mobile-selection"></script>
   </body>
 </html>

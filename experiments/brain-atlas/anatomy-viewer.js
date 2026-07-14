@@ -12,7 +12,7 @@ import {
   cleanAnatomyName,
   getSystem,
   isMirroredMidlineMesh
-} from "./data/atlas.js?v=20260713-anatomy-identities";
+} from "./data/atlas.js?v=20260715-mobile-selection";
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -45,6 +45,7 @@ export async function createAnatomyViewer({
   onReady = () => {},
   onProgress = () => {},
   onSelectionChange = () => {},
+  onIsolationChange = () => {},
   onVisibilityChange = () => {},
   onError = () => {}
 }) {
@@ -82,6 +83,7 @@ export async function createAnatomyViewer({
   let metadata = new Map();
   let modelRoot = null;
   let selected = null;
+  let isolationSnapshot = null;
   let outlines = [];
   let explodeAmount = 0;
   let targetExplodeAmount = 0;
@@ -518,27 +520,49 @@ export async function createAnatomyViewer({
     applyVisibilityPlan(new Map(targets.map((mesh) => [mesh, shouldShow])));
   }
 
+  function restoreIsolation() {
+    if (!isolationSnapshot) return false;
+    const previousVisibility = isolationSnapshot;
+    isolationSnapshot = null;
+    onIsolationChange(false);
+    applyVisibilityPlan(previousVisibility);
+    return true;
+  }
+
   function setSystemVisible(systemId, shouldShow) {
+    restoreIsolation();
     setMeshesVisible(meshesBySystem.get(systemId) || [], shouldShow);
   }
 
   function hideSelected() {
     if (!selected) return;
+    restoreIsolation();
     setMeshesVisible(selectionTargets(), false);
   }
 
   function showSelected() {
     if (!selected) return;
+    restoreIsolation();
     setMeshesVisible(selectionTargets(), true);
   }
 
   function isolateSelected() {
-    if (!selected) return;
+    if (restoreIsolation()) return false;
+    if (!selected) return false;
+    isolationSnapshot = new Map(
+      meshes.map((mesh) => [mesh, mesh.userData.atlas.targetVisible])
+    );
     const keep = new Set(selectionTargets());
+    onIsolationChange(true);
     applyVisibilityPlan(new Map(meshes.map((mesh) => [mesh, keep.has(mesh)])));
+    return true;
   }
 
   function showAll() {
+    if (isolationSnapshot) {
+      isolationSnapshot = null;
+      onIsolationChange(false);
+    }
     setMeshesVisible(meshes, true);
   }
 
@@ -719,6 +743,12 @@ export async function createAnatomyViewer({
   function validateState(epsilon = 1e-7) {
     const issues = [];
     const expectedPosition = new THREE.Vector3();
+    if (isolationSnapshot && (
+      isolationSnapshot.size !== meshes.length
+      || [...isolationSnapshot.values()].some((value) => typeof value !== "boolean")
+    )) {
+      issues.push("isolation:snapshot");
+    }
     meshes.forEach((mesh) => {
       const atlas = mesh.userData.atlas;
       expectedPosition
@@ -744,6 +774,7 @@ export async function createAnatomyViewer({
       visibleStructures: [...logicalMeshes.values()].filter(
         (group) => group.some((mesh) => mesh.userData.atlas.targetVisible)
       ).length,
+      isolated: isolationSnapshot !== null,
       explodeAmount,
       cameraDistance: camera.position.distanceTo(controls.target)
     };

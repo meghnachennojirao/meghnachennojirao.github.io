@@ -1,4 +1,4 @@
-# Brain, Layer by Layer — data provenance
+# Visualising Brain — data provenance
 
 This page is an educational atlas. It is not a diagnostic viewer and must not be used to interpret an individual MRI.
 

@@ -46,6 +46,9 @@ const elements = {
   selectionCaveat: document.querySelector(".selection-caveat"),
   hideSelected: document.querySelector("#hide-selected"),
   isolateSelected: document.querySelector("#isolate-selected"),
+  mobileSelectionReadout: document.querySelector("#mobile-selection-readout"),
+  mobileSelectionMeta: document.querySelector("#mobile-selection-meta"),
+  mobileSelectionName: document.querySelector("#mobile-selection-name"),
   visibleCount: document.querySelector("#visible-count"),
   mobileSheetToggles: [...document.querySelectorAll("[data-mobile-sheet-toggle]")],
   toast: document.querySelector("#status-toast")
@@ -60,6 +63,7 @@ let currentTourIndex = 0;
 let playbackTimer = 0;
 let toastTimer = 0;
 let loadedModelAsset = null;
+let anatomyIsolated = false;
 
 function showToast(message, duration = 2600) {
   clearTimeout(toastTimer);
@@ -83,9 +87,16 @@ function setSettingsOpen(open) {
 function setMobileSheet(button, expanded) {
   const panel = document.querySelector(button.dataset.sheetTarget);
   if (!panel) return;
+  const pageScrollLeft = window.scrollX;
+  const pageScrollTop = window.scrollY;
   panel.classList.toggle("is-collapsed", !expanded);
   button.setAttribute("aria-expanded", String(expanded));
   button.setAttribute("aria-label", `${expanded ? "Close" : "Open"} ${button.dataset.sheetLabel}`);
+  if (expanded) panel.scrollTop = 0;
+  if (mobileLayoutQuery.matches) {
+    window.scrollTo(pageScrollLeft, pageScrollTop);
+    requestAnimationFrame(() => window.scrollTo(pageScrollLeft, pageScrollTop));
+  }
 }
 
 function collapseMobileSheets() {
@@ -261,6 +272,24 @@ function syncSystemRow(systemId, visible) {
   button.innerHTML = visibilityIcon(visible);
 }
 
+function syncIsolationControl(selection = anatomyViewer?.getSelection()) {
+  elements.isolateSelected.textContent = anatomyIsolated ? "Unisolate" : "Isolate";
+  elements.isolateSelected.setAttribute("aria-pressed", String(anatomyIsolated));
+  elements.isolateSelected.setAttribute(
+    "aria-label",
+    anatomyIsolated
+      ? "Unisolate and restore previous visibility"
+      : selection
+        ? `Isolate ${selection.displayName}`
+        : "Isolate selected structure"
+  );
+}
+
+function handleIsolationChange(isolated) {
+  anatomyIsolated = isolated;
+  syncIsolationControl();
+}
+
 function updateSelection(selection) {
   const header = elements.selectedStructure.querySelector(".selection-empty");
   const actions = elements.selectedStructure.querySelector(".selection-actions");
@@ -270,8 +299,13 @@ function updateSelection(selection) {
 
   elements.selectedStructure.style.setProperty("--selected-color", selection.color);
   const side = selection.side ? `${selection.side[0].toUpperCase()}${selection.side.slice(1)}` : "Atlas";
-  label.textContent = selection.type === "system" ? "Selected system" : `${side} · ${selection.systemName}`;
+  const selectionMeta = selection.type === "system" ? "Selected system" : `${side} · ${selection.systemName}`;
+  label.textContent = selectionMeta;
   title.textContent = selection.displayName;
+  elements.mobileSelectionReadout.style.setProperty("--selected-color", selection.color);
+  elements.mobileSelectionReadout.classList.add("is-visible");
+  elements.mobileSelectionMeta.textContent = selectionMeta;
+  elements.mobileSelectionName.textContent = selection.displayName;
   elements.selectionContext.textContent = selection.type === "system"
     ? `${selection.count} separable atlas structures grouped for this view. ${system.detail}.`
     : selection.ontologyId
@@ -284,10 +318,7 @@ function updateSelection(selection) {
     ? `${visibilityIcon(true)} Show part`
     : `${visibilityIcon(false)} Hide part`;
   elements.hideSelected.dataset.action = selection.hidden ? "show" : "hide";
-  if (mobileLayoutQuery.matches) {
-    const anatomySheetToggle = elements.mobileSheetToggles.find((button) => button.dataset.sheetTarget === "#anatomy-structure-panel");
-    if (anatomySheetToggle) setMobileSheet(anatomySheetToggle, true);
-  }
+  syncIsolationControl(selection);
 }
 
 function handleVisibilityChange({ visible, total }) {
@@ -303,7 +334,7 @@ async function initializeAnatomy() {
   if (anatomyLoading) return anatomyLoading;
   anatomyLoading = (async () => {
     try {
-      const { createAnatomyViewer } = await import("./anatomy-viewer.js?v=20260713-anatomy-identities");
+      const { createAnatomyViewer } = await import("./anatomy-viewer.js?v=20260715-mobile-selection");
       const currentSettings = settingsController.get();
       loadedModelAsset = currentSettings.render.modelAsset;
       anatomyViewer = await createAnatomyViewer({
@@ -320,6 +351,7 @@ async function initializeAnatomy() {
           renderSystemList(systems);
         },
         onSelectionChange: updateSelection,
+        onIsolationChange: handleIsolationChange,
         onVisibilityChange: handleVisibilityChange,
         onError: handleViewerError
       });
